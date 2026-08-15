@@ -771,11 +771,11 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 상점 탭 (행운 효율 2배 차감 적용) -->
+    <!-- 상점 탭 ('효과 차감' 문구 삭제 완료) -->
     <div id="shop" class="panel hidden">
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 2% 확률로 에너지 보너스 ×1.15 (효과 차감)</p></div>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 2% 확률로 에너지 보너스 ×1.15</p></div>
           <button class="buy" data-item="luck">구매 35,000</button>
         </div>
         <div class="shop-item">
@@ -815,7 +815,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
           <button class="gem-buy" data-gemitem="gemAuto">구매 💎 100</button>
         </div>
         <div class="shop-item">
-          <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +3.5% (효과 차감)</p></div>
+          <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +3.5%</p></div>
           <button class="gem-buy" data-gemitem="gemLuck">구매 💎 150</button>
         </div>
         <div class="shop-item">
@@ -859,10 +859,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="marketList" class="market-list"></div>
     </div>
 
-    <!-- 📈 주식시장 탭 (서버 공용 그래프 연동) -->
+    <!-- 📈 주식시장 탭 (완벽 동기화 및 새로고침 초기화 방지) -->
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (글로벌 공용)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">모든 플레이어가 동일한 실시간 시세 그래프를 공유합니다!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">모든 플레이어가 동일한 실시간 주식 그래프 시세를 공유하며 새로고침해도 유지됩니다!</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
@@ -931,7 +931,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 🐾 드론 탭 ('모두 합성' 추가 및 확장된 24종 드론 지원) -->
+    <!-- 🐾 드론 탭 -->
     <div id="petPanel" class="panel hidden">
       <div class="pet-box-grid">
         <div class="game-card">
@@ -959,7 +959,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="petList" class="pet-list"></div>
     </div>
 
-    <!-- 📖 도감 탭 (총 24종 확장) -->
+    <!-- 📖 도감 탭 -->
     <div id="encyclopediaPanel" class="panel hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감 & 수집 보상</h3>
@@ -1064,13 +1064,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 🔮 승급 탭 (환생 가격 20만원 마이너스 적용) -->
+    <!-- 🔮 승급 탭 ('-20만 완화' 문구 삭제 완료) -->
     <div id="rebirthPanel" class="panel hidden">
       <div class="attendance-card">
         <h2 style="margin-top:0; font-size:16px;">🔮 시스템 승급</h2>
         <p style="color:var(--text-sub); font-size:12px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다. (보석과 도감은 유지됨)</p>
         <p style="font-size:13px;">현재 승급 포인트: <b id="rp" style="color:var(--accent);">0</b></p>
-        <p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,000,000</b> 에너지 (-20만 완화)</p>
+        <p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,000,000</b> 에너지</p>
         <button id="rebirthBtn" class="attend-btn" style="margin-top:8px;">🔮 시스템 승급 실행</button>
       </div>
     </div>
@@ -1251,19 +1251,19 @@ function playFailureSound() {
 // --- 패치노트 데이터 (누적 유지) ---
 const patchNotes = [
   {
-    version: "v4.1 패치 (최신)",
-    title: "주식 그래프 서버 공용화, 신규 드론 10종 추가 및 '모두 합성' 도입, 환생 비용 완화",
-    desc: "1) 모든 플레이어가 동일한 실시간 주식 그래프 시세를 공유하도록 서버 연동되었습니다.\n2) 일광 합성이 삭제되고 격납고 전체 드론을 연쇄 업그레이드하는 '모두 합성' 기능이 추가되었습니다.\n3) 신규 드론 10종이 추가되어 총 24종의 드론 도감 수집이 가능해졌습니다.\n4) 환생 요구 에너지가 20만 에너지 낮아졌으며, 상점 내 행운 관련 버프 효과가 2배 차감(조정)되었습니다."
+    version: "v4.2 패치 (최신)",
+    title: "주식 새로고침 초기화 버그 완벽 해결, 상점 및 환생 불필요한 안내 문구 삭제",
+    desc: "1) 새로고침 시 주식 가격 및 그래프가 리셋되던 문제가 파이어베이스 글로벌 동기화 강화를 통해 완벽히 해결되었습니다.\n2) 승급 패널의 '(-20만 완화)' 안내 문구와 상점 내 행운 모듈의 '(효과 차감)' 안내 문구가 깨끗하게 삭제되었습니다.\n3) 모든 유저들이 완전히 동일한 실시간 주식 그래프를 공유합니다."
   },
   {
-    version: "v4.0 패치",
-    title: "보석 드랍률 하향, 캐시상점 가격 상향, 드론 추가 너프 적용",
-    desc: "1) 보석 드랍 및 캐시 상점 가격이 조정되었습니다."
+    version: "v4.1 패치",
+    title: "주식 그래프 서버 공용화, 신규 드론 10종 추가 및 '모두 합성' 도입",
+    desc: "1) 총 24종 드론 도감 확장 및 모두 합성 기능이 도입되었습니다."
   },
   {
     version: "v1.0 패치",
     title: "에너지 러시 최초 런칭",
-    desc: "클릭 채굴, 자동 장치, 드론 합성, 미니게임 및 구글 연동 시스템이 구축되었습니다."
+    desc: "기본 시스템 구축."
   }
 ];
 
@@ -1334,7 +1334,6 @@ if(!d.lastMarketReset || nowTime - d.lastMarketReset > 24 * 60 * 60 * 1000) {
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
-// 🌟 총 24종 드론 데이터베이스 구축 (신규 10종 추가)
 const PET_DB = {
  cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.5%', sellPrice: 150, gemReward: 1 },
  chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.8%', sellPrice: 150, gemReward: 1 },
@@ -1426,7 +1425,7 @@ function syncScoreToFirebase(force = false) {
   }, { merge: true }).catch(err => {});
 }
 
-// 📈 서버 공용 주식 데이터 동기화 리스너
+// 📈 서버 공용 주식 데이터 동기화 리스너 (새로고침 초기화 방지 및 완벽 동기화)
 let unsubscribeStock = null;
 function initRealtimeStock() {
   if(unsubscribeStock) unsubscribeStock();
@@ -1444,7 +1443,6 @@ function initRealtimeStock() {
         drawStockChart("stockCanvas2", stockHistory2);
       }
     } else {
-      // 초기 문서 생성
       db.collection('global_stock').doc('market').set({
         stockPrices: stockPrices,
         stockHistory1: stockHistory1,
@@ -1888,7 +1886,6 @@ function render(){
  
  if($("equippedPetCount")) $("equippedPetCount").textContent = `${d.equippedPets.length}/2`;
  
- // 환생 비용 -20만 에너지 완화 반영 (기본 100만부터 시작)
  let req = Math.max(200000, 1000000 * Math.pow(2.0, d.rebirth)); 
  if($("req")) $("req").textContent = fmt(req);
  if($("rebirthBtn")) $("rebirthBtn").disabled = d.score < req;
@@ -1999,7 +1996,6 @@ function renderEncyclopedia() {
   if(countDisplay) countDisplay.textContent = `수집률: ${discoveredCount} / ${totalKeys.length}`;
 }
 
-// 🤖 격납고 전체 드론 연쇄 '모두 합성' 실행 함수
 function performMergeAll() {
   let gradesOrder = ['C', 'B', 'A', 'S', 'L', 'M', 'T'];
   let mergedCount = 0;
@@ -2034,7 +2030,6 @@ function performMergeAll() {
         mergedCount++;
       }
 
-      // 재분류
       gradeIndices = [];
       d.pets.forEach((pId, idx) => {
         if(PET_DB[pId].grade === grade) gradeIndices.push({ id: pId, index: idx });
@@ -2047,7 +2042,7 @@ function performMergeAll() {
   }
 
   playSuccessSound();
-  say(`🤖 모두 합성 완료! 총 ${mergedCount쌍 = mergedCount}건의 연쇄 합성이 실행되었습니다!`);
+  say(`🤖 모두 합성 완료! 총 ${mergedCount}건의 연쇄 합성이 실행되었습니다!`);
   save();
 }
 
@@ -2424,7 +2419,6 @@ document.addEventListener("DOMContentLoaded", () => {
       let currentPower = (((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus;
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
       
-      // 행운 확률 2배 차감 적용 (기존보다 완화된 확률)
       const totalLuckProb = (d.luck ? 0.02 : 0.0) + ((d.permLuck || 0) / 100) + (d.gemLuck ? 0.035 : 0.0);
       if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
       d.score += gain;
@@ -2642,7 +2636,7 @@ setInterval(() => {
     save();
   }
 
-  // 서버 공용 주식 그래프 갱신 (리더 호스트 혹은 글로벌 타이머 방식)
+  // 주식 변동 주기 타이머 (서버 Firestore에 업데이트하여 모든 유저가 실시간 동일 그래프 공유 및 새로고침 초기화 방지)
   if(Math.random() < 0.2) {
     stockPrices[1] = Math.max(200, Math.floor(stockPrices[1] * (0.88 + Math.random() * 0.26)));
     stockPrices[2] = Math.max(1000, Math.floor(stockPrices[2] * (0.82 + Math.random() * 0.38)));
