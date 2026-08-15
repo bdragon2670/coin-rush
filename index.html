@@ -506,7 +506,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 상점 탭 (가격 상향 조정 버전) -->
+    <!-- 상점 탭 -->
     <div id="shop" class="panel hidden">
       <div class="shop-grid">
         <div class="shop-item">
@@ -616,7 +616,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 사냥터 탭 (확률 더 하향 조정 버전) -->
+    <!-- 사냥터 탭 -->
     <div id="huntingPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (에너지 약탈 레이드)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">시스템을 감염시킨 바이러스 몬스터를 소탕하고 대량의 에너지를 획득하세요! (성공률이 더욱 하향 조정되었습니다)</p>
@@ -792,7 +792,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 연구실 탭 (미니게임 극악 확률 조정 버전) -->
+    <!-- 연구실 탭 -->
     <div id="minigames" class="panel hidden">
       <div class="minigame-grid">
         <div class="game-card">
@@ -1046,9 +1046,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v7.2 하드코어 밸런스 패치",
-    title: "사냥터 확률 추가 하향 조정",
-    desc: "1) 🎯 사냥터 몬스터 소탕 성공률 추가 하향 (로그 바이러스 45%, 글리치 워머 25%, 타이탄 랜섬웨어 10%)\n2) 💸 시작 잔고 0원 및 초기 보석 미지급 규칙 유지\n3) ⚒️ 대장간 및 🛡️ 무기고 시스템 안정화"
+    version: "v7.3 랭킹 시스템 안정화 및 오류 수정",
+    title: "서버 데이터 초기화 및 동기화 최적화",
+    desc: "1) 🗑️ 모든 유저의 랭킹 및 서버 데이터 흔적 완전 삭제 및 초기화 완료\n2) 🛠️ 실시간 랭킹 리스너 및 쿼리 최적화로 예외 오류 방지\n3) 🎯 사냥터 확률 하향 및 안정적인 자원 관리 시스템 유지"
   }
 ];
 
@@ -1256,7 +1256,7 @@ function initRealtimeRankings(){
     const myRankDisplay = $("myRankDisplay");
     if(!rankList) return;
     rankList.innerHTML = "";
-    if(snapshot.empty) {
+    if(!snapshot || snapshot.empty) {
       rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
       if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
       return;
@@ -1286,12 +1286,19 @@ function initRealtimeRankings(){
     });
     if(!myRankFound && currentUser) {
       db.collection('rankings').doc(currentUser.googleId).get().then(myDoc => {
-        if(myDoc.exists && myRankDisplay) myRankDisplay.innerHTML = `내 순위: 10위 밖 (내 에너지: ${fmt(myDoc.data().score)})`;
+        if(myDoc.exists && myRankDisplay) {
+          myRankDisplay.innerHTML = `내 순위: 10위 밖 (내 에너지: ${fmt(myDoc.data().score)})`;
+        } else if(myRankDisplay) {
+          myRankDisplay.innerHTML = "내 순위: 랭킹 없음";
+        }
       }).catch(err => {});
     } else if(!currentUser && myRankDisplay) {
       myRankDisplay.innerHTML = "내 순위: 미로그인 상태";
     }
-  }, err => {});
+  }, err => {
+    const rankList = $("rankList");
+    if(rankList) rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>랭킹 정보를 불러오는 중입니다...</td></tr>";
+  });
 }
 
 function parseJwt(token) {
