@@ -46,6 +46,7 @@ body{
   border-radius: 20px;
   padding: 25px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
 h1{
@@ -83,6 +84,12 @@ h1{
 .user-avatar{width: 28px; height: 28px; border-radius: 50%; object-fit: cover;}
 .user-name{font-weight: 600; color: var(--accent); font-size: 13px;}
 
+.top-right-btns {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .tool-btn{
   padding: 6px 12px;
   background: rgba(255,255,255,0.05);
@@ -95,6 +102,73 @@ h1{
   transition: background 0.2s;
 }
 .tool-btn:hover{background: rgba(255,255,255,0.1);}
+
+/* 알람(패치노트) 버튼 스타일 */
+.alarm-btn {
+  position: relative;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+.alarm-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background: #f43f5e;
+  border-radius: 50%;
+  display: none;
+}
+.alarm-badge.active { display: block; }
+
+/* 패치노트 모달 팝업 */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-overlay.hidden { display: none; }
+.modal-box {
+  background: var(--card-bg);
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  width: min(500px, 90vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.modal-header h2 { margin: 0; font-size: 18px; color: var(--accent); }
+.close-modal { background: none; border: none; color: var(--text-sub); font-size: 18px; cursor: pointer; }
+.modal-body {
+  overflow-y: auto;
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.5;
+  padding-right: 4px;
+}
+.patch-item {
+  margin-bottom: 14px;
+  background: rgba(15, 23, 42, 0.4);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+.patch-item h4 { margin: 0 0 4px; color: var(--text-main); font-size: 14px; }
 
 .stats{
   display: grid;
@@ -399,8 +473,22 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <img src="https://via.placeholder.com/32/7f8c8d/ffffff?text=?" id="userAvatar" class="user-avatar">
     <span class="user-name" id="userName">연구원 (미로그인)</span>
   </div>
-  <div>
-    <button class="tool-btn" id="downloadGameBtn">📥 시스템 다운</button>
+  <div class="top-right-btns">
+    <button class="tool-btn alarm-btn" id="openPatchNoteBtn">📢 패치노트 <span class="alarm-badge active" id="alarmBadge"></span></button>
+    <button class="tool-btn" id="downloadGameBtn">📥 다운</button>
+  </div>
+</div>
+
+<!-- 패치노트 모달 팝업 -->
+<div class="modal-overlay hidden" id="patchModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>📜 패치노트 & 업데이트 내역</h2>
+      <button class="close-modal" id="closePatchNoteBtn">&times;</button>
+    </div>
+    <div class="modal-body" id="patchNoteContent">
+      <!-- 패치노트 리스트 동적 생성 -->
+    </div>
   </div>
 </div>
 
@@ -733,6 +821,77 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 </div>
 
 <script>
+// --- 패치노트 데이터 정의 ---
+const patchNotes = [
+  {
+    version: "v1.5 패치",
+    title: "알람 시스템 및 패치노트 추가",
+    desc: "우측 상단 알람 버튼을 통해 실시간 업데이트 내역을 확인할 수 있는 패치노트 시스템이 도입되었습니다."
+  },
+  {
+    version: "v1.4 패치",
+    title: "장비 격납고(무기) 및 탐사 지역(사냥터) 개설",
+    desc: "에너지를 투자해 클릭 효율을 영구적으로 올려주는 특수 장비 3종과 자동 채굴량을 대폭 늘려주는 탐사 지역 3곳이 추가되었습니다."
+  },
+  {
+    version: "v1.3 패치",
+    title: "데이터 영구 저장 고정 키 도입",
+    desc: "패치 시 에너지가 초기화되던 현상을 막기 위해 고정 저장 키(saveKey)를 적용하여 데이터가 안전하게 유지되도록 개선했습니다."
+  },
+  {
+    version: "v1.2 패치",
+    title: "실시간 글로벌 랭킹 & 내 순위 표시",
+    desc: "Firebase 데이터베이스와 연동하여 글로벌 Top 10 랭킹을 실시간으로 확인하고, 하단 배너를 통해 본인의 실시간 순위를 간편하게 볼 수 있습니다."
+  },
+  {
+    version: "v1.1 패치",
+    title: "미니멀 & 모던 UI 리팩토링",
+    desc: "어둡고 복잡하던 도박장 콘셉트의 인터페이스를 깔끔하고 세련된 미래 지향적 자원 연구소 콘셉트로 전면 개편했습니다."
+  },
+  {
+    version: "v1.0 패치",
+    title: "에너지 러시 최초 런칭",
+    desc: "클릭 채굴, 자동 장치, 드론 합성, 연구실 미니게임 및 구글 계정 연동 시스템이 최초로 구축되었습니다."
+  }
+];
+
+function renderPatchNotes() {
+  const container = $("patchNoteContent");
+  container.innerHTML = "";
+  patchNotes.forEach(note => {
+    const div = document.createElement("div");
+    div.className = "patch-item";
+    div.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <h4 style="margin:0; color:var(--accent);">${note.version}: ${note.title}</h4>
+      </div>
+      <p style="margin:0; font-size:12px; color:var(--text-sub);">${note.desc}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// 패치노트 모달 제어
+$("openPatchNoteBtn").onclick = () => {
+  $("patchModal").classList.remove("hidden");
+  $("alarmBadge").classList.remove("active"); // 알람 확인 시 느낌표 제거
+  localStorage.setItem("lastCheckedPatch", patchNotes[0].version);
+};
+
+$("closePatchNoteBtn").onclick = () => {
+  $("patchModal").classList.add("hidden");
+};
+
+// 최초 접속 시 새로운 패치가 있으면 알람 표시
+function checkNewPatch() {
+  const lastChecked = localStorage.getItem("lastCheckedPatch");
+  if(lastChecked !== patchNotes[0].version) {
+    $("alarmBadge").classList.add("active");
+  } else {
+    $("alarmBadge").classList.remove("active");
+  }
+}
+
 // --- Firebase 초기화 ---
 const firebaseConfig = {
     apiKey: "AIzaSyDVSpWYQJHulEzt5Z7pW4k6LWPWXAmQKYg",
@@ -746,7 +905,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// 💡 중요: 저장용 키 이름을 고정하여 버전이 바뀌어도 데이터가 초기화되지 않도록 설정합니다.
+// 💡 데이터가 절대 초기화되지 않는 고정 저장 키
 const saveKey = "energyRush_PermanentSaveData";
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
@@ -1495,6 +1654,8 @@ setInterval(()=>{
  }
 }, 1000);
 
+renderPatchNotes();
+checkNewPatch();
 updateUserUI();
 render();
 </script>
