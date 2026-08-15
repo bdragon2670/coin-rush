@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 프레스티지 에디션</title>
+<title>에너지 러시 - 클라우드 세이브 에디션</title>
 
 <!-- 브라우저 탭 아이콘 -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
@@ -198,66 +198,6 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 .patch-item { margin-bottom: 14px; background: rgba(7, 9, 14, 0.6); padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); }
 .patch-item h4 { margin: 0 0 6px; color: var(--text-main); font-size: 14px; }
 
-/* 1회 뽑기 오픈 인터랙티브 모달 */
-.box-opening-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(7, 9, 14, 0.92); backdrop-filter: blur(10px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
-}
-.box-opening-box {
-  background: var(--card-solid); border: 2px solid var(--accent); border-radius: 20px;
-  width: 140px; height: 150px; min-width: 140px; min-height: 150px; max-width: 140px; max-height: 150px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  cursor: pointer; user-select: none; transition: transform 0.1s ease, box-shadow 0.2s;
-  box-shadow: 0 10px 35px rgba(245, 158, 11, 0.3); font-size: 50px;
-}
-.box-opening-box:hover { transform: scale(1.05); box-shadow: 0 15px 45px rgba(245, 158, 11, 0.5); }
-
-/* 다중 상자 오픈 인터랙티브 오버레이 */
-.multi-box-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(7, 9, 14, 0.92); backdrop-filter: blur(10px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
-  padding: 20px;
-}
-.boxes-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
-  max-width: 660px;
-  margin: 20px 0;
-}
-.open-box-card {
-  background: var(--card-solid); border: 2px solid rgba(245, 158, 11, 0.3); border-radius: 16px;
-  width: 110px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  cursor: pointer; user-select: none; transition: transform 0.1s ease, border-color 0.2s;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-}
-.open-box-card:hover { transform: scale(1.05); border-color: var(--accent); box-shadow: 0 10px 30px rgba(245, 158, 11, 0.25); }
-.open-box-card.opened {
-  background: rgba(7, 9, 14, 0.9); border-color: #10b981; cursor: default; transform: none !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-}
-
-/* S등급 이상 웅장한 연출 효과 */
-.legendary-epic-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: radial-gradient(circle, rgba(217,119,6,0.85) 0%, rgba(7,9,14,0.98) 85%);
-  z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center;
-  animation: epicFlashAnim 2s forwards ease-out; pointer-events: none; text-align: center;
-}
-.legendary-epic-overlay h1 {
-  font-size: 38px; color: #fff; text-shadow: 0 0 30px #f59e0b, 0 0 60px #d97706, 0 0 90px #b45309;
-  margin: 0 0 12px; animation: textPulse 0.5s infinite alternate;
-}
-@keyframes epicFlashAnim {
-  0% { opacity: 0; transform: scale(0.7); }
-  15% { opacity: 1; transform: scale(1.06); }
-  85% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.15); }
-}
-@keyframes textPulse {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.04); }
-}
-
 .stats{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
 .stat{ background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px 10px; text-align: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
 .stat span { font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -273,8 +213,6 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 }
 .coin img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .coin:active{ transform: scale(0.94); box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3); }
-.coin.luck-anim{ animation: luckPop 0.4s ease-in-out; }
-@keyframes luckPop { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
 .luck-popup {
   position: absolute; top: 0; left: 50%; transform: translate(-50%, 0);
@@ -288,15 +226,6 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
   text-shadow: 0 2px 8px rgba(0,0,0,0.8); pointer-events: none; animation: gemFloat 1s forwards ease-out; z-index: 15;
 }
 @keyframes gemFloat { 0% { opacity: 0; transform: translateY(15px) scale(0.5); } 30% { opacity: 1; transform: translateY(-5px) scale(1.2); } 100% { opacity: 0; transform: translateY(-38px) scale(1); } }
-
-.epic-explosion {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: radial-gradient(circle, rgba(239,68,68,0.8) 0%, rgba(7,9,14,0.96) 80%);
-  z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
-  animation: epicFlash 1.4s forwards ease-out; pointer-events: none;
-}
-.epic-explosion h1 { font-size: 32px; color: #fff; text-shadow: 0 0 25px #ef4444, 0 0 50px #f59e0b; margin: 0 0 8px; }
-@keyframes epicFlash { 0% { opacity: 0; transform: scale(0.8); } 20% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1.1); } }
 
 #message{height: 24px; margin-top: 8px; color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.5px;}
 
@@ -321,9 +250,7 @@ button.buy, .upgrade-row button, .btn-game, .attend-btn, button.gem-buy, .btn-st
   font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
 }
 button.buy:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover, button.gem-buy:hover, .btn-stock:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
-button.buy:active, .upgrade-row button:active, .btn-game:active { transform: scale(0.97); }
 button.gem-buy { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25); }
-button.gem-buy:hover { box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
 button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,0.05) !important; color: var(--text-sub) !important; transform: none !important; box-shadow: none !important; filter: none !important;}
 
 .toggle-btn{ padding: 5px 12px; border-radius: 8px; border: none; font-weight: 700; font-size: 11px; cursor: pointer; }
@@ -335,7 +262,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .color-btn:hover { transform: scale(1.05); }
 .color-btn.selected, .icon-btn.selected{ border: 2px solid var(--accent) !important; box-shadow: 0 0 12px rgba(245, 158, 11, 0.5); }
 .icon-btn{ padding: 8px; font-size: 18px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
-.icon-btn:hover { background: rgba(245, 158, 11, 0.1); border-color: var(--accent); }
 
 .minigame-grid{display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;}
 .game-card{
@@ -352,57 +278,42 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   width: 100%; padding: 6px; border-radius: 8px; border: 1px solid var(--border-color);
   background: rgba(7, 9, 14, 0.8); color: var(--text-main); text-align: center; margin-bottom: 8px; font-size: 12px;
 }
-
 .btn-mini{
   padding: 6px 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
-  border-radius: 8px; color: var(--text-sub); font-weight: 600; font-size: 11px; cursor: pointer; margin: 2px; transition: all 0.2s;
+  border-radius: 8px; color: var(--text-sub); font-weight: 600; font-size: 11px; cursor: pointer; margin: 2px;
 }
-.btn-mini:hover { border-color: var(--accent); color: var(--text-main); }
-.btn-mini.selected{ background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; box-shadow: 0 2px 8px rgba(245,158,11,0.3); }
+.btn-mini.selected{ background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
 
 .pet-box-grid{display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px;}
 .pet-list, .encyclopedia-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 12px;}
 .pet-card{
   background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px;
   padding: 10px; text-align: center; position: relative; cursor: grab; user-select: none;
-  transition: all 0.2s;
 }
-.pet-card:hover { border-color: var(--border-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
 .pet-card.drag-over{border: 2px dashed var(--accent) !important; background: rgba(245,158,11,0.08) !important;}
 .pet-card.equipped{border: 1px solid var(--accent); box-shadow: 0 0 15px rgba(245,158,11,0.25); background: rgba(245,158,11,0.03);}
 .pet-icon{font-size: 28px; margin-bottom: 4px; pointer-events: none;}
 
-.encyclopedia-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; text-align: center; position: relative; transition: all 0.2s; }
+.encyclopedia-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; text-align: center; }
 .encyclopedia-card.locked { opacity: 0.35; filter: grayscale(100%); background: rgba(0,0,0,0.3); }
-.encyclopedia-card.unlocked { border: 1px solid #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.03); }
+.encyclopedia-card.unlocked { border: 1px solid #10b981; background: rgba(16, 185, 129, 0.03); }
 
-.badge-grade{display: inline-block; padding: 2px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; margin-bottom: 4px; letter-spacing: 0.5px;}
+.badge-grade{display: inline-block; padding: 2px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; margin-bottom: 4px;}
 .grade-C{background: #374151; color: #fff;}
 .grade-B{background: #0284c7; color: #fff;}
 .grade-A{background: #7c3aed; color: #fff;}
-.grade-S{background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 0 10px rgba(245,158,11,0.5);}
-.grade-L{background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; box-shadow: 0 0 10px rgba(239,68,68,0.5);}
-.grade-M{background: linear-gradient(135deg, #9333ea, #7e22ce); color: #fff; box-shadow: 0 0 12px rgba(147,51,234,0.6);}
-.grade-T{background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; font-weight:800; box-shadow: 0 0 12px rgba(56,189,248,0.6);}
-.grade-X{background: linear-gradient(135deg, #f59e0b, #ef4444, #9333ea); color: #fff; font-weight:800; box-shadow: 0 0 15px rgba(245,158,11,0.8);}
+.grade-S{background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff;}
+.grade-L{background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff;}
+.grade-M{background: linear-gradient(135deg, #9333ea, #7e22ce); color: #fff;}
+.grade-T{background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; font-weight:800;}
+.grade-X{background: linear-gradient(135deg, #f59e0b, #ef4444, #9333ea); color: #fff; font-weight:800;}
 
 .attendance-card{ background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; text-align: center; }
 
-.rank-table{width: 100%; border-collapse: collapse; margin-top: 10px;}
-.rank-table th, .rank-table td{padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 12px;}
-.rank-table th{background: rgba(255,255,255,0.03); color: var(--accent); font-weight: 700; letter-spacing: 0.5px;}
-.rank-user-info{display: flex; align-items: center; justify-content: center; gap: 8px;}
-.rank-user-avatar{width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--accent);}
-
-.my-rank-banner {
-  margin-top: 14px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3);
-  border-radius: 12px; padding: 12px; text-align: center; font-size: 12px; font-weight: 700; color: var(--accent);
-}
-
-.google-box{ background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; margin-bottom: 12px; }
+.google-box{ background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 16px; }
 
 .progress-bar-container { width: 100%; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid var(--border-color); height: 12px; margin-bottom: 14px; overflow: hidden; }
-.progress-bar-fill { height: 100%; background: var(--gold-grad); width: 0%; transition: width 0.4s ease; box-shadow: 0 0 10px rgba(245,158,11,0.5); }
+.progress-bar-fill { height: 100%; background: var(--gold-grad); width: 0%; transition: width 0.4s ease; }
 
 .stock-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .stock-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
@@ -441,7 +352,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab" data-tab="minigames"><span class="tab-icon">🔬</span><span class="tab-text">연구실 게임</span></button>
     <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구 스탯</span></button>
     <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">시스템 승급</span></button>
-    <button class="tab" data-tab="rankPanel"><span class="tab-icon">🏆</span><span class="tab-text">글로벌 랭킹</span></button>
+    <button class="tab" data-tab="cloudPanel"><span class="tab-icon">☁️</span><span class="tab-text">구글 클라우드</span></button>
   </div>
 
   <!-- 메인 게임 영역 -->
@@ -579,7 +490,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <!-- 대장간 탭 -->
     <div id="blacksmithPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚒️ 퀀텀 대장간 (장비 강화 및 제련)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">エ너지를 소모하여 채굴 장비를 제련하고 클릭 파워를 극한으로 끌어올리세요!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 채굴 장비를 제련하고 클릭 파워를 극한으로 끌어올리세요!</p>
       <div class="shop-grid">
         <div class="shop-item">
           <div><h3>⚒️ 티타늄 망치 제련</h3><p>클릭 파워 고정 +5 증가 (비용: 10,000 에너지)</p></div>
@@ -641,8 +552,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <!-- 주식시장 탭 -->
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (모두 50,000원 스타트)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">모든 플레이어가 동일한 실시간 주식 그래프 시세를 공유합니다!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">실시간 주식 시세 변동에 맞춰 에너지를 투자하고 불리세요!</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
@@ -868,37 +779,27 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 랭킹 탭 (새로운 모델 적용) -->
-    <div id="rankPanel" class="panel hidden">
+    <!-- 구글 클라우드 세이브 탭 -->
+    <div id="cloudPanel" class="panel hidden">
       <div class="google-box">
-        <h3 style="color:var(--text-main);margin:0 0 8px;font-size:14px;">🌐 퀀텀 글로벌 통합 랭킹 센터</h3>
-        <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">구글 계정 인증을 통해 전 세계 연구원들과 실시간 에너지 보유량을 경쟁하세요!</p>
+        <h3 style="color:var(--text-main);margin:0 0 8px;font-size:14px;">☁️ 구글 계정 클라우드 데이터 세이브</h3>
+        <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">구글 로그인 후 클라우드 서버에 안전하게 데이터를 동기화하고 언제든 불러오세요!</p>
+        
         <div id="g_id_onload"
              data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
              data-callback="handleCredentialResponse"
              data-auto_prompt="false">
         </div>
-        <div style="display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;">
+        <div style="display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
           <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
         </div>
-        <div style="margin-top:12px;">
-          <p style="margin:4px 0; font-size:12px;">내 실시간 동기화 에너지: <b id="myCurrentScore" style="color:var(--accent);">0</b> 에너지</p>
-          <button id="registerRankBtn" class="btn-game" style="width:auto;padding:6px 16px;margin-top:6px;box-shadow:none;">🏆 랭킹 서버에 즉시 전송</button>
+
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+          <button id="cloudSaveBtn" class="btn-game" style="background:linear-gradient(135deg, #10b981, #059669) !important; box-shadow:none;">☁️ 클라우드에 즉시 저장</button>
+          <button id="cloudLoadBtn" class="btn-game" style="background:linear-gradient(135deg, #0284c7, #0369a1) !important; box-shadow:none;">🔄 클라우드에서 불러오기</button>
         </div>
       </div>
-      <h3 style="text-align:center;color:var(--text-main);font-size:14px;margin:14px 0 8px;">🏆 실시간 글로벌 Top 10 랭커</h3>
-      <table class="rank-table">
-        <thead>
-          <tr>
-            <th>순위</th>
-            <th>연구원</th>
-            <th>에너지 자산</th>
-            <th>승급 횟수</th>
-          </tr>
-        </thead>
-        <tbody id="rankList"></tbody>
-      </table>
-      <div class="my-rank-banner" id="myRankDisplay">내 순위: 조회 중...</div>
+      <p style="text-align:center; font-size:11px; color:var(--text-sub);">* 로그인이 완료되면 게임 진행 상황이 파이어스토어 서버에 실시간 자동 백업됩니다.</p>
     </div>
 
   </div>
@@ -1046,9 +947,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v7.5 랭킹 시스템 리팩토링",
-    title: "유저 거래소 완전 삭제 및 글로벌 랭킹 모델 개편",
-    desc: "1) 🌐 불필요한 유저 간 거래소 시스템을 완전히 제거하고 게임 최적화를 진행했습니다.\n2) 🏆 구글 계정 기반의 더욱 빠르고 안정적인 실시간 글로벌 랭킹 모델로 재구축했습니다."
+    version: "v8.0 구글 클라우드 세이브 시스템",
+    title: "글로벌 랭킹 전면 삭제 및 구글 계정 클라우드 백업 도입",
+    desc: "1) 🗑️ 불필요한 랭킹 시스템을 완전히 제거했습니다.\n2) ☁️ 구글 로그인 계정 전용 파이어스토어 클라우드 세이브 기능을 도입하여 새로고침 시에도 완벽하게 데이터가 보호됩니다."
   }
 ];
 
@@ -1083,7 +984,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v75";
+const saveKey = "energyRush_PermanentSaveData_v80";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1194,109 +1095,37 @@ function checkAndDiscoverPets() {
   }
 }
 
-function syncScoreToFirebase(force = false) {
-  if(!currentUser) return;
-  db.collection('quantum_rankings').doc(currentUser.googleId).set({
+// 구글 클라우드 세이브 함수
+function saveToCloud() {
+  if(!currentUser) return say("구글 로그인을 먼저 진행해주세요.");
+  db.collection('quantum_users').doc(currentUser.googleId).set({
     googleId: currentUser.googleId,
     name: currentUser.name,
     picture: currentUser.picture,
-    score: d.score, 
-    rebirth: d.rebirth,
+    saveData: d,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true }).catch(err => {});
+  }, { merge: true }).then(() => {
+    playSuccessSound();
+    say("☁️ 구글 클라우드에 게임 데이터가 성공적으로 백업되었습니다!");
+  }).catch(err => {
+    say("클라우드 저장 실패: 권한을 확인해주세요.");
+  });
 }
 
-let unsubscribeStock = null;
-function initRealtimeStock() {
-  if(unsubscribeStock) unsubscribeStock();
-  unsubscribeStock = db.collection('global_stock').doc('market_v13').onSnapshot((doc) => {
-    if(doc.exists) {
-      const data = doc.data();
-      if(data.stockPrices) stockPrices = data.stockPrices;
-      if(data.stockHistory1) stockHistory1 = data.stockHistory1;
-      if(data.stockHistory2) stockHistory2 = data.stockHistory2;
-      if(data.stockHistory3) stockHistory3 = data.stockHistory3;
-      if(data.stockHistory4) stockHistory4 = data.stockHistory4;
+// 구글 클라우드 로드 함수
+function loadFromCloud() {
+  if(!currentUser) return say("구글 로그인을 먼저 진행해주세요.");
+  db.collection('quantum_users').doc(currentUser.googleId).get().then(doc => {
+    if(doc.exists && doc.data().saveData) {
+      d = doc.data().saveData;
+      save();
+      playSuccessSound();
+      say("🔄 클라우드에서 게임 데이터를 정상적으로 불러왔습니다!");
     } else {
-      db.collection('global_stock').doc('market_v13').set({
-        stockPrices: stockPrices,
-        stockHistory1: stockHistory1,
-        stockHistory2: stockHistory2,
-        stockHistory3: stockHistory3,
-        stockHistory4: stockHistory4,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).catch(err => {});
+      say("서버에 저장된 클라우드 데이터가 없습니다.");
     }
-    updateStockUI();
-  }, err => {});
-}
-
-function updateStockUI() {
-  if($("stockPrice1")) $("stockPrice1").textContent = fmt(stockPrices[1]);
-  if($("stockPrice2")) $("stockPrice2").textContent = fmt(stockPrices[2]);
-  if($("stockPrice3")) $("stockPrice3").textContent = fmt(stockPrices[3]);
-  if($("stockPrice4")) $("stockPrice4").textContent = fmt(stockPrices[4]);
-
-  if($("stockOwned1")) $("stockOwned1").textContent = d.stock1;
-  if($("stockOwned2")) $("stockOwned2").textContent = d.stock2;
-  if($("stockOwned3")) $("stockOwned3").textContent = d.stock3;
-  if($("stockOwned4")) $("stockOwned4").textContent = d.stock4;
-
-  drawStockChart("stockCanvas1", stockHistory1);
-  drawStockChart("stockCanvas2", stockHistory2);
-  drawStockChart("stockCanvas3", stockHistory3);
-  drawStockChart("stockCanvas4", stockHistory4);
-}
-
-// 새로운 랭킹 모델 리스너 (quantum_rankings 컬렉션 사용)
-let unsubscribeRankings = null;
-function initRealtimeRankings(){
-  if(unsubscribeRankings) unsubscribeRankings();
-  unsubscribeRankings = db.collection('quantum_rankings').orderBy('score', 'desc').limit(10).onSnapshot((snapshot) => {
-    const rankList = $("rankList");
-    const myRankDisplay = $("myRankDisplay");
-    if(!rankList) return;
-    rankList.innerHTML = "";
-    if(!snapshot || snapshot.empty) {
-      rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹 데이터가 없습니다.</td></tr>";
-      if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
-      return;
-    }
-    let index = 0;
-    let myRankFound = false;
-    snapshot.forEach((doc) => {
-      const item = doc.data();
-      let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-      let isMyRank = currentUser && item.googleId === currentUser.googleId;
-      if(isMyRank) {
-        myRankFound = true;
-        if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (자산: ${fmt(item.score)} 에너지)`;
-      }
-      let tr = document.createElement("tr");
-      if(isMyRank) tr.style.background = "rgba(245,158,11,0.06)";
-      tr.innerHTML = `
-        <td>${medal}${index + 1}위</td>
-        <td><div class="rank-user-info"><img src="${item.picture}" class="rank-user-avatar" onerror="this.src='https://via.placeholder.com/26'"><b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}</div></td>
-        <td style="color:var(--accent);">${fmt(item.score)}</td>
-        <td>${item.rebirth || 0}회</td>
-      `;
-      rankList.appendChild(tr);
-      index++;
-    });
-    if(!myRankFound && currentUser) {
-      db.collection('quantum_rankings').doc(currentUser.googleId).get().then(myDoc => {
-        if(myDoc.exists && myRankDisplay) {
-          myRankDisplay.innerHTML = `내 순위: 10위 밖 (내 에너지: ${fmt(myDoc.data().score)})`;
-        } else if(myRankDisplay) {
-          myRankDisplay.innerHTML = "내 순위: 랭킹 등록 대기중";
-        }
-      }).catch(err => {});
-    } else if(!currentUser && myRankDisplay) {
-      myRankDisplay.innerHTML = "내 순위: 미로그인 상태";
-    }
-  }, err => {
-    const rankList = $("rankList");
-    if(rankList) rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>랭킹 정보를 불러오는 중입니다...</td></tr>";
+  }).catch(err => {
+    say("데이터 불러오기 실패");
   });
 }
 
@@ -1322,8 +1151,7 @@ function handleCredentialResponse(response) {
     };
     localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
     updateUserUI();
-    syncScoreToFirebase(true);
-    initRealtimeRankings();
+    loadFromCloud(); // 로그인 시 자동 클라우드 로드 시도
     say(`환영합니다, ${currentUser.name} 연구원님!`);
   }
 }
@@ -1393,7 +1221,15 @@ function save(){
   checkAndDiscoverPets();
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
-  syncScoreToFirebase(true);
+  if(currentUser) {
+    db.collection('quantum_users').doc(currentUser.googleId).set({
+      googleId: currentUser.googleId,
+      name: currentUser.name,
+      picture: currentUser.picture,
+      saveData: d,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true }).catch(err => {});
+  }
 }
 
 function fmt(n){return Math.floor(n).toLocaleString()}
@@ -1422,10 +1258,13 @@ function triggerLuckEffect(amount) {
 function triggerEpicExplosion(droneName) {
   playEpicExplosionSound();
   const overlay = document.createElement("div");
-  overlay.className = "epic-explosion";
+  overlay.className = "modal-overlay";
+  overlay.style.background = "radial-gradient(circle, rgba(239,68,68,0.85) 0%, rgba(7,9,14,0.95) 80%)";
   overlay.innerHTML = `
-    <h1>⚠️ 과부하 대폭발! ⚠️</h1>
-    <p style="color:#fef3c7; font-size:15px; margin:0; text-shadow:0 0 10px #000;">${droneName} 파괴에너지 방출 중...</p>
+    <div style="text-align:center; color:#fff;">
+      <h1 style="font-size:28px; color:#ef4444; margin-bottom:8px;">⚠️ 과부하 대폭발! ⚠️</h1>
+      <p style="font-size:14px; color:#fef3c7;">${droneName} 파괴에너지 방출 중...</p>
+    </div>
   `;
   document.body.appendChild(overlay);
   setTimeout(() => overlay.remove(), 1400);
@@ -1434,10 +1273,13 @@ function triggerEpicExplosion(droneName) {
 function triggerLegendaryEpic(droneName, grade) {
   playLegendaryEpicSound();
   const overlay = document.createElement("div");
-  overlay.className = "legendary-epic-overlay";
+  overlay.className = "modal-overlay";
+  overlay.style.background = "radial-gradient(circle, rgba(217,119,6,0.85) 0%, rgba(7,9,14,0.95) 80%)";
   overlay.innerHTML = `
-    <h1>✨ [${grade}등급] ${droneName} 획득! ✨</h1>
-    <p style="color:#fef3c7; font-size:17px; margin:0; text-shadow:0 0 15px #f59e0b;">프레스티지 고등급 드론이 각성하여 전역에 에너지를 방출합니다!</p>
+    <div style="text-align:center; color:#fff;">
+      <h1 style="font-size:28px; color:#f59e0b; margin-bottom:8px;">✨ [${grade}등급] ${droneName} 획득! ✨</h1>
+      <p style="font-size:14px; color:#fef3c7;">프레스티지 고등급 드론이 각성했습니다!</p>
+    </div>
   `;
   document.body.appendChild(overlay);
   setTimeout(() => overlay.remove(), 2000);
@@ -1493,7 +1335,6 @@ function render(){
  if($("autoLv")) $("autoLv").textContent="Lv."+d.cps;
  if($("rp")) $("rp").textContent=fmt(d.rp);
  if($("permRpDisplay")) $("permRpDisplay").textContent=fmt(d.rp);
- if($("myCurrentScore")) $("myCurrentScore").textContent=fmt(d.score);
 
  if($("permPowerLv")) $("permPowerLv").textContent = `+${d.permPower || 0}`;
  if($("permCpsLv")) $("permCpsLv").textContent = `+${d.permCps || 0}`;
@@ -1924,11 +1765,13 @@ function startBoxOpeningInteraction(count = 1){
   let clicksLeft = 3;
 
   const overlay = document.createElement("div");
-  overlay.className = "box-opening-overlay";
+  overlay.className = "modal-overlay";
   overlay.innerHTML = `
-    <div style="color:var(--accent); font-size:18px; font-weight:700; margin-bottom:16px;">🎁 드론뽑기상자 [1개] 오픈! (남은 클릭: <span id="clickCountDisplay">3</span>회)</div>
-    <div class="box-opening-box" id="interactiveBox">🎁</div>
-    <div style="color:var(--text-sub); font-size:12px; margin-top:16px;">상자를 마우스로 좌클릭하세요!</div>
+    <div style="background:var(--card-solid); border:2px solid var(--accent); border-radius:20px; width:220px; padding:24px; text-align:center;">
+      <div style="color:var(--accent); font-size:14px; font-weight:700; margin-bottom:12px;">🎁 드론뽑기상자 오픈!</div>
+      <div style="font-size:50px; cursor:pointer; margin:14px 0;" id="interactiveBox">🎁</div>
+      <div style="color:var(--text-sub); font-size:11px;">상자를 마우스로 3번 클릭하세요! (<span id="clickCountDisplay">3</span>)</div>
+    </div>
   `;
   document.body.appendChild(overlay);
 
@@ -1970,27 +1813,29 @@ function startMultiBoxOpeningInteraction(count){
   }
 
   const overlay = document.createElement("div");
-  overlay.className = "multi-box-overlay";
+  overlay.className = "modal-overlay";
   
   let boxesHTML = "";
   obtainedPets.forEach((petId, idx) => {
     boxesHTML += `
-      <div class="open-box-card" id="boxCard_${idx}" onclick="openSingleMultiBox(${idx}, '${petId}')">
-        <span style="font-size:26px;">🎁</span>
-        <span style="font-size:10px; color:var(--text-sub); margin-top:4px;">상자 #${idx+1}</span>
+      <div style="background:var(--card-solid); border:2px solid rgba(245, 158, 11, 0.3); border-radius:14px; width:100px; height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer;" id="boxCard_${idx}" onclick="openSingleMultiBox(${idx}, '${petId}')">
+        <span style="font-size:24px;">🎁</span>
+        <span style="font-size:9px; color:var(--text-sub); margin-top:4px;">상자 #${idx+1}</span>
       </div>
     `;
   });
 
   overlay.innerHTML = `
-    <h2 style="color:var(--accent); margin:0 0 4px; font-size:18px;">🎁 드론뽑기상자 [${count}개] 패키지 오픈</h2>
-    <p style="color:var(--text-sub); font-size:11px; margin:0 0 12px;">상자를 개별 클릭하여 열거나 하단 모두 열기를 누르세요!</p>
-    <div class="boxes-grid" style="grid-template-columns: repeat(${Math.min(5, count)}, 1fr);">
-      ${boxesHTML}
-    </div>
-    <div style="display:flex; gap:10px; margin-top:12px;">
-      <button class="btn-game" id="openAllBoxesBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; color:#fff !important; padding:9px 24px;">🚀 모두 열기</button>
-      <button class="btn-game" id="closeBoxesModalBtn" style="background:#4b5563 !important; color:#fff !important; padding:9px 24px;" disabled>확인 및 격납고 저장</button>
+    <div style="background:var(--card-solid); border:1px solid var(--border-hover); border-radius:20px; width:min(600px, 92vw); padding:24px; text-align:center;">
+      <h2 style="color:var(--accent); margin:0 0 4px; font-size:16px;">🎁 드론뽑기상자 [${count}개] 패키지 오픈</h2>
+      <p style="color:var(--text-sub); font-size:11px; margin:0 0 14px;">상자를 개별 클릭하여 열거나 하단 모두 열기를 누르세요!</p>
+      <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:10px; margin-bottom:14px; max-height:360px; overflow-y:auto;">
+        ${boxesHTML}
+      </div>
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button class="btn-game" id="openAllBoxesBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; color:#fff !important;">🚀 모두 열기</button>
+        <button class="btn-game" id="closeBoxesModalBtn" style="background:#4b5563 !important; color:#fff !important;" disabled>확인 및 격납고 저장</button>
+      </div>
     </div>
   `;
   document.body.appendChild(overlay);
@@ -2007,8 +1852,8 @@ function startMultiBoxOpeningInteraction(count){
 
     const pet = PET_DB[petId];
     card.innerHTML = `
-      <span style="font-size:24px;">${pet.icon}</span>
-      <b style="font-size:9px; color:var(--accent); margin-top:2px;">${pet.name}</b>
+      <span style="font-size:22px;">${pet.icon}</span>
+      <b style="font-size:8px; color:var(--accent); margin-top:2px;">${pet.name}</b>
       <span class="badge-grade grade-${pet.grade}" style="margin-top:2px;">${pet.grade}급</span>
     `;
 
@@ -2034,8 +1879,8 @@ function startMultiBoxOpeningInteraction(count){
           card.classList.add("opened");
           const pet = PET_DB[pId];
           card.innerHTML = `
-            <span style="font-size:24px;">${pet.icon}</span>
-            <b style="font-size:9px; color:var(--accent); margin-top:2px;">${pet.name}</b>
+            <span style="font-size:22px;">${pet.icon}</span>
+            <b style="font-size:8px; color:var(--accent); margin-top:2px;">${pet.name}</b>
             <span class="badge-grade grade-${pet.grade}" style="margin-top:2px;">${pet.grade}급</span>
           `;
           if(['S', 'L', 'M', 'T', 'X'].includes(pet.grade)) {
@@ -2109,8 +1954,6 @@ document.addEventListener("DOMContentLoaded", () => {
   checkAndDiscoverPets();
   updateUserUI();
   render();
-  initRealtimeRankings();
-  initRealtimeStock();
 
   const bgmToggle = $("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
@@ -2135,11 +1978,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "energy_rush_prestige.html";
+      a.download = "energy_rush_cloud.html";
       a.click();
       say("시스템 파일이 다운로드되었습니다!");
     };
   }
+
+  const cloudSaveBtn = $("cloudSaveBtn");
+  if(cloudSaveBtn) cloudSaveBtn.onclick = saveToCloud;
+
+  const cloudLoadBtn = $("cloudLoadBtn");
+  if(cloudLoadBtn) cloudLoadBtn.onclick = loadFromCloud;
 
   const customImgUpload = $("customImageUpload");
   if(customImgUpload) {
@@ -2252,15 +2101,6 @@ document.addEventListener("DOMContentLoaded", () => {
       save();
     };
   });
-
-  const regRankBtn = $("registerRankBtn");
-  if(regRankBtn) {
-    regRankBtn.onclick = () => {
-      if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
-      syncScoreToFirebase(true);
-      say("랭킹 서버에 에너지가 즉시 전송되었습니다!");
-    };
-  }
 
   const autoToggle = $("autoToggleBtn");
   if(autoToggle) {
@@ -2470,12 +2310,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  let hlChoice = "high";
-  const hlHighBtn = $("hlHighBtn");
-  const hlLowBtn = $("hlLowBtn");
-  if(hlHighBtn) hlHighBtn.onclick = () => { hlChoice = "high"; hlHighBtn.classList.add("selected"); if(hlLowBtn) hlLowBtn.classList.remove("selected"); };
-  if(hlLowBtn) hlLowBtn.onclick = () => { hlChoice = "low"; hlLowBtn.classList.add("selected"); if(hlHighBtn) hlHighBtn.classList.remove("selected"); };
-
   const game4Btn = $("game4Btn");
   if(game4Btn) {
     game4Btn.onclick = () => {
@@ -2484,14 +2318,13 @@ document.addEventListener("DOMContentLoaded", () => {
       d.score -= bet;
       let randVal = Math.floor(Math.random() * 100) + 1;
       if($("game4Display")) $("game4Display").textContent = `뽑힌 수치: [ ${randVal} ]`;
-      let win = (hlChoice === "high" && randVal > 52) || (hlChoice === "low" && randVal <= 48);
+      let win = (randVal > 50);
       if (win) { d.score += Math.floor(bet * 2.4); say(`하이로우 적중! (+${fmt(bet*2.4)})`); } else { playFailureSound(); say("하이로우 실패"); }
       save();
     };
   }
 });
 
-let syncCounter = 0;
 let autoMiningTimer = 0;
 
 setInterval(() => {
@@ -2520,23 +2353,6 @@ setInterval(() => {
     stockHistory2.push(stockPrices[2]); if(stockHistory2.length > 20) stockHistory2.shift();
     stockHistory3.push(stockPrices[3]); if(stockHistory3.length > 20) stockHistory3.shift();
     stockHistory4.push(stockPrices[4]); if(stockHistory4.length > 20) stockHistory4.shift();
-
-    db.collection('global_stock').doc('market_v13').set({
-      stockPrices: stockPrices,
-      stockHistory1: stockHistory1,
-      stockHistory2: stockHistory2,
-      stockHistory3: stockHistory3,
-      stockHistory4: stockHistory4,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    }, { merge: true }).catch(err => {});
-  }
-
-  syncCounter++;
-  if(syncCounter >= 1) {
-    syncCounter = 0;
-    if(currentUser) {
-      syncScoreToFirebase();
-    }
   }
 }, 1000);
 </script>
