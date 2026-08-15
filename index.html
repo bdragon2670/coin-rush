@@ -1283,9 +1283,9 @@ function playFailureSound() {
 // --- 패치노트 데이터 ---
 const patchNotes = [
   {
-    version: "v4.5 패치 (최신)",
-    title: "승급 시 드론 뽑기 가격 초기화, 거래소 동기화 오류 해결, 4종 주식, /드론자랑 추가",
-    desc: "1) 시스템 승급 시 드론 보급품 요청 누적 횟수가 초기화되어 저렴하게 다시 뽑을 수 있습니다.\n2) 유저 간 거래소 매물 연동 오류가 완벽히 수정되었습니다.\n3) 모두 합성 시 일반 합성 규칙과 정확히 동일하게 확률 및 파괴/대박 판정이 적용됩니다.\n4) 주식 시장이 4종으로 확장되었으며, 상점 가격 상승률이 0.5%로 조정되었습니다.\n5) 실시간 채팅에 '/드론자랑' 명령어가 추가되었습니다."
+    version: "v4.6 패치 (데이터 복구 완료)",
+    title: "기존 로컬 저장 데이터 자동 연동(마이그레이션) 및 모든 기능 안정화",
+    desc: "1) 이전 버전에 저장되었던 로컬 데이터가 사라지지 않고 자동으로 마이그레이션되도록 복구되었습니다.\n2) 승급 시 드론 뽑기 가격 초기화, 거래소 동기화 오류 해결, 4종 주식, /드론자랑 명령어가 정상 작동합니다."
   }
 ];
 
@@ -1321,9 +1321,15 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// 💡 로컬 스토리지 저장소 시스템
-const saveKey = "energyRush_PermanentSaveData_v45";
-let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
+// 💡 기존 저장소 키들('energyRush_PermanentSaveData' 등)의 데이터를 자동으로 검색하여 불러오는 복구 시스템
+const saveKey = "energyRush_PermanentSaveData_v46";
+let oldSavedData = JSON.parse(
+  localStorage.getItem("energyRush_PermanentSaveData_v45") || 
+  localStorage.getItem("energyRush_PermanentSaveData") || 
+  "null"
+);
+
+let d = JSON.parse(localStorage.getItem(saveKey) || "null") || oldSavedData || {
  score:1, best:1, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false, cooler:false, filter:false, quantum:false,
  gemClick:false, gemAuto:false, gemLuck:false, gemHyper:false, gemRing:false, gemDivine:false, gemChronos:false, gemProtector:false,
  pets:[], equippedPets:[], discoveredPets:[], lastAttend:0, attendDays:0, autoEnabled:true,
@@ -2064,7 +2070,6 @@ function performMergeAll() {
     });
 
     while(gradeIndices.length >= 2) {
-      // S등급은 4개 단위 특별 합성 적용
       if(grade === 'S') {
         if(gradeIndices.length >= 4) {
           let pList = gradeIndices.splice(0, 4);
@@ -2086,7 +2091,6 @@ function performMergeAll() {
           break;
         }
       } else if(grade === 'L' || grade === 'M' || grade === 'T') {
-        // 고등급 파괴 판정
         let p1 = gradeIndices.shift();
         let p2 = gradeIndices.shift();
 
@@ -2106,7 +2110,6 @@ function performMergeAll() {
         }
         mergedCount++;
       } else {
-        // 일반 등급(C, B, A) 업그레이드
         let p1 = gradeIndices.shift();
         let p2 = gradeIndices.shift();
 
@@ -2128,7 +2131,6 @@ function performMergeAll() {
         }
       }
 
-      // 인덱스 재스캔
       gradeIndices = [];
       d.pets.forEach((pId, idx) => {
         if(PET_DB[pId].grade === grade) gradeIndices.push({ id: pId, index: idx });
@@ -2346,7 +2348,7 @@ function sellStock(id, amount) {
 // --- 애플리케이션 초기화 ---
 document.addEventListener("DOMContentLoaded", () => {
   renderPatchNotes();
-  const lastChecked = localStorage.getItem("lastCheckedPatch_v45");
+  const lastChecked = localStorage.getItem("lastCheckedPatch_v46");
   const alarmBadge = $("alarmBadge");
   if(alarmBadge && lastChecked === patchNotes[0].version) alarmBadge.classList.remove("active");
   checkAndDiscoverPets();
@@ -2367,7 +2369,7 @@ document.addEventListener("DOMContentLoaded", () => {
     openBtn.onclick = () => {
       if(patchModal) patchModal.classList.remove("hidden");
       if(alarmBadge) alarmBadge.classList.remove("active");
-      localStorage.setItem("lastCheckedPatch_v45", patchNotes[0].version);
+      localStorage.setItem("lastCheckedPatch_v46", patchNotes[0].version);
     };
   }
   if(closeBtn) {
