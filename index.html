@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 미니멀 자원 센터</title>
+<title>에너지 러시 - 자원 채굴 & 탐사 센터</title>
 
 <!-- 브라우저 탭 아이콘 (SVG Favicon) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%232563eb%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>⚡</text></svg>">
@@ -40,34 +40,34 @@ body{
 }
 
 .game{
-  width: min(900px, 96vw);
+  width: min(920px, 96vw);
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 20px;
-  padding: 30px;
+  padding: 25px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
 }
 
 h1{
-  font-size: 28px;
+  font-size: 26px;
   text-align: center;
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   color: var(--text-main);
   font-weight: 700;
 }
 .sub{
   text-align: center;
   color: var(--text-sub);
-  margin-bottom: 24px;
-  font-size: 14px;
+  margin-bottom: 20px;
+  font-size: 13px;
 }
 
 .top-tools{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -102,30 +102,30 @@ h1{
 .stats{
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 .stat{
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 14px 10px;
+  padding: 12px 8px;
   text-align: center;
 }
-.stat span { font-size: 12px; color: var(--text-sub); }
-.stat b{display: block; font-size: 18px; margin-top: 4px; color: var(--accent); font-weight: 600;}
+.stat span { font-size: 11px; color: var(--text-sub); }
+.stat b{display: block; font-size: 16px; margin-top: 4px; color: var(--accent); font-weight: 600;}
 
 /* 메인 클릭 버튼 */
-.main{text-align: center; position: relative; margin-bottom: 24px;}
+.main{text-align: center; position: relative; margin-bottom: 20px;}
 .coin{
-  width: 150px;
-  height: 150px;
+  width: 140px;
+  height: 140px;
   border: none;
   border-radius: 50%;
   background: linear-gradient(135deg, #38bdf8, #0284c7);
   box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
   cursor: pointer;
-  font-size: 56px;
+  font-size: 50px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -145,13 +145,12 @@ h1{
   100% { transform: scale(1); }
 }
 
-/* 팝업 및 효과 */
 .luck-popup {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translate(-50%, 0);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: #38bdf8;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
@@ -165,27 +164,27 @@ h1{
   100% { opacity: 0; transform: translate(-50%, -40px); }
 }
 
-#message{height: 24px; margin-top: 8px; color: var(--accent); font-weight: 600; font-size: 13px;}
+#message{height: 22px; margin-top: 6px; color: var(--accent); font-weight: 600; font-size: 13px;}
 
 /* 탭 메뉴 */
 .tabs{
   display: flex;
-  gap: 6px;
-  margin-bottom: 20px;
+  gap: 5px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
 }
 .tab{
   flex: 1;
-  min-width: 90px;
-  padding: 10px 6px;
+  min-width: 80px;
+  padding: 8px 4px;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 8px;
   background: rgba(255,255,255,0.02);
   color: var(--text-sub);
   font-weight: 600;
   cursor: pointer;
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   transition: all 0.2s;
 }
 .tab:hover{background: rgba(255,255,255,0.05); color: var(--text-main);}
@@ -201,36 +200,45 @@ h1{
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid var(--border-color);
   border-radius: 14px;
-  padding: 20px;
+  padding: 16px;
 }
 .hidden{display:none}
 
-/* 상점 및 업그레이드 레이아웃 */
-.shop{display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;}
-.item, .upgrades{
+/* 상점 및 업그레이드 그리드 */
+.shop-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;}
+.shop-item{
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.item h3, .upgrades h3{margin: 0 0 6px; font-size: 15px; color: var(--text-main);}
-.item p, .upgrades small{color: var(--text-sub); font-size: 12px; margin: 0 0 12px;}
+.shop-item h3{margin: 0 0 4px; font-size: 14px; color: var(--text-main);}
+.shop-item p{color: var(--text-sub); font-size: 11px; margin: 0 0 10px; min-height: 30px;}
+
+.upgrades{
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
 .upgrade-row{display: flex; justify-content: space-between; align-items: center; gap: 10px;}
 
-/* 버튼 공통 디자인 */
-button.buy, .upgrade-row button, .btn-game, .attend-btn {
-  padding: 8px 14px;
+button.buy, button.buy-weapon, button.buy-hunt, .upgrade-row button, .btn-game, .attend-btn {
+  padding: 7px 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--accent);
   color: #0f172a;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   transition: background 0.2s;
 }
-button.buy:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover {
+button.buy:hover, button.buy-weapon:hover, button.buy-hunt:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover {
   background: var(--accent-hover);
 }
 button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-color) !important; color: var(--text-sub);}
@@ -249,14 +257,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 /* 커스텀 그리드 */
 .custom-grid{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-  gap: 8px;
-  margin-top: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+  gap: 6px;
+  margin-top: 6px;
 }
 .color-btn{
   width: 100%;
-  height: 40px;
-  border-radius: 8px;
+  height: 35px;
+  border-radius: 6px;
   border: 1px solid var(--border-color);
   cursor: pointer;
 }
@@ -265,36 +273,36 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
 }
 .icon-btn{
-  padding: 8px;
-  font-size: 20px;
+  padding: 6px;
+  font-size: 18px;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
 /* 미니게임 및 드론 그리드 */
-.minigame-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;}
+.minigame-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;}
 .game-card{
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 14px;
+  border-radius: 10px;
+  padding: 12px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.game-card h3{margin: 0 0 6px; font-size: 14px; color: var(--text-main);}
+.game-card h3{margin: 0 0 4px; font-size: 13px; color: var(--text-main);}
 .slot-display{
-  font-size: 20px;
+  font-size: 18px;
   background: rgba(15, 23, 42, 0.8);
   border: 1px solid var(--border-color);
-  padding: 8px;
-  border-radius: 8px;
-  margin: 8px 0;
+  padding: 6px;
+  border-radius: 6px;
+  margin: 6px 0;
   letter-spacing: 2px;
-  min-height: 44px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -302,18 +310,18 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 }
 .bet-input{
   width: 100%;
-  padding: 6px;
+  padding: 5px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
   background: rgba(15, 23, 42, 0.8);
   color: var(--text-main);
   text-align: center;
   margin-bottom: 6px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .btn-mini{
-  padding: 6px 10px;
+  padding: 5px 8px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--border-color);
   border-radius: 6px;
@@ -329,23 +337,23 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   border-color: var(--accent) !important;
 }
 
-.dice-buttons{display: flex; justify-content: center; gap: 3px; margin-bottom: 6px; flex-wrap: wrap;}
-.pet-box-grid{display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px;}
-.pet-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 12px;}
+.dice-buttons{display: flex; justify-content: center; gap: 2px; margin-bottom: 4px; flex-wrap: wrap;}
+.pet-box-grid{display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px;}
+.pet-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 10px;}
 .pet-card{
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 8px;
   text-align: center;
   position: relative;
   cursor: grab;
   user-select: none;
 }
 .pet-card.drag-over{border: 2px dashed var(--accent) !important; background: rgba(56,189,248,0.05) !important;}
-.pet-card.equipped{border: 1px solid var(--accent); box-shadow: 0 0 8px rgba(56,189,248,0.3);}
-.pet-icon{font-size: 32px; margin-bottom: 4px; pointer-events: none;}
-.badge-grade{display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-bottom: 4px;}
+.pet-card.equipped{border: 1px solid var(--accent); box-shadow: 0 0 6px rgba(56,189,248,0.3);}
+.pet-icon{font-size: 28px; margin-bottom: 2px; pointer-events: none;}
+.badge-grade{display: inline-block; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; margin-bottom: 2px;}
 .grade-C{background: #475569; color: #fff;}
 .grade-B{background: #0284c7; color: #fff;}
 .grade-A{background: #7c3aed; color: #fff;}
@@ -354,30 +362,42 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 .attendance-card{
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 10px;
+  padding: 20px;
   text-align: center;
 }
 
-.rank-table{width: 100%; border-collapse: collapse; margin-top: 12px;}
-.rank-table th, .rank-table td{padding: 10px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 13px;}
+.rank-table{width: 100%; border-collapse: collapse; margin-top: 8px;}
+.rank-table th, .rank-table td{padding: 8px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 12px;}
 .rank-table th{background: rgba(255,255,255,0.03); color: var(--accent); font-weight: 600;}
-.rank-user-info{display: flex; align-items: center; justify-content: center; gap: 8px;}
-.rank-user-avatar{width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--accent);}
+.rank-user-info{display: flex; align-items: center; justify-content: center; gap: 6px;}
+.rank-user-avatar{width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--accent);}
+
+.my-rank-banner {
+  margin-top: 12px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
 
 .google-box{
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 15px;
+  border-radius: 10px;
+  padding: 12px;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 @media(max-width: 750px){
   .stats{grid-template-columns: repeat(2, 1fr);}
-  .shop, .minigame-grid, .pet-box-grid{grid-template-columns: 1fr;}
-  .coin{width: 130px; height: 130px; font-size: 48px;}
+  .shop-grid, .minigame-grid, .pet-box-grid{grid-template-columns: 1fr;}
+  .coin{width: 120px; height: 120px; font-size: 42px;}
 }
 </style>
 </head>
@@ -388,14 +408,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <img src="https://via.placeholder.com/32/7f8c8d/ffffff?text=?" id="userAvatar" class="user-avatar">
     <span class="user-name" id="userName">연구원 (미로그인)</span>
   </div>
-  <div style="display: flex; gap: 6px;">
-    <button class="tool-btn" id="downloadSaveBtn">💾 백업</button>
-    <button class="tool-btn" id="downloadGameBtn">📥 다운</button>
+  <div>
+    <button class="tool-btn" id="downloadGameBtn">📥 시스템 다운</button>
   </div>
 </div>
 
 <h1>⚡ 에너지 러시</h1>
-<div class="sub">구글 연동 및 실시간 자원 채굴 랭킹 시스템</div>
+<div class="sub">실시간 자원 채굴 & 탐사 센터</div>
 
 <div class="stats">
 <div class="stat"><span>에너지</span><b id="score">0</b></div>
@@ -413,6 +432,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div class="tabs">
 <button class="tab active" data-tab="upgrade">⚡ 강화</button>
 <button class="tab" data-tab="shop">🛒 상점</button>
+<button class="tab" data-tab="weaponPanel">⚔️ 장비</button>
+<button class="tab" data-tab="huntingPanel">🗺️ 탐사지역</button>
 <button class="tab" data-tab="customPanel">🎨 커스텀</button>
 <button class="tab" data-tab="petPanel">🤖 드론</button>
 <button class="tab" data-tab="attendPanel">📅 지원금</button>
@@ -446,35 +467,71 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 
 <!-- 상점 탭 -->
 <div id="shop" class="panel hidden">
-<div class="shop">
-<div class="item">
+<div class="shop-grid">
+<div class="shop-item">
   <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 10% 확률로 에너지 보너스 ×5</p></div>
   <button class="buy" data-item="luck">구매 10,000</button>
 </div>
-<div class="item">
+<div class="shop-item">
   <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +25%</p></div>
   <button class="buy" data-item="core">구매 50,000</button>
 </div>
-<div class="item">
+<div class="shop-item">
   <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +50%</p></div>
   <button class="buy" data-item="double">구매 200,000</button>
 </div>
 </div>
 </div>
 
+<!-- ⚔️ 장비 격납고 탭 (무기 추가) -->
+<div id="weaponPanel" class="panel hidden">
+<div class="shop-grid">
+<div class="shop-item">
+  <div><h3>🗡️ 레이저 블레이드</h3><p>클릭당 에너지 +15 영구 증가</p></div>
+  <button class="buy-weapon" data-weapon="blade">구매 25,000</button>
+</div>
+<div class="shop-item">
+  <div><h3>🔫 플라즈마 캐논</h3><p>클릭당 에너지 +50 영구 증가</p></div>
+  <button class="buy-weapon" data-weapon="cannon">구매 150,000</button>
+</div>
+<div class="shop-item">
+  <div><h3>🛡️ 안티매터 블래스터</h3><p>클릭당 에너지 +200 영구 증가</p></div>
+  <button class="buy-weapon" data-weapon="blaster">구매 800,000</button>
+</div>
+</div>
+</div>
+
+<!-- 🗺️ 탐사 지역 탭 (사냥터 추가) -->
+<div id="huntingPanel" class="panel hidden">
+<div class="shop-grid">
+<div class="shop-item">
+  <div><h3>🌲 제1구역: 크리스탈 광산</h3><p>초당 자동 채굴량 +50 추가</p></div>
+  <button class="buy-hunt" data-hunt="zone1">탐사 15,000</button>
+</div>
+<div class="shop-item">
+  <div><h3>⛰️ 제2구역: 마그마 심층부</h3><p>초당 자동 채굴량 +250 추가</p></div>
+  <button class="buy-hunt" data-hunt="zone2">탐사 120,000</button>
+</div>
+<div class="shop-item">
+  <div><h3>🌌 제3구역: 미지의 성운 코어</h3><p>초당 자동 채굴량 +1,000 추가</p></div>
+  <button class="buy-hunt" data-hunt="zone3">탐사 600,000</button>
+</div>
+</div>
+</div>
+
 <!-- 🎨 코인 커스텀 탭 -->
 <div id="customPanel" class="panel hidden">
-  <h3 style="color:var(--text-main); font-size:15px; margin-top:0;">🎨 에너지 코어 컬러 커스텀</h3>
+  <h3 style="color:var(--text-main); font-size:14px; margin-top:0;">🎨 에너지 코어 컬러 커스텀</h3>
   <div class="custom-grid">
-    <button class="color-btn" data-color="gold" style="background:radial-gradient(circle at 35% 28%,#fff49a,#ffd329 36%,#db8c00 78%);"></button>
-    <button class="color-btn" data-color="ruby" style="background:radial-gradient(circle at 35% 28%,#ff9a9a,#ff2929 36%,#8c0000 78%);"></button>
-    <button class="color-btn" data-color="emerald" style="background:radial-gradient(circle at 35% 28%,#9affb8,#29ff6b 36%,#008c28 78%);"></button>
-    <button class="color-btn" data-color="sapphire" style="background:radial-gradient(circle at 35% 28%,#9ae3ff,#29a0ff 36%,#00388c 78%);"></button>
-    <button class="color-btn" data-color="purple" style="background:radial-gradient(circle at 35% 28%,#e29aff,#b229ff 36%,#4a008c 78%);"></button>
-    <button class="color-btn" data-color="black" style="background:radial-gradient(circle at 35% 28%,#777,#333 36%,#000 78%);"></button>
+    <button class="color-btn" data-color="gold" style="background:linear-gradient(135deg, #38bdf8, #0284c7);"></button>
+    <button class="color-btn" data-color="ruby" style="background:linear-gradient(135deg, #f43f5e, #be123c);"></button>
+    <button class="color-btn" data-color="emerald" style="background:linear-gradient(135deg, #10b981, #047857);"></button>
+    <button class="color-btn" data-color="sapphire" style="background:linear-gradient(135deg, #6366f1, #4338ca);"></button>
+    <button class="color-btn" data-color="purple" style="background:linear-gradient(135deg, #a855f7, #7e22ce);"></button>
+    <button class="color-btn" data-color="black" style="background:linear-gradient(135deg, #475569, #1e293b);"></button>
   </div>
 
-  <h3 style="color:var(--text-main); font-size:15px; margin-top:20px;">⚡ 코어 심볼 커스텀</h3>
+  <h3 style="color:var(--text-main); font-size:14px; margin-top:16px;">⚡ 코어 심볼 커스텀</h3>
   <div class="custom-grid">
     <button class="icon-btn" data-icon="⚡">⚡</button>
     <button class="icon-btn" data-icon="💠">💠</button>
@@ -491,19 +548,19 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   <div class="pet-box-grid">
     <div class="game-card">
       <h3>🎁 표준형 드론 보급품</h3>
-      <p style="color:var(--text-sub); font-size:12px;">C~B등급 드론이 출현합니다.</p>
+      <p style="color:var(--text-sub); font-size:11px;">C~B등급 드론 출현</p>
       <button class="btn-game" id="buyPetBox1">보급품 요청 (3,000 에너지)</button>
     </div>
     <div class="game-card">
       <h3>🌟 특수형 드론 보급품</h3>
-      <p style="color:var(--text-sub); font-size:12px;">B~S등급 고성능 드론 출현 확률!</p>
+      <p style="color:var(--text-sub); font-size:11px;">B~S등급 드론 출현 확률</p>
       <button class="btn-game" id="buyPetBox2">보급품 요청 (30,000 에너지)</button>
     </div>
   </div>
 
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;border-bottom:1px solid var(--border-color);padding-bottom:8px;">
-    <h3 style="color:var(--text-main); margin:0; font-size:15px;">🤖 나의 드론 격납고</h3>
-    <span style="font-size:11px; color:var(--accent);">💡 동급 드론을 드래그하여 업그레이드하세요</span>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-bottom:1px solid var(--border-color);padding-bottom:6px;">
+    <h3 style="color:var(--text-main); margin:0; font-size:14px;">🤖 나의 드론 격납고</h3>
+    <span style="font-size:11px; color:var(--accent);">💡 동급 드론 드래그하여 업그레이드</span>
   </div>
   <div id="petList" class="pet-list"></div>
 </div>
@@ -511,31 +568,31 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <!-- 출석체크 탭 -->
 <div id="attendPanel" class="panel hidden">
   <div class="attendance-card">
-    <h2 style="margin-top:0; font-size:18px;">📅 연구소 일일 지원금 수령</h2>
-    <p style="color:var(--text-sub); font-size:13px;">24시간마다 접속하여 무상 연구 자원과 승급 포인트를 지원받으세요!</p>
-    <p style="font-size:14px;">연속 지원일: <b id="attDays" style="color:var(--accent);">0</b>일차</p>
+    <h2 style="margin-top:0; font-size:16px;">📅 연구소 일일 지원금 수령</h2>
+    <p style="color:var(--text-sub); font-size:12px;">24시간마다 접속하여 무상 연구 자원과 승급 포인트를 지원받으세요!</p>
+    <p style="font-size:13px;">연속 지원일: <b id="attDays" style="color:var(--accent);">0</b>일차</p>
     <button id="attendBtn" class="attend-btn">🎁 지원금 수령하기</button>
-    <p id="attStatus" style="font-size:12px;color:var(--text-sub);margin-top:10px;"></p>
+    <p id="attStatus" style="font-size:11px;color:var(--text-sub);margin-top:8px;"></p>
   </div>
 </div>
 
 <!-- 🎰 미니게임 탭 -->
 <div id="minigames" class="panel hidden">
 <div class="minigame-grid">
-  <!-- 1. 에너지 증폭 (슬롯) -->
+  <!-- 1. 에너지 증폭 -->
   <div class="game-card">
     <h3>🔬 에너지 증폭 실험</h3>
     <div class="slot-display" id="slotScreen">❓ ❓ ❓</div>
-    <p style="font-size:11px;color:var(--text-sub);margin:2px 0;">잭팟 확률 0.8%</p>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">확률 0.8%</p>
     <input type="number" id="slotBet" class="bet-input" value="300" min="100" step="100">
     <button class="btn-game" id="slotBtn">증폭 가동 (×20)</button>
   </div>
 
-  <!-- 2. 확률 데이터 분석 (동전) -->
+  <!-- 2. 확률 데이터 분석 -->
   <div class="game-card">
     <h3>📊 확률 데이터 분석</h3>
-    <div class="slot-display" id="coinResult" style="font-size:14px;">상승 or 하락 예측</div>
-    <p style="font-size:11px;color:var(--text-sub);margin:2px 0;">적중률 35%</p>
+    <div class="slot-display" id="coinResult" style="font-size:13px;">상승 or 하락</div>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 35%</p>
     <div style="margin-bottom: 4px;">
       <button class="btn-mini selected" id="btnHead">상승</button>
       <button class="btn-mini" id="btnTail">하락</button>
@@ -547,8 +604,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   <!-- 3. 양자 주사위 -->
   <div class="game-card">
     <h3>🎲 양자 주사위 파동</h3>
-    <div class="slot-display" id="diceResult" style="font-size:14px;">1~8 파동 선택</div>
-    <p style="font-size:11px;color:var(--text-sub);margin:2px 0;">정밀 일치 확률 12.5%</p>
+    <div class="slot-display" id="diceResult" style="font-size:13px;">1~8 선택</div>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">확률 12.5%</p>
     <div class="dice-buttons">
       <button class="btn-mini selected dice-select" data-num="1">1</button>
       <button class="btn-mini dice-select" data-num="2">2</button>
@@ -563,20 +620,20 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <button class="btn-game" id="diceRollBtn">측정 (×7)</button>
   </div>
 
-  <!-- 4. 코어 오버클럭 (룰렛) -->
+  <!-- 4. 코어 오버클럭 -->
   <div class="game-card">
     <h3>⚙️ 코어 오버클럭</h3>
-    <div class="slot-display" id="rouletteResult" style="font-size:14px;">출력 배율 튜닝</div>
-    <p style="font-size:11px;color:var(--text-sub);margin:2px 0;">실패율 65%</p>
+    <div class="slot-display" id="rouletteResult" style="font-size:13px;">배율 튜닝</div>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">실패율 65%</p>
     <input type="number" id="rouletteBet" class="bet-input" value="300" min="100" step="100">
     <button class="btn-game" id="rouletteSpinBtn">오버클럭 시도</button>
   </div>
 
-  <!-- 5. 데이터 배율 예측 (하이&로우) -->
+  <!-- 5. 데이터 배율 예측 -->
   <div class="game-card">
-    <h3>📈 데이터 배율 예측</h3>
-    <div class="slot-display" id="highLowCard" style="font-size:13px;">기준 수치: <b>8</b></div>
-    <p style="font-size:11px;color:var(--text-sub);margin:2px 0;">적중률 35%</p>
+    <h3>📈 배율 예측</h3>
+    <div class="slot-display" id="highLowCard" style="font-size:12px;">기준: <b>8</b></div>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 35%</p>
     <div style="margin-bottom: 4px;">
       <button class="btn-mini selected" id="btnHigh">UP</button>
       <button class="btn-mini" id="btnLow">DOWN</button>
@@ -587,9 +644,9 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 
   <!-- 6. 알고리즘 방어전 -->
   <div class="game-card">
-    <h3>🛡️ 알고리즘 방어전</h3>
-    <div class="slot-display" id="rspResult" style="font-size:14px;">방어 성공 시 ×3.5배</div>
-    <p style="font-size:11px;color:var(--text-sub);margin:2px 0;">AI 대응 (승률 20%)</p>
+    <h3>🛡️ 알고리즘 방어</h3>
+    <div class="slot-display" id="rspResult" style="font-size:13px;">방어 성공 ×3.5</div>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">승률 20%</p>
     <div style="margin-bottom: 4px;">
       <button class="btn-mini selected rsp-select" data-choice="rock">실드</button>
       <button class="btn-mini rsp-select" data-choice="scissors">블레이드</button>
@@ -603,9 +660,9 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 
 <!-- ✨ 영구 지속 환생 스탯 탭 -->
 <div id="permStatPanel" class="panel hidden">
-  <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:18px;">✨ 영구 연구 스탯 상점</h2>
-  <p style="text-align:center;color:var(--text-sub);font-size:12px;margin-bottom:16px;">
-    보유 승급 포인트(RP): <b id="permRpDisplay" style="color:var(--accent);font-size:16px;">0</b><br>
+  <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:16px;">✨ 영구 연구 스탯 상점</h2>
+  <p style="text-align:center;color:var(--text-sub);font-size:11px;margin-bottom:14px;">
+    보유 승급 포인트(RP): <b id="permRpDisplay" style="color:var(--accent);font-size:15px;">0</b><br>
     * 승급 후에도 절대 초기화되지 않고 영구 유지됩니다!
   </p>
 
@@ -634,18 +691,18 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <!-- 🔮 환생 탭 -->
 <div id="rebirthPanel" class="panel hidden">
 <div class="attendance-card">
-<h2 style="margin-top:0; font-size:18px;">🔮 시스템 승급</h2>
-<p style="color:var(--text-sub); font-size:13px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
-<p style="font-size:14px;">현재 승급 포인트: <b id="rp" style="color:var(--accent);">0</b></p>
-<p style="font-size:14px;">승급 요구 조건: <b id="req" style="color:var(--accent);">500,000</b> 에너지</p>
-<button id="rebirthBtn" class="attend-btn" style="margin-top:10px;">🔮 시스템 승급 실행</button>
+<h2 style="margin-top:0; font-size:16px;">🔮 시스템 승급</h2>
+<p style="color:var(--text-sub); font-size:12px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
+<p style="font-size:13px;">현재 승급 포인트: <b id="rp" style="color:var(--accent);">0</b></p>
+<p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">500,000</b> 에너지</p>
+<button id="rebirthBtn" class="attend-btn" style="margin-top:8px;">🔮 시스템 승급 실행</button>
 </div>
 </div>
 
 <!-- 🏆 구글 연동 랭킹 탭 -->
 <div id="rankPanel" class="panel hidden">
   <div class="google-box">
-    <h3 style="color:var(--text-main);margin:0 0 10px;font-size:15px;">🌐 실시간 랭킹 연동</h3>
+    <h3 style="color:var(--text-main);margin:0 0 8px;font-size:14px;">🌐 실시간 랭킹 연동</h3>
     
     <div id="g_id_onload"
          data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
@@ -657,13 +714,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
     </div>
 
-    <div style="margin-top:12px;">
-      <p style="margin:5px 0; font-size:13px;">현재 보유 에너지: <b id="myCurrentScore" style="color:var(--accent);">0</b> 에너지</p>
-      <button id="registerRankBtn" class="btn-game" style="width:auto;padding:8px 16px;margin-top:6px;">🏆 서버에 에너지 동기화</button>
+    <div style="margin-top:10px;">
+      <p style="margin:4px 0; font-size:12px;">현재 보유 에너지: <b id="myCurrentScore" style="color:var(--accent);">0</b> 에너지</p>
+      <button id="registerRankBtn" class="btn-game" style="width:auto;padding:6px 14px;margin-top:4px;">🏆 서버에 에너지 동기화</button>
     </div>
   </div>
 
-  <h3 style="text-align:center;color:var(--text-main);font-size:15px;margin:15px 0 10px;">🏆 실시간 글로벌 Top 10</h3>
+  <h3 style="text-align:center;color:var(--text-main);font-size:14px;margin:12px 0 8px;">🏆 실시간 글로벌 Top 10</h3>
   <table class="rank-table">
     <thead>
       <tr>
@@ -675,6 +732,11 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     </thead>
     <tbody id="rankList"></tbody>
   </table>
+
+  <!-- 자신의 순위 표시 영역 -->
+  <div class="my-rank-banner" id="myRankDisplay">
+    내 순위: 조회 중...
+  </div>
 </div>
 
 </div>
@@ -693,14 +755,16 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const saveKey = "energyRushV11";
+const saveKey = "energyRushV12";
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score:0, best:0, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false,
  pets:[], equippedPet:null, lastAttend:0, attendDays:0, autoEnabled:true,
  permPower:0, permCps:0, permLuck:0,
- coinColor:'gold', coinIcon:'⚡'
+ coinColor:'gold', coinIcon:'⚡',
+ weapons: { blade:false, cannon:false, blaster:false },
+ hunts: { zone1:false, zone2:false, zone3:false }
 };
 
 const PET_DB = {
@@ -781,15 +845,21 @@ $("downloadGameBtn").onclick = () => {
   say("시스템 파일이 다운로드되었습니다!");
 };
 
-$("downloadSaveBtn").onclick = () => {
-  const saveData = { gameData: d, user: currentUser };
-  const blob = new Blob([JSON.stringify(saveData, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `energy_rush_backup_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  say("연구 데이터가 백업되었습니다!");
-};
+function getWeaponBonus(){
+  let bonus = 0;
+  if(d.weapons.blade) bonus += 15;
+  if(d.weapons.cannon) bonus += 50;
+  if(d.weapons.blaster) bonus += 200;
+  return bonus;
+}
+
+function getHuntBonus(){
+  let bonus = 0;
+  if(d.hunts.zone1) bonus += 50;
+  if(d.hunts.zone2) bonus += 250;
+  if(d.hunts.zone3) bonus += 1000;
+  return bonus;
+}
 
 function getPetBonus(){
   let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.10;
@@ -838,8 +908,8 @@ function render(){
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
 
- const totalPower = (d.power + (d.permPower || 0)) * baseMult * petBonus.clickMult * petBonus.coinMult;
- const totalCps = (d.cps + (d.permCps || 0)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
+ const totalPower = ((d.power + (d.permPower || 0) + getWeaponBonus())) * baseMult * petBonus.clickMult * petBonus.coinMult;
+ const totalCps = ((d.cps + (d.permCps || 0) + getHuntBonus())) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  $("score").textContent=fmt(d.score); 
  $("power").textContent=fmt(totalPower);
@@ -880,6 +950,24 @@ function render(){
  if(coreBtn) coreBtn.textContent=d.core?"완료":"구매 50,000";
  if(doubleBtn) doubleBtn.textContent=d.double?"완료":"구매 200,000";
 
+ // 무기 버튼 렌더링
+ document.querySelectorAll(".buy-weapon").forEach(btn => {
+   const w = btn.dataset.weapon;
+   if(d.weapons[w]) {
+     btn.textContent = "보유중";
+     btn.disabled = true;
+   }
+ });
+
+ // 탐사지역 버튼 렌더링
+ document.querySelectorAll(".buy-hunt").forEach(btn => {
+   const h = btn.dataset.hunt;
+   if(d.hunts[h]) {
+     btn.textContent = "탐사완료";
+     btn.disabled = true;
+   }
+ });
+
  const now = Date.now();
  const cooldown = 24 * 60 * 60 * 1000;
  $("attDays").textContent = d.attendDays;
@@ -904,6 +992,36 @@ function updateCustomUI(){
     btn.classList.toggle("selected", btn.dataset.icon === (d.coinIcon || '⚡'));
   });
 }
+
+// 무기 구매 로직
+document.querySelectorAll(".buy-weapon").forEach(btn => {
+  btn.onclick = () => {
+    const w = btn.dataset.weapon;
+    const costs = { blade: 25000, cannon: 150000, blaster: 800000 };
+    const cost = costs[w];
+    if(d.score < cost) return say("에너지가 부족합니다.");
+    d.score -= cost;
+    d.weapons[w] = true;
+    say("신규 장비가 장착되었습니다!");
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+});
+
+// 탐사지역 구매 로직
+document.querySelectorAll(".buy-hunt").forEach(btn => {
+  btn.onclick = () => {
+    const h = btn.dataset.hunt;
+    const costs = { zone1: 15000, zone2: 120000, zone3: 600000 };
+    const cost = costs[h];
+    if(d.score < cost) return say("에너지가 부족합니다.");
+    d.score -= cost;
+    d.hunts[h] = true;
+    say("새로운 탐사 지역이 개척되었습니다!");
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+});
 
 $("buyPermPowerBtn").onclick = () => {
   let cost = 1;
@@ -969,37 +1087,52 @@ function syncScoreToFirebase() {
 function loadFirebaseRankings(){
   db.collection('rankings')
     .orderBy('score', 'desc')
-    .limit(10)
     .get()
     .then((snapshot) => {
       const rankList = $("rankList");
       rankList.innerHTML = "";
       if(snapshot.empty) {
         rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
+        $("myRankDisplay").textContent = "내 순위: 랭킹 없음";
         return;
       }
+      
       let index = 0;
+      let myRankFound = false;
+      
       snapshot.forEach((doc) => {
         const item = doc.data();
         let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
         let isMyRank = currentUser && item.googleId === currentUser.googleId;
-        let tr = document.createElement("tr");
-        if(isMyRank) tr.style.background = "rgba(56,189,248,0.05)";
+        
+        if(isMyRank) {
+          myRankFound = true;
+          $("myRankDisplay").innerHTML = `내 순위: <b>${index + 1}위</b> (보유 에너지: ${fmt(item.score)})`;
+        }
 
-        tr.innerHTML = `
-          <td>${medal}${index + 1}위</td>
-          <td>
-            <div class="rank-user-info">
-              <img src="${item.picture}" class="rank-user-avatar" onerror="this.src='https://via.placeholder.com/26'">
-              <b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}
-            </div>
-          </td>
-          <td style="color:var(--accent);">${fmt(item.score)}</td>
-          <td>${item.rebirth || 0}회</td>
-        `;
-        rankList.appendChild(tr);
+        if(index < 10) {
+          let tr = document.createElement("tr");
+          if(isMyRank) tr.style.background = "rgba(56,189,248,0.05)";
+
+          tr.innerHTML = `
+            <td>${medal}${index + 1}위</td>
+            <td>
+              <div class="rank-user-info">
+                <img src="${item.picture}" class="rank-user-avatar" onerror="this.src='https://via.placeholder.com/26'">
+                <b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}
+              </div>
+            </td>
+            <td style="color:var(--accent);">${fmt(item.score)}</td>
+            <td>${item.rebirth || 0}회</td>
+          `;
+          rankList.appendChild(tr);
+        }
         index++;
       });
+
+      if(!myRankFound) {
+        $("myRankDisplay").innerHTML = currentUser ? "내 순위: 10위 밖 (동기화 버튼을 눌러주세요)" : "내 순위: 미로그인 상태";
+      }
     });
 }
 
@@ -1013,7 +1146,7 @@ function renderPetList(){
   const container = $("petList");
   container.innerHTML = "";
   if(!d.pets || d.pets.length === 0){
-    container.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:12px;'>보유한 드론이 없습니다.</p>";
+    container.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:11px;'>보유한 드론이 없습니다.</p>";
     return;
   }
 
@@ -1030,8 +1163,8 @@ function renderPetList(){
     card.innerHTML = `
       <span class="badge-grade grade-${pet.grade}">${pet.grade}급</span>
       <div class="pet-icon">${pet.icon}</div>
-      <b style="color:var(--text-main); font-size:13px;">${pet.name}</b>
-      <p style="font-size:11px;color:var(--text-sub);margin:4px 0 8px;">${pet.desc}</p>
+      <b style="color:var(--text-main); font-size:12px;">${pet.name}</b>
+      <p style="font-size:10px;color:var(--text-sub);margin:3px 0 6px;">${pet.desc}</p>
       <button class="btn-mini" style="width:100%;" onclick="toggleEquipPet('${petId}')">
         ${isEquipped ? '해제' : '장착'}
       </button>
@@ -1103,7 +1236,7 @@ $("coin").onclick=()=>{
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
  
- let currentPower = d.power + (d.permPower || 0);
+ let currentPower = (d.power + (d.permPower || 0) + getWeaponBonus());
  let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
 
  const totalLuckProb = petBonus.luckProb + ((d.permLuck || 0) / 100);
@@ -1366,9 +1499,9 @@ $("rspPlayBtn").onclick = () => {
 };
 
 setInterval(()=>{
- if((d.cps + (d.permCps || 0)) > 0 && d.autoEnabled){
-   const currentCps = d.cps + (d.permCps || 0);
-   d.score += currentCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
+ const autoCps = (d.cps + (d.permCps || 0) + getHuntBonus());
+ if(autoCps > 0 && d.autoEnabled){
+   d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
    save();
    if(currentUser) syncScoreToFirebase();
  }
