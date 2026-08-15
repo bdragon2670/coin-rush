@@ -771,11 +771,11 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 상점 탭 -->
+    <!-- 상점 탭 (행운 효율 2배 차감 적용) -->
     <div id="shop" class="panel hidden">
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 4% 확률로 에너지 보너스 ×1.3 (너프됨)</p></div>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 2% 확률로 에너지 보너스 ×1.15 (효과 차감)</p></div>
           <button class="buy" data-item="luck">구매 35,000</button>
         </div>
         <div class="shop-item">
@@ -801,7 +801,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 💎 보석 캐시 상점 탭 (가격 상향 조정) -->
+    <!-- 💎 보석 캐시 상점 탭 -->
     <div id="gemShop" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 보석 전용 프리미엄 캐시 상점</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">도감 수집 및 지원금으로 모은 보석(💎)으로 강력한 영구 버프 및 특수 아이템을 구매하세요!</p>
@@ -815,7 +815,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
           <button class="gem-buy" data-gemitem="gemAuto">구매 💎 100</button>
         </div>
         <div class="shop-item">
-          <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +7%</p></div>
+          <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +3.5% (효과 차감)</p></div>
           <button class="gem-buy" data-gemitem="gemLuck">구매 💎 150</button>
         </div>
         <div class="shop-item">
@@ -859,10 +859,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="marketList" class="market-list"></div>
     </div>
 
-    <!-- 📈 주식시장 탭 -->
+    <!-- 📈 주식시장 탭 (서버 공용 그래프 연동) -->
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">실시간 시세 그래프를 분석하여 일괄 매수 및 매도로 자산을 불리세요!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (글로벌 공용)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">모든 플레이어가 동일한 실시간 시세 그래프를 공유합니다!</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
@@ -931,25 +931,25 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 🐾 드론 탭 (배수 가격, 일괄 다중 일광합성 및 S등급 이상 제한 추가) -->
+    <!-- 🐾 드론 탭 ('모두 합성' 추가 및 확장된 24종 드론 지원) -->
     <div id="petPanel" class="panel hidden">
       <div class="pet-box-grid">
         <div class="game-card">
           <h3>🎁 표준형 드론 보급품</h3>
-          <p style="color:var(--text-sub); font-size:11px;" id="box1Desc">C ~ B등급 드론 출현</p>
+          <p style="color:var(--text-sub); font-size:11px;">C ~ B등급 드론 출현</p>
           <button class="btn-game" id="buyPetBox1">보급품 요청 (12,000 에너지)</button>
         </div>
         <div class="game-card">
           <h3>🌟 특수형 드론 보급품</h3>
-          <p style="color:var(--text-sub); font-size:11px;" id="box2Desc">A ~ S등급 드론 출현</p>
+          <p style="color:var(--text-sub); font-size:11px;">A ~ S등급 드론 출현</p>
           <button class="btn-game" id="buyPetBox2">보급품 요청 (120,000 에너지)</button>
         </div>
       </div>
 
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:10px; padding:12px; margin-bottom:14px; text-align:center;">
-        <h3 style="color:var(--accent); margin:0 0 4px; font-size:14px;">☀️ 일광 에너지 일괄 드론 공명 합성</h3>
-        <p style="color:var(--text-sub); font-size:11px; margin:0 0 8px;">보유한 동일 등급 드론들을 한번에 연쇄 공명시켜 상위 드론으로 전부 자동 합성합니다! (S등급 이상 및 레전더리 이상은 불가)</p>
-        <button class="btn-game" id="solarMergeBtn" style="background:#f59e0b !important; color:#fff !important;">☀️ 일광 공명 일괄 합성 가동</button>
+        <h3 style="color:var(--accent); margin:0 0 4px; font-size:14px;">⚡ 전체 드론 '모두 합성' 자동 가동</h3>
+        <p style="color:var(--text-sub); font-size:11px; margin:0 0 8px;">격납고에 있는 모든 동일 등급 드론들을 한번에 연쇄적으로 최상위 등급까지 자동 합성합니다!</p>
+        <button class="btn-game" id="mergeAllBtn" style="background:#10b981 !important; color:#fff !important;">🤖 모두 합성 실행</button>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-bottom:1px solid var(--border-color);padding-bottom:6px;">
@@ -959,13 +959,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="petList" class="pet-list"></div>
     </div>
 
-    <!-- 📖 도감 탭 -->
+    <!-- 📖 도감 탭 (총 24종 확장) -->
     <div id="encyclopediaPanel" class="panel hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감 & 수집 보상</h3>
-        <span style="font-size:12px; color:var(--accent);" id="encyclopediaCount">수집률: 0 / 14</span>
+        <span style="font-size:12px; color:var(--accent);" id="encyclopediaCount">수집률: 0 / 24</span>
       </div>
-      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:8px;">새로운 드론을 도감에 등록할 때마다 소량의 보석(💎)이 지급됩니다!</p>
+      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:8px;">새로운 드론을 도감에 등록할 때마다 적절한 보석(💎)이 지급됩니다!</p>
       
       <div class="progress-bar-container">
         <div class="progress-bar-fill" id="encyclopediaProgressBar"></div>
@@ -974,11 +974,11 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="encyclopediaList" class="encyclopedia-list"></div>
     </div>
 
-    <!-- 출석체크 탭 (지원금 대폭 상향) -->
+    <!-- 출석체크 탭 -->
     <div id="attendPanel" class="panel hidden">
       <div class="attendance-card">
         <h2 style="margin-top:0; font-size:16px;">📅 연구소 일일 지원금 수령</h2>
-        <p style="color:var(--text-sub); font-size:12px;">24시간마다 접속하여 대폭 상향된 무상 연구 자원과 보석 5,000개를 지원받으세요!</p>
+        <p style="color:var(--text-sub); font-size:12px;">24시간마다 접속하여 무상 연구 자원과 보석 5,000개를 지원받으세요!</p>
         <p style="font-size:13px;">연속 지원일: <b id="attDays" style="color:var(--accent);">0</b>일차</p>
         <button id="attendBtn" class="attend-btn">🎁 지원금 수령하기</button>
         <p id="attStatus" style="font-size:11px;color:var(--text-sub);margin-top:8px;"></p>
@@ -1064,13 +1064,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 🔮 승급 탭 -->
+    <!-- 🔮 승급 탭 (환생 가격 20만원 마이너스 적용) -->
     <div id="rebirthPanel" class="panel hidden">
       <div class="attendance-card">
         <h2 style="margin-top:0; font-size:16px;">🔮 시스템 승급</h2>
         <p style="color:var(--text-sub); font-size:12px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다. (보석과 도감은 유지됨)</p>
         <p style="font-size:13px;">현재 승급 포인트: <b id="rp" style="color:var(--accent);">0</b></p>
-        <p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,200,000</b> 에너지</p>
+        <p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,000,000</b> 에너지 (-20만 완화)</p>
         <button id="rebirthBtn" class="attend-btn" style="margin-top:8px;">🔮 시스템 승급 실행</button>
       </div>
     </div>
@@ -1210,11 +1210,10 @@ function playEpicExplosionSound() {
   } catch (e) {}
 }
 
-// 🎶 레전더리 이상 성공 시 활발한 효과음
 function playSuccessSound() {
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    const notes = [523.25, 659.25, 783.99, 1046.50];
     notes.forEach((freq, idx) => {
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -1230,7 +1229,6 @@ function playSuccessSound() {
   } catch(e){}
 }
 
-// 🎶 레전더리 이상 실패 시 우울한 효과음
 function playFailureSound() {
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1253,14 +1251,14 @@ function playFailureSound() {
 // --- 패치노트 데이터 (누적 유지) ---
 const patchNotes = [
   {
-    version: "v4.0 패치 (최신)",
-    title: "보석 드랍률 하향, 캐시상점 가격 상향, 대량 일괄 일광합성 및 드론 추가 너프 적용",
-    desc: "1) 클릭 시 보석 드랍 확률과 획득량이 대폭 하향 조정되었습니다.\n2) 캐시 상점 내 전용 아이템들의 보석(💎) 구매 가격이 대폭 상향되었습니다.\n3) 일광 공명 합성이 동일 등급 다중 보유 시 한번에 대량으로 연쇄 합성되도록 개편되었으며, S등급 이상 및 레전더리 이상은 일광 합성이 불가능하도록 제한되었습니다.\n4) 드론 전체 능력치가 추가 너프되었고, 드론 보급품 구매 시 누적 횟수에 따라 가격이 배수로 상승합니다.\n5) 레전더리 이상 등급 합성 성공 및 실패 시 각각 활발한 성공 음악과 우울한 실패 음악 효과음이 재생됩니다."
+    version: "v4.1 패치 (최신)",
+    title: "주식 그래프 서버 공용화, 신규 드론 10종 추가 및 '모두 합성' 도입, 환생 비용 완화",
+    desc: "1) 모든 플레이어가 동일한 실시간 주식 그래프 시세를 공유하도록 서버 연동되었습니다.\n2) 일광 합성이 삭제되고 격납고 전체 드론을 연쇄 업그레이드하는 '모두 합성' 기능이 추가되었습니다.\n3) 신규 드론 10종이 추가되어 총 24종의 드론 도감 수집이 가능해졌습니다.\n4) 환생 요구 에너지가 20만 에너지 낮아졌으며, 상점 내 행운 관련 버프 효과가 2배 차감(조정)되었습니다."
   },
   {
-    version: "v3.9 패치",
-    title: "유저 간 거래소 및 랭킹 시스템 실시간 파이어베이스(Firestore) 동기화 개편",
-    desc: "1) 거래소 매물 및 랭킹이 실시간 onSnapshot 리스너로 완벽 연동되었습니다."
+    version: "v4.0 패치",
+    title: "보석 드랍률 하향, 캐시상점 가격 상향, 드론 추가 너프 적용",
+    desc: "1) 보석 드랍 및 캐시 상점 가격이 조정되었습니다."
   },
   {
     version: "v1.0 패치",
@@ -1336,33 +1334,50 @@ if(!d.lastMarketReset || nowTime - d.lastMarketReset > 24 * 60 * 60 * 1000) {
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
-// 드론 추가 너프 반영 (스펙 하향)
+// 🌟 총 24종 드론 데이터베이스 구축 (신규 10종 추가)
 const PET_DB = {
  cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.5%', sellPrice: 150, gemReward: 1 },
  chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.8%', sellPrice: 150, gemReward: 1 },
+ sparrow: { id:'sparrow', name:'초소형 정찰기', icon:'🦅', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.6%', sellPrice: 150, gemReward: 1 },
+ beetle: { id:'beetle', name:'딱정벌레 채굴기', icon:'🐞', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.7%', sellPrice: 150, gemReward: 1 },
+ 
  dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +1%', sellPrice: 600, gemReward: 1 },
  rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +1.2%', sellPrice: 600, gemReward: 1 },
+ hamster: { id:'hamster', name:'회전축 제너레이터', icon:'🐹', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +1.1%', sellPrice: 600, gemReward: 1 },
+ frog: { id:'frog', name:'점프 드라이브', icon:'🐸', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +1.3%', sellPrice: 600, gemReward: 1 },
+
  fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +1.5%', sellPrice: 3000, gemReward: 2 },
  panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +1.5%', sellPrice: 3000, gemReward: 2 },
+ wolf: { id:'wolf', name:'텍틱스 프로세서', icon:'🐺', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +1.8%', sellPrice: 3000, gemReward: 2 },
+ owl: { id:'owl', name:'나이트 옵틱스', icon:'🦉', grade:'A', nextGrade:'S', desc:'클릭 효율 +1.8%', sellPrice: 3000, gemReward: 2 },
+
  dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.04배', sellPrice: 15000, gemReward: 3 },
  unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.05배', sellPrice: 15000, gemReward: 3 },
  phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +2.5% & 자동 +1.5%', sellPrice: 15000, gemReward: 3 },
  titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.06배', sellPrice: 15000, gemReward: 3 },
+ 
  legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:'M', desc:'모든 에너지 획득량 1.15배 & 행운 확률 +3%', sellPrice: 20000, gemReward: 5 },
+ leviathan: { id:'leviathan', name:'심해 레비아탄', icon:'🐉', grade:'L', nextGrade:'M', desc:'모든 에너지 획득량 1.18배', sellPrice: 22000, gemReward: 5 },
+
  mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:'T', desc:'모든 에너지 획득량 1.5배 & 행운 확률 +8%', sellPrice: 50000, gemReward: 8 },
+ chronos: { id:'chronos', name:'크로노스 웨이브', icon:'⏳', grade:'M', nextGrade:'T', desc:'모든 에너지 획득량 1.6배', sellPrice: 55000, gemReward: 8 },
+
  trans: { id:'trans', name:'에테르 오브 파라다이스', icon:'💎✨', grade:'T', nextGrade:'X', desc:'모든 에너지 획득량 2.5배 & 행운 확률 +15%', sellPrice: 150000, gemReward: 12 },
- chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 획득량 6배 & 행운 확률 +25%', sellPrice: 400000, gemReward: 20 }
+ infinity: { id:'infinity', name:'인피니티 게이트', icon:'🌀', grade:'T', nextGrade:'X', desc:'모든 에너지 획득량 2.8배', sellPrice: 160000, gemReward: 12 },
+
+ chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 획득량 6배 & 행운 확률 +25%', sellPrice: 400000, gemReward: 20 },
+ voidmaster: { id:'voidmaster', name:'오블리비언 싱귤래리티', icon:'🖤⚛️', grade:'X', nextGrade:null, desc:'모든 에너지 획득량 7.5배', sellPrice: 500000, gemReward: 25 }
 };
 
 const PETS_BY_GRADE = {
- 'C': ['cat', 'chick'],
- 'B': ['dog', 'rabbit'],
- 'A': ['fox', 'panda'],
+ 'C': ['cat', 'chick', 'sparrow', 'beetle'],
+ 'B': ['dog', 'rabbit', 'hamster', 'frog'],
+ 'A': ['fox', 'panda', 'wolf', 'owl'],
  'S': ['dragon', 'unicorn', 'phoenix', 'titan'],
- 'L': ['legend'],
- 'M': ['mythic'],
- 'T': ['trans'],
- 'X': ['chaos']
+ 'L': ['legend', 'leviathan'],
+ 'M': ['mythic', 'chronos'],
+ 'T': ['trans', 'infinity'],
+ 'X': ['chaos', 'voidmaster']
 };
 
 const COLOR_GRADIENTS = {
@@ -1409,6 +1424,35 @@ function syncScoreToFirebase(force = false) {
     rebirth: d.rebirth,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).catch(err => {});
+}
+
+// 📈 서버 공용 주식 데이터 동기화 리스너
+let unsubscribeStock = null;
+function initRealtimeStock() {
+  if(unsubscribeStock) unsubscribeStock();
+  unsubscribeStock = db.collection('global_stock').doc('market').onSnapshot((doc) => {
+    if(doc.exists) {
+      const data = doc.data();
+      if(data.stockPrices) stockPrices = data.stockPrices;
+      if(data.stockHistory1) stockHistory1 = data.stockHistory1;
+      if(data.stockHistory2) stockHistory2 = data.stockHistory2;
+
+      if(!$("stockPanel").classList.contains("hidden")) {
+        if($("stockPrice1")) $("stockPrice1").textContent = fmt(stockPrices[1]);
+        if($("stockPrice2")) $("stockPrice2").textContent = fmt(stockPrices[2]);
+        drawStockChart("stockCanvas1", stockHistory1);
+        drawStockChart("stockCanvas2", stockHistory2);
+      }
+    } else {
+      // 초기 문서 생성
+      db.collection('global_stock').doc('market').set({
+        stockPrices: stockPrices,
+        stockHistory1: stockHistory1,
+        stockHistory2: stockHistory2,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  });
 }
 
 let unsubscribeRankings = null;
@@ -1674,18 +1718,35 @@ function getPetBonus(){
   d.equippedPets.forEach(petId => {
     if(petId === 'cat') clickMult += 0.005;
     if(petId === 'chick') clickMult += 0.008;
+    if(petId === 'sparrow') clickMult += 0.006;
+    if(petId === 'beetle') clickMult += 0.007;
+
     if(petId === 'dog') cpsMult += 0.01;
     if(petId === 'rabbit') cpsMult += 0.012;
+    if(petId === 'hamster') cpsMult += 0.011;
+    if(petId === 'frog') cpsMult += 0.013;
+
     if(petId === 'fox') luckProb += 0.015;
     if(petId === 'panda') { clickMult += 0.015; cpsMult += 0.015; }
+    if(petId === 'wolf') luckProb += 0.018;
+    if(petId === 'owl') clickMult += 0.018;
+
     if(petId === 'dragon') coinMult *= 1.04;
     if(petId === 'unicorn') coinMult *= 1.05;
     if(petId === 'phoenix') { clickMult += 0.025; cpsMult += 0.015; }
     if(petId === 'titan') coinMult *= 1.06;
+
     if(petId === 'legend') { coinMult *= 1.15; luckProb += 0.03; }
+    if(petId === 'leviathan') coinMult *= 1.18;
+
     if(petId === 'mythic') { coinMult *= 1.5; luckProb += 0.08; }
+    if(petId === 'chronos') coinMult *= 1.6;
+
     if(petId === 'trans') { coinMult *= 2.5; luckProb += 0.15; }
+    if(petId === 'infinity') coinMult *= 2.8;
+
     if(petId === 'chaos') { coinMult *= 6.0; luckProb += 0.25; }
+    if(petId === 'voidmaster') coinMult *= 7.5;
   });
   return { clickMult, cpsMult, coinMult, luckProb };
 }
@@ -1827,14 +1888,14 @@ function render(){
  
  if($("equippedPetCount")) $("equippedPetCount").textContent = `${d.equippedPets.length}/2`;
  
- let req = 1200000 * Math.pow(2.2, d.rebirth); 
+ // 환생 비용 -20만 에너지 완화 반영 (기본 100만부터 시작)
+ let req = Math.max(200000, 1000000 * Math.pow(2.0, d.rebirth)); 
  if($("req")) $("req").textContent = fmt(req);
  if($("rebirthBtn")) $("rebirthBtn").disabled = d.score < req;
  
  if($("powerBtn")) $("powerBtn").textContent = fmt(350 * Math.pow(1.25, d.power - 1)) + " 에너지";
  if($("autoBtn")) $("autoBtn").textContent = fmt(1800 * Math.pow(1.28, d.cps)) + " 에너지";
 
- // 배수 적용된 보급품 가격 동적 표시
  const box1Cost = Math.floor(12000 * Math.pow(1.15, d.box1Count));
  const box2Cost = Math.floor(120000 * Math.pow(1.18, d.box2Count));
  if($("buyPetBox1")) $("buyPetBox1").textContent = `보급품 요청 (${fmt(box1Cost)} 에너지)`;
@@ -1938,59 +1999,55 @@ function renderEncyclopedia() {
   if(countDisplay) countDisplay.textContent = `수집률: ${discoveredCount} / ${totalKeys.length}`;
 }
 
-// ☀️ 대량 일괄 일광합성 함수 (C, B, A 등급 등 2개 이상 모여있으면 전부 연쇄 자동 공명 합성, S등급 이상 및 레전더리 이상 차단)
-function performSolarMerge() {
-  let gradeGroups = { 'C': [], 'B': [], 'A': [] };
-  d.pets.forEach((pId, idx) => {
-    const grade = PET_DB[pId].grade;
-    if(gradeGroups[grade]) {
-      gradeGroups[grade].push({ id: pId, index: idx });
-    }
-  });
+// 🤖 격납고 전체 드론 연쇄 '모두 합성' 실행 함수
+function performMergeAll() {
+  let gradesOrder = ['C', 'B', 'A', 'S', 'L', 'M', 'T'];
+  let mergedCount = 0;
 
-  let mergedAny = false;
-  let summaryLog = [];
+  gradesOrder.forEach(grade => {
+    let gradePool = PETS_BY_GRADE[grade];
+    if(!gradePool) return;
 
-  ['C', 'B', 'A'].forEach(grade => {
-    let list = gradeGroups[grade];
-    while(list.length >= 2) {
-      let p1Obj = list.shift();
-      let p2Obj = list.shift();
-      
-      // 장착 중 해제 처리
-      [p1Obj.id, p2Obj.id].forEach(p => {
+    let gradeIndices = [];
+    d.pets.forEach((pId, idx) => {
+      if(PET_DB[pId].grade === grade) gradeIndices.push({ id: pId, index: idx });
+    });
+
+    while(gradeIndices.length >= 2) {
+      let p1 = gradeIndices.shift();
+      let p2 = gradeIndices.shift();
+
+      [p1.id, p2.id].forEach(p => {
         let eqIdx = d.equippedPets.indexOf(p);
         if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
       });
 
-      // 기존 격납고에서 두 개 제거 (인덱스 역순 정렬 후 제거)
-      let indices = [p1Obj.index, p2Obj.index].sort((a,b) => b - a);
-      indices.forEach(i => d.pets.splice(i, 1));
+      let indicesToRemove = [p1.index, p2.index].sort((a,b) => b - a);
+      indicesToRemove.forEach(i => d.pets.splice(i, 1));
 
-      // 상위 등급 결정
-      let sourcePet = PET_DB[p1Obj.id];
-      const nextGradeCandidates = PETS_BY_GRADE[sourcePet.nextGrade];
-      let unowned = nextGradeCandidates.filter(id => !d.pets.includes(id));
-      let newPetId = unowned.length > 0 ? unowned[0] : nextGradeCandidates[Math.floor(Math.random() * nextGradeCandidates.length)];
+      let sourcePet = PET_DB[p1.id];
+      if(sourcePet.nextGrade) {
+        const nextCandidates = PETS_BY_GRADE[sourcePet.nextGrade];
+        let unowned = nextCandidates.filter(id => !d.pets.includes(id));
+        let newPetId = unowned.length > 0 ? unowned[0] : nextCandidates[Math.floor(Math.random() * nextCandidates.length)];
+        d.pets.push(newPetId);
+        mergedCount++;
+      }
 
-      d.pets.push(newPetId);
-      mergedAny = true;
-      summaryLog.push(PET_DB[newPetId].name);
-
-      // 인덱스 재계산을 위해 다시 등급 그룹 재분류
-      gradeGroups[grade] = [];
+      // 재분류
+      gradeIndices = [];
       d.pets.forEach((pId, idx) => {
-        if(gradeGroups[PET_DB[pId].grade]) gradeGroups[PET_DB[pId].grade].push({ id: pId, index: idx });
+        if(PET_DB[pId].grade === grade) gradeIndices.push({ id: pId, index: idx });
       });
-      list = gradeGroups[grade];
     }
   });
 
-  if(!mergedAny) {
-    return say("일광 공명 합성을 위한 동일 등급 드론(최소 2개 이상, S등급 미만)이 부족합니다.");
+  if(mergedCount === 0) {
+    return say("합성할 수 있는 동일 등급 드론 쌍이 없습니다.");
   }
 
-  say(`☀️ 일광 연쇄 공명 완료! 획득: ${summaryLog.join(', ')}`);
+  playSuccessSound();
+  say(`🤖 모두 합성 완료! 총 ${mergedCount쌍 = mergedCount}건의 연쇄 합성이 실행되었습니다!`);
   save();
 }
 
@@ -2067,7 +2124,7 @@ function renderPetList(){
           }
 
           triggerEpicExplosion("고등급 드론");
-          playFailureSound(); // 레전더리 이상 실패 시 우울한 효과음
+          playFailureSound();
           indicesToRemove.forEach(idx => {
             let removedPetId = d.pets[idx];
             let equipIdx = d.equippedPets.indexOf(removedPetId);
@@ -2132,7 +2189,6 @@ function sellPet(index){
   save();
 }
 
-// 드론 뽑기 가격 배수 상승 구조 적용
 function drawPet(boxType){
   const cost = boxType === 1 ? Math.floor(12000 * Math.pow(1.15, d.box1Count)) : Math.floor(120000 * Math.pow(1.18, d.box2Count));
   if(d.score < cost) return say("에너지가 부족합니다.");
@@ -2143,16 +2199,11 @@ function drawPet(boxType){
 
   let obtained = 'cat';
   if(boxType === 1){
-    let r = Math.random();
-    if(r < 0.90) obtained = Math.random() < 0.5 ? 'cat' : 'chick';
-    else obtained = Math.random() < 0.5 ? 'dog' : 'rabbit';
+    let cPool = PETS_BY_GRADE['C'].concat(PETS_BY_GRADE['B']);
+    obtained = cPool[Math.floor(Math.random() * cPool.length)];
   } else {
-    let r = Math.random();
-    if(r < 0.80) obtained = Math.random() < 0.5 ? 'fox' : 'panda';
-    else {
-      let sPool = ['dragon', 'unicorn', 'phoenix', 'titan'];
-      obtained = sPool[Math.floor(Math.random() * sPool.length)];
-    }
+    let sPool = PETS_BY_GRADE['A'].concat(PETS_BY_GRADE['S']);
+    obtained = sPool[Math.floor(Math.random() * sPool.length)];
   }
   d.pets.push(obtained);
   say(`${PET_DB[obtained].name} 획득!`);
@@ -2206,6 +2257,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadChatMessages();
   initRealtimeRankings();
   initRealtimeMarket();
+  initRealtimeStock();
 
   const bgmToggle = $("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
@@ -2294,8 +2346,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const marketRegBtn = $("marketRegisterBtn");
   if(marketRegBtn) marketRegBtn.onclick = registerMarketItem;
 
-  const solarMergeBtn = $("solarMergeBtn");
-  if(solarMergeBtn) solarMergeBtn.onclick = performSolarMerge;
+  const mergeAllBtn = $("mergeAllBtn");
+  if(mergeAllBtn) mergeAllBtn.onclick = performMergeAll;
 
   const buyPermPower = $("buyPermPowerBtn");
   if(buyPermPower) {
@@ -2372,12 +2424,12 @@ document.addEventListener("DOMContentLoaded", () => {
       let currentPower = (((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus;
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
       
-      const totalLuckProb = (d.luck ? 0.04 : 0.0) + ((d.permLuck || 0) / 100) + (d.gemLuck ? 0.07 : 0.0);
-      if(Math.random() < totalLuckProb){ gain *= 1.3; triggerLuckEffect(gain); }
+      // 행운 확률 2배 차감 적용 (기존보다 완화된 확률)
+      const totalLuckProb = (d.luck ? 0.02 : 0.0) + ((d.permLuck || 0) / 100) + (d.gemLuck ? 0.035 : 0.0);
+      if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
       d.score += gain;
 
       window.clickCounter++;
-      // 보석 나오는 확률 및 획득량 하향 조정 (더 드물고 적게 드랍)
       if(window.clickCounter >= 40) {
         window.clickCounter = 0;
         if(Math.random() < 0.6) {
@@ -2451,7 +2503,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if(box1) box1.onclick = () => drawPet(1);
   if(box2) box2.onclick = () => drawPet(2);
 
-  // 지원금 대폭 상향 (보석 5,000개 + 자원 대폭 증가)
   const attendBtn = $("attendBtn");
   if(attendBtn) {
     attendBtn.onclick = () => {
@@ -2468,7 +2519,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const rebirthBtn = $("rebirthBtn");
   if(rebirthBtn) {
     rebirthBtn.onclick = () => {
-      let req = 1200000 * Math.pow(2.2, d.rebirth);
+      let req = Math.max(200000, 1000000 * Math.pow(2.0, d.rebirth));
       if(d.score < req) return;
       d.rebirth++; d.rp += 3; d.score = 1; d.power = 1; d.cps = 0;
       say("시스템 승급 완료! (+3 RP, 보석 및 도감 보존)"); save();
@@ -2591,7 +2642,8 @@ setInterval(() => {
     save();
   }
 
-  if(Math.random() < 0.15) {
+  // 서버 공용 주식 그래프 갱신 (리더 호스트 혹은 글로벌 타이머 방식)
+  if(Math.random() < 0.2) {
     stockPrices[1] = Math.max(200, Math.floor(stockPrices[1] * (0.88 + Math.random() * 0.26)));
     stockPrices[2] = Math.max(1000, Math.floor(stockPrices[2] * (0.82 + Math.random() * 0.38)));
     
@@ -2600,12 +2652,12 @@ setInterval(() => {
     stockHistory2.push(stockPrices[2]);
     if(stockHistory2.length > 20) stockHistory2.shift();
 
-    if(!$("stockPanel").classList.contains("hidden")) {
-      if($("stockPrice1")) $("stockPrice1").textContent = fmt(stockPrices[1]);
-      if($("stockPrice2")) $("stockPrice2").textContent = fmt(stockPrices[2]);
-      drawStockChart("stockCanvas1", stockHistory1);
-      drawStockChart("stockCanvas2", stockHistory2);
-    }
+    db.collection('global_stock').doc('market').set({
+      stockPrices: stockPrices,
+      stockHistory1: stockHistory1,
+      stockHistory2: stockHistory2,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true }).catch(err => {});
   }
 
   syncCounter++;
