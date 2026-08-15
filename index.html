@@ -33,20 +33,97 @@ body{
   background: var(--bg-color);
   color: var(--text-main);
   min-height:100vh;
-  padding:20px;
+  padding: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.layout-container {
+  display: flex;
+  gap: 15px;
+  width: min(1150px, 98vw);
+  align-items: flex-start;
+}
+
+/* 사이드바 메뉴 */
+.sidebar {
+  width: 220px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s ease;
+}
+.sidebar.collapsed {
+  width: 65px;
+}
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sidebar.collapsed .sidebar-header h3 { display: none; }
+.toggle-sidebar-btn {
+  background: none;
+  border: none;
+  color: var(--text-sub);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tab {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  color: var(--text-sub);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tab span.tab-icon { font-size: 14px; min-width: 16px; text-align: center; }
+.sidebar.collapsed .tab span.tab-text { display: none; }
+.tab:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
+.tab.active {
+  background: var(--accent);
+  color: #0f172a;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+/* 메인 게임 영역 */
 .game{
-  width: min(920px, 96vw);
+  flex: 1;
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 25px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
   position: relative;
+  min-width: 0;
 }
 
 h1{
@@ -70,6 +147,8 @@ h1{
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .user-profile{
@@ -234,34 +313,6 @@ h1{
 
 #message{height: 22px; margin-top: 6px; color: var(--accent); font-weight: 600; font-size: 13px;}
 
-.tabs{
-  display: flex;
-  gap: 5px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-.tab{
-  flex: 1;
-  min-width: 70px;
-  padding: 8px 4px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: rgba(255,255,255,0.02);
-  color: var(--text-sub);
-  font-weight: 600;
-  cursor: pointer;
-  text-align: center;
-  font-size: 12px;
-  transition: all 0.2s;
-}
-.tab:hover{background: rgba(255,255,255,0.05); color: var(--text-main);}
-.tab.active{
-  background: var(--accent);
-  color: #0f172a;
-  border-color: var(--accent);
-  font-weight: 700;
-}
-
 .panel{
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid var(--border-color);
@@ -416,7 +467,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 .pet-card.equipped{border: 1px solid var(--accent); box-shadow: 0 0 6px rgba(56,189,248,0.3);}
 .pet-icon{font-size: 28px; margin-bottom: 2px; pointer-events: none;}
 
-/* 도감 카드 스타일 */
 .encyclopedia-card {
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
@@ -480,7 +530,60 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   margin-bottom: 10px;
 }
 
+/* 채팅 패널 스타일 */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 380px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.chat-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.chat-msg {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 12px;
+}
+.chat-msg-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+.chat-msg-user { color: var(--accent); font-weight: 600; }
+.chat-msg-time { color: var(--text-sub); }
+.chat-input-area {
+  display: flex;
+  padding: 10px;
+  gap: 8px;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid var(--border-color);
+}
+.chat-input {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px;
+  color: var(--text-main);
+  font-size: 12px;
+}
+
 @media(max-width: 750px){
+  .layout-container { flex-direction: column; }
+  .sidebar { width: 100% !important; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .sidebar-header, .sidebar.collapsed .sidebar-header { display: none; }
   .stats{grid-template-columns: repeat(2, 1fr);}
   .shop-grid, .minigame-grid, .pet-box-grid{grid-template-columns: 1fr;}
   .coin{width: 120px; height: 120px; font-size: 42px;}
@@ -488,311 +591,326 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 </style>
 </head>
 <body>
-<div class="game">
-<div class="top-tools">
-  <div class="user-profile" id="userProfileArea">
-    <img src="https://via.placeholder.com/32/7f8c8d/ffffff?text=?" id="userAvatar" class="user-avatar">
-    <span class="user-name" id="userName">연구원 (미로그인)</span>
-  </div>
-  <div class="top-right-btns">
-    <button class="tool-btn" id="bgmToggleBtn" style="background:rgba(16, 185, 129, 0.1); border-color:#10b981; color:#10b981;">🎵 BGM 끄기</button>
-    <button class="tool-btn alarm-btn" id="openPatchNoteBtn">📢 패치노트 <span class="alarm-badge active" id="alarmBadge"></span></button>
-    <button class="tool-btn" id="downloadGameBtn">📥 다운</button>
-  </div>
-</div>
 
-<!-- 패치노트 모달 팝업 -->
-<div class="modal-overlay hidden" id="patchModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h2>📜 패치노트 & 업데이트 내역</h2>
-      <button class="close-modal" id="closePatchNoteBtn">&times;</button>
+<div class="layout-container">
+  <!-- 왼쪽 접고 펼치는 사이드바 메뉴 -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>📁 메뉴 네비게이션</h3>
+      <button class="toggle-sidebar-btn" id="toggleSidebarBtn">◀</button>
     </div>
-    <div class="modal-body" id="patchNoteContent">
-      <!-- 패치노트 리스트 동적 생성 -->
-    </div>
-  </div>
-</div>
-
-<h1>⚡ 에너지 러시</h1>
-<div class="sub">실시간 자원 채굴 & 탐사 센터</div>
-
-<div class="stats">
-<div class="stat"><span>에너지</span><b id="score">0</b></div>
-<div class="stat"><span>초당 채굴</span><b id="cps">0</b></div>
-<div class="stat"><span>채굴 효율</span><b id="power">1</b></div>
-<div class="stat"><span>장착 드론</span><b id="equippedPetCount">0/2</b></div>
-</div>
-
-<div class="main" id="mainArea">
-<button class="coin" id="coin">⚡</button>
-<div id="message"></div>
-</div>
-
-<div class="tabs">
-<button class="tab active" data-tab="upgrade">⚡ 강화</button>
-<button class="tab" data-tab="shop">🛒 상점</button>
-<button class="tab" data-tab="customPanel">🎨 커스텀</button>
-<button class="tab" data-tab="petPanel">🤖 드론</button>
-<button class="tab" data-tab="encyclopediaPanel">📖 도감</button>
-<button class="tab" data-tab="attendPanel">📅 지원금</button>
-<button class="tab" data-tab="minigames">🔬 연구실</button>
-<button class="tab" data-tab="permStatPanel">✨ 영구스탯</button>
-<button class="tab" data-tab="rebirthPanel">🔮 승급</button>
-<button class="tab" data-tab="rankPanel">🏆 랭킹</button>
-</div>
-
-<!-- 파워업 탭 -->
-<div id="upgrade" class="panel">
-<div class="upgrades">
-<div class="upgrade-row">
-  <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small>클릭당 에너지 생산량 증가</small></div>
-  <button id="powerBtn">350 에너지</button>
-</div>
-</div>
-<div class="upgrades">
-<div class="upgrade-row">
-  <div>
-    <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b></h3>
-    <small>초당 자동 채굴 (ON/OFF 가능)</small>
-  </div>
-  <div style="display: flex; align-items: center; gap: 8px;">
-    <button id="autoToggleBtn" class="toggle-btn on">ON</button>
-    <button id="autoBtn">1,800 에너지</button>
-  </div>
-</div>
-</div>
-</div>
-
-<!-- 상점 탭 -->
-<div id="shop" class="panel hidden">
-<div class="shop-grid">
-<div class="shop-item">
-  <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 10% 확률로 에너지 보너스 ×2</p></div>
-  <button class="buy" data-item="luck">구매 30,000</button>
-</div>
-<div class="shop-item">
-  <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +25%</p></div>
-  <button class="buy" data-item="core">구매 180,000</button>
-</div>
-<div class="shop-item">
-  <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +50%</p></div>
-  <button class="buy" data-item="double">구매 750,000</button>
-</div>
-</div>
-</div>
-
-<!-- 🎨 코인 커스텀 탭 -->
-<div id="customPanel" class="panel hidden">
-  <h3 style="color:var(--text-main); font-size:14px; margin-top:0;">🎨 에너지 코어 컬러 커스텀</h3>
-  <div class="custom-grid">
-    <button class="color-btn" data-color="gold" style="background:linear-gradient(135deg, #38bdf8, #0284c7);"></button>
-    <button class="color-btn" data-color="ruby" style="background:linear-gradient(135deg, #f43f5e, #be123c);"></button>
-    <button class="color-btn" data-color="emerald" style="background:linear-gradient(135deg, #10b981, #047857);"></button>
-    <button class="color-btn" data-color="sapphire" style="background:linear-gradient(135deg, #6366f1, #4338ca);"></button>
-    <button class="color-btn" data-color="purple" style="background:linear-gradient(135deg, #a855f7, #7e22ce);"></button>
-    <button class="color-btn" data-color="black" style="background:linear-gradient(135deg, #475569, #1e293b);"></button>
+    <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화</span></button>
+    <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">상점</span></button>
+    <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">커스텀</span></button>
+    <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론</span></button>
+    <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">도감</span></button>
+    <button class="tab" data-tab="attendPanel"><span class="tab-icon">📅</span><span class="tab-text">지원금</span></button>
+    <button class="tab" data-tab="minigames"><span class="tab-icon">🔬</span><span class="tab-text">연구실</span></button>
+    <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구스탯</span></button>
+    <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">승급</span></button>
+    <button class="tab" data-tab="rankPanel"><span class="tab-icon">🏆</span><span class="tab-text">랭킹</span></button>
+    <button class="tab" data-tab="chatPanel"><span class="tab-icon">💬</span><span class="tab-text">실시간 채팅</span></button>
   </div>
 
-  <h3 style="color:var(--text-main); font-size:14px; margin-top:16px;">⚡ 코어 심볼 커스텀</h3>
-  <div class="custom-grid">
-    <button class="icon-btn" data-icon="⚡">⚡</button>
-    <button class="icon-btn" data-icon="💠">💠</button>
-    <button class="icon-btn" data-icon="💎">💎</button>
-    <button class="icon-btn" data-icon="🔋">🔋</button>
-    <button class="icon-btn" data-icon="⚛️">⚛️</button>
-    <button class="icon-btn" data-icon="🚀">🚀</button>
-    <button class="icon-btn" data-icon="⭐">⭐</button>
-  </div>
-</div>
-
-<!-- 🐾 드론 탭 -->
-<div id="petPanel" class="panel hidden">
-  <div class="pet-box-grid">
-    <div class="game-card">
-      <h3>🎁 표준형 드론 보급품</h3>
-      <p style="color:var(--text-sub); font-size:11px;">C ~ B등급 드론 출현</p>
-      <button class="btn-game" id="buyPetBox1">보급품 요청 (12,000 에너지)</button>
-    </div>
-    <div class="game-card">
-      <h3>🌟 특수형 드론 보급품</h3>
-      <p style="color:var(--text-sub); font-size:11px;">A ~ S등급 드론 출현</p>
-      <button class="btn-game" id="buyPetBox2">보급품 요청 (120,000 에너지)</button>
-    </div>
-  </div>
-
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-bottom:1px solid var(--border-color);padding-bottom:6px;">
-    <h3 style="color:var(--text-main); margin:0; font-size:14px;">🤖 나의 드론 격납고 (영구 저장)</h3>
-    <span style="font-size:11px; color:var(--accent);">💡 드래그하여 업그레이드</span>
-  </div>
-  <div id="petList" class="pet-list"></div>
-</div>
-
-<!-- 📖 도감 탭 -->
-<div id="encyclopediaPanel" class="panel hidden">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">
-    <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감</h3>
-    <span style="font-size:12px; color:var(--accent);" id="encyclopediaCount">수집률: 0 / 16</span>
-  </div>
-  <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:12px;">모든 드론의 능력치 정보와 획득 여부를 확인할 수 있습니다.</p>
-  <div id="encyclopediaList" class="encyclopedia-list"></div>
-</div>
-
-<!-- 출석체크 탭 -->
-<div id="attendPanel" class="panel hidden">
-  <div class="attendance-card">
-    <h2 style="margin-top:0; font-size:16px;">📅 연구소 일일 지원금 수령</h2>
-    <p style="color:var(--text-sub); font-size:12px;">24시간마다 접속하여 무상 연구 자원과 승급 포인트를 지원받으세요!</p>
-    <p style="font-size:13px;">연속 지원일: <b id="attDays" style="color:var(--accent);">0</b>일차</p>
-    <button id="attendBtn" class="attend-btn">🎁 지원금 수령하기</button>
-    <p id="attStatus" style="font-size:11px;color:var(--text-sub);margin-top:8px;"></p>
-  </div>
-</div>
-
-<!-- 🔬 연구실 미니게임 탭 -->
-<div id="minigames" class="panel hidden">
-<div class="minigame-grid" style="grid-template-columns: repeat(2, 1fr);">
-  <!-- 1. 에너지 증폭 -->
-  <div class="game-card">
-    <h3>🔬 에너지 증폭 실험</h3>
-    <div class="slot-display" id="slotScreen">❓ ❓ ❓</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">잭팟 확률 0.6%</p>
-    <input type="number" id="slotBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="slotBtn">증폭 가동 (×15)</button>
-  </div>
-
-  <!-- 2. 확률 데이터 분석 -->
-  <div class="game-card">
-    <h3>📊 확률 데이터 분석</h3>
-    <div class="slot-display" id="coinResult" style="font-size:13px;">상승 or 하락</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 30%</p>
-    <div style="margin-bottom: 4px;">
-      <button class="btn-mini selected" id="btnHead">상승</button>
-      <button class="btn-mini" id="btnTail">하락</button>
-    </div>
-    <input type="number" id="coinBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="coinFlipBtn">동기화 (×2.2)</button>
-  </div>
-
-  <!-- 3. 양자 주사위 -->
-  <div class="game-card">
-    <h3>🎲 양자 주사위 파동</h3>
-    <div class="slot-display" id="diceResult" style="font-size:13px;">1~8 선택</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 6%</p>
-    <div class="dice-buttons">
-      <button class="btn-mini selected dice-select" data-num="1">1</button>
-      <button class="btn-mini dice-select" data-num="2">2</button>
-      <button class="btn-mini dice-select" data-num="3">3</button>
-      <button class="btn-mini dice-select" data-num="4">4</button>
-      <button class="btn-mini dice-select" data-num="5">5</button>
-      <button class="btn-mini dice-select" data-num="6">6</button>
-      <button class="btn-mini dice-select" data-num="7">7</button>
-      <button class="btn-mini dice-select" data-num="8">8</button>
-    </div>
-    <input type="number" id="diceBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="diceRollBtn">측정 (×6.5)</button>
-  </div>
-
-  <!-- 4. 데이터 배율 예측 -->
-  <div class="game-card">
-    <h3>📈 배율 예측</h3>
-    <div class="slot-display" id="highLowCard" style="font-size:12px;">기준: <b>8</b></div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 30%</p>
-    <div style="margin-bottom: 4px;">
-      <button class="btn-mini selected" id="btnHigh">UP</button>
-      <button class="btn-mini" id="btnLow">DOWN</button>
-    </div>
-    <input type="number" id="highLowBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="highLowBtn">검증 (×2.2)</button>
-  </div>
-</div>
-</div>
-
-<!-- ✨ 영구 지속 환생 스탯 탭 -->
-<div id="permStatPanel" class="panel hidden">
-  <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:16px;">✨ 영구 연구 스탯 상점</h2>
-  <p style="text-align:center;color:var(--text-sub);font-size:11px;margin-bottom:14px;">
-    보유 승급 포인트(RP): <b id="permRpDisplay" style="color:var(--accent);font-size:15px;">0</b><br>
-    * 승급 후에도 절대 초기화되지 않고 영구 유지됩니다!
-  </p>
-
-  <div class="upgrades">
-    <div class="upgrade-row">
-      <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small>기초 클릭 채굴 파워 영구 강화</small></div>
-      <button id="buyPermPowerBtn">2 RP</button>
-    </div>
-  </div>
-
-  <div class="upgrades">
-    <div class="upgrade-row">
-      <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small>초당 자동 채굴 능력 영구 강화</small></div>
-      <button id="buyPermCpsBtn">2 RP</button>
-    </div>
-  </div>
-
-  <div class="upgrades">
-    <div class="upgrade-row">
-      <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small>대성공 확률 추가 (최대 +15%)</small></div>
-      <button id="buyPermLuckBtn">4 RP</button>
-    </div>
-  </div>
-</div>
-
-<!-- 🔮 환생 탭 -->
-<div id="rebirthPanel" class="panel hidden">
-<div class="attendance-card">
-<h2 style="margin-top:0; font-size:16px;">🔮 시스템 승급</h2>
-<p style="color:var(--text-sub); font-size:12px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
-<p style="font-size:13px;">현재 승급 포인트: <b id="rp" style="color:var(--accent);">0</b></p>
-<p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,200,000</b> 에너지</p>
-<button id="rebirthBtn" class="attend-btn" style="margin-top:8px;">🔮 시스템 승급 실행</button>
-</div>
-</div>
-
-<!-- 🏆 구글 연동 랭킹 탭 -->
-<div id="rankPanel" class="panel hidden">
-  <div class="google-box">
-    <h3 style="color:var(--text-main);margin:0 0 8px;font-size:14px;">🌐 실시간 랭킹 연동</h3>
-    
-    <div id="g_id_onload"
-         data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false">
-    </div>
-    
-    <div style="display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;">
-      <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
+  <!-- 메인 게임 영역 -->
+  <div class="game">
+    <div class="top-tools">
+      <div class="user-profile" id="userProfileArea">
+        <img src="https://via.placeholder.com/32/7f8c8d/ffffff?text=?" id="userAvatar" class="user-avatar">
+        <span class="user-name" id="userName">연구원 (미로그인)</span>
+      </div>
+      <div class="top-right-btns">
+        <button class="tool-btn" id="bgmToggleBtn" style="background:rgba(16, 185, 129, 0.1); border-color:#10b981; color:#10b981;">🎵 BGM 끄기</button>
+        <button class="tool-btn alarm-btn" id="openPatchNoteBtn">📢 패치노트 <span class="alarm-badge active" id="alarmBadge"></span></button>
+        <button class="tool-btn" id="downloadGameBtn">📥 다운</button>
+      </div>
     </div>
 
-    <div style="margin-top:10px;">
-      <p style="margin:4px 0; font-size:12px;">현재 보유 에너지: <b id="myCurrentScore" style="color:var(--accent);">0</b> 에너지</p>
-      <button id="registerRankBtn" class="btn-game" style="width:auto;padding:6px 14px;margin-top:4px;">🏆 서버에 에너지 즉시 동기화</button>
+    <!-- 패치노트 모달 팝업 -->
+    <div class="modal-overlay hidden" id="patchModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h2>📜 패치노트 & 업데이트 내역</h2>
+          <button class="close-modal" id="closePatchNoteBtn">&times;</button>
+        </div>
+        <div class="modal-body" id="patchNoteContent"></div>
+      </div>
     </div>
+
+    <h1>⚡ 에너지 러시</h1>
+    <div class="sub">실시간 자원 채굴 & 탐사 센터</div>
+
+    <div class="stats">
+      <div class="stat"><span>에너지</span><b id="score">0</b></div>
+      <div class="stat"><span>초당 채굴</span><b id="cps">0</b></div>
+      <div class="stat"><span>채굴 효율</span><b id="power">1</b></div>
+      <div class="stat"><span>장착 드론</span><b id="equippedPetCount">0/2</b></div>
+    </div>
+
+    <div class="main" id="mainArea">
+      <button class="coin" id="coin">⚡</button>
+      <div id="message"></div>
+    </div>
+
+    <!-- 파워업 탭 -->
+    <div id="upgrade" class="panel">
+      <div class="upgrades">
+        <div class="upgrade-row">
+          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small>클릭당 에너지 생산량 증가</small></div>
+          <button id="powerBtn">350 에너지</button>
+        </div>
+      </div>
+      <div class="upgrades">
+        <div class="upgrade-row">
+          <div>
+            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b></h3>
+            <small>초당 자동 채굴 (ON/OFF 가능)</small>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button id="autoToggleBtn" class="toggle-btn on">ON</button>
+            <button id="autoBtn">1,800 에너지</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상점 탭 -->
+    <div id="shop" class="panel hidden">
+      <div class="shop-grid">
+        <div class="shop-item">
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 10% 확률로 에너지 보너스 ×2</p></div>
+          <button class="buy" data-item="luck">구매 30,000</button>
+        </div>
+        <div class="shop-item">
+          <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +25%</p></div>
+          <button class="buy" data-item="core">구매 180,000</button>
+        </div>
+        <div class="shop-item">
+          <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +50%</p></div>
+          <button class="buy" data-item="double">구매 750,000</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🎨 커스텀 탭 -->
+    <div id="customPanel" class="panel hidden">
+      <h3 style="color:var(--text-main); font-size:14px; margin-top:0;">🎨 에너지 코어 컬러 커스텀</h3>
+      <div class="custom-grid">
+        <button class="color-btn" data-color="gold" style="background:linear-gradient(135deg, #38bdf8, #0284c7);"></button>
+        <button class="color-btn" data-color="ruby" style="background:linear-gradient(135deg, #f43f5e, #be123c);"></button>
+        <button class="color-btn" data-color="emerald" style="background:linear-gradient(135deg, #10b981, #047857);"></button>
+        <button class="color-btn" data-color="sapphire" style="background:linear-gradient(135deg, #6366f1, #4338ca);"></button>
+        <button class="color-btn" data-color="purple" style="background:linear-gradient(135deg, #a855f7, #7e22ce);"></button>
+        <button class="color-btn" data-color="black" style="background:linear-gradient(135deg, #475569, #1e293b);"></button>
+      </div>
+
+      <h3 style="color:var(--text-main); font-size:14px; margin-top:16px;">⚡ 코어 심볼 커스텀</h3>
+      <div class="custom-grid">
+        <button class="icon-btn" data-icon="⚡">⚡</button>
+        <button class="icon-btn" data-icon="💠">💠</button>
+        <button class="icon-btn" data-icon="💎">💎</button>
+        <button class="icon-btn" data-icon="🔋">🔋</button>
+        <button class="icon-btn" data-icon="⚛️">⚛️</button>
+        <button class="icon-btn" data-icon="🚀">🚀</button>
+        <button class="icon-btn" data-icon="⭐">⭐</button>
+      </div>
+    </div>
+
+    <!-- 🐾 드론 탭 -->
+    <div id="petPanel" class="panel hidden">
+      <div class="pet-box-grid">
+        <div class="game-card">
+          <h3>🎁 표준형 드론 보급품</h3>
+          <p style="color:var(--text-sub); font-size:11px;">C ~ B등급 드론 출현</p>
+          <button class="btn-game" id="buyPetBox1">보급품 요청 (12,000 에너지)</button>
+        </div>
+        <div class="game-card">
+          <h3>🌟 특수형 드론 보급품</h3>
+          <p style="color:var(--text-sub); font-size:11px;">A ~ S등급 드론 출현</p>
+          <button class="btn-game" id="buyPetBox2">보급품 요청 (120,000 에너지)</button>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-bottom:1px solid var(--border-color);padding-bottom:6px;">
+        <h3 style="color:var(--text-main); margin:0; font-size:14px;">🤖 나의 드론 격납고 (영구 저장)</h3>
+        <span style="font-size:11px; color:var(--accent);">💡 드래그하여 업그레이드</span>
+      </div>
+      <div id="petList" class="pet-list"></div>
+    </div>
+
+    <!-- 📖 도감 탭 -->
+    <div id="encyclopediaPanel" class="panel hidden">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">
+        <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감</h3>
+        <span style="font-size:12px; color:var(--accent);" id="encyclopediaCount">수집률: 0 / 14</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:12px;">모든 드론의 능력치 정보와 획득 여부를 확인할 수 있습니다.</p>
+      <div id="encyclopediaList" class="encyclopedia-list"></div>
+    </div>
+
+    <!-- 출석체크 탭 -->
+    <div id="attendPanel" class="panel hidden">
+      <div class="attendance-card">
+        <h2 style="margin-top:0; font-size:16px;">📅 연구소 일일 지원금 수령</h2>
+        <p style="color:var(--text-sub); font-size:12px;">24시간마다 접속하여 무상 연구 자원과 승급 포인트를 지원받으세요!</p>
+        <p style="font-size:13px;">연속 지원일: <b id="attDays" style="color:var(--accent);">0</b>일차</p>
+        <button id="attendBtn" class="attend-btn">🎁 지원금 수령하기</button>
+        <p id="attStatus" style="font-size:11px;color:var(--text-sub);margin-top:8px;"></p>
+      </div>
+    </div>
+
+    <!-- 🔬 연구실 미니게임 탭 -->
+    <div id="minigames" class="panel hidden">
+      <div class="minigame-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="game-card">
+          <h3>🔬 에너지 증폭 실험</h3>
+          <div class="slot-display" id="slotScreen">❓ ❓ ❓</div>
+          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">잭팟 확률 0.6%</p>
+          <input type="number" id="slotBet" class="bet-input" value="300" min="100" step="100">
+          <button class="btn-game" id="slotBtn">증폭 가동 (×15)</button>
+        </div>
+        <div class="game-card">
+          <h3>📊 확률 데이터 분석</h3>
+          <div class="slot-display" id="coinResult" style="font-size:13px;">상승 or 하락</div>
+          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 30%</p>
+          <div style="margin-bottom: 4px;">
+            <button class="btn-mini selected" id="btnHead">상승</button>
+            <button class="btn-mini" id="btnTail">하락</button>
+          </div>
+          <input type="number" id="coinBet" class="bet-input" value="300" min="100" step="100">
+          <button class="btn-game" id="coinFlipBtn">동기화 (×2.2)</button>
+        </div>
+        <div class="game-card">
+          <h3>🎲 양자 주사위 파동</h3>
+          <div class="slot-display" id="diceResult" style="font-size:13px;">1~8 선택</div>
+          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 6%</p>
+          <div class="dice-buttons">
+            <button class="btn-mini selected dice-select" data-num="1">1</button>
+            <button class="btn-mini dice-select" data-num="2">2</button>
+            <button class="btn-mini dice-select" data-num="3">3</button>
+            <button class="btn-mini dice-select" data-num="4">4</button>
+            <button class="btn-mini dice-select" data-num="5">5</button>
+            <button class="btn-mini dice-select" data-num="6">6</button>
+            <button class="btn-mini dice-select" data-num="7">7</button>
+            <button class="btn-mini dice-select" data-num="8">8</button>
+          </div>
+          <input type="number" id="diceBet" class="bet-input" value="300" min="100" step="100">
+          <button class="btn-game" id="diceRollBtn">측정 (×6.5)</button>
+        </div>
+        <div class="game-card">
+          <h3>📈 배율 예측</h3>
+          <div class="slot-display" id="highLowCard" style="font-size:12px;">기준: <b>8</b></div>
+          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 30%</p>
+          <div style="margin-bottom: 4px;">
+            <button class="btn-mini selected" id="btnHigh">UP</button>
+            <button class="btn-mini" id="btnLow">DOWN</button>
+          </div>
+          <input type="number" id="highLowBet" class="bet-input" value="300" min="100" step="100">
+          <button class="btn-game" id="highLowBtn">검증 (×2.2)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✨ 영구 스탯 탭 -->
+    <div id="permStatPanel" class="panel hidden">
+      <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:16px;">✨ 영구 연구 스탯 상점</h2>
+      <p style="text-align:center;color:var(--text-sub);font-size:11px;margin-bottom:14px;">
+        보유 승급 포인트(RP): <b id="permRpDisplay" style="color:var(--accent);font-size:15px;">0</b><br>
+        * 승급 후에도 절대 초기화되지 않고 영구 유지됩니다!
+      </p>
+      <div class="upgrades">
+        <div class="upgrade-row">
+          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small>기초 클릭 채굴 파워 영구 강화</small></div>
+          <button id="buyPermPowerBtn">2 RP</button>
+        </div>
+      </div>
+      <div class="upgrades">
+        <div class="upgrade-row">
+          <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small>초당 자동 채굴 능력 영구 강화</small></div>
+          <button id="buyPermCpsBtn">2 RP</button>
+        </div>
+      </div>
+      <div class="upgrades">
+        <div class="upgrade-row">
+          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small>대성공 확률 추가 (최대 +15%)</small></div>
+          <button id="buyPermLuckBtn">4 RP</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔮 승급 탭 -->
+    <div id="rebirthPanel" class="panel hidden">
+      <div class="attendance-card">
+        <h2 style="margin-top:0; font-size:16px;">🔮 시스템 승급</h2>
+        <p style="color:var(--text-sub); font-size:12px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
+        <p style="font-size:13px;">현재 승급 포인트: <b id="rp" style="color:var(--accent);">0</b></p>
+        <p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,200,000</b> 에너지</p>
+        <button id="rebirthBtn" class="attend-btn" style="margin-top:8px;">🔮 시스템 승급 실행</button>
+      </div>
+    </div>
+
+    <!-- 🏆 랭킹 탭 -->
+    <div id="rankPanel" class="panel hidden">
+      <div class="google-box">
+        <h3 style="color:var(--text-main);margin:0 0 8px;font-size:14px;">🌐 실시간 랭킹 연동</h3>
+        <div id="g_id_onload"
+             data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+        <div style="display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
+        </div>
+        <div style="margin-top:10px;">
+          <p style="margin:4px 0; font-size:12px;">현재 보유 에너지: <b id="myCurrentScore" style="color:var(--accent);">0</b> 에너지</p>
+          <button id="registerRankBtn" class="btn-game" style="width:auto;padding:6px 14px;margin-top:4px;">🏆 서버에 에너지 즉시 동기화</button>
+        </div>
+      </div>
+      <h3 style="text-align:center;color:var(--text-main);font-size:14px;margin:12px 0 8px;">🏆 실시간 글로벌 Top 10</h3>
+      <table class="rank-table">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>연구원</th>
+            <th>현재 에너지</th>
+            <th>승급</th>
+          </tr>
+        </thead>
+        <tbody id="rankList"></tbody>
+      </table>
+      <div class="my-rank-banner" id="myRankDisplay">내 순위: 조회 중...</div>
+    </div>
+
+    <!-- 💬 실시간 채팅 탭 -->
+    <div id="chatPanel" class="panel hidden">
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💬 연구원 실시간 소통 채널</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:10px;">구글 로그인 후 전 세계 연구원들과 실시간으로 대화를 나눠보세요!</p>
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div style="color:var(--text-sub); text-align:center; font-size:11px; margin-top:20px;">채팅 기록을 불러오는 중...</div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" class="chat-input" placeholder="메시지를 입력하세요 (로그인 필수)..." maxlength="150">
+          <button class="btn-game" id="chatSendBtn" style="padding: 6px 14px;">전송</button>
+        </div>
+      </div>
+    </div>
+
   </div>
-
-  <h3 style="text-align:center;color:var(--text-main);font-size:14px;margin:12px 0 8px;">🏆 실시간 글로벌 Top 10</h3>
-  <table class="rank-table">
-    <thead>
-      <tr>
-        <th>순위</th>
-        <th>연구원</th>
-        <th>현재 에너지</th>
-        <th>승급</th>
-      </tr>
-    </thead>
-    <tbody id="rankList"></tbody>
-  </table>
-
-  <!-- 자신의 순위 표시 영역 -->
-  <div class="my-rank-banner" id="myRankDisplay">
-    내 순위: 조회 중...
-  </div>
-</div>
-
 </div>
 
 <script>
-// --- 배경음악(BGM) 신디사이저 엔진 ---
+// --- 사이드바 접기/펼치기 토글 ---
+const sidebar = document.getElementById("sidebar");
+const toggleSidebarBtn = document.getElementById("toggleSidebarBtn");
+if(toggleSidebarBtn) {
+  toggleSidebarBtn.onclick = () => {
+    sidebar.classList.toggle("collapsed");
+    toggleSidebarBtn.textContent = sidebar.classList.contains("collapsed") ? "▶" : "◀";
+  };
+}
+
+// --- BGM 사운드 엔진 ---
 let bgmAudioCtx = null;
 let bgmInterval = null;
 let isBgmPlaying = false;
@@ -822,32 +940,22 @@ function toggleBGM() {
 
 function startBGM() {
   try {
-    if(!bgmAudioCtx) {
-      bgmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if(bgmAudioCtx.state === 'suspended') {
-      bgmAudioCtx.resume();
-    }
-
-    const notes = [220.00, 246.94, 293.66, 329.63, 392.00, 440.00]; // 앰비언트 우주 사운드 노트
+    if(!bgmAudioCtx) bgmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(bgmAudioCtx.state === 'suspended') bgmAudioCtx.resume();
+    const notes = [220.00, 246.94, 293.66, 329.63, 392.00, 440.00];
     let noteIndex = 0;
-
     bgmInterval = setInterval(() => {
       if(!isBgmPlaying || !bgmAudioCtx) return;
       try {
         const osc = bgmAudioCtx.createOscillator();
         const gain = bgmAudioCtx.createGain();
-
         osc.type = "sine";
         osc.frequency.setValueAtTime(notes[noteIndex % notes.length], bgmAudioCtx.currentTime);
         noteIndex++;
-
         gain.gain.setValueAtTime(0.02, bgmAudioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, bgmAudioCtx.currentTime + 3.0);
-
         osc.connect(gain);
         gain.connect(bgmAudioCtx.destination);
-
         osc.start();
         osc.stop(bgmAudioCtx.currentTime + 3.0);
       } catch(e){}
@@ -856,40 +964,32 @@ function startBGM() {
 }
 
 function stopBGM() {
-  if(bgmInterval) {
-    clearInterval(bgmInterval);
-    bgmInterval = null;
-  }
+  if(bgmInterval) { clearInterval(bgmInterval); bgmInterval = null; }
 }
 
-// --- 웹 오디오 API (합성 실패 효과음) ---
 function playFailSound() {
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
-    
     osc.type = "sawtooth";
     osc.frequency.setValueAtTime(150, audioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.4);
-    
     gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
     gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-    
     osc.connect(gainNode);
     gainNode.connect(audioCtx.destination);
-    
     osc.start();
     osc.stop(audioCtx.currentTime + 0.4);
   } catch (e) {}
 }
 
-// --- 패치노트 데이터 정의 ---
+// --- 패치노트 데이터 ---
 const patchNotes = [
   {
-    version: "v3.0 패치 (최신)",
-    title: "BGM 사운드 시스템 및 초월/카오스 등급 드론 대거 추가",
-    desc: "1) 브라우저 자체 앰비언트 BGM(켜기/끄기 가능)이 도입되었습니다.\n2) 레전더리 위 등급인 [초월: 에테르 오브 파라다이스], [신화: 초신성 제네시스], [카오스: 공허의 디바우러], [제네시스: 오메가 싱귤래리티] 등 궁극의 드론들이 추가되었습니다.\n3) 확장된 모든 드론이 통합 도감에 자동 반영됩니다."
+    version: "v3.1 패치 (최신)",
+    title: "왼쪽 사이드바 메뉴 및 실시간 채팅 시스템 구축",
+    desc: "1) 카테고리 메뉴를 왼쪽으로 이동하여 접고 펼칠 수 있는 슬라이드 바로 개편했습니다.\n2) 전 세계 연구원들과 실시간으로 소통할 수 있는 채팅 시스템이 추가되었습니다.\n3) 최상위 초월/카오스 드론 및 도감 데이터가 영구 보존됩니다."
   },
   {
     version: "v1.0 패치",
@@ -985,19 +1085,16 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-// 도감 자동 등록 체크
+// 도감 자동 등록
 function checkAndDiscoverPets() {
   if(!d.discoveredPets) d.discoveredPets = [];
   d.pets.forEach(petId => {
-    if(!d.discoveredPets.includes(petId)) {
-      d.discoveredPets.push(petId);
-    }
+    if(!d.discoveredPets.includes(petId)) d.discoveredPets.push(petId);
   });
 }
 
 function syncScoreToFirebase(force = false) {
   if(!currentUser) return;
-
   db.collection('rankings').doc(currentUser.googleId).set({
     googleId: currentUser.googleId,
     name: currentUser.name,
@@ -1006,72 +1103,103 @@ function syncScoreToFirebase(force = false) {
     rebirth: d.rebirth,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
-    if(!$("rankPanel").classList.contains("hidden")) {
-      loadFirebaseRankings();
-    }
+    if(!$("rankPanel").classList.contains("hidden")) loadFirebaseRankings();
   }).catch(err => {});
 }
 
 function loadFirebaseRankings(){
-  db.collection('rankings')
-    .orderBy('score', 'desc')
-    .limit(20)
-    .get()
-    .then((snapshot) => {
-      const rankList = $("rankList");
-      const myRankDisplay = $("myRankDisplay");
-      if(!rankList) return;
-      rankList.innerHTML = "";
-      
-      if(snapshot.empty) {
-        rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
-        if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
-        return;
+  db.collection('rankings').orderBy('score', 'desc').limit(20).get().then((snapshot) => {
+    const rankList = $("rankList");
+    const myRankDisplay = $("myRankDisplay");
+    if(!rankList) return;
+    rankList.innerHTML = "";
+    if(snapshot.empty) {
+      rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
+      if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
+      return;
+    }
+    let index = 0;
+    let myRankFound = false;
+    snapshot.forEach((doc) => {
+      const item = doc.data();
+      let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
+      let isMyRank = currentUser && item.googleId === currentUser.googleId;
+      if(isMyRank) {
+        myRankFound = true;
+        if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (보유 에너지: ${fmt(item.score)})`;
       }
-      
-      let index = 0;
-      let myRankFound = false;
-      
-      snapshot.forEach((doc) => {
-        const item = doc.data();
-        let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-        let isMyRank = currentUser && item.googleId === currentUser.googleId;
-        
-        if(isMyRank) {
-          myRankFound = true;
-          if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (보유 에너지: ${fmt(item.score)})`;
-        }
-
-        if(index < 10) {
-          let tr = document.createElement("tr");
-          if(isMyRank) tr.style.background = "rgba(56,189,248,0.05)";
-
-          tr.innerHTML = `
-            <td>${medal}${index + 1}위</td>
-            <td>
-              <div class="rank-user-info">
-                <img src="${item.picture}" class="rank-user-avatar" onerror="this.src='https://via.placeholder.com/26'">
-                <b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}
-              </div>
-            </td>
-            <td style="color:var(--accent);">${fmt(item.score)}</td>
-            <td>${item.rebirth || 0}회</td>
-          `;
-          rankList.appendChild(tr);
-        }
-        index++;
-      });
-
-      if(!myRankFound && currentUser) {
-        db.collection('rankings').doc(currentUser.googleId).get().then(myDoc => {
-          if(myDoc.exists && myRankDisplay) {
-            myRankDisplay.innerHTML = `내 순위: 10위 밖 (내 에너지: ${fmt(myDoc.data().score)})`;
-          }
-        });
-      } else if(!currentUser && myRankDisplay) {
-        myRankDisplay.innerHTML = "내 순위: 미로그인 상태";
+      if(index < 10) {
+        let tr = document.createElement("tr");
+        if(isMyRank) tr.style.background = "rgba(56,189,248,0.05)";
+        tr.innerHTML = `
+          <td>${medal}${index + 1}위</td>
+          <td><div class="rank-user-info"><img src="${item.picture}" class="rank-user-avatar" onerror="this.src='https://via.placeholder.com/26'"><b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}</div></td>
+          <td style="color:var(--accent);">${fmt(item.score)}</td>
+          <td>${item.rebirth || 0}회</td>
+        `;
+        rankList.appendChild(tr);
       }
+      index++;
     });
+    if(!myRankFound && currentUser) {
+      db.collection('rankings').doc(currentUser.googleId).get().then(myDoc => {
+        if(myDoc.exists && myRankDisplay) myRankDisplay.innerHTML = `내 순위: 10위 밖 (내 에너지: ${fmt(myDoc.data().score)})`;
+      });
+    } else if(!currentUser && myRankDisplay) {
+      myRankDisplay.innerHTML = "내 순위: 미로그인 상태";
+    }
+  });
+}
+
+// 실시간 채팅 로드 및 전송
+function loadChatMessages() {
+  db.collection('global_chat').orderBy('createdAt', 'asc').limit(50).onSnapshot((snapshot) => {
+    const chatContainer = $("chatMessages");
+    if(!chatContainer) return;
+    chatContainer.innerHTML = "";
+    if(snapshot.empty) {
+      chatContainer.innerHTML = "<div style='color:var(--text-sub); text-align:center; font-size:11px; margin-top:20px;'>첫 번째 메시지를 남겨보세요!</div>";
+      return;
+    }
+    snapshot.forEach((doc) => {
+      const msg = doc.data();
+      const timeStr = msg.createdAt ? new Date(msg.createdAt.toDate()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '방금 전';
+      const div = document.createElement("div");
+      div.className = "chat-msg";
+      div.innerHTML = `
+        <div class="chat-msg-header">
+          <span class="chat-msg-user">${msg.name}</span>
+          <span class="chat-msg-time">${timeStr}</span>
+        </div>
+        <div style="color:var(--text-main); word-break:break-all;">${escapeHtml(msg.text)}</div>
+      `;
+      chatContainer.appendChild(div);
+    });
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  });
+}
+
+function sendChatMessage() {
+  if(!currentUser) return say("구글 로그인 후 채팅을 이용할 수 있습니다.");
+  const input = $("chatInput");
+  const text = input.value.trim();
+  if(!text) return;
+
+  db.collection('global_chat').add({
+    googleId: currentUser.googleId,
+    name: currentUser.name,
+    picture: currentUser.picture,
+    text: text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    input.value = "";
+  }).catch(err => {
+    say("메시지 전송 실패");
+  });
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function parseJwt(token) {
@@ -1117,7 +1245,6 @@ function updateUserUI() {
 function getPetBonus(){
   let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.05;
   if (!d.equippedPets) d.equippedPets = [];
-
   d.equippedPets.forEach(petId => {
     if(petId === 'cat') clickMult += 0.02;
     if(petId === 'chick') clickMult += 0.03;
@@ -1134,7 +1261,6 @@ function getPetBonus(){
     if(petId === 'trans') { coinMult *= 7.0; luckProb += 0.40; }
     if(petId === 'chaos') { coinMult *= 20.0; luckProb += 0.70; }
   });
-
   return { clickMult, cpsMult, coinMult, luckProb };
 }
 
@@ -1162,11 +1288,9 @@ function triggerLuckEffect(amount) {
   const coinBtn = $("coin");
   const mainArea = $("mainArea");
   if(!coinBtn || !mainArea) return;
-
   coinBtn.classList.remove("luck-anim");
   void coinBtn.offsetWidth;
   coinBtn.classList.add("luck-anim");
-
   const pop = document.createElement("div");
   pop.className = "luck-popup";
   pop.textContent = `대성공! (+${fmt(amount)})`;
@@ -1177,7 +1301,6 @@ function triggerLuckEffect(amount) {
 function render(){
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
-
  const totalPower = (d.power + (d.permPower || 0)) * baseMult * petBonus.clickMult * petBonus.coinMult;
  const totalCps = (d.cps + (d.permCps || 0)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
@@ -1206,9 +1329,7 @@ function render(){
    autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
  }
  
- if($("equippedPetCount")) {
-   $("equippedPetCount").textContent = `${d.equippedPets.length}/2`;
- }
+ if($("equippedPetCount")) $("equippedPetCount").textContent = `${d.equippedPets.length}/2`;
  
  let req = 1200000 * Math.pow(2.2, d.rebirth); 
  if($("req")) $("req").textContent = fmt(req);
@@ -1220,7 +1341,6 @@ function render(){
  const luckBtn=document.querySelector('[data-item="luck"]');
  const coreBtn=document.querySelector('[data-item="core"]');
  const doubleBtn=document.querySelector('[data-item="double"]');
- 
  if(luckBtn) luckBtn.textContent=d.luck?"완료":"구매 30,000";
  if(coreBtn) coreBtn.textContent=d.core?"완료":"구매 180,000";
  if(doubleBtn) doubleBtn.textContent=d.double?"완료":"구매 750,000";
@@ -1258,7 +1378,6 @@ function renderEncyclopedia() {
   const countDisplay = $("encyclopediaCount");
   if(!container) return;
   container.innerHTML = "";
-
   if(!d.discoveredPets) d.discoveredPets = [];
   let totalKeys = Object.keys(PET_DB);
   let discoveredCount = 0;
@@ -1267,10 +1386,8 @@ function renderEncyclopedia() {
     const pet = PET_DB[petId];
     const isUnlocked = d.discoveredPets.includes(petId);
     if(isUnlocked) discoveredCount++;
-
     const card = document.createElement("div");
     card.className = `encyclopedia-card ${isUnlocked ? 'unlocked' : 'locked'}`;
-
     card.innerHTML = `
       <span class="badge-grade grade-${pet.grade}">${pet.grade}급</span>
       <div class="pet-icon">${pet.icon}</div>
@@ -1282,10 +1399,7 @@ function renderEncyclopedia() {
     `;
     container.appendChild(card);
   });
-
-  if(countDisplay) {
-    countDisplay.textContent = `수집률: ${discoveredCount} / ${totalKeys.length}`;
-  }
+  if(countDisplay) countDisplay.textContent = `수집률: ${discoveredCount} / ${totalKeys.length}`;
 }
 
 function renderPetList(){
@@ -1296,60 +1410,37 @@ function renderPetList(){
     container.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:11px;'>보유한 드론이 없습니다.</p>";
     return;
   }
-
   d.pets.forEach((petId, index) => {
     const pet = PET_DB[petId];
     if(!pet) return;
-
     const isEquipped = d.equippedPets.includes(petId);
     const card = document.createElement("div");
     card.className = `pet-card ${isEquipped ? 'equipped' : ''}`;
     card.draggable = true;
     card.dataset.index = index;
-
     card.innerHTML = `
       <span class="badge-grade grade-${pet.grade}">${pet.grade}급</span>
       <div class="pet-icon">${pet.icon}</div>
       <b style="color:var(--text-main); font-size:12px;">${pet.name}</b>
       <p style="font-size:10px;color:var(--text-sub);margin:3px 0 6px;">${pet.desc}</p>
       <div style="display:flex; gap:4px;">
-        <button class="btn-mini" style="flex:1;" onclick="toggleEquipPet(${index})">
-          ${isEquipped ? '해제' : '장착'}
-        </button>
-        <button class="btn-mini" style="flex:1; background:#ef4444 !important; color:#fff !important; border-color:#dc2626 !important;" onclick="sellPet(${index})">
-          판매(${fmt(pet.sellPrice)})
-        </button>
+        <button class="btn-mini" style="flex:1;" onclick="toggleEquipPet(${index})">${isEquipped ? '해제' : '장착'}</button>
+        <button class="btn-mini" style="flex:1; background:#ef4444 !important; color:#fff !important; border-color:#dc2626 !important;" onclick="sellPet(${index})">판매(${fmt(pet.sellPrice)})</button>
       </div>
     `;
-
-    card.addEventListener("dragstart", (e) => {
-      draggedPetIdx = index;
-      e.dataTransfer.effectAllowed = "move";
-    });
-
-    card.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      card.classList.add("drag-over");
-    });
-
-    card.addEventListener("dragleave", () => {
-      card.classList.remove("drag-over");
-    });
-
+    card.addEventListener("dragstart", (e) => { draggedPetIdx = index; e.dataTransfer.effectAllowed = "move"; });
+    card.addEventListener("dragover", (e) => { e.preventDefault(); card.classList.add("drag-over"); });
+    card.addEventListener("dragleave", () => { card.classList.remove("drag-over"); });
     card.addEventListener("drop", (e) => {
       e.preventDefault();
       card.classList.remove("drag-over");
       if(draggedPetIdx === null || draggedPetIdx === index) return;
-
       const sourcePet = PET_DB[d.pets[draggedPetIdx]];
       const targetPet = PET_DB[d.pets[index]];
-
       if(sourcePet.grade === targetPet.grade) {
         if(sourcePet.grade === 'S') {
           let sIndices = [];
-          d.pets.forEach((pId, idx) => {
-            if(PET_DB[pId].grade === 'S') sIndices.push(idx);
-          });
+          d.pets.forEach((pId, idx) => { if(PET_DB[pId].grade === 'S') sIndices.push(idx); });
           if(sIndices.length >= 4) {
             let indicesToRemove = sIndices.slice(0, 4);
             indicesToRemove.sort((a,b) => b - a);
@@ -1361,20 +1452,14 @@ function renderPetList(){
             });
             d.pets.push('legend');
             say(`✨ 레전더리 드론 [옴니버스 싱귤래리티] 합성 성공!`);
-            draggedPetIdx = null;
-            save();
-          } else {
-            say("S등급 드론이 총 4개 필요합니다.");
-          }
+            draggedPetIdx = null; save();
+          } else say("S등급 드론이 총 4개 필요합니다.");
         } else if(sourcePet.grade === 'L') {
           let lIndices = [];
-          d.pets.forEach((pId, idx) => {
-            if(PET_DB[pId].grade === 'L') lIndices.push(idx);
-          });
+          d.pets.forEach((pId, idx) => { if(PET_DB[pId].grade === 'L') lIndices.push(idx); });
           if(lIndices.length >= 2) {
             let indicesToRemove = [draggedPetIdx, index];
             indicesToRemove.sort((a,b) => b - a);
-            
             if(Math.random() < 0.25) {
               indicesToRemove.forEach(idx => {
                 let removedPetId = d.pets[idx];
@@ -1394,20 +1479,14 @@ function renderPetList(){
               });
               say(`💥 합성 실패! 레전더리 드론이 과부하로 파괴되었습니다...`);
             }
-            draggedPetIdx = null;
-            save();
-          } else {
-            say("레전더리 등급 드론 2개가 필요합니다.");
-          }
+            draggedPetIdx = null; save();
+          } else say("레전더리 등급 드론 2개가 필요합니다.");
         } else if(sourcePet.grade === 'M') {
           let mIndices = [];
-          d.pets.forEach((pId, idx) => {
-            if(PET_DB[pId].grade === 'M') mIndices.push(idx);
-          });
+          d.pets.forEach((pId, idx) => { if(PET_DB[pId].grade === 'M') mIndices.push(idx); });
           if(mIndices.length >= 2) {
             let indicesToRemove = [draggedPetIdx, index];
             indicesToRemove.sort((a,b) => b - a);
-            
             if(Math.random() < 0.20) {
               indicesToRemove.forEach(idx => {
                 let removedPetId = d.pets[idx];
@@ -1427,20 +1506,14 @@ function renderPetList(){
               });
               say(`💥 합성 실패! 신화 드론이 파괴되었습니다...`);
             }
-            draggedPetIdx = null;
-            save();
-          } else {
-            say("신화 등급 드론 2개가 필요합니다.");
-          }
+            draggedPetIdx = null; save();
+          } else say("신화 등급 드론 2개가 필요합니다.");
         } else if(sourcePet.grade === 'T') {
           let tIndices = [];
-          d.pets.forEach((pId, idx) => {
-            if(PET_DB[pId].grade === 'T') tIndices.push(idx);
-          });
+          d.pets.forEach((pId, idx) => { if(PET_DB[pId].grade === 'T') tIndices.push(idx); });
           if(tIndices.length >= 2) {
             let indicesToRemove = [draggedPetIdx, index];
             indicesToRemove.sort((a,b) => b - a);
-            
             if(Math.random() < 0.15) {
               indicesToRemove.forEach(idx => {
                 let removedPetId = d.pets[idx];
@@ -1460,42 +1533,28 @@ function renderPetList(){
               });
               say(`💥 합성 실패! 초월 드론이 공허 속으로 사라졌습니다...`);
             }
-            draggedPetIdx = null;
-            save();
-          } else {
-            say("초월 등급 드론 2개가 필요합니다.");
-          }
+            draggedPetIdx = null; save();
+          } else say("초월 등급 드론 2개가 필요합니다.");
         } else if(sourcePet.nextGrade && sourcePet.nextGrade !== 'L' && sourcePet.nextGrade !== 'M' && sourcePet.nextGrade !== 'T' && sourcePet.nextGrade !== 'X') {
           const nextGradeCandidates = PETS_BY_GRADE[sourcePet.nextGrade];
           let unowned = nextGradeCandidates.filter(id => !d.pets.includes(id));
           let newPetId = unowned.length > 0 ? unowned[0] : nextGradeCandidates[Math.floor(Math.random() * nextGradeCandidates.length)];
-
           let p1 = d.pets[draggedPetIdx];
           let p2 = d.pets[index];
           [p1, p2].forEach(p => {
             let eqIdx = d.equippedPets.indexOf(p);
             if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
           });
-
           const firstCut = Math.max(draggedPetIdx, index);
           const secondCut = Math.min(draggedPetIdx, index);
-
           d.pets.splice(firstCut, 1);
           d.pets.splice(secondCut, 1);
           d.pets.push(newPetId);
-
-          const newPet = PET_DB[newPetId];
-          say(`업그레이드 성공: ${newPet.name}!`);
-          draggedPetIdx = null;
-          save();
-        } else {
-          say("더 이상 일반 합성이 불가능한 등급입니다.");
-        }
-      } else {
-        say("동급 드론끼리만 업그레이드 가능합니다.");
-      }
+          say(`업그레이드 성공: ${PET_DB[newPetId].name}!`);
+          draggedPetIdx = null; save();
+        } else say("더 이상 일반 합성이 불가능한 등급입니다.");
+      } else say("동급 드론끼리만 업그레이드 가능합니다.");
     });
-
     container.appendChild(card);
   });
 }
@@ -1503,14 +1562,11 @@ function renderPetList(){
 function toggleEquipPet(index){
   const petId = d.pets[index];
   const eqIdx = d.equippedPets.indexOf(petId);
-
   if(eqIdx !== -1) {
     d.equippedPets.splice(eqIdx, 1);
     say("드론 장착이 해제되었습니다.");
   } else {
-    if(d.equippedPets.length >= 2) {
-      return say("드론은 최대 2개까지만 동시 장착할 수 있습니다!");
-    }
+    if(d.equippedPets.length >= 2) return say("드론은 최대 2개까지만 동시 장착할 수 있습니다!");
     d.equippedPets.push(petId);
     say("드론이 장착되었습니다.");
   }
@@ -1521,12 +1577,8 @@ function sellPet(index){
   const petId = d.pets[index];
   const pet = PET_DB[petId];
   if(!pet) return;
-
   let eqIdx = d.equippedPets.indexOf(petId);
-  if(eqIdx !== -1) {
-    d.equippedPets.splice(eqIdx, 1);
-  }
-
+  if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
   d.pets.splice(index, 1);
   d.score += pet.sellPrice;
   say(`${pet.name} 판매 완료! (+${fmt(pet.sellPrice)} 에너지)`);
@@ -1536,7 +1588,6 @@ function sellPet(index){
 function drawPet(boxType){
   const cost = boxType === 1 ? 12000 : 120000;
   if(d.score < cost) return say("에너지가 부족합니다.");
-
   d.score -= cost;
   let obtained = 'cat';
   if(boxType === 1){
@@ -1551,33 +1602,28 @@ function drawPet(boxType){
       obtained = sPool[Math.floor(Math.random() * sPool.length)];
     }
   }
-
   d.pets.push(obtained);
   say(`${PET_DB[obtained].name} 획득!`);
   save();
 }
 
-// --- 애플리케이션 초기화 및 이벤트 연결 ---
+// --- 애플리케이션 초기화 ---
 document.addEventListener("DOMContentLoaded", () => {
   renderPatchNotes();
   const lastChecked = localStorage.getItem("lastCheckedPatch");
   const alarmBadge = $("alarmBadge");
-  if(alarmBadge && lastChecked === patchNotes[0].version) {
-    alarmBadge.classList.remove("active");
-  }
+  if(alarmBadge && lastChecked === patchNotes[0].version) alarmBadge.classList.remove("active");
   checkAndDiscoverPets();
   updateUserUI();
   render();
+  loadChatMessages();
 
   const bgmToggle = $("bgmToggleBtn");
-  if(bgmToggle) {
-    bgmToggle.onclick = toggleBGM;
-  }
+  if(bgmToggle) bgmToggle.onclick = toggleBGM;
 
   const openBtn = $("openPatchNoteBtn");
   const closeBtn = $("closePatchNoteBtn");
   const patchModal = $("patchModal");
-
   if(openBtn) {
     openBtn.onclick = () => {
       if(patchModal) patchModal.classList.remove("hidden");
@@ -1585,11 +1631,8 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("lastCheckedPatch", patchNotes[0].version);
     };
   }
-
   if(closeBtn) {
-    closeBtn.onclick = () => {
-      if(patchModal) patchModal.classList.add("hidden");
-    };
+    closeBtn.onclick = () => { if(patchModal) patchModal.classList.add("hidden"); };
   }
 
   const downloadBtn = $("downloadGameBtn");
@@ -1604,97 +1647,68 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  const chatSendBtn = $("chatSendBtn");
+  const chatInput = $("chatInput");
+  if(chatSendBtn) chatSendBtn.onclick = sendChatMessage;
+  if(chatInput) {
+    chatInput.onkeydown = (e) => { if(e.key === 'Enter') sendChatMessage(); };
+  }
+
   const buyPermPower = $("buyPermPowerBtn");
   if(buyPermPower) {
     buyPermPower.onclick = () => {
-      let cost = 2;
-      if(d.rp >= cost){
-        d.rp -= cost;
-        d.permPower = (d.permPower || 0) + 10;
-        say("기초 채굴 효율 강화 성공!");
-        save();
-      } else say("승급 포인트(RP)가 부족합니다! (필요: 2 RP)");
+      if(d.rp >= 2){ d.rp -= 2; d.permPower = (d.permPower || 0) + 10; say("기초 채굴 효율 강화 성공!"); save(); }
+      else say("승급 포인트(RP)가 부족합니다! (필요: 2 RP)");
     };
   }
 
   const buyPermCps = $("buyPermCpsBtn");
   if(buyPermCps) {
     buyPermCps.onclick = () => {
-      let cost = 2;
-      if(d.rp >= cost){
-        d.rp -= cost;
-        d.permCps = (d.permCps || 0) + 25;
-        say("자동 채굴 강화 성공!");
-        save();
-      } else say("승급 포인트(RP)가 부족합니다! (필요: 2 RP)");
+      if(d.rp >= 2){ d.rp -= 2; d.permCps = (d.permCps || 0) + 25; say("자동 채굴 강화 성공!"); save(); }
+      else say("승급 포인트(RP)가 부족합니다! (필요: 2 RP)");
     };
   }
 
   const buyPermLuck = $("buyPermLuckBtn");
   if(buyPermLuck) {
     buyPermLuck.onclick = () => {
-      let cost = 4;
       if((d.permLuck || 0) >= 15) return say("최대 강화 한도에 도달했습니다.");
-      if(d.rp >= cost){
-        d.rp -= cost;
-        d.permLuck = (d.permLuck || 0) + 3;
-        say("행운 모듈 강화 성공!");
-        save();
-      } else say("승급 포인트(RP)가 부족합니다! (필요: 4 RP)");
+      if(d.rp >= 4){ d.rp -= 4; d.permLuck = (d.permLuck || 0) + 3; say("행운 모듈 강화 성공!"); save(); }
+      else say("승급 포인트(RP)가 부족합니다! (필요: 4 RP)");
     };
   }
 
   document.querySelectorAll(".color-btn").forEach(btn => {
-    btn.onclick = () => {
-      d.coinColor = btn.dataset.color;
-      say("코어 컬러가 변경되었습니다.");
-      save();
-    };
+    btn.onclick = () => { d.coinColor = btn.dataset.color; say("코어 컬러가 변경되었습니다."); save(); };
   });
 
   document.querySelectorAll(".icon-btn").forEach(btn => {
-    btn.onclick = () => {
-      d.coinIcon = btn.dataset.icon;
-      say("코어 심볼이 변경되었습니다.");
-      save();
-    };
+    btn.onclick = () => { d.coinIcon = btn.dataset.icon; say("코어 심볼이 변경되었습니다."); save(); };
   });
 
   const regRankBtn = $("registerRankBtn");
   if(regRankBtn) {
     regRankBtn.onclick = () => {
       if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
-      syncScoreToFirebase();
-      loadFirebaseRankings();
+      syncScoreToFirebase(); loadFirebaseRankings();
       say("서버에 에너지가 즉시 동기화되었습니다!");
     };
   }
 
   const autoToggle = $("autoToggleBtn");
-  if(autoToggle) {
-    autoToggle.onclick = () => {
-      d.autoEnabled = !d.autoEnabled;
-      save();
-    };
-  }
+  if(autoToggle) autoToggle.onclick = () => { d.autoEnabled = !d.autoEnabled; save(); };
 
   const coinBtnMain = $("coin");
   if(coinBtnMain) {
     coinBtnMain.onclick = () => {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
-      
       let currentPower = (d.power + (d.permPower || 0));
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
-
       const totalLuckProb = petBonus.luckProb + ((d.permLuck || 0) / 100);
-
-      if(d.luck && Math.random() < totalLuckProb){ 
-        gain *= 2.0; 
-        triggerLuckEffect(gain);
-      }
-      d.score += gain; 
-      save();
+      if(d.luck && Math.random() < totalLuckProb){ gain *= 2.0; triggerLuckEffect(gain); }
+      d.score += gain; save();
     };
   }
 
@@ -1702,11 +1716,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(powerBtn) {
     powerBtn.onclick = () => {
       let cost = Math.floor(350 * Math.pow(1.25, d.power - 1));
-      if(d.score>=cost){
-        d.score-=cost;
-        d.power++;
-        save();
-      } else say("에너지가 부족합니다.");
+      if(d.score>=cost){ d.score-=cost; d.power++; save(); } else say("에너지가 부족합니다.");
     };
   }
 
@@ -1714,11 +1724,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(autoBtn) {
     autoBtn.onclick = () => {
       let cost = Math.floor(1800 * Math.pow(1.28, d.cps));
-      if(d.score>=cost){
-        d.score-=cost;
-        d.cps++;
-        save();
-      } else say("에너지가 부족합니다.");
+      if(d.score>=cost){ d.score-=cost; d.cps++; save(); } else say("에너지가 부족합니다.");
     };
   }
 
@@ -1728,9 +1734,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const costs = { luck: 30000, core: 180000, double: 750000 };
       const cost = costs[type];
       if(d.score < cost) return say("에너지가 부족합니다.");
-      d.score -= cost;
-      d[type] = true;
-      save();
+      d.score -= cost; d[type] = true; save();
     };
   });
 
@@ -1744,12 +1748,8 @@ document.addEventListener("DOMContentLoaded", () => {
     attendBtn.onclick = () => {
       const now = Date.now();
       if(now - d.lastAttend < 24*60*60*1000) return say("아직 지원금 수령 시간이 되지 않았습니다.");
-
-      d.lastAttend = now;
-      d.attendDays += 1;
-      d.score += 12000 + (d.attendDays * 2500);
-      d.rp += 1;
-      save();
+      d.lastAttend = now; d.attendDays += 1;
+      d.score += 12000 + (d.attendDays * 2500); d.rp += 1; save();
     };
   }
 
@@ -1758,16 +1758,12 @@ document.addEventListener("DOMContentLoaded", () => {
     rebirthBtn.onclick = () => {
       let req = 1200000 * Math.pow(2.2, d.rebirth);
       if(d.score < req) return;
-      d.rebirth++; 
-      d.rp += 3;
-      d.score = 0; 
-      d.power = 1; 
-      d.cps = 0;
-      say("시스템 승급 완료! (+3 RP)");
-      save();
+      d.rebirth++; d.rp += 3; d.score = 0; d.power = 1; d.cps = 0;
+      say("시스템 승급 완료! (+3 RP)"); save();
     };
   }
 
+  // 사이드바 메뉴 탭 전환
   document.querySelectorAll(".tab").forEach(t => {
     t.onclick = () => {
       document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
@@ -1787,24 +1783,14 @@ document.addEventListener("DOMContentLoaded", () => {
       let bet = parseInt($("slotBet").value) || 0;
       if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
       d.score -= bet;
-      
       let r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
       let r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
       let r3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-      
       if($("slotScreen")) $("slotScreen").textContent = `${r1} ${r2} ${r3}`;
-      
-      if (r1 === r2 && r2 === r3 && r1 !== "⚡" && Math.random() < 0.06) { 
-        d.score += bet * 15; 
-        say(`대성공 잭팟! (+${fmt(bet*15)})`); 
-      } else if (r1 === "⚡" && r2 === "⚡" && r3 === "⚡") {
-        say("과부하 발생! 에너지가 소실되었습니다.");
-      } else if ((r1 === r2 || r2 === r3 || r1 === r3) && Math.random() < 0.15) { 
-        d.score += Math.floor(bet * 1.2); 
-        say("일부 환급되었습니다."); 
-      } else { 
-        say("실험 실패"); 
-      }
+      if (r1 === r2 && r2 === r3 && r1 !== "⚡" && Math.random() < 0.06) { d.score += bet * 15; say(`대성공 잭팟! (+${fmt(bet*15)})`); }
+      else if (r1 === "⚡" && r2 === "⚡" && r3 === "⚡") { say("과부하 발생! 에너지가 소실되었습니다."); }
+      else if ((r1 === r2 || r2 === r3 || r1 === r3) && Math.random() < 0.15) { d.score += Math.floor(bet * 1.2); say("일부 환급되었습니다."); }
+      else { say("실험 실패"); }
       save();
     };
   }
@@ -1821,17 +1807,10 @@ document.addEventListener("DOMContentLoaded", () => {
       let bet = parseInt($("coinBet").value) || 0;
       if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
       d.score -= bet;
-      
       let userWins = Math.random() < 0.30;
       let isHead = userWins ? (coinChoice === "head") : (coinChoice !== "head");
-      
       if($("coinResult")) $("coinResult").textContent = isHead ? "결과: 상승 (A)" : "결과: 하락 (B)";
-      if (userWins) { 
-        d.score += Math.floor(bet * 2.2); 
-        say(`분석 적중! (+${fmt(bet*2.2)})`); 
-      } else { 
-        say("분석 예측 실패"); 
-      }
+      if (userWins) { d.score += Math.floor(bet * 2.2); say(`분석 적중! (+${fmt(bet*2.2)})`); } else { say("분석 예측 실패"); }
       save();
     };
   }
@@ -1851,16 +1830,9 @@ document.addEventListener("DOMContentLoaded", () => {
       let bet = parseInt($("diceBet").value) || 0;
       if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
       d.score -= bet;
-      
       let roll = Math.floor(Math.random() * 8) + 1;
       if($("diceResult")) $("diceResult").textContent = `결과: [ ${roll} ]`;
-      
-      if (selectedDice === roll) { 
-        d.score += Math.floor(bet * 6.5); 
-        say(`양자 공명 당첨! (+${fmt(bet*6.5)})`); 
-      } else { 
-        say("파동 불일치"); 
-      }
+      if (selectedDice === roll) { d.score += Math.floor(bet * 6.5); say(`양자 공명 당첨! (+${fmt(bet*6.5)})`); } else { say("파동 불일치"); }
       save();
     };
   }
@@ -1878,28 +1850,22 @@ document.addEventListener("DOMContentLoaded", () => {
       let bet = parseInt($("highLowBet").value) || 0;
       if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
       d.score -= bet;
-
       let isWin = Math.random() < 0.30;
       let newNum = isWin ? 
         (highLowChoice === "high" ? Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1 : Math.floor(Math.random() * (currentCardNum - 1)) + 1) : 
         (highLowChoice === "high" ? Math.floor(Math.random() * currentCardNum) + 1 : Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1);
-      
       if(isNaN(newNum) || newNum < 1 || newNum > 15) newNum = 8;
       currentCardNum = newNum;
-
       if (isWin) {
         let win = Math.floor(bet * 2.2);
-        d.score += win;
-        say(`예측 적중! (+${fmt(win)})`);
-      } else {
-        say("예측 실패");
-      }
+        d.score += win; say(`예측 적중! (+${fmt(win)})`);
+      } else { say("예측 실패"); }
       save();
     };
   }
 });
 
-// 자동 채굴 및 주기적 서버 동기화 루프 (1초마다 실행)
+// 자동 채굴 루프 및 주기적 서버 동기화
 let syncCounter = 0;
 setInterval(() => {
   const autoCps = (d.cps + (d.permCps || 0));
@@ -1907,7 +1873,6 @@ setInterval(() => {
     d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
     save();
   }
-
   syncCounter++;
   if(syncCounter >= 5) {
     syncCounter = 0;
@@ -1920,9 +1885,7 @@ setInterval(() => {
         rebirth: d.rebirth,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true }).then(() => {
-        if(!$("rankPanel").classList.contains("hidden")) {
-          loadFirebaseRankings();
-        }
+        if(!$("rankPanel").classList.contains("hidden")) loadFirebaseRankings();
       }).catch(err => {});
     }
   }
