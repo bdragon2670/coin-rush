@@ -320,15 +320,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 .stock-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; text-align: center; }
 .stock-chart-canvas { width: 100%; height: 70px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 6px; margin: 6px 0; }
 
-.chat-container { display: flex; flex-direction: column; height: 380px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
-.chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-.chat-msg { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; font-size: 12px; }
-.chat-msg-header { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 11px; }
-.chat-msg-user { color: var(--accent); font-weight: 600; }
-.chat-msg-time { color: var(--text-sub); }
-.chat-input-area { display: flex; padding: 10px; gap: 8px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border-color); }
-.chat-input { flex: 1; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 12px; }
-
 @media(max-width: 750px){
   .layout-container { flex-direction: column; }
   .sidebar { width: 100% !important; flex-direction: row; flex-wrap: wrap; justify-content: center; }
@@ -361,7 +352,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구스탯</span></button>
     <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">승급</span></button>
     <button class="tab" data-tab="rankPanel"><span class="tab-icon">🏆</span><span class="tab-text">랭킹</span></button>
-    <button class="tab" data-tab="chatPanel"><span class="tab-icon">💬</span><span class="tab-text">실시간 채팅</span></button>
   </div>
 
   <!-- 메인 게임 영역 -->
@@ -516,12 +506,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 
     <!-- 주식시장 탭 -->
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (글로벌 공용 4종)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">모든 플레이어가 동일한 실시간 주식 그래프 시세를 공유합니다!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (역대급 대폭락 조정 완료)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">모든 플레이어가 동일한 실시간 주식 그래프 시세를 공유하며, 새로고침 시에도 데이터가 완벽 유지됩니다!</p>
       <div class="stock-grid" style="grid-template-columns: repeat(2, 1fr);">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
-          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">1,000</b> 에너지</p>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">50</b> 에너지</p>
           <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
           <div style="display:flex; gap:6px; margin-top:6px;">
@@ -535,7 +525,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
         </div>
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
-          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">5,000</b> 에너지</p>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">120</b> 에너지</p>
           <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
           <div style="display:flex; gap:6px; margin-top:6px;">
@@ -549,7 +539,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
         </div>
         <div class="stock-card" style="margin-top:10px;">
           <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
-          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">12,000</b> 에너지</p>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">300</b> 에너지</p>
           <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
           <div style="display:flex; gap:6px; margin-top:6px;">
@@ -563,7 +553,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
         </div>
         <div class="stock-card" style="margin-top:10px;">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
-          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">35,000</b> 에너지</p>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">800</b> 에너지</p>
           <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
           <div style="display:flex; gap:6px; margin-top:6px;">
@@ -790,21 +780,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div class="my-rank-banner" id="myRankDisplay">내 순위: 조회 중...</div>
     </div>
 
-    <!-- 채팅 탭 -->
-    <div id="chatPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💬 연구원 실시간 소통 채널</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:10px;">구글 로그인 후 소통하세요! (<b style="color:var(--accent);">/자랑</b> 명령어 사용 가능)</p>
-      <div class="chat-container">
-        <div class="chat-messages" id="chatMessages">
-          <div style="color:var(--text-sub); text-align:center; font-size:11px; margin-top:20px;">채팅 기록을 불러오는 중...</div>
-        </div>
-        <div class="chat-input-area">
-          <input type="text" id="chatInput" class="chat-input" placeholder="메시지 또는 /자랑 입력..." maxlength="150">
-          <button class="btn-game" id="chatSendBtn" style="padding: 6px 14px;">전송</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
@@ -838,7 +813,7 @@ function toggleBGM() {
     isBgmPlaying = false;
     if(btn) {
       btn.textContent = "🔇 BGM 켜기";
-      btn.style.background = "rgba(239, 68, 68, 0.1)";
+      v.style.background = "rgba(239, 68, 68, 0.1)";
       btn.style.borderColor = "#ef4444";
       btn.style.color = "#ef4444";
     }
@@ -915,6 +890,7 @@ function playFailureSound() {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const notes = [300, 250, 180]; 
     notes.forEach((freq, idx) => {
+      const opt = document.createElement("div");
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = "sawtooth";
@@ -931,9 +907,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v4.8 패치 (최적화)",
-    title: "실시간 연동 속도 대폭 개선 및 네트워크 최적화 완료",
-    desc: "1) 랭킹 및 거래소 리스너 지연 현상 완전 해소\n2) 드론 뽑기 가격 상승폭 고정 150 적용\n3) 채팅 `/자랑` 시스템 스탯 연동 안정화"
+    version: "v5.0 대규모 패치",
+    title: "경제 시스템 개편 및 주식/채팅 시스템 대대적 정비",
+    desc: "1) 📉 주식시장 역대급 대폭락 조정 완료 (시세 전면 개편)\n2) 🔄 새로고침 시 주식 보유 데이터가 초기화되지 않도록 영구 저장 연동\n3) 💸 모든 유저 에너지(자산) 50% 반토막 조정 적용\n4) 💬 실시간 소통 채널(채팅) 기능 전면 폐지 및 삭제"
   }
 ];
 
@@ -977,8 +953,15 @@ let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  coinColor:'gold', coinIcon:'⚡', customImg: null, bgImg: null,
  stock1: 0, stock2: 0, stock3: 0, stock4: 0,
  lastMarketReset: 0, regCountToday: 3, buyCountToday: 3,
- box1Count: 0, box2Count: 0
+ box1Count: 0, box2Count: 0, halfScoreApplied: false
 };
+
+// 에너지 50% 반토막 조정 (최초 1회만 적용)
+if(!d.halfScoreApplied) {
+  d.score = Math.floor(d.score / 2);
+  d.halfScoreApplied = true;
+  localStorage.setItem(saveKey, JSON.stringify(d));
+}
 
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
@@ -1062,11 +1045,12 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-let stockPrices = { 1: 1000, 2: 5000, 3: 12000, 4: 35000 };
-let stockHistory1 = [1000, 1020, 990, 1010, 1000];
-let stockHistory2 = [5000, 4900, 5100, 5050, 5000];
-let stockHistory3 = [12000, 11800, 12100, 11950, 12000];
-let stockHistory4 = [35000, 34500, 35200, 34800, 35000];
+// 역대급 대폭락 조정된 주식 기본 시세 (기존 대비 대폭 하향)
+let stockPrices = { 1: 50, 2: 120, 3: 300, 4: 800 };
+let stockHistory1 = [50, 52, 48, 51, 50];
+let stockHistory2 = [120, 115, 125, 122, 120];
+let stockHistory3 = [300, 290, 310, 295, 300];
+let stockHistory4 = [800, 780, 820, 790, 800];
 
 function checkAndDiscoverPets() {
   if(!d.discoveredPets) d.discoveredPets = [];
@@ -1094,15 +1078,13 @@ function syncScoreToFirebase(force = false) {
     score: d.score, 
     rebirth: d.rebirth,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true }).catch(err => {
-    console.error("랭킹 동기화 에러:", err);
-  });
+  }, { merge: true }).catch(err => {});
 }
 
 let unsubscribeStock = null;
 function initRealtimeStock() {
   if(unsubscribeStock) unsubscribeStock();
-  unsubscribeStock = db.collection('global_stock').doc('market_v4').onSnapshot((doc) => {
+  unsubscribeStock = db.collection('global_stock').doc('market_v5').onSnapshot((doc) => {
     if(doc.exists) {
       const data = doc.data();
       if(data.stockPrices) stockPrices = data.stockPrices;
@@ -1111,7 +1093,7 @@ function initRealtimeStock() {
       if(data.stockHistory3) stockHistory3 = data.stockHistory3;
       if(data.stockHistory4) stockHistory4 = data.stockHistory4;
     } else {
-      db.collection('global_stock').doc('market_v4').set({
+      db.collection('global_stock').doc('market_v5').set({
         stockPrices: stockPrices,
         stockHistory1: stockHistory1,
         stockHistory2: stockHistory2,
@@ -1274,9 +1256,7 @@ function registerMarketItem() {
     say("드론이 거래소에 성공적으로 등록되었습니다!");
     save();
     initRealtimeMarket();
-  }).catch(err => {
-    say("거래소 등록 실패");
-  });
+  }).catch(err => {});
 }
 
 function cancelMarketItem(docId, petId) {
@@ -1286,9 +1266,7 @@ function cancelMarketItem(docId, petId) {
     say("매물이 회수되어 격납고로 반환되었습니다.");
     save();
     initRealtimeMarket();
-  }).catch(err => {
-    say("회수 실패");
-  });
+  }).catch(err => {});
 }
 
 function buyMarketItem(docId, price, petId) {
@@ -1309,72 +1287,6 @@ function buyMarketItem(docId, price, petId) {
       initRealtimeMarket();
     });
   }).catch(err => {});
-}
-
-function loadChatMessages() {
-  db.collection('global_chat').orderBy('createdAt', 'asc').limit(50).onSnapshot((snapshot) => {
-    const chatContainer = $("chatMessages");
-    if(!chatContainer) return;
-    chatContainer.innerHTML = "";
-    if(snapshot.empty) {
-      chatContainer.innerHTML = "<div style='color:var(--text-sub); text-align:center; font-size:11px; margin-top:20px;'>첫 번째 메시지를 남겨보세요!</div>";
-      return;
-    }
-    snapshot.forEach((doc) => {
-      const msg = doc.data();
-      const timeStr = msg.createdAt ? new Date(msg.createdAt.toDate()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '방금 전';
-      const div = document.createElement("div");
-      div.className = "chat-msg";
-      div.innerHTML = `
-        <div class="chat-msg-header">
-          <span class="chat-msg-user">${msg.name}</span>
-          <span class="chat-msg-time">${timeStr}</span>
-        </div>
-        <div style="color:var(--text-main); word-break:break-all;">${escapeHtml(msg.text)}</div>
-      `;
-      chatContainer.appendChild(div);
-    });
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }, err => {});
-}
-
-function sendChatMessage() {
-  if(!currentUser) return say("구글 로그인 후 채팅을 이용할 수 있습니다.");
-  const input = $("chatInput");
-  let text = input.value.trim();
-  if(!text) return;
-
-  if(text === "/자랑") {
-    let topGrade = "없음";
-    let gradeRank = {'X':9, 'T':8, 'M':7, 'L':6, 'S':5, 'A':4, 'B':3, 'C':2};
-    let maxGradeVal = 0;
-    if(d.pets && d.pets.length > 0) {
-      d.pets.forEach(pId => {
-        let p = PET_DB[pId];
-        if(p && gradeRank[p.grade] > maxGradeVal) {
-          maxGradeVal = gradeRank[p.grade];
-          topGrade = `${p.grade}급 (${p.name})`;
-        }
-      });
-    }
-    text = `✨ [자랑 시스템] 에너지: ${fmt(d.score)} | 보석: 💎${fmt(d.gems)} | 승급: ${d.rebirth}회 | 최고드론: ${topGrade}`;
-  }
-
-  db.collection('global_chat').add({
-    googleId: currentUser.googleId,
-    name: currentUser.name,
-    picture: currentUser.picture,
-    text: text,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(() => {
-    input.value = "";
-  }).catch(err => {
-    say("메시지 전송 실패");
-  });
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function parseJwt(token) {
@@ -1952,7 +1864,6 @@ document.addEventListener("DOMContentLoaded", () => {
   checkAndDiscoverPets();
   updateUserUI();
   render();
-  loadChatMessages();
   initRealtimeRankings();
   initRealtimeMarket();
   initRealtimeStock();
@@ -2032,13 +1943,6 @@ document.addEventListener("DOMContentLoaded", () => {
       say("기본 배경 화면으로 복원되었습니다.");
       save();
     };
-  }
-
-  const chatSendBtn = $("chatSendBtn");
-  const chatInput = $("chatInput");
-  if(chatSendBtn) chatSendBtn.onclick = sendChatMessage;
-  if(chatInput) {
-    chatInput.onkeydown = (e) => { if(e.key === 'Enter') sendChatMessage(); };
   }
 
   const marketRegBtn = $("marketRegisterBtn");
@@ -2335,17 +2239,17 @@ setInterval(() => {
   }
 
   if(Math.random() < 0.2) {
-    stockPrices[1] = Math.max(200, Math.floor(stockPrices[1] * (0.88 + Math.random() * 0.26)));
-    stockPrices[2] = Math.max(1000, Math.floor(stockPrices[2] * (0.82 + Math.random() * 0.38)));
-    stockPrices[3] = Math.max(3000, Math.floor(stockPrices[3] * (0.80 + Math.random() * 0.40)));
-    stockPrices[4] = Math.max(8000, Math.floor(stockPrices[4] * (0.75 + Math.random() * 0.45)));
+    stockPrices[1] = Math.max(10, Math.floor(stockPrices[1] * (0.85 + Math.random() * 0.30)));
+    stockPrices[2] = Math.max(30, Math.floor(stockPrices[2] * (0.82 + Math.random() * 0.35)));
+    stockPrices[3] = Math.max(80, Math.floor(stockPrices[3] * (0.80 + Math.random() * 0.40)));
+    stockPrices[4] = Math.max(200, Math.floor(stockPrices[4] * (0.75 + Math.random() * 0.45)));
     
     stockHistory1.push(stockPrices[1]); if(stockHistory1.length > 20) stockHistory1.shift();
     stockHistory2.push(stockPrices[2]); if(stockHistory2.length > 20) stockHistory2.shift();
     stockHistory3.push(stockPrices[3]); if(stockHistory3.length > 20) stockHistory3.shift();
     stockHistory4.push(stockPrices[4]); if(stockHistory4.length > 20) stockHistory4.shift();
 
-    db.collection('global_stock').doc('market_v4').set({
+    db.collection('global_stock').doc('market_v5').set({
       stockPrices: stockPrices,
       stockHistory1: stockHistory1,
       stockHistory2: stockHistory2,
