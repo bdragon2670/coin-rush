@@ -361,7 +361,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .btn-mini.selected{ background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; box-shadow: 0 2px 8px rgba(245,158,11,0.3); }
 
 .pet-box-grid{display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px;}
-.pet-list, .encyclopedia-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 12px;}
+.pet-list, .encyclopedia-list, .market-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 12px;}
 .pet-card{
   background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px;
   padding: 10px; text-align: center; position: relative; cursor: grab; user-select: none;
@@ -436,6 +436,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab" data-tab="stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span></button>
     <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">코어 커스텀</span></button>
     <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
+    <button class="tab" data-tab="droneMarketPanel"><span class="tab-icon">🌐</span><span class="tab-text">유저 드론 거래소</span></button>
     <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">통합 도감</span></button>
     <button class="tab" data-tab="attendPanel"><span class="tab-icon">📅</span><span class="tab-text">일일 지원금</span></button>
     <button class="tab" data-tab="minigames"><span class="tab-icon">🔬</span><span class="tab-text">연구실 게임</span></button>
@@ -488,7 +489,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="upgrade" class="panel">
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);">클릭당 에너지 생산량 증가 (제곱 비례)</small></div>
+          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);">클릭당 에너지 생산량 증가</small></div>
           <button id="powerBtn">150 에너지</button>
         </div>
       </div>
@@ -496,7 +497,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <div class="upgrade-row">
           <div>
             <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b></h3>
-            <small style="color:var(--text-sub);">5초마다 자동 채굴 (최초 구매 후 ON/OFF)</small>
+            <small style="color:var(--text-sub);">5초마다 자동 채굴</small>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <button id="autoToggleBtn" class="toggle-btn on">ON</button>
@@ -619,7 +620,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <!-- 사냥터 탭 -->
     <div id="huntingPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (에너지 약탈 레이드)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">시스템을 감염시킨 바이러스 몬스터를 소탕하고 대량의 에너지를 획득하세요! (성공률이 더욱 하향 조정되었습니다)</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">시스템을 감염시킨 바이러스 몬스터를 소탕하고 대량의 에너지를 획득하세요!</p>
       <div class="shop-grid">
         <div class="game-card">
           <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#f43f5e;">(성공률 45%)</span></h3>
@@ -766,6 +767,24 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <div id="petList" class="pet-list"></div>
     </div>
 
+    <!-- 유저 드론 거래소 탭 -->
+    <div id="droneMarketPanel" class="panel hidden">
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🌐 유저 드론 실시간 거래소</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">구글 계정으로 로그인한 유저끼리 드론을 자유롭게 등록하고 에너지를 지불해 구매하세요!</p>
+      
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:14px; margin-bottom:16px;">
+        <h4 style="color:var(--accent); margin:0 0 8px; font-size:13px;">📦 내 드론 거래소에 등록하기</h4>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <select id="marketSelectPet" style="flex:1; padding:8px; border-radius:8px; background:rgba(7,9,14,0.8); color:var(--text-main); border:1px solid var(--border-color); font-size:12px;"></select>
+          <input type="number" id="marketPriceInput" placeholder="판매 가격 (에너지)" min="1000" step="1000" style="width:140px; padding:8px; border-radius:8px; background:rgba(7,9,14,0.8); color:var(--text-main); border:1px solid var(--border-color); font-size:12px;">
+          <button class="btn-game" id="registerMarketBtn" style="padding:8px 16px;">거래소 등록</button>
+        </div>
+      </div>
+
+      <h4 style="color:var(--text-main); font-size:13px; margin:0 0 8px;">🛒 실시간 거래소 매물 리스트</h4>
+      <div id="marketList" class="market-list"></div>
+    </div>
+
     <!-- 도감 탭 -->
     <div id="encyclopediaPanel" class="panel hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -785,7 +804,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="attendPanel" class="panel hidden">
       <div class="attendance-card">
         <h2 style="margin-top:0; font-size:18px; color:var(--accent);">📅 연구소 일일 지원금 수령 (1,500 에너지)</h2>
-        <p style="color:var(--text-sub); font-size:12px; margin-bottom:14px;">24시간마다 접속하여 무상 연구 자원을 지원받으세요! (초반/일일 지원금에는 보석이 지급되지 않습니다)</p>
+        <p style="color:var(--text-sub); font-size:12px; margin-bottom:14px;">24시간마다 접속하여 무상 연구 자원을 지원받으세요!</p>
         <p style="font-size:14px; margin-bottom:14px;">연속 지원일: <b id="attDays" style="color:var(--accent); font-size:16px;">0</b>일차</p>
         <button id="attendBtn" class="attend-btn" style="padding:10px 24px; font-size:13px;">🎁 지원금 수령하기</button>
         <p id="attStatus" style="font-size:11px; color:var(--text-sub); margin-top:10px;"></p>
@@ -861,7 +880,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="rebirthPanel" class="panel hidden">
       <div class="attendance-card">
         <h2 style="margin-top:0; font-size:18px; color:var(--accent);">🔮 퀀텀 시스템 승급 (환생)</h2>
-        <p style="color:var(--text-sub); font-size:12px; margin-bottom:14px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다. (환생할 때마다 획득 포인트가 누적 증가!)</p>
+        <p style="color:var(--text-sub); font-size:12px; margin-bottom:14px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
         <p style="font-size:14px;">현재 승급 포인트: <b id="rp" style="color:var(--accent); font-size:16px;">0</b></p>
         <p style="font-size:14px; margin-bottom:16px;">승급 요구 조건: <b id="req" style="color:var(--accent);">500,000</b> 에너지</p>
         <button id="rebirthBtn" class="attend-btn" style="padding:10px 24px; font-size:13px;">🔮 시스템 승급 실행</button>
@@ -1046,9 +1065,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v7.3 랭킹 시스템 안정화 및 오류 수정",
-    title: "서버 데이터 초기화 및 동기화 최적화",
-    desc: "1) 🗑️ 모든 유저의 랭킹 및 서버 데이터 흔적 완전 삭제 및 초기화 완료\n2) 🛠️ 실시간 랭킹 리스너 및 쿼리 최적화로 예외 오류 방지\n3) 🎯 사냥터 확률 하향 및 안정적인 자원 관리 시스템 유지"
+    version: "v7.4 유저 드론 거래소 오픈",
+    title: "구글 계정 연동 드론 마켓 기능 추가",
+    desc: "1) 🌐 구글 계정으로 로그인한 유저끼리 보유한 드론을 에너지를 가격으로 설정해 거래소에 등록할 수 있습니다.\n2) 🛒 다른 유저가 올린 드론을 에너지를 지불해 즉시 구매할 수 있습니다."
   }
 ];
 
@@ -1083,7 +1102,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v72";
+const saveKey = "energyRush_PermanentSaveData_v74";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1248,6 +1267,145 @@ function updateStockUI() {
   drawStockChart("stockCanvas4", stockHistory4);
 }
 
+// 실시간 유저 드론 거래소 리스너
+let unsubscribeMarket = null;
+function initRealtimeDroneMarket() {
+  if(unsubscribeMarket) unsubscribeMarket();
+  unsubscribeMarket = db.collection('drone_market').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+    const marketList = $("marketList");
+    if(!marketList) return;
+    marketList.innerHTML = "";
+    if(!snapshot || snapshot.empty) {
+      marketList.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:11px;'>등록된 드론 매물이 없습니다.</p>";
+      return;
+    }
+    snapshot.forEach((docSnap) => {
+      const item = docSnap.data();
+      const pet = PET_DB[item.petId];
+      if(!pet) return;
+      const isMyItem = currentUser && item.sellerId === currentUser.googleId;
+
+      const card = document.createElement("div");
+      card.className = "pet-card";
+      card.innerHTML = `
+        <span class="badge-grade grade-${pet.grade}">${pet.grade}급</span>
+        <div class="pet-icon">${pet.icon}</div>
+        <b style="color:var(--text-main); font-size:12px;">${pet.name}</b>
+        <p style="font-size:10px; color:var(--accent); margin:2px 0;">가격: ${fmt(item.price)} 에너지</p>
+        <p style="font-size:9px; color:var(--text-sub); margin:0 0 6px;">판매자: ${item.sellerName}</p>
+        ${isMyItem ? 
+          `<button class="btn-mini" style="background:#4b5563 !important; width:100%;" onclick="cancelMarketItem('${docSnap.id}', '${item.petId}')">등록 취소</button>` :
+          `<button class="btn-mini" style="background:var(--gold-grad) !important; width:100%;" onclick="buyMarketItem('${docSnap.id}', '${item.petId}', ${item.price}, '${item.sellerId}')">구매하기</button>`
+        }
+      `;
+      marketList.appendChild(card);
+    });
+  }, err => {});
+}
+
+function registerMarketItem() {
+  if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
+  const select = $("marketSelectPet");
+  const priceInput = $("marketPriceInput");
+  if(!select || select.value === "") return say("등록할 드론을 선택해주세요.");
+  let petIdx = parseInt(select.value);
+  let price = parseInt(priceInput.value);
+  if(isNaN(price) || price <= 100) return say("올바른 판매 가격을 입력해주세요.");
+
+  let petId = d.pets[petIdx];
+  if(!petId) return say("유효하지 않은 드론입니다.");
+
+  // 장착 중인 드론인지 체크
+  if(d.equippedPets.includes(petId)) {
+    return say("장착 중인 드론은 거래소에 등록할 수 없습니다. 장착 해제 후 등록해주세요.");
+  }
+
+  // 격납고에서 제거 후 거래소 등록
+  d.pets.splice(petIdx, 1);
+  save();
+
+  db.collection('drone_market').add({
+    petId: petId,
+    price: price,
+    sellerId: currentUser.googleId,
+    sellerName: currentUser.name,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    playSuccessSound();
+    say("🌐 거래소에 드론이 성공적으로 등록되었습니다!");
+    updateMarketSelectOptions();
+  }).catch(err => {
+    // 실패 시 다시 복구
+    d.pets.push(petId);
+    save();
+    say("등록 중 오류가 발생했습니다.");
+  });
+}
+
+function cancelMarketItem(docId, petId) {
+  if(!currentUser) return;
+  db.collection('drone_market').doc(docId).delete().then(() => {
+    d.pets.push(petId);
+    playSuccessSound();
+    say("거래소 등록이 취소되어 드론이 격납고로 반환되었습니다.");
+    save();
+    updateMarketSelectOptions();
+  }).catch(err => {
+    say("취소 중 오류가 발생했습니다.");
+  });
+}
+
+function buyMarketItem(docId, petId, price, sellerId) {
+  if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
+  if(currentUser.googleId === sellerId) return say("자신이 등록한 매물은 구매할 수 없습니다.");
+  if(d.score < price) return say("에너지가 부족합니다.");
+
+  db.collection('drone_market').doc(docId).get().then(doc => {
+    if(!doc.exists) return say("이미 판매되었거나 존재하지 않는 매물입니다.");
+    
+    d.score -= price;
+    d.pets.push(petId);
+    playSuccessSound();
+    say("🎉 드론 구매 완료! 격납고로 지급되었습니다.");
+    save();
+    updateMarketSelectOptions();
+
+    // 매물 문서 삭제
+    db.collection('drone_market').doc(docId).delete().catch(err => {});
+
+    // 판매자에게 에너지 정산 (판매자가 랭킹 등에 동기화되어 있을 경우 반영)
+    db.collection('rankings').doc(sellerId).get().then(sellerDoc => {
+      if(sellerDoc.exists) {
+        let currentSellerScore = sellerDoc.data().score || 0;
+        db.collection('rankings').doc(sellerId).update({
+          score: currentSellerScore + price
+        }).catch(err => {});
+      }
+    }).catch(err => {});
+  }).catch(err => {
+    say("구매 처리 중 오류가 발생했습니다.");
+  });
+}
+
+function updateMarketSelectOptions() {
+  const select = $("marketSelectPet");
+  if(!select) return;
+  select.innerHTML = "";
+  if(!d.pets || d.pets.length === 0) {
+    select.innerHTML = "<option value=''>등록 가능한 드론 없음</option>";
+    return;
+  }
+  d.pets.forEach((petId, idx) => {
+    const pet = PET_DB[petId];
+    if(!pet) return;
+    const isEquipped = d.equippedPets.includes(petId);
+    const opt = document.createElement("option");
+    opt.value = idx;
+    opt.textContent = `[${pet.grade}급] ${pet.name} ${isEquipped ? '(장착중)' : ''}`;
+    select.appendChild(opt);
+  });
+}
+
 let unsubscribeRankings = null;
 function initRealtimeRankings(){
   if(unsubscribeRankings) unsubscribeRankings();
@@ -1257,7 +1415,7 @@ function initRealtimeRankings(){
     if(!rankList) return;
     rankList.innerHTML = "";
     if(!snapshot || snapshot.empty) {
-      rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
+      rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다. (초기화 완료)</td></tr>";
       if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
       return;
     }
@@ -1604,6 +1762,7 @@ function render(){
  renderPetList();
  renderEncyclopedia();
  updateCustomUI();
+ updateMarketSelectOptions();
 }
 
 function updateCustomUI(){
@@ -2112,6 +2271,7 @@ document.addEventListener("DOMContentLoaded", () => {
   render();
   initRealtimeRankings();
   initRealtimeStock();
+  initRealtimeDroneMarket();
 
   const bgmToggle = $("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
@@ -2192,6 +2352,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const mergeAllBtn = $("mergeAllBtn");
   if(mergeAllBtn) mergeAllBtn.onclick = performMergeAll;
+
+  const registerMarketBtn = $("registerMarketBtn");
+  if(registerMarketBtn) registerMarketBtn.onclick = registerMarketItem;
 
   const buyPermPower = $("buyPermPowerBtn");
   if(buyPermPower) {
@@ -2404,7 +2567,7 @@ document.addEventListener("DOMContentLoaded", () => {
       d.lastAttend = now; d.attendDays += 1;
       d.score += 1500; 
       save();
-      say("일일 지원금 수령 완료! (+1,500 에너지, 보석 지급 없음)");
+      say("일일 지원금 수령 완료! (+1,500 에너지)");
     };
   }
 
@@ -2436,6 +2599,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetPanel = $(t.dataset.tab);
       if(targetPanel) targetPanel.classList.remove("hidden");
       if(t.dataset.tab === 'stockPanel') updateStockUI();
+      if(t.dataset.tab === 'droneMarketPanel') updateMarketSelectOptions();
     };
   });
 
