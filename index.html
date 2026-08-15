@@ -242,7 +242,7 @@ h1{
 }
 .tab{
   flex: 1;
-  min-width: 80px;
+  min-width: 70px;
   padding: 8px 4px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -401,7 +401,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 }
 
 .pet-box-grid{display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px;}
-.pet-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 10px;}
+.pet-list, .encyclopedia-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 10px;}
 .pet-card{
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
@@ -415,6 +415,26 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 .pet-card.drag-over{border: 2px dashed var(--accent) !important; background: rgba(56,189,248,0.05) !important;}
 .pet-card.equipped{border: 1px solid var(--accent); box-shadow: 0 0 6px rgba(56,189,248,0.3);}
 .pet-icon{font-size: 28px; margin-bottom: 2px; pointer-events: none;}
+
+/* 도감 카드 스타일 */
+.encyclopedia-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  position: relative;
+}
+.encyclopedia-card.locked {
+  opacity: 0.4;
+  filter: grayscale(100%);
+  background: rgba(0,0,0,0.2);
+}
+.encyclopedia-card.unlocked {
+  border: 1px solid #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.3);
+}
+
 .badge-grade{display: inline-block; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; margin-bottom: 2px;}
 .grade-C{background: #475569; color: #fff;}
 .grade-B{background: #0284c7; color: #fff;}
@@ -511,6 +531,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <button class="tab" data-tab="shop">🛒 상점</button>
 <button class="tab" data-tab="customPanel">🎨 커스텀</button>
 <button class="tab" data-tab="petPanel">🤖 드론</button>
+<button class="tab" data-tab="encyclopediaPanel">📖 도감</button>
 <button class="tab" data-tab="attendPanel">📅 지원금</button>
 <button class="tab" data-tab="minigames">🔬 연구실</button>
 <button class="tab" data-tab="permStatPanel">✨ 영구스탯</button>
@@ -602,6 +623,16 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <span style="font-size:11px; color:var(--accent);">💡 드래그하여 업그레이드</span>
   </div>
   <div id="petList" class="pet-list"></div>
+</div>
+
+<!-- 📖 도감 탭 -->
+<div id="encyclopediaPanel" class="panel hidden">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">
+    <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감</h3>
+    <span style="font-size:12px; color:var(--accent);" id="encyclopediaCount">수집률: 0 / 12</span>
+  </div>
+  <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:12px;">모든 드론의 능력치 정보와 획득 여부를 확인할 수 있습니다.</p>
+  <div id="encyclopediaList" class="encyclopedia-list"></div>
 </div>
 
 <!-- 출석체크 탭 -->
@@ -783,9 +814,9 @@ function playFailSound() {
 // --- 패치노트 데이터 정의 ---
 const patchNotes = [
   {
-    version: "v2.7 패치",
-    title: "실시간 랭킹 자동 반영 및 동기화 최적화",
-    desc: "1) 클릭 및 자동 채굴 시 실시간으로 점수가 서버에 반영되도록 최적화되었습니다.\n2) 랭킹 탭을 누를 때마다 서버에서 즉시 최신 순위를 불러옵니다."
+    version: "v2.8 패치 (최신)",
+    title: "통합 드론 도감 시스템 추가",
+    desc: "1) 모든 드론의 정보와 능력치를 확인할 수 있는 '도감' 탭이 신설되었습니다.\n2) 미획득 드론은 잠금 표시 및 흐리게 표시되며, 획득한 드론은 수집 상태가 표시됩니다.\n3) 도감 데이터 및 수집 이력은 로컬 스토리지에 영구 보존됩니다."
   },
   {
     version: "v1.0 패치",
@@ -830,12 +861,13 @@ const db = firebase.firestore();
 const saveKey = "energyRush_PermanentSaveData";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score:0, best:0, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false,
- pets:[], equippedPets:[], lastAttend:0, attendDays:0, autoEnabled:true,
+ pets:[], equippedPets:[], discoveredPets:[], lastAttend:0, attendDays:0, autoEnabled:true,
  permPower:0, permCps:0, permLuck:0,
  coinColor:'gold', coinIcon:'⚡'
 };
 
 if (!d.equippedPets) d.equippedPets = [];
+if (!d.discoveredPets) d.discoveredPets = [];
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
@@ -876,7 +908,17 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-// 💡 랭킹 실시간 동기화 함수 (채굴 및 중요 액션 시 즉시 반영)
+// 드론 획득 시 도감에 자동 등록 체크
+function checkAndDiscoverPets() {
+  if(!d.discoveredPets) d.discoveredPets = [];
+  d.pets.forEach(petId => {
+    if(!d.discoveredPets.includes(petId)) {
+      d.discoveredPets.push(petId);
+    }
+  });
+}
+
+// 랭킹 실시간 동기화 함수
 function syncScoreToFirebase(force = false) {
   if(!currentUser) return;
 
@@ -888,13 +930,10 @@ function syncScoreToFirebase(force = false) {
     rebirth: d.rebirth,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
-    // 랭킹 창이 켜져있다면 즉시 최신 데이터 반영
     if(!$("rankPanel").classList.contains("hidden")) {
       loadFirebaseRankings();
     }
-  }).catch(err => {
-    console.error("랭킹 동기화 실패:", err);
-  });
+  }).catch(err => {});
 }
 
 function loadFirebaseRankings(){
@@ -1026,9 +1065,10 @@ function getBaseMult(){
 }
 
 function save(){
+  checkAndDiscoverPets();
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
-  syncScoreToFirebase(); // 데이터 변경 시 서버에 실시간 동기화
+  syncScoreToFirebase();
 }
 
 function fmt(n){return Math.floor(n).toLocaleString()}
@@ -1122,6 +1162,7 @@ function render(){
  }
 
  renderPetList();
+ renderEncyclopedia();
  updateCustomUI();
 }
 
@@ -1132,6 +1173,41 @@ function updateCustomUI(){
   document.querySelectorAll(".icon-btn").forEach(btn => {
     btn.classList.toggle("selected", btn.dataset.icon === (d.coinIcon || '⚡'));
   });
+}
+
+function renderEncyclopedia() {
+  const container = $("encyclopediaList");
+  const countDisplay = $("encyclopediaCount");
+  if(!container) return;
+  container.innerHTML = "";
+
+  if(!d.discoveredPets) d.discoveredPets = [];
+  let totalKeys = Object.keys(PET_DB);
+  let discoveredCount = 0;
+
+  totalKeys.forEach(petId => {
+    const pet = PET_DB[petId];
+    const isUnlocked = d.discoveredPets.includes(petId);
+    if(isUnlocked) discoveredCount++;
+
+    const card = document.createElement("div");
+    card.className = `encyclopedia-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+
+    card.innerHTML = `
+      <span class="badge-grade grade-${pet.grade}">${pet.grade}급</span>
+      <div class="pet-icon">${pet.icon}</div>
+      <b style="color:var(--text-main); font-size:12px;">${isUnlocked ? pet.name : '??? (미확인)'}</b>
+      <p style="font-size:10px; color:${isUnlocked ? 'var(--text-sub)' : '#64748b'}; margin:3px 0 6px;">${pet.desc}</p>
+      <div style="font-size:10px; font-weight:600; color:${isUnlocked ? '#10b981' : '#ef4444'};">
+        ${isUnlocked ? '✅ 획득 완료' : '🔒 미획득'}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  if(countDisplay) {
+    countDisplay.textContent = `수집률: ${discoveredCount} / ${totalKeys.length}`;
+  }
 }
 
 function renderPetList(){
@@ -1345,6 +1421,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(alarmBadge && lastChecked === patchNotes[0].version) {
     alarmBadge.classList.remove("active");
   }
+  checkAndDiscoverPets();
   updateUserUI();
   render();
 
@@ -1682,7 +1759,6 @@ setInterval(() => {
     save();
   }
 
-  // 5초마다 자동 백그라운드 랭킹 동기화 (서버 부하 없이 실시간 갱신 유지)
   syncCounter++;
   if(syncCounter >= 5) {
     syncCounter = 0;
