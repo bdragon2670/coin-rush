@@ -170,7 +170,7 @@ h1{
 
 .stats{
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -292,7 +292,7 @@ h1{
 }
 .upgrade-row{display: flex; justify-content: space-between; align-items: center; gap: 10px;}
 
-button.buy, button.buy-weapon, button.buy-hunt, .upgrade-row button, .btn-game, .attend-btn {
+button.buy, .upgrade-row button, .btn-game, .attend-btn {
   padding: 7px 12px;
   border: none;
   border-radius: 6px;
@@ -303,7 +303,7 @@ button.buy, button.buy-weapon, button.buy-hunt, .upgrade-row button, .btn-game, 
   cursor: pointer;
   transition: background 0.2s;
 }
-button.buy:hover, button.buy-weapon:hover, button.buy-hunt:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover {
+button.buy:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover {
   background: var(--accent-hover);
 }
 button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-color) !important; color: var(--text-sub);}
@@ -497,7 +497,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div class="stat"><span>에너지</span><b id="score">0</b></div>
 <div class="stat"><span>초당 채굴</span><b id="cps">0</b></div>
 <div class="stat"><span>채굴 효율</span><b id="power">1</b></div>
-<div class="stat"><span>장착 드론</span><b id="equippedPetName">없음</b></div>
 <div class="stat"><span>시스템 승급</span><b id="rebirth">0</b></div>
 </div>
 
@@ -509,8 +508,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div class="tabs">
 <button class="tab active" data-tab="upgrade">⚡ 강화</button>
 <button class="tab" data-tab="shop">🛒 상점</button>
-<button class="tab" data-tab="weaponPanel">⚔️ 장비</button>
-<button class="tab" data-tab="huntingPanel">🗺️ 탐사지역</button>
 <button class="tab" data-tab="customPanel">🎨 커스텀</button>
 <button class="tab" data-tab="petPanel">🤖 드론</button>
 <button class="tab" data-tab="attendPanel">📅 지원금</button>
@@ -525,7 +522,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div class="upgrades">
 <div class="upgrade-row">
   <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small>클릭당 에너지 생산량 증가</small></div>
-  <button id="powerBtn">200 에너지</button>
+  <button id="powerBtn">100 에너지</button>
 </div>
 </div>
 <div class="upgrades">
@@ -536,7 +533,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   </div>
   <div style="display: flex; align-items: center; gap: 8px;">
     <button id="autoToggleBtn" class="toggle-btn on">ON</button>
-    <button id="autoBtn">1,000 에너지</button>
+    <button id="autoBtn">500 에너지</button>
   </div>
 </div>
 </div>
@@ -546,52 +543,16 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div id="shop" class="panel hidden">
 <div class="shop-grid">
 <div class="shop-item">
-  <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 10% 확률로 에너지 보너스 ×5</p></div>
-  <button class="buy" data-item="luck">구매 10,000</button>
+  <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 15% 확률로 에너지 보너스 ×5</p></div>
+  <button class="buy" data-item="luck">구매 5,000</button>
 </div>
 <div class="shop-item">
-  <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +25%</p></div>
-  <button class="buy" data-item="core">구매 50,000</button>
+  <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +30%</p></div>
+  <button class="buy" data-item="core">구매 25,000</button>
 </div>
 <div class="shop-item">
-  <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +50%</p></div>
-  <button class="buy" data-item="double">구매 200,000</button>
-</div>
-</div>
-</div>
-
-<!-- ⚔️ 장비 격납고 탭 -->
-<div id="weaponPanel" class="panel hidden">
-<div class="shop-grid">
-<div class="shop-item">
-  <div><h3>🗡️ 레이저 블레이드</h3><p>클릭당 에너지 +15 영구 증가</p></div>
-  <button class="buy-weapon" data-weapon="blade">구매 25,000</button>
-</div>
-<div class="shop-item">
-  <div><h3>🔫 플라즈마 캐논</h3><p>클릭당 에너지 +50 영구 증가</p></div>
-  <button class="buy-weapon" data-weapon="cannon">구매 150,000</button>
-</div>
-<div class="shop-item">
-  <div><h3>🛡️ 안티매터 블래스터</h3><p>클릭당 에너지 +200 영구 증가</p></div>
-  <button class="buy-weapon" data-weapon="blaster">구매 800,000</button>
-</div>
-</div>
-</div>
-
-<!-- 🗺️ 탐사 지역 탭 -->
-<div id="huntingPanel" class="panel hidden">
-<div class="shop-grid">
-<div class="shop-item">
-  <div><h3>🌲 제1구역: 크리스탈 광산</h3><p>초당 자동 채굴량 +50 추가</p></div>
-  <button class="buy-hunt" data-hunt="zone1">탐사 15,000</button>
-</div>
-<div class="shop-item">
-  <div><h3>⛰️ 제2구역: 마그마 심층부</h3><p>초당 자동 채굴량 +250 추가</p></div>
-  <button class="buy-hunt" data-hunt="zone2">탐사 120,000</button>
-</div>
-<div class="shop-item">
-  <div><h3>🌌 제3구역: 미지의 성운 코어</h3><p>초당 자동 채굴량 +1,000 추가</p></div>
-  <button class="buy-hunt" data-hunt="zone3">탐사 600,000</button>
+  <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +60%</p></div>
+  <button class="buy" data-item="double">구매 100,000</button>
 </div>
 </div>
 </div>
@@ -626,12 +587,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <div class="game-card">
       <h3>🎁 표준형 드론 보급품</h3>
       <p style="color:var(--text-sub); font-size:11px;">C~B등급 드론 출현</p>
-      <button class="btn-game" id="buyPetBox1">보급품 요청 (3,000 에너지)</button>
+      <button class="btn-game" id="buyPetBox1">보급품 요청 (1,500 에너지)</button>
     </div>
     <div class="game-card">
       <h3>🌟 특수형 드론 보급품</h3>
       <p style="color:var(--text-sub); font-size:11px;">B~S등급 드론 출현 확률</p>
-      <button class="btn-game" id="buyPetBox2">보급품 요청 (30,000 에너지)</button>
+      <button class="btn-game" id="buyPetBox2">보급품 요청 (15,000 에너지)</button>
     </div>
   </div>
 
@@ -653,29 +614,29 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   </div>
 </div>
 
-<!-- 🎰 미니게임 탭 -->
+<!-- 🎰 미니게임 탭 (밸런스 조정됨: 룰렛/알고리즘 방어 삭제) -->
 <div id="minigames" class="panel hidden">
-<div class="minigame-grid">
+<div class="minigame-grid" style="grid-template-columns: repeat(2, 1fr);">
   <!-- 1. 에너지 증폭 -->
   <div class="game-card">
     <h3>🔬 에너지 증폭 실험</h3>
     <div class="slot-display" id="slotScreen">❓ ❓ ❓</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">확률 0.8%</p>
-    <input type="number" id="slotBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="slotBtn">증폭 가동 (×20)</button>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">잭팟 확률 상향 (1.5%)</p>
+    <input type="number" id="slotBet" class="bet-input" value="100" min="50" step="50">
+    <button class="btn-game" id="slotBtn">증폭 가동 (×15)</button>
   </div>
 
   <!-- 2. 확률 데이터 분석 -->
   <div class="game-card">
     <h3>📊 확률 데이터 분석</h3>
     <div class="slot-display" id="coinResult" style="font-size:13px;">상승 or 하락</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 35%</p>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 45%</p>
     <div style="margin-bottom: 4px;">
       <button class="btn-mini selected" id="btnHead">상승</button>
       <button class="btn-mini" id="btnTail">하락</button>
     </div>
-    <input type="number" id="coinBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="coinFlipBtn">동기화 (×2.5)</button>
+    <input type="number" id="coinBet" class="bet-input" value="100" min="50" step="50">
+    <button class="btn-game" id="coinFlipBtn">동기화 (×2.2)</button>
   </div>
 
   <!-- 3. 양자 주사위 -->
@@ -693,44 +654,21 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <button class="btn-mini dice-select" data-num="7">7</button>
       <button class="btn-mini dice-select" data-num="8">8</button>
     </div>
-    <input type="number" id="diceBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="diceRollBtn">측정 (×7)</button>
+    <input type="number" id="diceBet" class="bet-input" value="100" min="50" step="50">
+    <button class="btn-game" id="diceRollBtn">측정 (×6.5)</button>
   </div>
 
-  <!-- 4. 코어 오버클럭 -->
-  <div class="game-card">
-    <h3>⚙️ 코어 오버클럭</h3>
-    <div class="slot-display" id="rouletteResult" style="font-size:13px;">배율 튜닝</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">실패율 65%</p>
-    <input type="number" id="rouletteBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="rouletteSpinBtn">오버클럭 시도</button>
-  </div>
-
-  <!-- 5. 데이터 배율 예측 -->
+  <!-- 4. 데이터 배율 예측 -->
   <div class="game-card">
     <h3>📈 배율 예측</h3>
     <div class="slot-display" id="highLowCard" style="font-size:12px;">기준: <b>8</b></div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 35%</p>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 45%</p>
     <div style="margin-bottom: 4px;">
       <button class="btn-mini selected" id="btnHigh">UP</button>
       <button class="btn-mini" id="btnLow">DOWN</button>
     </div>
-    <input type="number" id="highLowBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="highLowBtn">검증 (×2.5)</button>
-  </div>
-
-  <!-- 6. 알고리즘 방어전 -->
-  <div class="game-card">
-    <h3>🛡️ 알고리즘 방어</h3>
-    <div class="slot-display" id="rspResult" style="font-size:13px;">방어 성공 ×3.5</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">승률 20%</p>
-    <div style="margin-bottom: 4px;">
-      <button class="btn-mini selected rsp-select" data-choice="rock">실드</button>
-      <button class="btn-mini rsp-select" data-choice="scissors">블레이드</button>
-      <button class="btn-mini rsp-select" data-choice="paper">펄스</button>
-    </div>
-    <input type="number" id="rspBet" class="bet-input" value="300" min="100" step="100">
-    <button class="btn-game" id="rspPlayBtn">방어 가동 (×3.5)</button>
+    <input type="number" id="highLowBet" class="bet-input" value="100" min="50" step="50">
+    <button class="btn-game" id="highLowBtn">검증 (×2.2)</button>
   </div>
 </div>
 </div>
@@ -771,7 +709,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <h2 style="margin-top:0; font-size:16px;">🔮 시스템 승급</h2>
 <p style="color:var(--text-sub); font-size:12px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
 <p style="font-size:13px;">현재 승급 포인트: <b id="rp" style="color:var(--accent);">0</b></p>
-<p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">500,000</b> 에너지</p>
+<p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">200,000</b> 에너지</p>
 <button id="rebirthBtn" class="attend-btn" style="margin-top:8px;">🔮 시스템 승급 실행</button>
 </div>
 </div>
@@ -822,14 +760,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 // --- 패치노트 데이터 정의 ---
 const patchNotes = [
   {
+    version: "v2.0 패치 (최신)",
+    title: "콘텐츠 간소화 및 밸런스 대폭 개편",
+    desc: "불필요한 룰렛, 알고리즘 방어 미니게임 및 장비/탐사 지역 시스템을 과감하게 삭제하여 게임의 몰입도를 높였습니다. 또한 전반적인 업그레이드 비용 및 승급 요구치가 완화되어 밸런스가 최적화되었습니다."
+  },
+  {
     version: "v1.5 패치",
     title: "알람 시스템 및 패치노트 추가",
     desc: "우측 상단 알람 버튼을 통해 실시간 업데이트 내역을 확인할 수 있는 패치노트 시스템이 도입되었습니다."
-  },
-  {
-    version: "v1.4 패치",
-    title: "장비 격납고(무기) 및 탐사 지역(사냥터) 개설",
-    desc: "에너지를 투자해 클릭 효율을 영구적으로 올려주는 특수 장비 3종과 자동 채굴량을 대폭 늘려주는 탐사 지역 3곳이 추가되었습니다."
   },
   {
     version: "v1.3 패치",
@@ -842,14 +780,9 @@ const patchNotes = [
     desc: "Firebase 데이터베이스와 연동하여 글로벌 Top 10 랭킹을 실시간으로 확인하고, 하단 배너를 통해 본인의 실시간 순위를 간편하게 볼 수 있습니다."
   },
   {
-    version: "v1.1 패치",
-    title: "미니멀 & 모던 UI 리팩토링",
-    desc: "어둡고 복잡하던 도박장 콘셉트의 인터페이스를 깔끔하고 세련된 미래 지향적 자원 연구소 콘셉트로 전면 개편했습니다."
-  },
-  {
     version: "v1.0 패치",
     title: "에너지 러시 최초 런칭",
-    desc: "클릭 채굴, 자동 장치, 드론 합성, 연구실 미니게임 및 구글 계정 연동 시스템이 최초로 구축되었습니다."
+    desc: "클릭 채굴, 자동 장치, 드론 합성, 미니게임 및 구글 계정 연동 시스템이 최초로 구축되었습니다."
   }
 ];
 
@@ -893,9 +826,7 @@ let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score:0, best:0, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false,
  pets:[], equippedPet:null, lastAttend:0, attendDays:0, autoEnabled:true,
  permPower:0, permCps:0, permLuck:0,
- coinColor:'gold', coinIcon:'⚡',
- weapons: { blade:false, cannon:false, blaster:false },
- hunts: { zone1:false, zone2:false, zone3:false }
+ coinColor:'gold', coinIcon:'⚡'
 };
 
 const PET_DB = {
@@ -903,7 +834,7 @@ const PET_DB = {
  chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +12%' },
  dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +20%' },
  rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +25%' },
- fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 2배 (20%)' },
+ fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 2배 (25%)' },
  panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +35%' },
  dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:null, desc:'모든 에너지 획득량 2배 & 행운 2배' },
  unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:null, desc:'모든 에너지 획득량 2.5배' }
@@ -969,37 +900,21 @@ function updateUserUI() {
   loadFirebaseRankings();
 }
 
-function getWeaponBonus(){
-  let bonus = 0;
-  if(d.weapons.blade) bonus += 15;
-  if(d.weapons.cannon) bonus += 50;
-  if(d.weapons.blaster) bonus += 200;
-  return bonus;
-}
-
-function getHuntBonus(){
-  let bonus = 0;
-  if(d.hunts.zone1) bonus += 50;
-  if(d.hunts.zone2) bonus += 250;
-  if(d.hunts.zone3) bonus += 1000;
-  return bonus;
-}
-
 function getPetBonus(){
-  let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.10;
+  let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.15;
   if(d.equippedPet === 'cat') clickMult = 1.10;
   if(d.equippedPet === 'chick') clickMult = 1.12;
   if(d.equippedPet === 'dog') cpsMult = 1.20;
   if(d.equippedPet === 'rabbit') cpsMult = 1.25;
-  if(d.equippedPet === 'fox') luckProb = 0.20;
+  if(d.equippedPet === 'fox') luckProb = 0.25;
   if(d.equippedPet === 'panda') { clickMult = 1.35; cpsMult = 1.35; }
-  if(d.equippedPet === 'dragon') { coinMult = 2.0; luckProb = 0.20; }
+  if(d.equippedPet === 'dragon') { coinMult = 2.0; luckProb = 0.25; }
   if(d.equippedPet === 'unicorn') { coinMult = 2.5; }
   return { clickMult, cpsMult, coinMult, luckProb };
 }
 
 function getBaseMult(){
-  return (d.core ? 1.25 : 1) * (d.double ? 1.5 : 1) * (1 + d.rp * 0.10);
+  return (d.core ? 1.3 : 1) * (d.double ? 1.6 : 1) * (1 + d.rp * 0.15);
 }
 
 function save(){
@@ -1035,8 +950,8 @@ function render(){
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
 
- const totalPower = ((d.power + (d.permPower || 0) + getWeaponBonus())) * baseMult * petBonus.clickMult * petBonus.coinMult;
- const totalCps = ((d.cps + (d.permCps || 0) + getHuntBonus())) * baseMult * petBonus.cpsMult * petBonus.coinMult;
+ const totalPower = (d.power + (d.permPower || 0)) * baseMult * petBonus.clickMult * petBonus.coinMult;
+ const totalCps = (d.cps + (d.permCps || 0)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  if($("score")) $("score").textContent=fmt(d.score); 
  if($("power")) $("power").textContent=fmt(totalPower);
@@ -1064,40 +979,20 @@ function render(){
    autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
  }
  
- if($("equippedPetName")) {
-   $("equippedPetName").textContent = (d.equippedPet && PET_DB[d.equippedPet]) ? PET_DB[d.equippedPet].icon + " " + PET_DB[d.equippedPet].name : "없음";
- }
- 
- let req = 500000 * Math.pow(2.2, d.rebirth); 
+ let req = 200000 * Math.pow(2.0, d.rebirth); 
  if($("req")) $("req").textContent = fmt(req);
  if($("rebirthBtn")) $("rebirthBtn").disabled = d.score < req;
  
- if($("powerBtn")) $("powerBtn").textContent = fmt(200 * Math.pow(1.25, d.power - 1)) + " 에너지";
- if($("autoBtn")) $("autoBtn").textContent = fmt(1000 * Math.pow(1.28, d.cps)) + " 에너지";
+ if($("powerBtn")) $("powerBtn").textContent = fmt(100 * Math.pow(1.2, d.power - 1)) + " 에너지";
+ if($("autoBtn")) $("autoBtn").textContent = fmt(500 * Math.pow(1.22, d.cps)) + " 에너지";
  
  const luckBtn=document.querySelector('[data-item="luck"]');
  const coreBtn=document.querySelector('[data-item="core"]');
  const doubleBtn=document.querySelector('[data-item="double"]');
  
- if(luckBtn) luckBtn.textContent=d.luck?"완료":"구매 10,000";
- if(coreBtn) coreBtn.textContent=d.core?"완료":"구매 50,000";
- if(doubleBtn) doubleBtn.textContent=d.double?"완료":"구매 200,000";
-
- document.querySelectorAll(".buy-weapon").forEach(btn => {
-   const w = btn.dataset.weapon;
-   if(d.weapons[w]) {
-     btn.textContent = "보유중";
-     btn.disabled = true;
-   }
- });
-
- document.querySelectorAll(".buy-hunt").forEach(btn => {
-   const h = btn.dataset.hunt;
-   if(d.hunts[h]) {
-     btn.textContent = "탐사완료";
-     btn.disabled = true;
-   }
- });
+ if(luckBtn) luckBtn.textContent=d.luck?"완료":"구매 5,000";
+ if(coreBtn) coreBtn.textContent=d.core?"완료":"구매 25,000";
+ if(doubleBtn) doubleBtn.textContent=d.double?"완료":"구매 100,000";
 
  const now = Date.now();
  const cooldown = 24 * 60 * 60 * 1000;
@@ -1282,7 +1177,7 @@ function toggleEquipPet(petId){
 }
 
 function drawPet(boxType){
-  const cost = boxType === 1 ? 3000 : 30000;
+  const cost = boxType === 1 ? 1500 : 15000;
   if(d.score < cost) return say("에너지가 부족합니다.");
 
   d.score -= cost;
@@ -1344,36 +1239,6 @@ document.addEventListener("DOMContentLoaded", () => {
       say("시스템 파일이 다운로드되었습니다!");
     };
   }
-
-  // 무기 구매
-  document.querySelectorAll(".buy-weapon").forEach(btn => {
-    btn.onclick = () => {
-      const w = btn.dataset.weapon;
-      const costs = { blade: 25000, cannon: 150000, blaster: 800000 };
-      const cost = costs[w];
-      if(d.score < cost) return say("에너지가 부족합니다.");
-      d.score -= cost;
-      d.weapons[w] = true;
-      say("신규 장비가 장착되었습니다!");
-      save();
-      if(currentUser) syncScoreToFirebase();
-    };
-  });
-
-  // 탐사지역 구매
-  document.querySelectorAll(".buy-hunt").forEach(btn => {
-    btn.onclick = () => {
-      const h = btn.dataset.hunt;
-      const costs = { zone1: 15000, zone2: 120000, zone3: 600000 };
-      const cost = costs[h];
-      if(d.score < cost) return say("에너지가 부족합니다.");
-      d.score -= cost;
-      d.hunts[h] = true;
-      say("새로운 탐사 지역이 개척되었습니다!");
-      save();
-      if(currentUser) syncScoreToFirebase();
-    };
-  });
 
   const buyPermPower = $("buyPermPowerBtn");
   if(buyPermPower) {
@@ -1454,7 +1319,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
       
-      let currentPower = (d.power + (d.permPower || 0) + getWeaponBonus());
+      let currentPower = (d.power + (d.permPower || 0));
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
 
       const totalLuckProb = petBonus.luckProb + ((d.permLuck || 0) / 100);
@@ -1472,7 +1337,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const powerBtn = $("powerBtn");
   if(powerBtn) {
     powerBtn.onclick = () => {
-      let cost = Math.floor(200 * Math.pow(1.25, d.power - 1));
+      let cost = Math.floor(100 * Math.pow(1.2, d.power - 1));
       if(d.score>=cost){
         d.score-=cost;
         d.power++;
@@ -1485,7 +1350,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoBtn = $("autoBtn");
   if(autoBtn) {
     autoBtn.onclick = () => {
-      let cost = Math.floor(1000 * Math.pow(1.28, d.cps));
+      let cost = Math.floor(500 * Math.pow(1.22, d.cps));
       if(d.score>=cost){
         d.score-=cost;
         d.cps++;
@@ -1498,7 +1363,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".buy").forEach(btn => {
     btn.onclick = () => {
       const type = btn.dataset.item;
-      const costs = { luck: 10000, core: 50000, double: 200000 };
+      const costs = { luck: 5000, core: 25000, double: 100000 };
       const cost = costs[type];
       if(d.score < cost) return say("에너지가 부족합니다.");
       d.score -= cost;
@@ -1521,7 +1386,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       d.lastAttend = now;
       d.attendDays += 1;
-      d.score += 10000 + (d.attendDays * 2000);
+      d.score += 5000 + (d.attendDays * 1000);
       d.rp += 1;
       save();
       if(currentUser) syncScoreToFirebase();
@@ -1531,7 +1396,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const rebirthBtn = $("rebirthBtn");
   if(rebirthBtn) {
     rebirthBtn.onclick = () => {
-      let req = 500000 * Math.pow(2.2, d.rebirth);
+      let req = 200000 * Math.pow(2.0, d.rebirth);
       if(d.score < req) return;
       d.rebirth++; 
       d.rp += 3;
@@ -1555,13 +1420,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  // 미니게임 로직
+  // 미니게임 로직 (남은 미니게임 밸런스 조정)
   const slotSymbols = ["⚡", "⚡", "⚡", "⚡", "🍀", "💎", "7️⃣", "🔋"];
   const slotBtn = $("slotBtn");
   if(slotBtn) {
     slotBtn.onclick = () => {
       let bet = parseInt($("slotBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+      if (bet < 50 || d.score < bet) return say("최소 투자 에너지는 50 이상입니다.");
       d.score -= bet;
       
       let r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
@@ -1571,12 +1436,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if($("slotScreen")) $("slotScreen").textContent = `${r1} ${r2} ${r3}`;
       
       if (r1 === r2 && r2 === r3 && r1 !== "⚡") { 
-        d.score += bet * 20; 
-        say(`대성공 잭팟! (+${fmt(bet*20)})`); 
+        d.score += bet * 15; 
+        say(`대성공 잭팟! (+${fmt(bet*15)})`); 
       } else if (r1 === "⚡" && r2 === "⚡" && r3 === "⚡") {
         say("과부하 발생! 에너지가 소실되었습니다.");
-      } else if ((r1 === r2 || r2 === r3 || r1 === r3) && Math.random() < 0.3) { 
-        d.score += Math.floor(bet * 1.2); 
+      } else if ((r1 === r2 || r2 === r3 || r1 === r3) && Math.random() < 0.35) { 
+        d.score += Math.floor(bet * 1.3); 
         say("일부 환급되었습니다."); 
       } else { 
         say("실험 실패"); 
@@ -1596,16 +1461,16 @@ document.addEventListener("DOMContentLoaded", () => {
   if(coinFlipBtn) {
     coinFlipBtn.onclick = () => {
       let bet = parseInt($("coinBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+      if (bet < 50 || d.score < bet) return say("최소 투자 에너지는 50 이상입니다.");
       d.score -= bet;
       
-      let userWins = Math.random() < 0.35;
+      let userWins = Math.random() < 0.45; // 적중률 상향
       let isHead = userWins ? (coinChoice === "head") : (coinChoice !== "head");
       
       if($("coinResult")) $("coinResult").textContent = isHead ? "결과: 상승 (A)" : "결과: 하락 (B)";
       if (userWins) { 
-        d.score += Math.floor(bet * 2.5); 
-        say(`분석 적중! (+${fmt(bet*2.5)})`); 
+        d.score += Math.floor(bet * 2.2); 
+        say(`분석 적중! (+${fmt(bet*2.2)})`); 
       } else { 
         say("분석 예측 실패"); 
       }
@@ -1627,45 +1492,18 @@ document.addEventListener("DOMContentLoaded", () => {
   if(diceRollBtn) {
     diceRollBtn.onclick = () => {
       let bet = parseInt($("diceBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+      if (bet < 50 || d.score < bet) return say("최소 투자 에너지는 50 이상입니다.");
       d.score -= bet;
       
       let roll = Math.floor(Math.random() * 8) + 1;
       if($("diceResult")) $("diceResult").textContent = `결과: [ ${roll} ]`;
       
       if (selectedDice === roll) { 
-        d.score += bet * 7; 
-        say(`양자 공명 당첨! (+${fmt(bet*7)})`); 
+        d.score += Math.floor(bet * 6.5); 
+        say(`양자 공명 당첨! (+${fmt(bet*6.5)})`); 
       } else { 
         say("파동 불일치"); 
       }
-      save();
-      if(currentUser) syncScoreToFirebase();
-    };
-  }
-
-  const rouletteSpinBtn = $("rouletteSpinBtn");
-  if(rouletteSpinBtn) {
-    rouletteSpinBtn.onclick = () => {
-      let bet = parseInt($("rouletteBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
-      d.score -= bet;
-
-      let rand = Math.random();
-      let mult = 0;
-      if (rand < 0.65) mult = 0;
-      else if (rand < 0.85) mult = 0.5;
-      else if (rand < 0.95) mult = 2;
-      else if (rand < 0.99) mult = 4;
-      else mult = 10;
-
-      const win = Math.floor(bet * mult);
-      if($("rouletteResult")) $("rouletteResult").textContent = `배율: x${mult}`;
-      d.score += win;
-
-      if(mult >= 4) say(`오버클럭 대성공! x${mult}`);
-      else if(mult > 0) say(`안정화 성공!`);
-      else say("오버클럭 실패");
       save();
       if(currentUser) syncScoreToFirebase();
     };
@@ -1682,10 +1520,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if(highLowBtn) {
     highLowBtn.onclick = () => {
       let bet = parseInt($("highLowBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+      if (bet < 50 || d.score < bet) return say("최소 투자 에너지는 50 이상입니다.");
       d.score -= bet;
 
-      let isWin = Math.random() < 0.35;
+      let isWin = Math.random() < 0.45;
       let newNum = isWin ? 
         (highLowChoice === "high" ? Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1 : Math.floor(Math.random() * (currentCardNum - 1)) + 1) : 
         (highLowChoice === "high" ? Math.floor(Math.random() * currentCardNum) + 1 : Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1);
@@ -1694,46 +1532,11 @@ document.addEventListener("DOMContentLoaded", () => {
       currentCardNum = newNum;
 
       if (isWin) {
-        let win = Math.floor(bet * 2.5);
+        let win = Math.floor(bet * 2.2);
         d.score += win;
         say(`예측 적중! (+${fmt(win)})`);
       } else {
         say("예측 실패");
-      }
-      save();
-      if(currentUser) syncScoreToFirebase();
-    };
-  }
-
-  let rspChoice = "rock";
-  document.querySelectorAll(".rsp-select").forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll(".rsp-select").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      rspChoice = btn.dataset.choice;
-    };
-  });
-
-  const rspPlayBtn = $("rspPlayBtn");
-  if(rspPlayBtn) {
-    rspPlayBtn.onclick = () => {
-      let bet = parseInt($("rspBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
-      d.score -= bet;
-
-      const winMap = { rock: "scissors", scissors: "paper", paper: "rock" };
-      const loseMap = { rock: "paper", scissors: "rock", paper: "scissors" };
-      let dealerChoice = Math.random() < 0.20 ? winMap[rspChoice] : (Math.random() < 0.30 ? rspChoice : loseMap[rspChoice]);
-
-      if (rspChoice === dealerChoice) {
-        d.score += Math.floor(bet * 0.5);
-        say("전력 상쇄 (절반 환급)");
-      } else if (dealerChoice === winMap[rspChoice]) {
-        let win = Math.floor(bet * 3.5);
-        d.score += win;
-        say(`방어 성공! (+${fmt(win)})`);
-      } else {
-        say("방어 실패");
       }
       save();
       if(currentUser) syncScoreToFirebase();
@@ -1749,7 +1552,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 자동 채굴 루프 (초당 실행)
 setInterval(() => {
-  const autoCps = (d.cps + (d.permCps || 0) + getHuntBonus());
+  const autoCps = (d.cps + (d.permCps || 0));
   if(autoCps > 0 && d.autoEnabled){
     d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
     save();
