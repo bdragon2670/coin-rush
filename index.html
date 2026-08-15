@@ -71,7 +71,6 @@ h1{
   border-bottom: 1px solid var(--border-color);
 }
 
-/* 프로필 스타일 */
 .user-profile{
   display: flex;
   align-items: center;
@@ -84,7 +83,6 @@ h1{
 .user-avatar{width: 28px; height: 28px; border-radius: 50%; object-fit: cover;}
 .user-name{font-weight: 600; color: var(--accent); font-size: 13px;}
 
-/* 툴바 버튼 */
 .tool-btn{
   padding: 6px 12px;
   background: rgba(255,255,255,0.05);
@@ -98,7 +96,6 @@ h1{
 }
 .tool-btn:hover{background: rgba(255,255,255,0.1);}
 
-/* 상태 지표 그리드 */
 .stats{
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -115,7 +112,6 @@ h1{
 .stat span { font-size: 11px; color: var(--text-sub); }
 .stat b{display: block; font-size: 16px; margin-top: 4px; color: var(--accent); font-weight: 600;}
 
-/* 메인 클릭 버튼 */
 .main{text-align: center; position: relative; margin-bottom: 20px;}
 .coin{
   width: 140px;
@@ -166,7 +162,6 @@ h1{
 
 #message{height: 22px; margin-top: 6px; color: var(--accent); font-weight: 600; font-size: 13px;}
 
-/* 탭 메뉴 */
 .tabs{
   display: flex;
   gap: 5px;
@@ -195,7 +190,6 @@ h1{
   font-weight: 700;
 }
 
-/* 패널 박스 */
 .panel{
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid var(--border-color);
@@ -204,7 +198,6 @@ h1{
 }
 .hidden{display:none}
 
-/* 상점 및 업그레이드 그리드 */
 .shop-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;}
 .shop-item{
   background: rgba(255,255,255,0.02);
@@ -254,7 +247,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 .toggle-btn.on{background: #10b981; color: #fff;}
 .toggle-btn.off{background: #64748b; color: #fff;}
 
-/* 커스텀 그리드 */
 .custom-grid{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
@@ -281,7 +273,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   cursor: pointer;
 }
 
-/* 미니게임 및 드론 그리드 */
 .minigame-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;}
 .game-card{
   background: rgba(255,255,255,0.02);
@@ -483,7 +474,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 </div>
 </div>
 
-<!-- ⚔️ 장비 격납고 탭 (무기 추가) -->
+<!-- ⚔️ 장비 격납고 탭 -->
 <div id="weaponPanel" class="panel hidden">
 <div class="shop-grid">
 <div class="shop-item">
@@ -501,7 +492,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 </div>
 </div>
 
-<!-- 🗺️ 탐사 지역 탭 (사냥터 추가) -->
+<!-- 🗺️ 탐사 지역 탭 -->
 <div id="huntingPanel" class="panel hidden">
 <div class="shop-grid">
 <div class="shop-item">
@@ -755,7 +746,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const saveKey = "energyRushV12";
+// 💡 중요: 저장용 키 이름을 고정하여 버전이 바뀌어도 데이터가 초기화되지 않도록 설정합니다.
+const saveKey = "energyRush_PermanentSaveData";
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
@@ -950,7 +942,6 @@ function render(){
  if(coreBtn) coreBtn.textContent=d.core?"완료":"구매 50,000";
  if(doubleBtn) doubleBtn.textContent=d.double?"완료":"구매 200,000";
 
- // 무기 버튼 렌더링
  document.querySelectorAll(".buy-weapon").forEach(btn => {
    const w = btn.dataset.weapon;
    if(d.weapons[w]) {
@@ -959,7 +950,6 @@ function render(){
    }
  });
 
- // 탐사지역 버튼 렌더링
  document.querySelectorAll(".buy-hunt").forEach(btn => {
    const h = btn.dataset.hunt;
    if(d.hunts[h]) {
@@ -993,7 +983,6 @@ function updateCustomUI(){
   });
 }
 
-// 무기 구매 로직
 document.querySelectorAll(".buy-weapon").forEach(btn => {
   btn.onclick = () => {
     const w = btn.dataset.weapon;
@@ -1008,7 +997,6 @@ document.querySelectorAll(".buy-weapon").forEach(btn => {
   };
 });
 
-// 탐사지역 구매 로직
 document.querySelectorAll(".buy-hunt").forEach(btn => {
   btn.onclick = () => {
     const h = btn.dataset.hunt;
