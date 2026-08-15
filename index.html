@@ -859,7 +859,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="marketList" class="market-list"></div>
     </div>
 
-    <!-- 📈 주식시장 탭 (서버 전역 완벽 동기화) -->
+    <!-- 📈 주식시장 탭 -->
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (글로벌 공용)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">모든 플레이어가 동일한 실시간 주식 그래프 시세를 공유하며 새로고침해도 유지됩니다!</p>
@@ -1251,9 +1251,9 @@ function playFailureSound() {
 // --- 패치노트 데이터 ---
 const patchNotes = [
   {
-    version: "v4.3 패치 (최신)",
-    title: "글로벌 주식 데이터 완벽 동기화 및 유저 간 시세 불일치 문제 해결",
-    desc: "1) 모든 플레이어가 100% 동일한 주식 시세와 그래프를 공유하도록 서버 연동 구조가 강화되었습니다.\n2) 승급 패널 및 상점 내 불필요한 안내 문구가 깔끔하게 삭제되었습니다."
+    version: "v4.4 패치 (최신)",
+    title: "실시간 랭킹 즉시 반영 및 글로벌 주식·데이터 완벽 동기화",
+    desc: "1) 점수 변동 시 즉시 서버 랭킹에 반영되도록 개선되었습니다.\n2) 모든 유저들이 동일한 주식 시세와 그래프를 공유하도록 서버 공용 엔진이 강화되었습니다."
   }
 ];
 
@@ -1404,6 +1404,7 @@ function checkAndDiscoverPets() {
   }
 }
 
+// 💡 랭킹 점수 즉시 서버 동기화 함수
 function syncScoreToFirebase(force = false) {
   if(!currentUser) return;
   db.collection('rankings').doc(currentUser.googleId).set({
@@ -1416,7 +1417,7 @@ function syncScoreToFirebase(force = false) {
   }, { merge: true }).catch(err => {});
 }
 
-// 📈 서버 공용 주식 데이터 실시간 연동 (모든 유저 동일한 시세 강제 동기화)
+// 📈 서버 공용 주식 데이터 실시간 연동 (그래프 통일)
 let unsubscribeStock = null;
 function initRealtimeStock() {
   if(unsubscribeStock) unsubscribeStock();
@@ -1427,7 +1428,6 @@ function initRealtimeStock() {
       if(data.stockHistory1) stockHistory1 = data.stockHistory1;
       if(data.stockHistory2) stockHistory2 = data.stockHistory2;
     } else {
-      // 문서가 없을 경우 초기값 생성 후 저장
       db.collection('global_stock').doc('market').set({
         stockPrices: stockPrices,
         stockHistory1: stockHistory1,
@@ -1448,6 +1448,7 @@ function updateStockUI() {
   drawStockChart("stockCanvas2", stockHistory2);
 }
 
+// 🏆 실시간 랭킹 리스너
 let unsubscribeRankings = null;
 function initRealtimeRankings(){
   if(unsubscribeRankings) unsubscribeRankings();
@@ -1757,7 +1758,7 @@ function save(){
   checkAndDiscoverPets();
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
-  syncScoreToFirebase();
+  syncScoreToFirebase(); // 점수 변경 시 실시간 반영
 }
 
 function fmt(n){return Math.floor(n).toLocaleString()}
@@ -2242,7 +2243,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadChatMessages();
   initRealtimeRankings();
   initRealtimeMarket();
-  initRealtimeStock(); // 💡 글로벌 주식 실시간 동기화 시작
+  initRealtimeStock();
 
   const bgmToggle = $("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
@@ -2625,7 +2626,7 @@ setInterval(() => {
     save();
   }
 
-  // 📈 주식 변동 업데이트 (Firestore에 기록하여 모든 유저가 완전히 동일한 시세 공유)
+  // 📈 주식 변동 업데이트 (전역 공용 갱신)
   if(Math.random() < 0.2) {
     stockPrices[1] = Math.max(200, Math.floor(stockPrices[1] * (0.88 + Math.random() * 0.26)));
     stockPrices[2] = Math.max(1000, Math.floor(stockPrices[2] * (0.82 + Math.random() * 0.38)));
@@ -2644,17 +2645,10 @@ setInterval(() => {
   }
 
   syncCounter++;
-  if(syncCounter >= 5) {
+  if(syncCounter >= 3) {
     syncCounter = 0;
     if(currentUser) {
-      db.collection('rankings').doc(currentUser.googleId).set({
-        googleId: currentUser.googleId,
-        name: currentUser.name,
-        picture: currentUser.picture,
-        score: d.score, 
-        rebirth: d.rebirth,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true }).catch(err => {});
+      syncScoreToFirebase();
     }
   }
 }, 1000);
