@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>사이버 해커 - 뉴럴 네트워크 터미널</title>
+<title>넥서스 크로니클 - 사이버 펑크 텍스트 RPG</title>
 
 <!-- 브라우저 탭 아이콘 (SVG Favicon) -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23050505%22/><text y=%22.8em%22 x=%2210%22 font-size=%2270%22 fill=%22%2300ff66%22>&gt;_</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f0f1a%22/><text y=%22.8em%22 x=%2215%22 font-size=%2265%22 fill=%22%23a855f7%22>⚔️</text></svg>">
 
 <!-- Google Identity Services SDK -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -17,20 +17,21 @@
 
 <style>
 :root {
-  --bg-color: #05080c;
-  --card-bg: #0b131d;
-  --border-color: #1e3a5f;
-  --accent: #00ff66;
-  --accent-hover: #00cc52;
-  --text-main: #00ff66;
-  --text-sub: #58a6ff;
-  --terminal-dim: #225533;
+  --bg-color: #0b0f19;
+  --card-bg: #131c2e;
+  --border-color: #1e293b;
+  --accent: #a855f7;
+  --accent-hover: #9333ea;
+  --text-main: #f8fafc;
+  --text-sub: #94a3b8;
+  --hp-red: #ef4444;
+  --exp-blue: #38bdf8;
 }
 
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:'Courier New', Courier, monospace, 'Pretendard';
+  font-family:'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--bg-color);
   color: var(--text-main);
   min-height:100vh;
@@ -44,9 +45,9 @@ body{
   width: min(940px, 96vw);
   background: var(--card-bg);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 20px;
   padding: 25px;
-  box-shadow: 0 0 30px rgba(0, 255, 102, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   position: relative;
 }
 
@@ -56,15 +57,13 @@ h1{
   margin: 0 0 4px;
   color: var(--accent);
   font-weight: 700;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+  letter-spacing: 1px;
 }
 .sub{
   text-align: center;
   color: var(--text-sub);
   margin-bottom: 20px;
   font-size: 12px;
-  letter-spacing: 1px;
 }
 
 .top-tools{
@@ -80,9 +79,9 @@ h1{
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(0, 255, 102, 0.03);
+  background: rgba(255,255,255,0.03);
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid var(--border-color);
 }
 .user-avatar{width: 28px; height: 28px; border-radius: 50%; object-fit: cover;}
@@ -96,20 +95,22 @@ h1{
 
 .tool-btn{
   padding: 6px 12px;
-  background: rgba(0, 255, 102, 0.05);
+  background: rgba(255,255,255,0.05);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  color: var(--accent);
+  border-radius: 8px;
+  color: var(--text-main);
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  font-family: inherit;
   transition: background 0.2s;
 }
-.tool-btn:hover{background: rgba(0, 255, 102, 0.15);}
+.tool-btn:hover{background: rgba(255,255,255,0.1);}
 
 .alarm-btn {
   position: relative;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid var(--accent);
+  color: var(--accent);
 }
 .alarm-badge {
   position: absolute;
@@ -117,7 +118,7 @@ h1{
   right: -4px;
   width: 8px;
   height: 8px;
-  background: #ff3366;
+  background: #f43f5e;
   border-radius: 50%;
   display: none;
 }
@@ -126,7 +127,7 @@ h1{
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -136,13 +137,13 @@ h1{
 .modal-box {
   background: var(--card-bg);
   border: 1px solid var(--accent);
-  border-radius: 12px;
+  border-radius: 16px;
   width: min(500px, 90vw);
   max-height: 80vh;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  box-shadow: 0 0 25px rgba(0, 255, 102, 0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 .modal-header {
   display: flex;
@@ -163,69 +164,69 @@ h1{
 }
 .patch-item {
   margin-bottom: 14px;
-  background: rgba(5, 8, 12, 0.6);
+  background: rgba(15, 23, 42, 0.6);
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid var(--border-color);
 }
-.patch-item h4 { margin: 0 0 4px; color: var(--accent); font-size: 13px; }
+.patch-item h4 { margin: 0 0 4px; color: var(--text-main); font-size: 13px; }
 
-.stats{
+/* RPG 스탯 및 게이지바 */
+.stats-grid{
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
-.stat{
-  background: rgba(5, 8, 12, 0.8);
+.stat-card{
+  background: rgba(15, 23, 42, 0.8);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 10px 8px;
+  border-radius: 10px;
+  padding: 10px;
   text-align: center;
 }
-.stat span { font-size: 10px; color: var(--text-sub); }
-.stat b{display: block; font-size: 14px; margin-top: 4px; color: var(--accent); font-weight: 600;}
+.stat-card span { font-size: 10px; color: var(--text-sub); }
+.stat-card b{display: block; font-size: 14px; margin-top: 3px; color: var(--accent); font-weight: 600;}
 
-/* 터미널 화면 스타일 */
-.terminal-screen {
-  background: #030508;
+.bars-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.bar-box {
+  background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 15px;
-  height: 220px;
-  overflow-y: auto;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 13px;
-  margin-bottom: 15px;
-  box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+  padding: 8px 12px;
 }
-.log-line { margin: 4px 0; color: #a5d6ff; }
-.log-success { color: var(--accent); }
-.log-warn { color: #f0883e; }
-.log-error { color: #ff3366; }
+.bar-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: var(--text-sub); }
+.progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; transition: width 0.3s ease; }
+.hp-fill { background: var(--hp-red); }
+.exp-fill { background: var(--exp-blue); }
 
-.terminal-input-area {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-.terminal-input {
-  flex: 1;
-  background: #030508;
+/* 로그 콘솔 창 */
+.rpg-console {
+  background: #070a12;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 10px 12px;
-  color: var(--accent);
-  font-family: inherit;
-  font-size: 14px;
-  outline: none;
+  border-radius: 10px;
+  padding: 12px;
+  height: 160px;
+  overflow-y: auto;
+  font-size: 12px;
+  font-family: monospace;
+  margin-bottom: 15px;
 }
-.terminal-input:focus { border-color: var(--accent); }
+.log-line { margin: 3px 0; color: #a5d6ff; }
+.log-hit { color: #f87171; }
+.log-crit { color: #fbbf24; font-weight: bold; }
+.log-reward { color: #34d399; }
 
 .tabs{
   display: flex;
   gap: 5px;
-  margin-bottom: 16px;
+  margin-bottom: 15px;
   flex-wrap: wrap;
 }
 .tab{
@@ -233,89 +234,83 @@ h1{
   min-width: 75px;
   padding: 8px 4px;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: rgba(0, 255, 102, 0.02);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
   color: var(--text-sub);
   font-weight: 600;
   cursor: pointer;
   text-align: center;
   font-size: 11px;
-  font-family: inherit;
   transition: all 0.2s;
 }
-.tab:hover{background: rgba(0, 255, 102, 0.08); color: var(--accent);}
+.tab:hover{background: rgba(255,255,255,0.05); color: var(--text-main);}
 .tab.active{
   background: var(--accent);
-  color: #05080c;
+  color: #0f172a;
   border-color: var(--accent);
   font-weight: 700;
 }
 
 .panel{
-  background: rgba(11, 19, 29, 0.6);
+  background: rgba(15, 23, 42, 0.4);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 16px;
 }
 .hidden{display:none}
 
 .grid-2{display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;}
 .card{
-  background: rgba(5, 8, 12, 0.5);
+  background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.card h3{margin: 0 0 4px; font-size: 13px; color: var(--accent);}
+.card h3{margin: 0 0 4px; font-size: 13px; color: var(--text-main);}
 .card p{color: var(--text-sub); font-size: 11px; margin: 0 0 10px; min-height: 28px;}
 
-button.h-btn, .btn-terminal {
-  padding: 6px 12px;
+button.r-btn, .btn-rpg {
+  padding: 7px 12px;
   border: none;
   border-radius: 6px;
   background: var(--accent);
-  color: #05080c;
-  font-weight: 700;
+  color: #0f172a;
+  font-weight: 600;
   font-size: 11px;
   cursor: pointer;
-  font-family: inherit;
   transition: background 0.2s;
 }
-button.h-btn:hover, .btn-terminal:hover { background: var(--accent-hover); }
-button:disabled{opacity: 0.3; cursor: not-allowed; background: var(--border-color) !important; color: var(--text-sub);}
+button.r-btn:hover, .btn-rpg:hover { background: var(--accent-hover); }
+button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-color) !important; color: var(--text-sub);}
 
-.node-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;}
-.node-card{
-  background: rgba(5, 8, 12, 0.6);
+.inventory-grid{display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 8px;}
+.item-card{
+  background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 8px;
   text-align: center;
-  position: relative;
-  cursor: grab;
-  user-select: none;
 }
-.node-card.drag-over{border: 2px dashed var(--accent) !important; background: rgba(0,255,102,0.05) !important;}
-.node-card.connected{border: 1px solid var(--accent); box-shadow: 0 0 5px rgba(0,255,102,0.3);}
-.badge-tier{display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: 700; margin-bottom: 2px;}
-.tier-1{background: #225533; color: #00ff66;}
-.tier-2{background: #114466; color: #58a6ff;}
-.tier-3{background: #552255; color: #d2a8ff;}
+.badge-grade{display: inline-block; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; margin-bottom: 2px;}
+.grade-normal{background: #475569; color: #fff;}
+.grade-rare{background: #0284c7; color: #fff;}
+.grade-epic{background: #7c3aed; color: #fff;}
+.grade-legend{background: #d97706; color: #fff; box-shadow: 0 0 6px rgba(217,119,6,0.5);}
 
 .rank-table{width: 100%; border-collapse: collapse; margin-top: 8px;}
 .rank-table th, .rank-table td{padding: 8px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 11px;}
-.rank-table th{background: rgba(0, 255, 102, 0.03); color: var(--accent); font-weight: 600;}
+.rank-table th{background: rgba(255,255,255,0.03); color: var(--accent); font-weight: 600;}
 .rank-user-info{display: flex; align-items: center; justify-content: center; gap: 6px;}
 .rank-user-avatar{width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--accent);}
 
 .my-rank-banner {
-  margin-top: 12px;
-  background: rgba(0, 255, 102, 0.05);
+  margin-top: 10px;
+  background: rgba(168, 85, 247, 0.08);
   border: 1px solid var(--accent);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 8px;
   text-align: center;
   font-size: 12px;
@@ -324,17 +319,17 @@ button:disabled{opacity: 0.3; cursor: not-allowed; background: var(--border-colo
 }
 
 .google-box{
-  background: rgba(5, 8, 12, 0.5);
+  background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 12px;
   text-align: center;
   margin-bottom: 10px;
 }
 
 @media(max-width: 750px){
-  .stats{grid-template-columns: repeat(2, 1fr);}
-  .grid-2{grid-template-columns: 1fr;}
+  .stats-grid{grid-template-columns: repeat(2, 1fr);}
+  .bars-area, .grid-2{grid-template-columns: 1fr;}
 }
 </style>
 </head>
@@ -343,7 +338,7 @@ button:disabled{opacity: 0.3; cursor: not-allowed; background: var(--border-colo
 <div class="top-tools">
   <div class="user-profile" id="userProfileArea">
     <img src="https://via.placeholder.com/32/7f8c8d/ffffff?text=?" id="userAvatar" class="user-avatar">
-    <span class="user-name" id="userName">GUEST_USER</span>
+    <span class="user-name" id="userName">방랑자 (미로그인)</span>
   </div>
   <div class="top-right-btns">
     <button class="tool-btn alarm-btn" id="openPatchNoteBtn">📢 패치노트 <span class="alarm-badge active" id="alarmBadge"></span></button>
@@ -364,150 +359,121 @@ button:disabled{opacity: 0.3; cursor: not-allowed; background: var(--border-colo
   </div>
 </div>
 
-<h1>&gt;_ CYBER_HACKER.v1</h1>
-<div class="sub">NEURAL NETWORK DECRYPTION & TERMINAL</div>
+<h1>⚔️ 넥서스 크로니클</h1>
+<div class="sub">사이버 펑크 텍스트 RPG & 던전 탐험</div>
 
-<div class="stats">
-<div class="stat"><span>데이터 비트</span><b id="score">0</b></div>
-<div class="stat"><span>초당 채굴(H/s)</span><b id="cps">0</b></div>
-<div class="stat"><span>파서 파워</span><b id="power">1</b></div>
-<div class="stat"><span>연결 노드</span><b id="connectedCount">0/2</b></div>
+<!-- 캐릭터 스탯 요약 -->
+<div class="stats-grid">
+  <div class="stat-card"><span>레벨</span><b id="charLevel">1</b></div>
+  <div class="stat-card"><span>공격력</span><b id="charAtk">15</b></div>
+  <div class="stat-card"><span>방어력</span><b id="charDef">5</b></div>
+  <div class="stat-card"><span>크레딧</span><b id="charGold">500</b></div>
 </div>
 
-<!-- 터미널 콘솔 화면 -->
-<div class="terminal-screen" id="terminalScreen">
-  <div class="log-line">&gt; SYSTEM INITIALIZED... CONNECTED TO SECURE PROXY.</div>
-  <div class="log-line">&gt; TYPE COMMAND OR CLICK DECRYPT TO MINE DATA BITS.</div>
+<!-- 체력 & 경험치 게이지 바 -->
+<div class="bars-area">
+  <div class="bar-box">
+    <div class="bar-label"><span>HP (체력)</span><span id="hpText">100 / 100</span></div>
+    <div class="progress-bg"><div class="progress-fill hp-fill" id="hpBar" style="width: 100%;"></div></div>
+  </div>
+  <div class="bar-box">
+    <div class="bar-label"><span>EXP (경험치)</span><span id="expText">0 / 100</span></div>
+    <div class="progress-bg"><div class="progress-fill exp-fill" id="expBar" style="width: 0%;"></div></div>
+  </div>
 </div>
 
-<div class="terminal-input-area">
-  <input type="text" id="terminalInput" class="terminal-input" placeholder="명령어 입력 (예: hack, decrypt, status)...">
-  <button class="btn-terminal" id="execBtn">실행</button>
+<!-- 전투 / 이벤트 콘솔 로그 -->
+<div class="rpg-console" id="rpgConsole">
+  <div class="log-line">&gt; 넥서스 시티에 접속하셨습니다. 탐험 지역을 선택하여 전투를 시작하세요.</div>
 </div>
 
 <div class="tabs">
-<button class="tab active" data-tab="upgrade">💻 시스템</button>
-<button class="tab" data-tab="exploit">⚡ 익스플로잇</button>
-<button class="tab" data-tab="nodes">🔗 프록시노드</button>
-<button class="tab" data-tab="breach">🔓 브리치실험</button>
-<button class="tab" data-tab="packet">📦 데이터패킷</button>
-<button class="tab" data-tab="overclock">🚀 오버클럭</button>
-<button class="tab" data-tab="rankPanel">🏆 글로벌 순위</button>
+<button class="tab active" data-tab="huntPanel">🗺️ 사냥터</button>
+<button class="tab" data-tab="equipPanel">🛡️ 장비창</button>
+<button class="tab" data-tab="shopPanel">🛒 상인</button>
+<button class="tab" data-tab="skillsPanel">⚡ 스킬</button>
+<button class="tab" data-tab="dungeonPanel">💀 어비스</button>
+<button class="tab" data-tab="rankPanel">🏆 랭킹</button>
 </div>
 
-<!-- 시스템 탭 -->
-<div id="upgrade" class="panel">
-<div class="card" style="margin-bottom:8px;">
-  <div class="upgrade-row" style="display:flex;justify-content:space-between;align-items:center;">
-    <div><h3>💻 파서 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);font-size:10px;">클릭당 데이터 비트 생산량 증가</small></div>
-    <button class="h-btn" id="powerBtn">300 비트</button>
-  </div>
-</div>
-<div class="card">
-  <div class="upgrade-row" style="display:flex;justify-content:space-between;align-items:center;">
-    <div>
-      <h3>🤖 오토 백그라운드 크롤러 <b id="autoLv" style="color:var(--accent)">Lv.0</b></h3>
-      <small style="color:var(--text-sub);font-size:10px;">초당 자동 데이터 채굴 (ON/OFF 가능)</small>
+<!-- 사냥터 탭 -->
+<div id="huntPanel" class="panel">
+  <div class="grid-2">
+    <div class="card">
+      <h3>🌃 네온 슬럼가 (Lv.1 ~ 5)</h3>
+      <p>부랑자와 길거리 로봇이 출몰하는 위험한 빈민가입니다.</p>
+      <button class="btn-rpg" onclick="startHunt(1)">사냥 시작</button>
     </div>
-    <div style="display:flex;gap:6px;align-items:center;">
-      <button id="autoToggleBtn" class="tool-btn" style="background:#114422;">ON</button>
-      <button class="h-btn" id="autoBtn">1,500 비트</button>
+    <div class="card">
+      <h3>🏭 사이버 공장 지대 (Lv.6 ~ 12)</h3>
+      <p>폭주한 경비 드론과 안드로이드가 지키는 공장입니다.</p>
+      <button class="btn-rpg" onclick="startHunt(2)">사냥 시작</button>
     </div>
   </div>
 </div>
-</div>
 
-<!-- 익스플로잇 탭 -->
-<div id="exploit" class="panel hidden">
-<div class="grid-2">
-<div class="card">
-  <div><h3>🍀 럭키 인젝션</h3><p>클릭 시 12% 확률로 데이터 비트 2배 획득</p></div>
-  <button class="h-btn buy" data-item="luck">구매 25,000</button>
-</div>
-<div class="card">
-  <div><h3>💎 다중 스레드 코어</h3><p>모든 데이터 획득량 +25% 증가</p></div>
-  <button class="h-btn buy" data-item="core">구매 150,000</button>
-</div>
-<div class="card">
-  <div><h3>🔥 오버히트 모듈</h3><p>모든 데이터 획득량 +50% 증가</p></div>
-  <button class="h-btn buy" data-item="double">구매 600,000</button>
-</div>
-</div>
-</div>
-
-<!-- 프록시 노드 탭 -->
-<div id="nodes" class="panel hidden">
+<!-- 장비창 탭 -->
+<div id="equipPanel" class="panel hidden">
   <div class="grid-2" style="margin-bottom:10px;">
     <div class="card">
-      <h3>🎁 서브넷 패킷 보급</h3>
-      <p style="font-size:10px;">티어 1 ~ 2 프록시 노드 수신</p>
-      <button class="h-btn" id="buyNode1">패킷 요청 (10,000 비트)</button>
+      <h3>⚔️ 장착 무기</h3>
+      <p id="equippedWeapon">없음 (공격력 +0)</p>
     </div>
     <div class="card">
-      <h3>🌟 다크웹 메인프레임</h3>
-      <p style="font-size:10px;">티어 3 메인프레임 고확률 수신</p>
-      <button class="h-btn" id="buyNode2">패킷 요청 (100,000 비트)</button>
+      <h3>🛡️ 장착 방어구</h3>
+      <p id="equippedArmor">없음 (방어력 +0)</p>
     </div>
   </div>
-
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;border-bottom:1px solid var(--border-color);padding-bottom:6px;">
-    <h3 style="color:var(--accent); margin:0; font-size:12px;">🔗 프록시 노드 관리 (최대 2개 동시 연결, 효과 누적)</h3>
-    <span style="font-size:10px; color:var(--text-sub);">💡 동급 노드 2개 드래그 합성</span>
-  </div>
-  <div id="nodeList" class="node-list"></div>
+  <h3 style="color:var(--text-main); font-size:13px; margin:10px 0 4px;">🎒 보유 인벤토리</h3>
+  <div id="inventoryList" class="inventory-grid"></div>
 </div>
 
-<!-- 브리치 실험실 탭 -->
-<div id="breach" class="panel hidden">
-<div class="grid-2">
-  <div class="card">
-    <h3>🔬 방화벽 뚫기</h3>
-    <div class="slot-display" id="slotScreen" style="background:#030508;border:1px solid var(--border-color);padding:8px;border-radius:6px;text-align:center;font-size:16px;color:var(--accent);margin:6px 0;letter-spacing:2px;">❓ ❓ ❓</div>
-    <p style="font-size:10px;color:var(--text-sub);">잭팟 성공 시 15배 (확률 5%)</p>
-    <input type="number" id="slotBet" class="terminal-input" value="300" min="100" step="100" style="margin-bottom:6px;">
-    <button class="h-btn" id="slotBtn">브리치 가동</button>
-  </div>
-
-  <div class="card">
-    <h3>📊 비트 변동성 분석</h3>
-    <div class="slot-display" id="coinResult" style="background:#030508;border:1px solid var(--border-color);padding:8px;border-radius:6px;text-align:center;font-size:12px;color:var(--accent);margin:6px 0;">상승 or 하락 예측</div>
-    <p style="font-size:10px;color:var(--text-sub);">적중 시 2.2배 (확률 35%)</p>
-    <div style="margin-bottom:6px; display:flex; gap:4px;">
-      <button class="tool-btn selected" id="btnHead" style="flex:1;">상승(UP)</button>
-      <button class="tool-btn" id="btnTail" style="flex:1;">하락(DOWN)</button>
+<!-- 상인 탭 -->
+<div id="shopPanel" class="panel hidden">
+  <div class="grid-2">
+    <div class="card">
+      <h3>🧪 응급 힐링팩 (HP 50 회복)</h3>
+      <p>비전투 시 체력을 즉시 회복합니다. (가격: 100 크레딧)</p>
+      <button class="r-btn" onclick="buyItem('healPotion')">구매하기</button>
     </div>
-    <input type="number" id="coinBet" class="terminal-input" value="300" min="100" step="100" style="margin-bottom:6px;">
-    <button class="h-btn" id="coinFlipBtn">동기화 검증</button>
+    <div class="card">
+      <h3>📦 장비 보급 상자</h3>
+      <p>랜덤한 무기 또는 방어구를 획득합니다. (가격: 350 크레딧)</p>
+      <button class="r-btn" onclick="buyItem('gearBox')">구매하기</button>
+    </div>
   </div>
 </div>
+
+<!-- 스킬 탭 -->
+<div id="skillsPanel" class="panel hidden">
+  <div class="grid-2">
+    <div class="card">
+      <h3>⚡ 오버클럭 스트라이크</h3>
+      <p>치명타 확률과 피해량을 증폭시키는 전투 패시브입니다.</p>
+      <button class="r-btn" id="skillBtn1" onclick="upgradeSkill(1)">강화 (비용: 300 크레딧)</button>
+    </div>
+    <div class="card">
+      <h3>🛡️ 나노 머신 아머</h3>
+      <p>상시 방어력을 높여 받는 피해를 감소시킵니다.</p>
+      <button class="r-btn" id="skillBtn2" onclick="upgradeSkill(2)">강화 (비용: 300 크레딧)</button>
+    </div>
+  </div>
 </div>
 
-<!-- 데이터 패킷 탭 -->
-<div id="packet" class="panel hidden">
+<!-- 어비스 던전 탭 -->
+<div id="dungeonPanel" class="panel hidden">
   <div class="card" style="text-align:center; padding:18px;">
-    <h2 style="margin-top:0; font-size:15px; color:var(--accent);">📦 일일 다크웹 데이터 패킷</h2>
-    <p style="color:var(--text-sub); font-size:11px;">매일 접속하여 암호화된 비트 자원과 뉴럴 포인트를 수령하세요!</p>
-    <p style="font-size:12px;">연속 접속일: <b id="attDays" style="color:var(--accent);">0</b>일차</p>
-    <button id="attendBtn" class="h-btn" style="margin-top:8px;">🎁 패킷 해독하기</button>
-    <p id="attStatus" style="font-size:10px;color:var(--text-sub);margin-top:6px;"></p>
+    <h2 style="margin-top:0; font-size:15px; color:var(--accent);">💀 어비스 하층부 보스 레이드</h2>
+    <p style="color:var(--text-sub); font-size:11px;">강력한 사이버 보스와 1:1 결투를 벌이고 막대한 보상을 획득하세요!</p>
+    <p style="font-size:12px;">입장 조건: 레벨 5 이상 권장</p>
+    <button class="btn-rpg" style="margin-top:8px;" onclick="startBossRaid()">보스 레이드 도전</button>
   </div>
 </div>
 
-<!-- 오버클럭 탭 -->
-<div id="overclock" class="panel hidden">
-<div class="card" style="text-align:center; padding:18px;">
-<h2 style="margin-top:0; font-size:15px; color:var(--accent);">🚀 뉴럴 코어 오버클럭 (환생)</h2>
-<p style="color:var(--text-sub); font-size:11px;">데이터와 노드가 초기화되지만, 영구적인 뉴럴 포인트(RP)를 획득합니다.</p>
-<p style="font-size:12px;">보유 뉴럴 포인트(RP): <b id="rp" style="color:var(--accent);">0</b></p>
-<p style="font-size:12px;">오버클럭 요구 비트: <b id="req" style="color:var(--accent);">1,000,000</b> 비트</p>
-<button id="prestigeBtn" class="h-btn" style="margin-top:8px;">🚀 오버클럭 실행</button>
-</div>
-</div>
-
-<!-- 글로벌 순위 탭 -->
+<!-- 🏆 구글 연동 랭킹 탭 -->
 <div id="rankPanel" class="panel hidden">
   <div class="google-box">
-    <h3 style="color:var(--accent);margin:0 0 8px;font-size:13px;">🌐 글로벌 해커 순위 연동</h3>
+    <h3 style="color:var(--accent);margin:0 0 8px;font-size:13px;">🌐 글로벌 방랑자 랭킹 연동</h3>
     
     <div id="g_id_onload"
          data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
@@ -520,19 +486,19 @@ button:disabled{opacity: 0.3; cursor: not-allowed; background: var(--border-colo
     </div>
 
     <div style="margin-top:10px;">
-      <p style="margin:4px 0; font-size:11px;">현재 보유 데이터 비트: <b id="myCurrentScore" style="color:var(--accent);">0</b> 비트</p>
-      <button id="registerRankBtn" class="h-btn" style="width:auto;padding:5px 12px;margin-top:4px;">🏆 서버에 비트 동기화</button>
+      <p style="margin:4px 0; font-size:11px;">현재 보유 크레딧: <b id="myCurrentScore" style="color:var(--accent);">500</b> 크레딧</p>
+      <button id="registerRankBtn" class="btn-rpg" style="width:auto;padding:5px 12px;margin-top:4px;">🏆 서버에 랭킹 동기화</button>
     </div>
   </div>
 
-  <h3 style="text-align:center;color:var(--accent);font-size:13px;margin:10px 0 6px;">🏆 글로벌 해커 Top 10</h3>
+  <h3 style="text-align:center;color:var(--accent);font-size:13px;margin:10px 0 6px;">🏆 글로벌 방랑자 Top 10</h3>
   <table class="rank-table">
     <thead>
       <tr>
         <th>순위</th>
-        <th>해커 ID</th>
-        <th>데이터 비트</th>
-        <th>오버클럭</th>
+        <th>방랑자 ID</th>
+        <th>레벨</th>
+        <th>크레딧</th>
       </tr>
     </thead>
     <tbody id="rankList"></tbody>
@@ -549,9 +515,9 @@ button:disabled{opacity: 0.3; cursor: not-allowed; background: var(--border-colo
 // --- 패치노트 데이터 (보존) ---
 const patchNotes = [
   {
-    version: "v4.0 패치 (최신)",
-    title: "[사이버 해커: 뉴럴 네트워크 터미널] 신규 장르 출시",
-    desc: "1) 기존 공장 타이쿤에서 사이버 터미널 해커 컨셉의 완전히 새로운 게임으로 개편되었습니다.\n2) 명령어 입력 터미널, 프록시 노드 합성 시스템, 방화벽 브리치 미니게임이 추가되었습니다.\n3) 구글 로그인 연동, 실시간 글로벌 랭킹, 패치노트 시스템은 완벽히 보존됩니다."
+    version: "v5.0 패치 (최신)",
+    title: "[넥서스 크로니클: 사이버 펑크 텍스트 RPG] 대규모 런칭",
+    desc: "1) 완전히 새로운 정통 텍스트 RPG 시스템이 도입되었습니다.\n2) 사냥터 탐험, 장비 인벤토리, 스킬 강화, 보스 레이드(어비스)가 추가되었습니다.\n3) 구글 로그인 연동, 실시간 글로벌 랭킹, 패치노트 시스템은 완벽히 보존됩니다."
   },
   {
     version: "v2.0 패치",
@@ -592,34 +558,19 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// 💡 데이터 저장 키 (안전 보존)
-const saveKey = "cyberHacker_SaveData";
-let currentUser = JSON.parse(localStorage.getItem("cyberHackerGoogleUser") || "null");
+// 💡 데이터 저장 키
+const saveKey = "nexusRpg_SaveData";
+let currentUser = JSON.parse(localStorage.getItem("nexusRpgGoogleUser") || "null");
 
-let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
- score:0, power:1, cps:0, prestige:0, rp:0, luck:false, core:false, double:false,
- nodes:[], connectedNodes:[], lastAttend:0, attendDays:0, autoEnabled:true
-};
-
-if (!d.connectedNodes) d.connectedNodes = [];
-
-const NODE_DB = {
- proxy1: { id:'proxy1', name:'서브넷 릴레이', icon:'🔌', tier:1, nextTier:2, desc:'클릭 효율 +3%', sellPrice: 300 },
- proxy2: { id:'proxy2', name:'암호화 스니퍼', icon:'📡', tier:1, nextTier:2, desc:'초당 채굴 +4%', sellPrice: 300 },
- relay1: { id:'relay1', name:'다크웹 터널', icon:'🌐', tier:2, nextTier:3, desc:'클릭 & 초당 +6%', sellPrice: 1500 },
- relay2: { id:'relay2', name:'뉴럴 프로세서', icon:'🧠', tier:2, nextTier:3, desc:'모든 비트 1.15배', sellPrice: 1500 },
- coreNode: { id:'coreNode', name:'퀀텀 메인프레임', icon:'💠', tier:3, nextTier:null, desc:'모든 비트 2배', sellPrice: 10000 }
-};
-
-const NODES_BY_TIER = {
- 1: ['proxy1', 'proxy2'],
- 2: ['relay1', 'relay2'],
- 3: ['coreNode']
+let p = JSON.parse(localStorage.getItem(saveKey) || "null") || {
+ level: 1, exp: 0, maxExp: 100, hp: 100, maxHp: 100,
+ atk: 15, def: 5, gold: 500,
+ skill1Lv: 0, skill2Lv: 0,
+ weapon: null, armor: null,
+ inventory: []
 };
 
 const $ = id => document.getElementById(id);
-let msgTimer = null;
-let draggedNodeIdx = null;
 
 function parseJwt(token) {
   try {
@@ -641,10 +592,10 @@ function handleCredentialResponse(response) {
       picture: responsePayload.picture,
       email: responsePayload.email
     };
-    localStorage.setItem("cyberHackerGoogleUser", JSON.stringify(currentUser));
+    localStorage.setItem("nexusRpgGoogleUser", JSON.stringify(currentUser));
     updateUserUI();
     syncScoreToFirebase();
-    appendTerminalLog(`> AUTHENTICATED: WELCOME BACK, ${currentUser.name}.`, "success");
+    appendLog(`> 구글 인증 완료: 환영합니다, ${currentUser.name} 방랑자님!`, "log-reward");
   }
 }
 
@@ -656,98 +607,96 @@ function updateUserUI() {
     if(userName) userName.textContent = currentUser.name;
   } else {
     if(userAvatar) userAvatar.src = "https://via.placeholder.com/32/7f8c8d/ffffff?text=?";
-    if(userName) userName.textContent = "GUEST_USER";
+    if(userName) userName.textContent = "방랑자 (미로그인)";
   }
   loadFirebaseRankings();
 }
 
-function getNodeBonus(){
-  let clickMult = 1.0, cpsMult = 1.0, globalMult = 1.0;
-  d.connectedNodes.forEach(id => {
-    if(id === 'proxy1') clickMult += 0.03;
-    if(id === 'proxy2') cpsMult += 0.04;
-    if(id === 'relay1') { clickMult += 0.06; cpsMult += 0.06; }
-    if(id === 'relay2') globalMult *= 1.15;
-    if(id === 'coreNode') globalMult *= 2.0;
-  });
-  return { clickMult, cpsMult, globalMult };
-}
-
-function getBaseMult(){
-  return (d.core ? 1.25 : 1) * (d.double ? 1.5 : 1) * (1 + d.rp * 0.12);
-}
-
 function save(){
-  localStorage.setItem(saveKey, JSON.stringify(d));
+  localStorage.setItem(saveKey, JSON.stringify(p));
   render();
 }
+
 function fmt(n){return Math.floor(n).toLocaleString()}
 
-function appendTerminalLog(text, type = "normal") {
-  const screen = $("terminalScreen");
-  if(!screen) return;
+function appendLog(text, className = "log-line") {
+  const consoleBox = $("rpgConsole");
+  if(!consoleBox) return;
   const div = document.createElement("div");
-  div.className = "log-line";
-  if(type === "success") div.className += " log-success";
-  if(type === "warn") div.className += " log-warn";
-  if(type === "error") div.className += " log-error";
+  div.className = className;
   div.textContent = text;
-  screen.appendChild(div);
-  screen.scrollTop = screen.scrollHeight;
+  consoleBox.appendChild(div);
+  consoleBox.scrollTop = consoleBox.scrollHeight;
 }
 
 function render(){
- const nodeBonus = getNodeBonus();
- const baseMult = getBaseMult();
+  if($("charLevel")) $("charLevel").textContent = p.level;
+  
+  let bonusAtk = p.weapon ? p.weapon.stat : 0;
+  let bonusDef = p.armor ? p.armor.stat : 0;
+  let skillBonusAtk = p.skill1Lv * 3;
+  let skillBonusDef = p.skill2Lv * 2;
 
- const totalPower = d.power * baseMult * nodeBonus.clickMult * nodeBonus.globalMult;
- const totalCps = d.cps * baseMult * nodeBonus.cpsMult * nodeBonus.globalMult;
+  if($("charAtk")) $("charAtk").textContent = (p.atk + bonusAtk + skillBonusAtk);
+  if($("charDef")) $("charDef").textContent = (p.def + bonusDef + skillBonusDef);
+  if($("charGold")) $("charGold").textContent = fmt(p.gold);
+  if($("myCurrentScore")) $("myCurrentScore").textContent = fmt(p.gold);
 
- if($("score")) $("score").textContent=fmt(d.score); 
- if($("power")) $("power").textContent=fmt(totalPower);
- if($("cps")) $("cps").textContent=fmt(totalCps); 
- if($("powerLv")) $("powerLv").textContent="Lv."+d.power; 
- if($("autoLv")) $("autoLv").textContent="Lv."+d.cps;
- if($("rp")) $("rp").textContent=fmt(d.rp);
- if($("myCurrentScore")) $("myCurrentScore").textContent=fmt(d.score);
- if($("connectedCount")) $("connectedCount").textContent=`${d.connectedNodes.length}/2`;
+  if($("hpText")) $("hpText").textContent = `${p.hp} / ${p.maxHp}`;
+  if($("hpBar")) $("hpBar").style.width = `${Math.max(0, Math.min(100, (p.hp / p.maxHp) * 100))}%`;
 
- const autoBtn = $("autoToggleBtn");
- if(autoBtn) {
-   autoBtn.textContent = d.autoEnabled ? "ON" : "OFF";
-   autoBtn.style.background = d.autoEnabled ? "#114422" : "#441111";
- }
+  if($("expText")) $("expText").textContent = `${p.exp} / ${p.maxExp}`;
+  if($("expBar")) $("expBar").style.width = `${Math.max(0, Math.min(100, (p.exp / p.maxExp) * 100))}%`;
 
- let req = 1000000 * Math.pow(2.2, d.prestige); 
- if($("req")) $("req").textContent = fmt(req);
- if($("prestigeBtn")) $("prestigeBtn").disabled = d.score < req;
- 
- if($("powerBtn")) $("powerBtn").textContent = fmt(300 * Math.pow(1.25, d.power - 1)) + " 비트";
- if($("autoBtn")) $("autoBtn").textContent = fmt(1500 * Math.pow(1.28, d.cps)) + " 비트";
- 
- const luckBtn = document.querySelector('[data-item="luck"]');
- const coreBtn = document.querySelector('[data-item="core"]');
- const doubleBtn = document.querySelector('[data-item="double"]');
- 
- if(luckBtn) luckBtn.textContent = d.luck ? "완료" : "구매 25,000";
- if(coreBtn) coreBtn.textContent = d.core ? "완료" : "구매 150,000";
- if(doubleBtn) doubleBtn.textContent = d.double ? "완료" : "구매 600,000";
+  if($("equippedWeapon")) {
+    $("equippedWeapon").textContent = p.weapon ? `${p.weapon.name} (공격력 +${p.weapon.stat})` : "없음 (공격력 +0)";
+  }
+  if($("equippedArmor")) {
+    $("equippedArmor").textContent = p.armor ? `${p.armor.name} (방어력 +${p.armor.stat})` : "없음 (방어력 +0)";
+  }
 
- const now = Date.now();
- const cooldown = 24 * 60 * 60 * 1000;
- if($("attDays")) $("attDays").textContent = d.attendDays;
- if($("attendBtn") && $("attStatus")) {
-   if(now - d.lastAttend >= cooldown){
-     $("attendBtn").disabled = false;
-     $("attStatus").textContent = "패킷 해독이 가능합니다!";
-   } else {
-     $("attendBtn").disabled = true;
-     let leftSec = Math.ceil((cooldown - (now - d.lastAttend)) / 1000);
-     $("attStatus").textContent = `다음 패킷까지: ${Math.floor(leftSec/3600)}시간 ${Math.floor((leftSec%3600)/60)}분`;
-   }
- }
+  if($("skillBtn1")) $("skillBtn1").textContent = `강화 Lv.${p.skill1Lv} (비용: ${300 * (p.skill1Lv + 1)} 크레딧)`;
+  if($("skillBtn2")) $("skillBtn2").textContent = `강화 Lv.${p.skill2Lv} (비용: ${300 * (p.skill2Lv + 1)} 크레딧)`;
 
- renderNodeList();
+  renderInventory();
+}
+
+function renderInventory(){
+  const container = $("inventoryList");
+  if(!container) return;
+  container.innerHTML = "";
+  if(!p.inventory || p.inventory.length === 0){
+    container.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:11px;'>인벤토리가 비어 있습니다.</p>";
+    return;
+  }
+
+  p.inventory.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.innerHTML = `
+      <span class="badge-grade grade-${item.grade}">${item.grade.toUpperCase()}</span>
+      <b style="display:block;font-size:11px;color:var(--text-main);margin:2px 0;">${item.name}</b>
+      <span style="font-size:10px;color:var(--text-sub);">+${item.stat} ${item.type === 'weapon' ? '공격력' : '방어력'}</span>
+      <button class="tool-btn" style="width:100%;margin-top:6px;padding:3px;font-size:10px;" onclick="equipItem(${index})">장착</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function equipItem(index) {
+  const item = p.inventory[index];
+  p.inventory.splice(index, 1);
+
+  if(item.type === 'weapon') {
+    if(p.weapon) p.inventory.push(p.weapon);
+    p.weapon = item;
+    appendLog(`> 무기 장착: ${item.name}`, "log-reward");
+  } else {
+    if(p.armor) p.inventory.push(p.armor);
+    p.armor = item;
+    appendLog(`> 방어구 장착: ${item.name}`, "log-reward");
+  }
+  save();
 }
 
 function syncScoreToFirebase() {
@@ -756,8 +705,8 @@ function syncScoreToFirebase() {
     googleId: currentUser.googleId,
     name: currentUser.name,
     picture: currentUser.picture,
-    score: d.score, 
-    prestige: d.prestige,
+    score: p.gold, 
+    level: p.level,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
     loadFirebaseRankings();
@@ -790,12 +739,12 @@ function loadFirebaseRankings(){
         
         if(isMyRank) {
           myRankFound = true;
-          if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (비트: ${fmt(item.score)})`;
+          if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (크레딧: ${fmt(item.score)})`;
         }
 
         if(index < 10) {
           let tr = document.createElement("tr");
-          if(isMyRank) tr.style.background = "rgba(0,255,102,0.05)";
+          if(isMyRank) tr.style.background = "rgba(168,85,247,0.05)";
 
           tr.innerHTML = `
             <td>${medal}${index + 1}위</td>
@@ -805,8 +754,8 @@ function loadFirebaseRankings(){
                 <b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}
               </div>
             </td>
+            <td>Lv.${item.level || 1}</td>
             <td style="color:var(--accent);">${fmt(item.score)}</td>
-            <td>${item.prestige || 0}회</td>
           `;
           rankList.appendChild(tr);
         }
@@ -819,187 +768,155 @@ function loadFirebaseRankings(){
     });
 }
 
-function renderNodeList(){
-  const container = $("nodeList");
-  if(!container) return;
-  container.innerHTML = "";
-  if(!d.nodes || d.nodes.length === 0){
-    container.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:11px;'>보유한 프록시 노드가 없습니다.</p>";
-    return;
+// 전투 시스템
+const MONSTERS = {
+  1: [
+    { name: "길거리 부랑자", hp: 40, atk: 12, def: 2, exp: 35, gold: 40 },
+    { name: "폭주 안드로이드", hp: 65, atk: 18, def: 4, exp: 55, gold: 70 }
+  ],
+  2: [
+    { name: "경비 전투 드론", hp: 120, atk: 28, def: 10, exp: 90, gold: 130 },
+    { name: "사이버 사이코", hp: 180, atk: 38, def: 15, exp: 140, gold: 220 }
+  ]
+};
+
+function startHunt(zone) {
+  if(p.hp <= 0) {
+    p.hp = p.maxHp;
+    appendLog(`> 체력이 모두 소모되어 의료 포트를 통해 체력을 완전 회복했습니다.`, "log-hit");
   }
 
-  d.nodes.forEach((nodeId, index) => {
-    const node = NODE_DB[nodeId];
-    if(!node) return;
+  const pool = MONSTERS[zone];
+  const mob = JSON.parse(JSON.stringify(pool[Math.floor(Math.random() * pool.length)]));
+  
+  appendLog(`> [전투 발생] 야생의 '${mob.name}'(이)가 나타났습니다!`);
 
-    const isConnected = d.connectedNodes.includes(nodeId);
-    const card = document.createElement("div");
-    card.className = `node-card ${isConnected ? 'connected' : ''}`;
-    card.draggable = true;
-    card.dataset.index = index;
+  let bonusAtk = (p.weapon ? p.weapon.stat : 0) + (p.skill1Lv * 3);
+  let bonusDef = (p.armor ? p.armor.stat : 0) + (p.skill2Lv * 2);
+  let totalAtk = p.atk + bonusAtk;
+  let totalDef = p.def + bonusDef;
 
-    card.innerHTML = `
-      <span class="badge-tier tier-${node.tier}">Tier ${node.tier}</span>
-      <div style="font-size:24px;margin:2px 0;">${node.icon}</div>
-      <b style="color:var(--text-main); font-size:11px;">${node.name}</b>
-      <p style="font-size:9px;color:var(--text-sub);margin:2px 0 4px;">${node.desc}</p>
-      <div style="display:flex; gap:3px;">
-        <button class="tool-btn" style="flex:1;font-size:10px;padding:3px;" onclick="toggleConnectNode(${index})">
-          ${isConnected ? '해제' : '연결'}
-        </button>
-        <button class="tool-btn" style="flex:1;font-size:10px;padding:3px;background:#441122;color:#ff3366;" onclick="sellNode(${index})">
-          폐기(${fmt(node.sellPrice)})
-        </button>
-      </div>
-    `;
+  // 턴 계산
+  while(mob.hp > 0 && p.hp > 0) {
+    let pDmg = Math.max(1, totalAtk - mob.def + Math.floor(Math.random() * 5));
+    let isCrit = Math.random() < 0.15;
+    if(isCrit) pDmg = Math.floor(pDmg * 1.5);
 
-    card.addEventListener("dragstart", (e) => {
-      draggedNodeIdx = index;
-      e.dataTransfer.effectAllowed = "move";
-    });
-
-    card.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      card.classList.add("drag-over");
-    });
-
-    card.addEventListener("dragleave", () => {
-      card.classList.remove("drag-over");
-    });
-
-    card.addEventListener("drop", (e) => {
-      e.preventDefault();
-      card.classList.remove("drag-over");
-      if(draggedNodeIdx === null || draggedNodeIdx === index) return;
-
-      const sourceNode = NODE_DB[d.nodes[draggedNodeIdx]];
-      const targetNode = NODE_DB[d.nodes[index]];
-
-      if(sourceNode.tier === targetNode.tier) {
-        if(sourceNode.nextTier) {
-          const nextCandidates = NODES_BY_TIER[sourceNode.nextTier] || ['coreNode'];
-          let newId = nextCandidates[Math.floor(Math.random() * nextCandidates.length)];
-
-          let p1 = d.nodes[draggedNodeIdx];
-          let p2 = d.nodes[index];
-          [p1, p2].forEach(p => {
-            let eqIdx = d.connectedNodes.indexOf(p);
-            if(eqIdx !== -1) d.connectedNodes.splice(eqIdx, 1);
-          });
-
-          const firstCut = Math.max(draggedNodeIdx, index);
-          const secondCut = Math.min(draggedNodeIdx, index);
-
-          d.nodes.splice(firstCut, 1);
-          d.nodes.splice(secondCut, 1);
-          d.nodes.push(newId);
-
-          appendTerminalLog(`> NODE UPGRADE SUCCESS: ${NODE_DB[newId].name} SYNCHRONIZED.`, "success");
-          draggedNodeIdx = null;
-          save();
-          if(currentUser) syncScoreToFirebase();
-        } else {
-          appendTerminalLog(`> MAX TIER REACHED. CANNOT UPGRADE FURTHER.`, "warn");
-        }
-      } else {
-        appendTerminalLog(`> ERROR: TIER MISMATCH FOR SYNCHRONIZATION.`, "error");
-      }
-    });
-
-    container.appendChild(card);
-  });
-}
-
-function toggleConnectNode(index){
-  const nodeId = d.nodes[index];
-  const eqIdx = d.connectedNodes.indexOf(nodeId);
-
-  if(eqIdx !== -1) {
-    d.connectedNodes.splice(eqIdx, 1);
-    appendTerminalLog(`> PROXY NODE DISCONNECTED.`);
-  } else {
-    if(d.connectedNodes.length >= 2) {
-      return appendTerminalLog(`> MAX 2 NODES CAN BE CONNECTED SIMULTANEOUSLY.`, "warn");
+    mob.hp -= pDmg;
+    if(isCrit) {
+      appendLog(`> 치명타 적중! '${mob.name}'에게 ${pDmg}의 피해를 입혔습니다!`, "log-crit");
+    } else {
+      appendLog(`> '${mob.name}'에게 ${pDmg}의 피해를 입혔습니다.`, "log-hit");
     }
-    d.connectedNodes.push(nodeId);
-    appendTerminalLog(`> PROXY NODE CONNECTED SUCCESSFULLY.`, "success");
+
+    if(mob.hp <= 0) break;
+
+    let mMobDmg = Math.max(1, mob.atk - totalDef + Math.floor(Math.random() * 4));
+    p.hp -= mMobDmg;
+    appendLog(`> '${mob.name}'의 반격! 당신은 ${mMobDmg}의 피해를 입었습니다.`);
   }
-  save();
-}
 
-function sellNode(index){
-  const nodeId = d.nodes[index];
-  const node = NODE_DB[nodeId];
-  if(!node) return;
+  if(p.hp > 0) {
+    appendLog(`> 승리! '${mob.name}'을(를) 처치했습니다. (EXP +${mob.exp}, 골드 +${mob.gold})`, "log-reward");
+    p.gold += mob.gold;
+    p.exp += mob.exp;
 
-  let eqIdx = d.connectedNodes.indexOf(nodeId);
-  if(eqIdx !== -1) d.connectedNodes.splice(eqIdx, 1);
-
-  d.nodes.splice(index, 1);
-  d.score += node.sellPrice;
-  appendTerminalLog(`> NODE SCRAPPED: +${fmt(node.sellPrice)} BITS.`, "success");
-  save();
-  if(currentUser) syncScoreToFirebase();
-}
-
-function acquirePacket(tier){
-  const cost = tier === 1 ? 10000 : 100000;
-  if(d.score < cost) return appendTerminalLog(`> ERROR: INSUFFICIENT DATA BITS.`, "error");
-
-  d.score -= cost;
-  let obtained = tier === 1 ? 'proxy1' : 'relay1';
-  if(tier === 1) {
-    obtained = Math.random() < 0.6 ? 'proxy1' : 'proxy2';
+    // 레벨업 체크
+    if(p.exp >= p.maxExp) {
+      p.level++;
+      p.exp -= p.maxExp;
+      p.maxExp = Math.floor(p.maxExp * 1.3);
+      p.maxHp += 25;
+      p.hp = p.maxHp;
+      p.atk += 4;
+      p.def += 2;
+      appendLog(`> 🎉 레벨 업! Lv.${p.level}이 되었습니다! (전체 능력치 상승)`, "log-reward");
+    }
   } else {
-    obtained = Math.random() < 0.7 ? 'relay1' : 'relay2';
+    p.hp = 0;
+    appendLog(`> 패배... 전투에서 쓰러졌습니다. 재정비가 필요합니다.`, "log-hit");
   }
 
-  d.nodes.push(obtained);
-  appendTerminalLog(`> PACKET DECRYPTED: ACQUIRED [${NODE_DB[obtained].name}].`, "success");
   save();
   if(currentUser) syncScoreToFirebase();
 }
 
-// 터미널 명령어 처리기
-function executeCommand(cmd) {
-  const cleanCmd = cmd.trim().toLowerCase();
-  if(!cleanCmd) return;
-  appendTerminalLog(`&gt; ${cmd}`);
+function startBossRaid() {
+  if(p.level < 5) return alert("레벨 5 이상만 어비스 던전에 도전할 수 있습니다!");
+  if(p.hp <= 0) p.hp = p.maxHp;
 
-  if(cleanCmd === "help") {
-    appendTerminalLog(`> AVAILABLE COMMANDS:`);
-    appendTerminalLog(`>   hack / decrypt : 클리커 채굴 실행`);
-    appendTerminalLog(`>   status         : 현재 해킹 세션 통계 조회`);
-    appendTerminalLog(`>   clear          : 터미널 화면 초기화`);
-    appendTerminalLog(`>   ping           : 네트워크 지연 시간 테스트`);
-  } else if(cleanCmd === "hack" || cleanCmd === "decrypt") {
-    triggerHack();
-  } else if(cleanCmd === "status") {
-    appendTerminalLog(`> BITS: ${fmt(d.score)} | H/S: ${fmt(d.cps)} | POWER: ${d.power}`);
-  } else if(cleanCmd === "clear") {
-    $("terminalScreeninnerHTML = "";
-    appendTerminalLog(`> TERMINAL SCREEN CLEARED.`);
-  } else if(cleanCmd === "ping") {
-    appendTerminalLog(`> PING SECURE_PROXY: 14ms [STABLE]`, "success");
-  } else {
-    appendTerminalLog(`> UNKNOWN COMMAND. TYPE 'help' FOR INSTRUCTIONS.`, "error");
+  const boss = { name: "네서스 메인 가디언", hp: 500, atk: 55, def: 22, exp: 400, gold: 800 };
+  appendLog(`> [보스 레이드] 최하층의 수호자 '${boss.name}'(이)가 깨어났습니다!`, "log-crit");
+
+  let bonusAtk = (p.weapon ? p.weapon.stat : 0) + (p.skill1Lv * 3);
+  let bonusDef = (p.armor ? p.armor.stat : 0) + (p.skill2Lv * 2);
+  let totalAtk = p.atk + bonusAtk;
+  let totalDef = p.def + bonusDef;
+
+  while(boss.hp > 0 && p.hp > 0) {
+    let pDmg = Math.max(1, totalAtk - boss.def + Math.floor(Math.random() * 8));
+    boss.hp -= pDmg;
+    appendLog(`> 보스에게 ${pDmg}의 집중 타격을 가했습니다!`, "log-hit");
+
+    if(boss.hp <= 0) break;
+
+    let bDmg = Math.max(1, boss.atk - totalDef + Math.floor(Math.random() * 6));
+    p.hp -= bDmg;
+    appendLog(`> 보스의 광역 공격! ${bDmg}의 치명적인 피해를 입었습니다.`);
   }
-  $("terminalInput").value = "";
+
+  if(p.hp > 0) {
+    appendLog(`> 레이드 성공! 보스를 토벌하고 전설의 보상을 획득했습니다!`, "log-reward");
+    p.gold += boss.gold;
+    p.exp += boss.exp;
+
+    // 고급 장비 드랍
+    let drop = Math.random() < 0.5 ? 
+      { name: "플라즈마 블레이드", type: "weapon", grade: "legend", stat: 25 } :
+      { name: "나노 아머 슈트", type: "armor", grade: "epic", stat: 18 };
+    p.inventory.push(drop);
+    appendLog(`> 획득 아이템: [${drop.name}]`, "log-reward");
+  } else {
+    p.hp = 0;
+    appendLog(`> 레이드 실패... 압도적인 힘에 밀려 후퇴했습니다.`, "log-hit");
+  }
+  save();
+  if(currentUser) syncScoreToFirebase();
 }
 
-function triggerHack() {
-  const nodeBonus = getNodeBonus();
-  const baseMult = getBaseMult();
-  let gain = d.power * baseMult * nodeBonus.clickMult * nodeBonus.globalMult;
-
-  if(d.luck && Math.random() < 0.12) {
-    gain *= 2;
-    appendTerminalLog(`> CRITICAL INJECTION: DATA GAIN DOUBLED! (+${fmt(gain)})`, "success");
-  } else {
-    appendTerminalLog(`> DECRYPTED PACKET: +${fmt(gain)} BITS.`);
+function buyItem(type) {
+  if(type === 'healPotion') {
+    if(p.gold < 100) return alert("크레딧이 부족합니다.");
+    p.gold -= 100;
+    p.hp = Math.min(p.maxHp, p.hp + 50);
+    appendLog(`> 힐링팩 사용: HP 50 회복`, "log-reward");
+  } else if(type === 'gearBox') {
+    if(p.gold < 350) return alert("크레딧이 부족합니다.");
+    p.gold -= 350;
+    let grades = ['normal', 'rare', 'epic'];
+    let g = grades[Math.floor(Math.random() * grades.length)];
+    let isWeapon = Math.random() < 0.5;
+    let item = isWeapon ? 
+      { name: g === 'epic' ? "레이저 소스검" : g === 'rare' ? "콤바트 나이프" : "철제 파이프", type: "weapon", grade: g, stat: g === 'epic' ? 15 : g === 'rare' ? 9 : 4 } :
+      { name: g === 'epic' ? "컴뱃 자켓" : g === 'rare' ? "케블라 조끼" : "가죽 재킷", type: "armor", grade: g, stat: g === 'epic' ? 12 : g === 'rare' ? 7 : 3 };
+    p.inventory.push(item);
+    appendLog(`> 장비 보급 상자 개봉: [${item.name}] 획득!`, "log-reward");
   }
+  save();
+  if(currentUser) syncScoreToFirebase();
+}
 
-  d.score += gain;
+function upgradeSkill(idx) {
+  let cost = 300 * (idx === 1 ? p.skill1Lv + 1 : p.skill2Lv + 1);
+  if(p.gold < cost) return alert("크레딧이 부족합니다.");
+  p.gold -= cost;
+  if(idx === 1) {
+    p.skill1Lv++;
+    appendLog(`> [오버클럭 스트라이크] Lv.${p.skill1Lv}로 강화 완료!`, "log-reward");
+  } else {
+    p.skill2Lv++;
+    appendLog(`> [나노 머신 아머] Lv.${p.skill2Lv}로 강화 완료!`, "log-reward");
+  }
   save();
   if(currentUser) syncScoreToFirebase();
 }
@@ -1031,115 +948,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "cyber_hacker.html";
+      a.download = "nexus_rpg.html";
       a.click();
-      appendTerminalLog(`> SESSION BACKUP SAVED TO DISK.`, "success");
+      appendLog(`> 캐릭터 세이브 파일 백업 완료.`);
     };
   }
 
   const regRankBtn = $("registerRankBtn");
   if(regRankBtn) {
     regRankBtn.onclick = () => {
-      if(!currentUser) return appendTerminalLog(`> ERROR: GOOGLE LOGIN REQUIRED.`, "error");
+      if(!currentUser) return alert("구글 계정으로 먼저 로그인해주세요.");
       syncScoreToFirebase();
-      appendTerminalLog(`> RANKINGS SYNCHRONIZED WITH CLOUD DB.`, "success");
-    };
-  }
-
-  const terminalInput = $("terminalInput");
-  const execBtn = $("execBtn");
-  if(execBtn && terminalInput) {
-    execBtn.onclick = () => executeCommand(terminalInput.value);
-    terminalInput.onkeydown = (e) => {
-      if(e.key === "Enter") executeCommand(terminalInput.value);
-    };
-  }
-
-  const autoToggle = $("autoToggleBtn");
-  if(autoToggle) {
-    autoToggle.onclick = () => {
-      d.autoEnabled = !d.autoEnabled;
-      appendTerminalLog(`> CRAWLER STATUS: ${d.autoEnabled ? "ACTIVE" : "PAUSED"}`);
-      save();
-    };
-  }
-
-  const powerBtn = $("powerBtn");
-  if(powerBtn) {
-    powerBtn.onclick = () => {
-      let cost = Math.floor(300 * Math.pow(1.25, d.power - 1));
-      if(d.score >= cost) {
-        d.score -= cost;
-        d.power++;
-        appendTerminalLog(`> PARSER UPGRADED TO Lv.${d.power}`, "success");
-        save();
-        if(currentUser) syncScoreToFirebase();
-      } else appendTerminalLog(`> INSUFFICIENT BITS.`, "error");
-    };
-  }
-
-  const autoBtn = $("autoBtn");
-  if(autoBtn) {
-    autoBtn.onclick = () => {
-      let cost = Math.floor(1500 * Math.pow(1.28, d.cps));
-      if(d.score >= cost) {
-        d.score -= cost;
-        d.cps++;
-        appendTerminalLog(`> CRAWLER UPGRADED TO Lv.${d.cps}`, "success");
-        save();
-        if(currentUser) syncScoreToFirebase();
-      } else appendTerminalLog(`> INSUFFICIENT BITS.`, "error");
-    };
-  }
-
-  document.querySelectorAll(".buy").forEach(btn => {
-    btn.onclick = () => {
-      const type = btn.dataset.item;
-      const costs = { luck: 25000, core: 150000, double: 600000 };
-      const cost = costs[type];
-      if(d.score < cost) return appendTerminalLog(`> INSUFFICIENT BITS.`, "error");
-      d.score -= cost;
-      d[type] = true;
-      appendTerminalLog(`> EXPLOIT MODULE [${type.toUpperCase()}] INSTALLED.`, "success");
-      save();
-      if(currentUser) syncScoreToFirebase();
-    };
-  });
-
-  const buyNode1 = $("buyNode1");
-  const buyNode2 = $("buyNode2");
-  if(buyNode1) buyNode1.onclick = () => acquirePacket(1);
-  if(buyNode2) buyNode2.onclick = () => acquirePacket(2);
-
-  const attendBtn = $("attendBtn");
-  if(attendBtn) {
-    attendBtn.onclick = () => {
-      const now = Date.now();
-      if(now - d.lastAttend < 24*60*60*1000) return appendTerminalLog(`> PACKET COOLDOWN NOT REACHED.`, "warn");
-
-      d.lastAttend = now;
-      d.attendDays += 1;
-      d.score += 12000 + (d.attendDays * 2500);
-      d.rp += 1;
-      appendTerminalLog(`> DAILY PACKET DECRYPTED: +REWARDS RECEIVED.`, "success");
-      save();
-      if(currentUser) syncScoreToFirebase();
-    };
-  }
-
-  const prestigeBtn = $("prestigeBtn");
-  if(prestigeBtn) {
-    prestigeBtn.onclick = () => {
-      let req = 1000000 * Math.pow(2.2, d.prestige);
-      if(d.score < req) return;
-      d.prestige++;
-      d.rp += 3;
-      d.score = 0;
-      d.power = 1;
-      d.cps = 0;
-      appendTerminalLog(`> OVERCLOCK COMPLETE. NEURAL POINTS +3.`, "success");
-      save();
-      if(currentUser) syncScoreToFirebase();
+      appendLog(`> 글로벌 랭킹 서버에 캐릭터 정보가 동기화되었습니다.`, "log-reward");
     };
   }
 
@@ -1154,63 +974,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  // 미니게임 1: 방화벽 브리치
-  const slotSymbols = ["⚡", "🔒", "🔑", "💻", "💎", "🌐"];
-  const slotBtn = $("slotBtn");
-  if(slotBtn) {
-    slotBtn.onclick = () => {
-      let bet = parseInt($("slotBet").value) || 0;
-      if (bet < 100 || d.score < bet) return appendTerminalLog(`> MINIMUM BET IS 100 BITS.`, "error");
-      d.score -= bet;
-
-      let r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-      let r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-      let r3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-
-      if($("slotScreen")) $("slotScreen").textContent = `${r1} ${r2} ${r3}`;
-
-      if (r1 === r2 && r2 === r3 && Math.random() < 0.08) {
-        d.score += bet * 15;
-        appendTerminalLog(`> FIREWALL BREACH JACKPOT! (+${fmt(bet*15)})`, "success");
-      } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-        d.score += Math.floor(bet * 1.2);
-        appendTerminalLog(`> PARTIAL DATA RECOVERED.`);
-      } else {
-        appendTerminalLog(`> BREACH FAILED. SECURITY TRACE DETECTED.`);
-      }
-      save();
-      if(currentUser) syncScoreToFirebase();
-    };
-  }
-
-  // 미니게임 2: 동기화 분석
-  let coinChoice = "head";
-  const btnHead = $("btnHead");
-  const btnTail = $("btnTail");
-  if(btnHead) btnHead.onclick = () => { coinChoice = "head"; btnHead.classList.add("selected"); if(btnTail) btnTail.classList.remove("selected"); };
-  if(btnTail) btnTail.onclick = () => { coinChoice = "tail"; btnTail.classList.add("selected"); if(btnHead) btnHead.classList.remove("selected"); };
-
-  const coinFlipBtn = $("coinFlipBtn");
-  if(coinFlipBtn) {
-    coinFlipBtn.onclick = () => {
-      let bet = parseInt($("coinBet").value) || 0;
-      if (bet < 100 || d.score < bet) return appendTerminalLog(`> MINIMUM BET IS 100 BITS.`, "error");
-      d.score -= bet;
-
-      let userWins = Math.random() < 0.35;
-      if($("coinResult")) $("coinResult").textContent = userWins ? "결과: 분석 일치 (WIN)" : "결과: 분석 불일치 (FAIL)";
-
-      if(userWins) {
-        d.score += Math.floor(bet * 2.2);
-        appendTerminalLog(`> SYNC SUCCESS: +${fmt(bet*2.2)} BITS.`, "success");
-      } else {
-        appendTerminalLog(`> SYNC FAILED.`);
-      }
-      save();
-      if(currentUser) syncScoreToFirebase();
-    };
-  }
-
   // 초기 실행
   renderPatchNotes();
   const lastChecked = localStorage.getItem("lastCheckedPatch");
@@ -1220,18 +983,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserUI();
   render();
 });
-
-// 자동 채굴 루프 (초당 실행)
-setInterval(() => {
-  const nodeBonus = getNodeBonus();
-  const baseMult = getBaseMult();
-  const autoCps = d.cps * baseMult * nodeBonus.cpsMult * nodeBonus.globalMult;
-  if(autoCps > 0 && d.autoEnabled){
-    d.score += autoCps;
-    save();
-    if(currentUser) syncScoreToFirebase();
-  }
-}, 1000);
 </script>
 </body>
 </html>
