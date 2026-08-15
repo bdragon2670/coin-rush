@@ -423,8 +423,8 @@ button:active, .tab:active, .tool-btn:active, .btn-mini:active, .buy:active, .bt
   </div>
 </div>
 
-<h1>🎰 코인 러시 (적정 밸런스)</h1>
-<div class="sub">구글 계정으로 로그인하고 실시간 전세계 랭킹 1위에 도전하세요!</div>
+<h1>🎰 코인 러시 (실시간 랭킹 변동)</h1>
+<div class="sub">구글 계정으로 로그인하고 현재 보유 코인으로 실시간 1위에 도전하세요!</div>
 
 <div class="stats">
 <div class="stat">코인<b id="score">0</b></div>
@@ -690,7 +690,7 @@ button:active, .tab:active, .tool-btn:active, .btn-mini:active, .buy:active, .bt
     <h3 style="color:#ffd700;margin:0 0 10px;">🌐 구글 계정으로 랭킹 등록하기</h3>
     
     <div id="g_id_onload"
-         data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
+         data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqqgfuk1l998.apps.googleusercontent.com"
          data-callback="handleCredentialResponse"
          data-auto_prompt="false">
     </div>
@@ -700,18 +700,18 @@ button:active, .tab:active, .tool-btn:active, .btn-mini:active, .buy:active, .bt
     </div>
 
     <div style="margin-top:15px;">
-      <p style="margin:5px 0;">나의 최고 기록: <b id="myBestScore" style="color:#ffd700;">0</b> 코인</p>
-      <button id="registerRankBtn" class="btn-game" style="width:auto;padding:10px 25px;background:linear-gradient(180deg,#f1c40f,#f39c12);color:#1a050b;">🏆 실시간 서버에 점수 수동 등록</button>
+      <p style="margin:5px 0;">현재 보유 코인: <b id="myCurrentScore" style="color:#ffd700;">0</b> 코인</p>
+      <button id="registerRankBtn" class="btn-game" style="width:auto;padding:10px 25px;background:linear-gradient(180deg,#f1c40f,#f39c12);color:#1a050b;">🏆 실시간 서버에 점수 수동 동기화</button>
     </div>
   </div>
 
-  <h3 style="text-align:center;color:#ffd700;">🏆 실시간 글로벌 Top 10</h3>
+  <h3 style="text-align:center;color:#ffd700;">🏆 실시간 글로벌 Top 10 (현재 보유 코인 기준)</h3>
   <table class="rank-table">
     <thead>
       <tr>
         <th>순위</th>
         <th>플레이어</th>
-        <th>최고 코인</th>
+        <th>현재 코인</th>
         <th>환생 횟수</th>
       </tr>
     </thead>
@@ -750,30 +750,30 @@ let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
 };
 
 const PET_DB = {
-  cat: { id:'cat', name:'아기 고양이', icon:'🐱', grade:'C', nextGrade:'B', desc:'클릭 코인 +10%' },
-  chick: { id:'chick', name:'귀여운 병아리', icon:'🐥', grade:'C', nextGrade:'B', desc:'클릭 코인 +12%' },
-  dog: { id:'dog', name:'시바견', icon:'🐶', grade:'B', nextGrade:'A', desc:'초당 자동 수집 +20%' },
-  rabbit: { id:'rabbit', name:'껑충 토끼', icon:'🐰', grade:'B', nextGrade:'A', desc:'초당 자동 수집 +25%' },
-  fox: { id:'fox', name:'붉은 여우', icon:'🦊', grade:'A', nextGrade:'S', desc:'행운 확률 2배 (20%)' },
-  panda: { id:'panda', name:'판다곰', icon:'🐼', grade:'A', nextGrade:'S', desc:'클릭 & 수집 +35%' },
-  dragon: { id:'dragon', name:'황금 드래곤', icon:'🐉', grade:'S', nextGrade:null, desc:'모든 획득량 2배 & 행운 2배' },
-  unicorn: { id:'unicorn', name:'전설의 유니콘', icon:'🦄', grade:'S', nextGrade:null, desc:'모든 획득량 2.5배' }
+ cat: { id:'cat', name:'아기 고양이', icon:'🐱', grade:'C', nextGrade:'B', desc:'클릭 코인 +10%' },
+ chick: { id:'chick', name:'귀여운 병아리', icon:'🐥', grade:'C', nextGrade:'B', desc:'클릭 코인 +12%' },
+ dog: { id:'dog', name:'시바견', icon:'🐶', grade:'B', nextGrade:'A', desc:'초당 자동 수집 +20%' },
+ rabbit: { id:'rabbit', name:'껑충 토끼', icon:'🐰', grade:'B', nextGrade:'A', desc:'초당 자동 수집 +25%' },
+ fox: { id:'fox', name:'붉은 여우', icon:'🦊', grade:'A', nextGrade:'S', desc:'행운 확률 2배 (20%)' },
+ panda: { id:'panda', name:'판다곰', icon:'🐼', grade:'A', nextGrade:'S', desc:'클릭 & 수집 +35%' },
+ dragon: { id:'dragon', name:'황금 드래곤', icon:'🐉', grade:'S', nextGrade:null, desc:'모든 획득량 2배 & 행운 2배' },
+ unicorn: { id:'unicorn', name:'전설의 유니콘', icon:'🦄', grade:'S', nextGrade:null, desc:'모든 획득량 2.5배' }
 };
 
 const PETS_BY_GRADE = {
-  'C': ['cat', 'chick'],
-  'B': ['dog', 'rabbit'],
-  'A': ['fox', 'panda'],
-  'S': ['dragon', 'unicorn']
+ 'C': ['cat', 'chick'],
+ 'B': ['dog', 'rabbit'],
+ 'A': ['fox', 'panda'],
+ 'S': ['dragon', 'unicorn']
 };
 
 const COLOR_GRADIENTS = {
-  gold: 'radial-gradient(circle at 35% 28%,#fff49a,#ffd329 36%,#db8c00 78%)',
-  ruby: 'radial-gradient(circle at 35% 28%,#ff9a9a,#ff2929 36%,#8c0000 78%)',
-  emerald: 'radial-gradient(circle at 35% 28%,#9affb8,#29ff6b 36%,#008c28 78%)',
-  sapphire: 'radial-gradient(circle at 35% 28%,#9ae3ff,#29a0ff 36%,#00388c 78%)',
-  purple: 'radial-gradient(circle at 35% 28%,#e29aff,#b229ff 36%,#4a008c 78%)',
-  black: 'radial-gradient(circle at 35% 28%,#777,#333 36%,#000 78%)'
+ gold: 'radial-gradient(circle at 35% 28%,#fff49a,#ffd329 36%,#db8c00 78%)',
+ ruby: 'radial-gradient(circle at 35% 28%,#ff9a9a,#ff2929 36%,#8c0000 78%)',
+ emerald: 'radial-gradient(circle at 35% 28%,#9affb8,#29ff6b 36%,#008c28 78%)',
+ sapphire: 'radial-gradient(circle at 35% 28%,#9ae3ff,#29a0ff 36%,#00388c 78%)',
+ purple: 'radial-gradient(circle at 35% 28%,#e29aff,#b229ff 36%,#4a008c 78%)',
+ black: 'radial-gradient(circle at 35% 28%,#777,#333 36%,#000 78%)'
 };
 
 const $ = id => document.getElementById(id);
@@ -860,9 +860,9 @@ function save(){
 }
 function fmt(n){return Math.floor(n).toLocaleString()}
 function say(t){
- $("message").textContent=t;
- clearTimeout(msgTimer);
- msgTimer=setTimeout(()=>{$("message").textContent=""},1500);
+  $("message").textContent=t;
+  clearTimeout(msgTimer);
+  msgTimer=setTimeout(()=>{$("message").textContent=""},1500);
 }
 
 function triggerLuckEffect(amount) {
@@ -912,7 +912,7 @@ function render(){
  $("autoLv").textContent="Lv."+d.cps;
  $("rp").textContent=fmt(d.rp);
  $("permRpDisplay").textContent=fmt(d.rp);
- $("myBestScore").textContent=fmt(d.best);
+ $("myCurrentScore").textContent=fmt(d.score);
 
  $("permPowerLv").textContent = `+${d.permPower || 0}`;
  $("permCpsLv").textContent = `+${d.permCps || 0}`;
@@ -1015,14 +1015,14 @@ document.querySelectorAll(".icon-btn").forEach(btn => {
   };
 });
 
-// --- Firebase 데이터베이스 연동 ---
+// --- Firebase 데이터베이스 연동 (실시간 보유 코인 기준) ---
 function syncScoreToFirebase() {
   if(!currentUser) return;
   db.collection('rankings').doc(currentUser.googleId).set({
     googleId: currentUser.googleId,
     name: currentUser.name,
     picture: currentUser.picture,
-    score: d.best,
+    score: d.score, // 현재 보유 코인으로 랭킹 산정
     rebirth: d.rebirth,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
@@ -1070,7 +1070,7 @@ function loadFirebaseRankings(){
 $("registerRankBtn").onclick = () => {
   if(!currentUser) return say("⚠️ 먼저 구글 계정으로 로그인해주세요!");
   syncScoreToFirebase();
-  say("🏆 실시간 서버에 성공적으로 랭킹이 등록되었습니다!");
+  say("🏆 실시간 서버에 현재 코인이 동기화되었습니다!");
 };
 
 function renderPetList(){
@@ -1140,6 +1140,7 @@ function renderPetList(){
           say(`✨ 합성 성공! [${sourcePet.grade}급] 펫 2마리가 [${newPet.grade}급 ${newPet.icon} ${newPet.name}] (으)로 진화했습니다!`);
           draggedPetIdx = null;
           save();
+          if(currentUser) syncScoreToFirebase();
         } else {
           say("⚠️ 최고 등급(S급) 펫은 더 이상 합성할 수 없습니다!");
         }
@@ -1176,25 +1177,37 @@ $("coin").onclick=()=>{
    triggerLuckEffect(gain);
  }
  d.score += gain; 
- d.best = Math.max(d.best, d.score); 
  save();
  if(currentUser) syncScoreToFirebase();
 };
 
 $("powerBtn").onclick=()=>{
  let cost = Math.floor(200 * Math.pow(1.25, d.power - 1));
- if(d.score>=cost){d.score-=cost;d.power++;save()}else say("코인이 부족해!");
+ if(d.score>=cost){
+   d.score-=cost;
+   d.power++;
+   save();
+   if(currentUser) syncScoreToFirebase();
+ } else say("코인이 부족해!");
 };
 
 $("autoBtn").onclick=()=>{
  let cost = Math.floor(1000 * Math.pow(1.28, d.cps));
- if(d.score>=cost){d.score-=cost;d.cps++;save()}else say("코인이 부족해!");
+ if(d.score>=cost){
+   d.score-=cost;
+   d.cps++;
+   save();
+   if(currentUser) syncScoreToFirebase();
+ } else say("코인이 부족해!");
 };
 
 document.querySelectorAll(".buy").forEach(btn=>btn.onclick=()=>{
  const type=btn.dataset.item, cost={luck:10000,core:50000,double:200000}[type];
  if(d.score<cost)return say("코인이 부족해!");
- d.score-=cost; d[type]=true; save();
+ d.score-=cost; 
+ d[type]=true; 
+ save();
+ if(currentUser) syncScoreToFirebase();
 });
 
 function drawPet(boxType){
@@ -1214,6 +1227,7 @@ function drawPet(boxType){
   d.pets.push(obtained);
   say(`🎉 ${PET_DB[obtained].icon} ${PET_DB[obtained].name} (${PET_DB[obtained].grade}급) 획득!`);
   save();
+  if(currentUser) syncScoreToFirebase();
 }
 
 $("buyPetBox1").onclick = () => drawPet(1);
@@ -1228,6 +1242,7 @@ $("attendBtn").onclick = () => {
   d.score += 10000 + (d.attendDays * 2000);
   d.rp += 1;
   save();
+  if(currentUser) syncScoreToFirebase();
 };
 
 $("rebirthBtn").onclick=()=>{
@@ -1278,6 +1293,7 @@ $("slotBtn").onclick = () => {
     say("💸 꽝!"); 
   }
   save();
+  if(currentUser) syncScoreToFirebase();
 };
 
 // 2. 동전 맞추기
@@ -1301,6 +1317,7 @@ $("coinFlipBtn").onclick = () => {
     say("💸 예측 실패!"); 
   }
   save();
+  if(currentUser) syncScoreToFirebase();
 };
 
 // 3. 8면 주사위 맞추기
@@ -1328,6 +1345,7 @@ $("diceRollBtn").onclick = () => {
     say("💸 틀렸습니다!"); 
   }
   save();
+  if(currentUser) syncScoreToFirebase();
 };
 
 // 4. 함정 룰렛
@@ -1353,6 +1371,7 @@ $("rouletteSpinBtn").onclick = () => {
   else if(mult > 0) say(`✨ 당첨! (+${fmt(win)} 코인)`);
   else say("💸 꽝! 베팅금을 잃었습니다.");
   save();
+  if(currentUser) syncScoreToFirebase();
 };
 
 // 5. 하이 & 로우
@@ -1390,6 +1409,7 @@ $("highLowBtn").onclick = () => {
     say("💸 예측 실패!");
   }
   save();
+  if(currentUser) syncScoreToFirebase();
 };
 
 // 6. 사기 딜러 가위바위보
@@ -1435,6 +1455,7 @@ $("rspPlayBtn").onclick = () => {
     say("💸 딜러에게 패배했습니다!");
   }
   save();
+  if(currentUser) syncScoreToFirebase();
 };
 
 /* 루프 타이머 */
@@ -1442,8 +1463,8 @@ setInterval(()=>{
  if((d.cps + (d.permCps || 0)) > 0 && d.autoEnabled){
    const currentCps = d.cps + (d.permCps || 0);
    d.score += currentCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
-   d.best = Math.max(d.best, d.score);
    save();
+   if(currentUser) syncScoreToFirebase();
  }
 }, 1000);
 
