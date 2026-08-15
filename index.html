@@ -6,7 +6,7 @@
 <title>넥서스 크로니클 - 사이버 펑크 텍스트 RPG</title>
 
 <!-- 브라우저 탭 아이콘 (SVG Favicon) -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f0f1a%22/><text y=%22.8em%22 x=%2215%22 font-size=%2265%22 fill=%22%23a855f7%22>⚔️</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230b0f19%22/><text y=%22.8em%22 x=%2215%22 font-size=%2265%22 fill=%22%23a855f7%22>⚔️</text></svg>">
 
 <!-- Google Identity Services SDK -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -42,7 +42,7 @@ body{
 }
 
 .game{
-  width: min(940px, 96vw);
+  width: min(960px, 96vw);
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 20px;
@@ -171,7 +171,46 @@ h1{
 }
 .patch-item h4 { margin: 0 0 4px; color: var(--text-main); font-size: 13px; }
 
-/* RPG 스탯 및 게이지바 */
+/* 전투 비주얼 & 모션 영역 */
+.combat-visual {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(7, 10, 18, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  overflow: hidden;
+}
+.combat-unit {
+  text-align: center;
+  font-size: 13px;
+  transition: transform 0.1s ease;
+}
+.combat-avatar {
+  font-size: 40px;
+  margin-bottom: 6px;
+}
+/* 공격 모션 애니메이션 클래스 */
+.attack-motion-left {
+  animation: attackLeft 0.3s ease;
+}
+.attack-motion-right {
+  animation: attackRight 0.3s ease;
+}
+@keyframes attackLeft {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(25px) scale(1.1); }
+  100% { transform: translateX(0); }
+}
+@keyframes attackRight {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-25px) scale(1.1); }
+  100% { transform: translateX(0); }
+}
+
 .stats-grid{
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -206,13 +245,12 @@ h1{
 .hp-fill { background: var(--hp-red); }
 .exp-fill { background: var(--exp-blue); }
 
-/* 로그 콘솔 창 */
 .rpg-console {
   background: #070a12;
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 12px;
-  height: 160px;
+  height: 140px;
   overflow-y: auto;
   font-size: 12px;
   font-family: monospace;
@@ -222,6 +260,7 @@ h1{
 .log-hit { color: #f87171; }
 .log-crit { color: #fbbf24; font-weight: bold; }
 .log-reward { color: #34d399; }
+.log-potion { color: #38bdf8; font-weight: bold; }
 
 .tabs{
   display: flex;
@@ -231,7 +270,7 @@ h1{
 }
 .tab{
   flex: 1;
-  min-width: 75px;
+  min-width: 70px;
   padding: 8px 4px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -362,12 +401,27 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <h1>⚔️ 넥서스 크로니클</h1>
 <div class="sub">사이버 펑크 텍스트 RPG & 던전 탐험</div>
 
+<!-- 전투 비주얼 & 애니메이션 모션 영역 -->
+<div class="combat-visual">
+  <div class="combat-unit" id="playerUnit">
+    <div class="combat-avatar" id="playerAvatar">🤺</div>
+    <div><b>플레이어</b></div>
+    <div style="font-size:10px;color:var(--text-sub);" id="playerCombatHp">HP: 100/100</div>
+  </div>
+  <div style="font-size:20px;font-weight:bold;color:var(--accent);">VS</div>
+  <div class="combat-unit" id="monsterUnit">
+    <div class="combat-avatar" id="mobAvatar">👾</div>
+    <div id="mobNameDisplay">대기 중...</div>
+    <div style="font-size:10px;color:var(--text-sub);" id="mobCombatHp">HP: -</div>
+  </div>
+</div>
+
 <!-- 캐릭터 스탯 요약 -->
 <div class="stats-grid">
   <div class="stat-card"><span>레벨</span><b id="charLevel">1</b></div>
   <div class="stat-card"><span>공격력</span><b id="charAtk">15</b></div>
   <div class="stat-card"><span>방어력</span><b id="charDef">5</b></div>
-  <div class="stat-card"><span>크레딧</span><b id="charGold">500</b></div>
+  <div class="stat-card"><span>물약 개수</span><b id="charPotions" style="color:#38bdf8;">3</b></div>
 </div>
 
 <!-- 체력 & 경험치 게이지 바 -->
@@ -384,7 +438,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 
 <!-- 전투 / 이벤트 콘솔 로그 -->
 <div class="rpg-console" id="rpgConsole">
-  <div class="log-line">&gt; 넥서스 시티에 접속하셨습니다. 탐험 지역을 선택하여 전투를 시작하세요.</div>
+  <div class="log-line">&gt; 넥서스 시티에 접속하셨습니다. 사냥터를 선택해 전투를 시작하세요. (체력 40% 이하 시 물약 자동 소모)</div>
 </div>
 
 <div class="tabs">
@@ -401,7 +455,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   <div class="grid-2">
     <div class="card">
       <h3>🌃 네온 슬럼가 (Lv.1 ~ 5)</h3>
-      <p>부랑자와 길거리 로봇이 출몰하는 위험한 빈민가입니다.</p>
+      <p>부랑자와 길거리 로봇이 출몰하는 빈민가입니다.</p>
       <button class="btn-rpg" onclick="startHunt(1)">사냥 시작</button>
     </div>
     <div class="card">
@@ -432,13 +486,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div id="shopPanel" class="panel hidden">
   <div class="grid-2">
     <div class="card">
-      <h3>🧪 응급 힐링팩 (HP 50 회복)</h3>
-      <p>비전투 시 체력을 즉시 회복합니다. (가격: 100 크레딧)</p>
-      <button class="r-btn" onclick="buyItem('healPotion')">구매하기</button>
+      <h3>🧪 전투용 힐링 포션 (HP 60 회복)</h3>
+      <p>전투 중 체력이 부족할 때 자동(또는 수동)으로 체력을 회복합니다. (가격: 80 크레딧)</p>
+      <button class="r-btn" onclick="buyItem('potion')">구매하기</button>
     </div>
     <div class="card">
       <h3>📦 장비 보급 상자</h3>
-      <p>랜덤한 무기 또는 방어구를 획득합니다. (가격: 350 크레딧)</p>
+      <p>랜덤한 무기 또는 방어구를 획득합니다. (가격: 300 크레딧)</p>
       <button class="r-btn" onclick="buyItem('gearBox')">구매하기</button>
     </div>
   </div>
@@ -449,7 +503,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   <div class="grid-2">
     <div class="card">
       <h3>⚡ 오버클럭 스트라이크</h3>
-      <p>치명타 확률과 피해량을 증폭시키는 전투 패시브입니다.</p>
+      <p>치명타 확률과 피해량을 증폭시키는 패시브입니다.</p>
       <button class="r-btn" id="skillBtn1" onclick="upgradeSkill(1)">강화 (비용: 300 크레딧)</button>
     </div>
     <div class="card">
@@ -515,9 +569,9 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 // --- 패치노트 데이터 (보존) ---
 const patchNotes = [
   {
-    version: "v5.0 패치 (최신)",
-    title: "[넥서스 크로니클: 사이버 펑크 텍스트 RPG] 대규모 런칭",
-    desc: "1) 완전히 새로운 정통 텍스트 RPG 시스템이 도입되었습니다.\n2) 사냥터 탐험, 장비 인벤토리, 스킬 강화, 보스 레이드(어비스)가 추가되었습니다.\n3) 구글 로그인 연동, 실시간 글로벌 랭킹, 패치노트 시스템은 완벽히 보존됩니다."
+    version: "v5.2 패치 (최신)",
+    title: "[전투 모션 & 자동 물약 시스템 추가]",
+    desc: "1) 사냥 시 캐릭터와 몬스터가 서로 공격하는 실시간 타격 애니메이션 모션이 추가되었습니다.\n2) 전투 중 체력이 40% 이하로 떨어지면 보유 중인 힐링 포션이 자동으로 소모되어 체력을 회복합니다.\n3) 구글 로그인 연동 및 글로벌 랭킹 시스템은 완벽히 유지됩니다."
   },
   {
     version: "v2.0 패치",
@@ -559,12 +613,12 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 
 // 💡 데이터 저장 키
-const saveKey = "nexusRpg_SaveData";
+const saveKey = "nexusRpg_SaveData_v2";
 let currentUser = JSON.parse(localStorage.getItem("nexusRpgGoogleUser") || "null");
 
 let p = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  level: 1, exp: 0, maxExp: 100, hp: 100, maxHp: 100,
- atk: 15, def: 5, gold: 500,
+ atk: 15, def: 5, gold: 500, potions: 3,
  skill1Lv: 0, skill2Lv: 0,
  weapon: null, armor: null,
  inventory: []
@@ -629,6 +683,21 @@ function appendLog(text, className = "log-line") {
   consoleBox.scrollTop = consoleBox.scrollHeight;
 }
 
+// 공격 모션 효과 트리거
+function playMotion(type) {
+  const playerUnit = $("playerUnit");
+  const monsterUnit = $("monsterUnit");
+  if(!playerUnit || !monsterUnit) return;
+
+  if(type === 'playerAttack') {
+    playerUnit.classList.add("attack-motion-left");
+    setTimeout(() => playerUnit.classList.remove("attack-motion-left"), 300);
+  } else if(type === 'monsterAttack') {
+    monsterUnit.classList.add("attack-motion-right");
+    setTimeout(() => monsterUnit.classList.remove("attack-motion-right"), 300);
+  }
+}
+
 function render(){
   if($("charLevel")) $("charLevel").textContent = p.level;
   
@@ -639,11 +708,12 @@ function render(){
 
   if($("charAtk")) $("charAtk").textContent = (p.atk + bonusAtk + skillBonusAtk);
   if($("charDef")) $("charDef").textContent = (p.def + bonusDef + skillBonusDef);
-  if($("charGold")) $("charGold").textContent = fmt(p.gold);
+  if($("charPotions")) $("charPotions").textContent = p.potions;
   if($("myCurrentScore")) $("myCurrentScore").textContent = fmt(p.gold);
 
   if($("hpText")) $("hpText").textContent = `${p.hp} / ${p.maxHp}`;
   if($("hpBar")) $("hpBar").style.width = `${Math.max(0, Math.min(100, (p.hp / p.maxHp) * 100))}%`;
+  if($("playerCombatHp")) $("playerCombatHp").textContent = `HP: ${p.hp}/${p.maxHp}`;
 
   if($("expText")) $("expText").textContent = `${p.exp} / ${p.maxExp}`;
   if($("expBar")) $("expBar").style.width = `${Math.max(0, Math.min(100, (p.exp / p.maxExp) * 100))}%`;
@@ -768,27 +838,42 @@ function loadFirebaseRankings(){
     });
 }
 
+// 💡 체력 자동 물약 회복 체크 함수
+function checkAndUsePotion() {
+  let hpPercent = p.hp / p.maxHp;
+  if (hpPercent <= 0.4 && p.potions > 0) {
+    p.potions--;
+    let healAmount = 60;
+    p.hp = Math.min(p.maxHp, p.hp + healAmount);
+    appendLog(`> 🧪 위기 상황! 포션을 자동 소모하여 HP ${healAmount}를 회복했습니다. (남은 포션: ${p.potions}개)`, "log-potion");
+  }
+}
+
 // 전투 시스템
 const MONSTERS = {
   1: [
-    { name: "길거리 부랑자", hp: 40, atk: 12, def: 2, exp: 35, gold: 40 },
-    { name: "폭주 안드로이드", hp: 65, atk: 18, def: 4, exp: 55, gold: 70 }
+    { name: "길거리 부랑자", hp: 40, atk: 12, def: 2, exp: 35, gold: 40, icon: "👤" },
+    { name: "폭주 안드로이드", hp: 65, atk: 18, def: 4, exp: 55, gold: 70, icon: "🤖" }
   ],
   2: [
-    { name: "경비 전투 드론", hp: 120, atk: 28, def: 10, exp: 90, gold: 130 },
-    { name: "사이버 사이코", hp: 180, atk: 38, def: 15, exp: 140, gold: 220 }
+    { name: "경비 전투 드론", hp: 120, atk: 28, def: 10, exp: 90, gold: 130, icon: "🛸" },
+    { name: "사이버 사이코", hp: 180, atk: 38, def: 15, exp: 140, gold: 220, icon: "🦾" }
   ]
 };
 
 function startHunt(zone) {
   if(p.hp <= 0) {
     p.hp = p.maxHp;
-    appendLog(`> 체력이 모두 소모되어 의료 포트를 통해 체력을 완전 회복했습니다.`, "log-hit");
+    appendLog(`> 체력이 모두 소모되어 의료 포트를 통해 완전 부활했습니다.`, "log-hit");
   }
 
   const pool = MONSTERS[zone];
   const mob = JSON.parse(JSON.stringify(pool[Math.floor(Math.random() * pool.length)]));
   
+  $("mobNameDisplay").innerHTML = `<b>${mob.name}</b>`;
+  $("mobAvatar").textContent = mob.icon;
+  $("mobCombatHp").textContent = `HP: ${mob.hp}/${mob.hp}`;
+
   appendLog(`> [전투 발생] 야생의 '${mob.name}'(이)가 나타났습니다!`);
 
   let bonusAtk = (p.weapon ? p.weapon.stat : 0) + (p.skill1Lv * 3);
@@ -796,8 +881,12 @@ function startHunt(zone) {
   let totalAtk = p.atk + bonusAtk;
   let totalDef = p.def + bonusDef;
 
-  // 턴 계산
+  // 턴 진행 루프
+  let originalMobHp = mob.hp;
   while(mob.hp > 0 && p.hp > 0) {
+    // 플레이어 공격 모션 실행
+    playMotion('playerAttack');
+
     let pDmg = Math.max(1, totalAtk - mob.def + Math.floor(Math.random() * 5));
     let isCrit = Math.random() < 0.15;
     if(isCrit) pDmg = Math.floor(pDmg * 1.5);
@@ -809,11 +898,22 @@ function startHunt(zone) {
       appendLog(`> '${mob.name}'에게 ${pDmg}의 피해를 입혔습니다.`, "log-hit");
     }
 
-    if(mob.hp <= 0) break;
+    if(mob.hp <= 0) {
+      $("mobCombatHp").textContent = `HP: 0 / ${originalMobHp}`;
+      break;
+    }
+    $("mobCombatHp").textContent = `HP: ${mob.hp} / ${originalMobHp}`;
+
+    // 몬스터 반격 모션 실행
+    playMotion('monsterAttack');
 
     let mMobDmg = Math.max(1, mob.atk - totalDef + Math.floor(Math.random() * 4));
     p.hp -= mMobDmg;
     appendLog(`> '${mob.name}'의 반격! 당신은 ${mMobDmg}의 피해를 입었습니다.`);
+
+    // 💡 피격 후 체력 체크 -> 물약 자동 소모
+    checkAndUsePotion();
+    render();
   }
 
   if(p.hp > 0) {
@@ -826,15 +926,15 @@ function startHunt(zone) {
       p.level++;
       p.exp -= p.maxExp;
       p.maxExp = Math.floor(p.maxExp * 1.3);
-      p.maxHp += 25;
+      p.maxHp += 30;
       p.hp = p.maxHp;
-      p.atk += 4;
+      p.atk += 5;
       p.def += 2;
-      appendLog(`> 🎉 레벨 업! Lv.${p.level}이 되었습니다! (전체 능력치 상승)`, "log-reward");
+      appendLog(`> 🎉 레벨 업! Lv.${p.level}이 되었습니다! (전체 능력치 대폭 상승)`, "log-reward");
     }
   } else {
     p.hp = 0;
-    appendLog(`> 패배... 전투에서 쓰러졌습니다. 재정비가 필요합니다.`, "log-hit");
+    appendLog(`> 패배... 전투에서 쓰러졌습니다. 안전지대로 후퇴합니다.`, "log-hit");
   }
 
   save();
@@ -845,24 +945,38 @@ function startBossRaid() {
   if(p.level < 5) return alert("레벨 5 이상만 어비스 던전에 도전할 수 있습니다!");
   if(p.hp <= 0) p.hp = p.maxHp;
 
-  const boss = { name: "네서스 메인 가디언", hp: 500, atk: 55, def: 22, exp: 400, gold: 800 };
+  const boss = { name: "네서스 메인 가디언", hp: 500, atk: 55, def: 22, exp: 400, gold: 800, icon: "👑" };
+  $("mobNameDisplay").innerHTML = `<b>${boss.name}</b>`;
+  $("mobAvatar").textContent = boss.icon;
+  $("mobCombatHp").textContent = `HP: ${boss.hp}/${boss.hp}`;
+
   appendLog(`> [보스 레이드] 최하층의 수호자 '${boss.name}'(이)가 깨어났습니다!`, "log-crit");
 
   let bonusAtk = (p.weapon ? p.weapon.stat : 0) + (p.skill1Lv * 3);
   let bonusDef = (p.armor ? p.armor.stat : 0) + (p.skill2Lv * 2);
   let totalAtk = p.atk + bonusAtk;
   let totalDef = p.def + bonusDef;
+  let originalBossHp = boss.hp;
 
   while(boss.hp > 0 && p.hp > 0) {
+    playMotion('playerAttack');
     let pDmg = Math.max(1, totalAtk - boss.def + Math.floor(Math.random() * 8));
     boss.hp -= pDmg;
     appendLog(`> 보스에게 ${pDmg}의 집중 타격을 가했습니다!`, "log-hit");
 
-    if(boss.hp <= 0) break;
+    if(boss.hp <= 0) {
+      $("mobCombatHp").textContent = `HP: 0 / ${originalBossHp}`;
+      break;
+    }
+    $("mobCombatHp").textContent = `HP: ${boss.hp} / ${originalBossHp}`;
 
+    playMotion('monsterAttack');
     let bDmg = Math.max(1, boss.atk - totalDef + Math.floor(Math.random() * 6));
     p.hp -= bDmg;
     appendLog(`> 보스의 광역 공격! ${bDmg}의 치명적인 피해를 입었습니다.`);
+
+    checkAndUsePotion();
+    render();
   }
 
   if(p.hp > 0) {
@@ -870,12 +984,11 @@ function startBossRaid() {
     p.gold += boss.gold;
     p.exp += boss.exp;
 
-    // 고급 장비 드랍
     let drop = Math.random() < 0.5 ? 
       { name: "플라즈마 블레이드", type: "weapon", grade: "legend", stat: 25 } :
       { name: "나노 아머 슈트", type: "armor", grade: "epic", stat: 18 };
     p.inventory.push(drop);
-    appendLog(`> 획득 아이템: [${drop.name}]`, "log-reward");
+    appendLog(`> 드랍 아이템 획득: [${drop.name}]`, "log-reward");
   } else {
     p.hp = 0;
     appendLog(`> 레이드 실패... 압도적인 힘에 밀려 후퇴했습니다.`, "log-hit");
@@ -885,14 +998,14 @@ function startBossRaid() {
 }
 
 function buyItem(type) {
-  if(type === 'healPotion') {
-    if(p.gold < 100) return alert("크레딧이 부족합니다.");
-    p.gold -= 100;
-    p.hp = Math.min(p.maxHp, p.hp + 50);
-    appendLog(`> 힐링팩 사용: HP 50 회복`, "log-reward");
+  if(type === 'potion') {
+    if(p.gold < 80) return alert("크레딧이 부족합니다.");
+    p.gold -= 80;
+    p.potions++;
+    appendLog(`> 전투용 힐링 포션 구매 완료! (보유: ${p.potions}개)`, "log-reward");
   } else if(type === 'gearBox') {
-    if(p.gold < 350) return alert("크레딧이 부족합니다.");
-    p.gold -= 350;
+    if(p.gold < 300) return alert("크레딧이 부족합니다.");
+    p.gold -= 300;
     let grades = ['normal', 'rare', 'epic'];
     let g = grades[Math.floor(Math.random() * grades.length)];
     let isWeapon = Math.random() < 0.5;
