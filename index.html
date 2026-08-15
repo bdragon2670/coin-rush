@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 클라우드 세이브 에디션</title>
+<title>에너지 러시 - 하드코어 미니게임 에디션</title>
 
 <!-- 브라우저 탭 아이콘 -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
@@ -265,24 +265,29 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
 .minigame-grid{display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;}
 .game-card{
-  background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px;
-  padding: 14px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 16px;
+  padding: 18px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: transform 0.2s, border-color 0.2s;
 }
-.game-card h3{margin: 0 0 6px; font-size: 13px; color: var(--text-main); font-weight: 700;}
+.game-card:hover { border-color: rgba(245, 158, 11, 0.4); transform: translateY(-2px); }
+.game-card h3{margin: 0 0 6px; font-size: 14px; color: var(--text-main); font-weight: 700; display:flex; align-items:center; justify-content:center; gap:6px;}
+
 .slot-display{
-  font-size: 15px; background: rgba(7, 9, 14, 0.8); border: 1px solid var(--border-color);
-  padding: 8px; border-radius: 10px; margin: 8px 0; letter-spacing: 1px; min-height: 40px;
-  display: flex; align-items: center; justify-content: center; color: var(--accent); font-weight: 600;
+  font-size: 14px; background: rgba(7, 9, 14, 0.9); border: 1px solid var(--border-color);
+  padding: 12px; border-radius: 12px; margin: 10px 0; letter-spacing: 0.5px; min-height: 48px;
+  display: flex; align-items: center; justify-content: center; color: var(--accent); font-weight: 700;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
 }
 .bet-input{
-  width: 100%; padding: 6px; border-radius: 8px; border: 1px solid var(--border-color);
-  background: rgba(7, 9, 14, 0.8); color: var(--text-main); text-align: center; margin-bottom: 8px; font-size: 12px;
+  width: 100%; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color);
+  background: rgba(7, 9, 14, 0.9); color: var(--text-main); text-align: center; margin-bottom: 10px; font-size: 13px; font-weight: 600;
 }
 .btn-mini{
-  padding: 6px 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
-  border-radius: 8px; color: var(--text-sub); font-weight: 600; font-size: 11px; cursor: pointer; margin: 2px;
+  flex: 1; padding: 7px 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+  border-radius: 8px; color: var(--text-sub); font-weight: 600; font-size: 11px; cursor: pointer; transition: all 0.2s;
 }
-.btn-mini.selected{ background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
+.btn-mini.selected{ background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; box-shadow: 0 0 10px rgba(245,158,11,0.4); }
 
 .pet-box-grid{display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px;}
 .pet-list, .encyclopedia-list{display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 12px;}
@@ -703,40 +708,47 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 연구실 탭 -->
+    <!-- 연구실 탭 (하드코어 극악 확률 미니게임) -->
     <div id="minigames" class="panel hidden">
+      <div style="text-align:center; margin-bottom:16px;">
+        <h3 style="color:var(--accent); margin:0 0 4px; font-size:15px;">🔬 하이퍼 하드코어 퀀텀 연구실</h3>
+        <p style="color:var(--text-sub); font-size:11px; margin:0;">성공 확률은 극악이지만, 성공 시 엄청난 배율의 에너지를 독식합니다!</p>
+      </div>
       <div class="minigame-grid">
+        <!-- 미니게임 1: 싱귤래리티 터널 (성공률 3%) -->
         <div class="game-card">
-          <h3>⚡ 에너지 터널 탈출 <span style="font-size:10px; color:#f43f5e;">(성공률 12%)</span></h3>
-          <div class="slot-display" id="game1Display">탈출 준비 완료</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">최소 베팅 1,500 에너지</p>
+          <h3>⚡ 싱귤래리티 터널 <span style="font-size:10px; color:#ef4444;">(성공률 3%)</span></h3>
+          <div class="slot-display" id="game1Display">안정 구역 대기중</div>
+          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×50</b> 배</p>
           <input type="number" id="game1Bet" class="bet-input" value="1500" min="1500" step="500">
-          <button class="btn-game" id="game1Btn">터널 진입 (×4.5)</button>
+          <button class="btn-game" id="game1Btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);">극한의 터널 진입 (×50)</button>
         </div>
+
+        <!-- 미니게임 2: 퀀텀 러시안룰렛 (성공률 5%) -->
         <div class="game-card">
-          <h3>🪙 퀀텀 코인토스 <span style="font-size:10px; color:#f43f5e;">(적중률 35%)</span></h3>
-          <div class="slot-display" id="game2Display">앞면 or 뒷면</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">최소 베팅 1,500 에너지</p>
-          <div style="margin-bottom: 6px;">
-            <button class="btn-mini selected" id="coinFrontBtn">앞면</button>
-            <button class="btn-mini" id="coinBackBtn">뒷면</button>
-          </div>
+          <h3>🎯 퀀텀 러시안룰렛 <span style="font-size:10px; color:#ef4444;">(성공률 5%)</span></h3>
+          <div class="slot-display" id="game2Display">방아쇠 장전 완료</div>
+          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×30</b> 배</p>
           <input type="number" id="game2Bet" class="bet-input" value="1500" min="1500" step="500">
-          <button class="btn-game" id="game2Btn">동전 던지기 (×2.5)</button>
+          <button class="btn-game" id="game2Btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);">방아쇠 당기기 (×30)</button>
         </div>
+
+        <!-- 미니게임 3: 초신성 얼티밋 잭팟 (성공률 0.5%) -->
         <div class="game-card">
-          <h3>🎰 럭키 룰렛 스핀 <span style="font-size:10px; color:#f43f5e;">(잭팟률 1.5%)</span></h3>
-          <div class="slot-display" id="game3Display">🍀 💎 ⚡</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">최소 베팅 1,500 에너지</p>
+          <h3>🎰 초신성 잭팟 슬롯 <span style="font-size:10px; color:#ef4444;">(성공률 0.5%)</span></h3>
+          <div class="slot-display" id="game3Display">🌌 🌌 🌌</div>
+          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×300</b> 배</p>
           <input type="number" id="game3Bet" class="bet-input" value="1500" min="1500" step="500">
-          <button class="btn-game" id="game3Btn">룰렛 회전 (×15)</button>
+          <button class="btn-game" id="game3Btn" style="background:linear-gradient(135deg, #9333ea, #6b21a8);">초신성 스핀 (×300)</button>
         </div>
+
+        <!-- 미니게임 4: 타임 크로노스 오라클 (성공률 8%) -->
         <div class="game-card">
-          <h3>📈 하이퍼 하이로우 <span style="font-size:10px; color:#f43f5e;">(적중률 38%)</span></h3>
-          <div class="slot-display" id="game4Display">기준: <b>50</b></div>
-          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">최소 베팅 1,500 에너지</p>
+          <h3>⏳ 크로노스 오라클 <span style="font-size:10px; color:#ef4444;">(성공률 8%)</span></h3>
+          <div class="slot-display" id="game4Display">미래 시각 동기화 대기</div>
+          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×15</b> 배</p>
           <input type="number" id="game4Bet" class="bet-input" value="1500" min="1500" step="500">
-          <button class="btn-game" id="game4Btn">결과 예측 (×2.4)</button>
+          <button class="btn-game" id="game4Btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);">오라클 예측 (×15)</button>
         </div>
       </div>
     </div>
@@ -947,9 +959,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v8.1 클라우드 세이브 오류 수정",
-    title: "updateStockUI 함수 선언 위치 재정렬",
-    desc: "1) 🛠️ 스크립트 실행 순서 오류로 인한 버튼 먹통 현상을 완전히 해결했습니다."
+    version: "v8.2 주식 고장 수정 및 하드코어 미니게임 개편",
+    title: "주식 시스템 복구 및 극악 확률 하드코어 미니게임 도입",
+    desc: "1) 📈 주식 가격 변동 및 캔버스 렌더링 오류를 완전히 수정했습니다.\n2) 🔬 연구실 미니게임 4종의 성공 확률을 극악(3%~8%)으로 낮추고 배율을 대폭 상향했습니다."
   }
 ];
 
@@ -984,7 +996,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v81";
+const saveKey = "energyRush_PermanentSaveData_v82";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1082,7 +1094,8 @@ function drawStockChart(canvasId, historyData) {
   const canvas = $(canvasId);
   if(!canvas) return;
   const ctx = canvas.getContext("2d");
-  const width = canvas.width = canvas.parentElement.clientWidth - 24;
+  const parentWidth = canvas.parentElement ? canvas.parentElement.clientWidth - 28 : 200;
+  const width = canvas.width = parentWidth > 0 ? parentWidth : 200;
   const height = canvas.height = 75;
   
   ctx.clearRect(0, 0, width, height);
@@ -1993,7 +2006,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "energy_rush_cloud.html";
+      a.download = "energy_rush_hardcore.html";
       a.click();
       say("시스템 파일이 다운로드되었습니다!");
     };
@@ -2274,67 +2287,98 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
+  // 미니게임 1: 싱귤래리티 터널 (성공률 3%, 배율 50배)
   const game1Btn = $("game1Btn");
   if(game1Btn) {
     game1Btn.onclick = () => {
       let bet = parseInt($("game1Bet").value) || 0;
       if (bet < 1500 || d.score < bet) return say("최소 투자 에너지는 1,500 이상입니다.");
       d.score -= bet;
-      let success = Math.random() < 0.12;
-      if($("game1Display")) $("game1Display").textContent = success ? "🎉 터널 극적 탈출 성공!" : "💥 터널 완전 붕괴!";
-      if (success) { d.score += Math.floor(bet * 4.5); say(`탈출 대성공! (+${fmt(bet*4.5)})`); } else { playFailureSound(); say("에너지 대폭 소실"); }
+      let success = Math.random() < 0.03;
+      if($("game1Display")) $("game1Display").textContent = success ? "⚡ 싱귤래리티 탈출 성공!" : "💥 차원 붕괴 (실패)";
+      if (success) { 
+        let reward = Math.floor(bet * 50);
+        d.score += reward; 
+        playSuccessSound();
+        say(`터널 탈출 대성공! (+${fmt(reward)})`); 
+      } else { 
+        playFailureSound(); 
+        say("차원 붕괴로 에너지를 소실했습니다."); 
+      }
       save();
     };
   }
 
-  let coinChoice = "front";
-  const coinFrontBtn = $("coinFrontBtn");
-  const coinBackBtn = $("coinBackBtn");
-  if(coinFrontBtn) coinFrontBtn.onclick = () => { coinChoice = "front"; coinFrontBtn.classList.add("selected"); if(coinBackBtn) coinBackBtn.classList.remove("selected"); };
-  if(coinBackBtn) coinBackBtn.onclick = () => { coinChoice = "back"; coinBackBtn.classList.add("selected"); if(coinFrontBtn) coinFrontBtn.classList.remove("selected"); };
-
+  // 미니게임 2: 퀀텀 러시안룰렛 (성공률 5%, 배율 30배)
   const game2Btn = $("game2Btn");
   if(game2Btn) {
     game2Btn.onclick = () => {
       let bet = parseInt($("game2Bet").value) || 0;
       if (bet < 1500 || d.score < bet) return say("최소 투자 에너지는 1,500 이상입니다.");
       d.score -= bet;
-      let result = Math.random() < 0.35 ? coinChoice : (coinChoice === "front" ? "back" : "front");
-      if($("game2Display")) $("game2Display").textContent = `결과: ${result === 'front' ? '앞면' : '뒷면'}`;
-      if (coinChoice === result) { d.score += Math.floor(bet * 2.5); say(`토스 적중! (+${fmt(bet*2.5)})`); } else { playFailureSound(); say("토스 실패"); }
+      let success = Math.random() < 0.05;
+      if($("game2Display")) $("game2Display").textContent = success ? "🎯 생존 및 코어 회수 성공!" : "💀 오버클럭 실격 (실패)";
+      if (success) { 
+        let reward = Math.floor(bet * 30);
+        d.score += reward; 
+        playSuccessSound();
+        say(`러시안룰렛 적중! (+${fmt(reward)})`); 
+      } else { 
+        playFailureSound(); 
+        say("실격으로 에너지를 잃었습니다."); 
+      }
       save();
     };
   }
 
+  // 미니게임 3: 초신성 잭팟 슬롯 (성공률 0.5%, 배율 300배)
   const game3Btn = $("game3Btn");
   if(game3Btn) {
     game3Btn.onclick = () => {
       let bet = parseInt($("game3Bet").value) || 0;
       if (bet < 1500 || d.score < bet) return say("최소 투자 에너지는 1,500 이상입니다.");
       d.score -= bet;
-      const icons = ["🍀", "💎", "⚡", "🚀", "⚛️", "💀"];
+      const icons = ["🌌", "💎", "⚡", "🚀", "⚛️", "💀"];
       let r1 = icons[Math.floor(Math.random() * icons.length)];
       let r2 = icons[Math.floor(Math.random() * icons.length)];
       let r3 = icons[Math.floor(Math.random() * icons.length)];
-      if(Math.random() < 0.015) { r1 = "💎"; r2 = "💎"; r3 = "💎"; }
+      
+      let jackpot = Math.random() < 0.005;
+      if(jackpot) { r1 = "🌌"; r2 = "🌌"; r3 = "🌌"; }
+
       if($("game3Display")) $("game3Display").textContent = `${r1} ${r2} ${r3}`;
-      if (r1 === r2 && r2 === r3) { d.score += Math.floor(bet * 15); say(`룰렛 얼티밋 잭팟! (+${fmt(bet*15)})`); }
-      else if (r1 === r2 || r2 === r3 || r1 === r3) { d.score += Math.floor(bet * 1.2); say("미세 적중!"); }
-      else { playFailureSound(); say("완전 꽝"); }
+      
+      if (jackpot) { 
+        let reward = Math.floor(bet * 300);
+        d.score += reward; 
+        playLegendaryEpicSound();
+        say(`🌌 초신성 잭팟 대폭발!! (+${fmt(reward)})`); 
+      } else { 
+        playFailureSound(); 
+        say("초신성 공명 실패 (꽝)"); 
+      }
       save();
     };
   }
 
+  // 미니게임 4: 크로노스 오라클 (성공률 8%, 배율 15배)
   const game4Btn = $("game4Btn");
   if(game4Btn) {
     game4Btn.onclick = () => {
       let bet = parseInt($("game4Bet").value) || 0;
       if (bet < 1500 || d.score < bet) return say("최소 투자 에너지는 1,500 이상입니다.");
       d.score -= bet;
-      let randVal = Math.floor(Math.random() * 100) + 1;
-      if($("game4Display")) $("game4Display").textContent = `뽑힌 수치: [ ${randVal} ]`;
-      let win = (randVal > 50);
-      if (win) { d.score += Math.floor(bet * 2.4); say(`하이로우 적중! (+${fmt(bet*2.4)})`); } else { playFailureSound(); say("하이로우 실패"); }
+      let success = Math.random() < 0.08;
+      if($("game4Display")) $("game4Display").textContent = success ? "⏳ 미래 오라클 동기화 성공!" : "🌀 시공간 왜곡 (실패)";
+      if (success) { 
+        let reward = Math.floor(bet * 15);
+        d.score += reward; 
+        playSuccessSound();
+        say(`오라클 예측 적중! (+${fmt(reward)})`); 
+      } else { 
+        playFailureSound(); 
+        say("시공간 왜곡으로 에너지 소실"); 
+      }
       save();
     };
   }
@@ -2368,6 +2412,11 @@ setInterval(() => {
     stockHistory2.push(stockPrices[2]); if(stockHistory2.length > 20) stockHistory2.shift();
     stockHistory3.push(stockPrices[3]); if(stockHistory3.length > 20) stockHistory3.shift();
     stockHistory4.push(stockPrices[4]); if(stockHistory4.length > 20) stockHistory4.shift();
+
+    const stockPanel = $("stockPanel");
+    if(stockPanel && !stockPanel.classList.contains("hidden")) {
+      updateStockUI();
+    }
   }
 }, 1000);
 </script>
