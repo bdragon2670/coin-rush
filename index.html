@@ -947,9 +947,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v8.0 구글 클라우드 세이브 시스템",
-    title: "글로벌 랭킹 전면 삭제 및 구글 계정 클라우드 백업 도입",
-    desc: "1) 🗑️ 불필요한 랭킹 시스템을 완전히 제거했습니다.\n2) ☁️ 구글 로그인 계정 전용 파이어스토어 클라우드 세이브 기능을 도입하여 새로고침 시에도 완벽하게 데이터가 보호됩니다."
+    version: "v8.1 클라우드 세이브 오류 수정",
+    title: "updateStockUI 함수 선언 위치 재정렬",
+    desc: "1) 🛠️ 스크립트 실행 순서 오류로 인한 버튼 먹통 현상을 완전히 해결했습니다."
   }
 ];
 
@@ -984,7 +984,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v80";
+const saveKey = "energyRush_PermanentSaveData_v81";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1078,6 +1078,50 @@ let stockHistory2 = [50000, 49000, 46000, 43000, 50000];
 let stockHistory3 = [50000, 47000, 44000, 41000, 50000];
 let stockHistory4 = [50000, 48500, 45500, 42500, 50000];
 
+function drawStockChart(canvasId, historyData) {
+  const canvas = $(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const width = canvas.width = canvas.parentElement.clientWidth - 24;
+  const height = canvas.height = 75;
+  
+  ctx.clearRect(0, 0, width, height);
+  if(!historyData || historyData.length < 2) return;
+
+  const min = Math.min(...historyData);
+  const max = Math.max(...historyData);
+  const range = max - min || 1;
+
+  ctx.beginPath();
+  ctx.strokeStyle = "#f59e0b";
+  ctx.lineWidth = 2.5;
+
+  historyData.forEach((val, idx) => {
+    const x = (idx / (historyData.length - 1)) * (width - 10) + 5;
+    const y = height - 10 - ((val - min) / range) * (height - 20);
+    if(idx === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+}
+
+function updateStockUI() {
+  if($("stockPrice1")) $("stockPrice1").textContent = fmt(stockPrices[1]);
+  if($("stockPrice2")) $("stockPrice2").textContent = fmt(stockPrices[2]);
+  if($("stockPrice3")) $("stockPrice3").textContent = fmt(stockPrices[3]);
+  if($("stockPrice4")) $("stockPrice4").textContent = fmt(stockPrices[4]);
+
+  if($("stockOwned1")) $("stockOwned1").textContent = d.stock1;
+  if($("stockOwned2")) $("stockOwned2").textContent = d.stock2;
+  if($("stockOwned3")) $("stockOwned3").textContent = d.stock3;
+  if($("stockOwned4")) $("stockOwned4").textContent = d.stock4;
+
+  drawStockChart("stockCanvas1", stockHistory1);
+  drawStockChart("stockCanvas2", stockHistory2);
+  drawStockChart("stockCanvas3", stockHistory3);
+  drawStockChart("stockCanvas4", stockHistory4);
+}
+
 function checkAndDiscoverPets() {
   if(!d.discoveredPets) d.discoveredPets = [];
   d.pets.forEach(petId => {
@@ -1095,7 +1139,6 @@ function checkAndDiscoverPets() {
   }
 }
 
-// 구글 클라우드 세이브 함수
 function saveToCloud() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해주세요.");
   db.collection('quantum_users').doc(currentUser.googleId).set({
@@ -1112,7 +1155,6 @@ function saveToCloud() {
   });
 }
 
-// 구글 클라우드 로드 함수
 function loadFromCloud() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해주세요.");
   db.collection('quantum_users').doc(currentUser.googleId).get().then(doc => {
@@ -1151,7 +1193,7 @@ function handleCredentialResponse(response) {
     };
     localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
     updateUserUI();
-    loadFromCloud(); // 로그인 시 자동 클라우드 로드 시도
+    loadFromCloud();
     say(`환영합니다, ${currentUser.name} 연구원님!`);
   }
 }
@@ -1283,33 +1325,6 @@ function triggerLegendaryEpic(droneName, grade) {
   `;
   document.body.appendChild(overlay);
   setTimeout(() => overlay.remove(), 2000);
-}
-
-function drawStockChart(canvasId, historyData) {
-  const canvas = $(canvasId);
-  if(!canvas) return;
-  const ctx = canvas.getContext("2d");
-  const width = canvas.width = canvas.parentElement.clientWidth - 24;
-  const height = canvas.height = 75;
-  
-  ctx.clearRect(0, 0, width, height);
-  if(!historyData || historyData.length < 2) return;
-
-  const min = Math.min(...historyData);
-  const max = Math.max(...historyData);
-  const range = max - min || 1;
-
-  ctx.beginPath();
-  ctx.strokeStyle = "#f59e0b";
-  ctx.lineWidth = 2.5;
-
-  historyData.forEach((val, idx) => {
-    const x = (idx / (historyData.length - 1)) * (width - 10) + 5;
-    const y = height - 10 - ((val - min) / range) * (height - 20);
-    if(idx === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  });
-  ctx.stroke();
 }
 
 function render(){
