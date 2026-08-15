@@ -969,12 +969,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
         <div class="game-card">
           <h3>🎁 표준형 드론 보급품</h3>
           <p style="color:var(--text-sub); font-size:11px;">C ~ B등급 드론 출현</p>
-          <button class="btn-game" id="buyPetBox1">보급품 요청 (12,000 에너지)</button>
+          <button class="btn-game" id="buyPetBox1">보급품 요청 (1,200 에너지)</button>
         </div>
         <div class="game-card">
           <h3>🌟 특수형 드론 보급품</h3>
           <p style="color:var(--text-sub); font-size:11px;">A ~ S등급 드론 출현</p>
-          <button class="btn-game" id="buyPetBox2">보급품 요청 (120,000 에너지)</button>
+          <button class="btn-game" id="buyPetBox2">보급품 요청 (12,000 에너지)</button>
         </div>
       </div>
 
@@ -1283,9 +1283,9 @@ function playFailureSound() {
 // --- 패치노트 데이터 ---
 const patchNotes = [
   {
-    version: "v4.6 패치 (최신)",
-    title: "실시간 채팅 명령어(/자랑) 추가 및 거래소·주식 연동 안정화",
-    desc: "1) 실시간 채팅창에 '/자랑' 명령어를 입력하여 자신의 보유 에너지, 보석, 승급 횟수, 최고 등급 드론 정보를 전 세계 유저들에게 공유할 수 있습니다.\n2) 유저 간 드론 거래소 및 주식 4종의 서버 데이터 동기화가 더욱 강력하게 개선되었습니다."
+    version: "v4.7 패치 (최신)",
+    title: "실시간 거래소 표시, /자랑 명령어 및 드론 뽑기 가격 상승폭 변경",
+    desc: "1) 유저 간 드론 거래소 실시간 연동 및 매물 표시 안정화 완료\n2) 채팅창 내 '/자랑' 명령어 정상 작동 및 스탯 공유 지원\n3) 드론 뽑기 비용 상승 규칙을 뽑을 때마다 150 에너지씩 증가하도록 변경\n4) 랭킹 실시간 변동 속도 및 동기화 최적화"
   }
 ];
 
@@ -1496,7 +1496,7 @@ function updateStockUI() {
   drawStockChart("stockCanvas4", stockHistory4);
 }
 
-// 🏆 실시간 랭킹 리스너
+// 🏆 실시간 랭킹 리스너 (즉시 변동성 강화)
 let unsubscribeRankings = null;
 function initRealtimeRankings(){
   if(unsubscribeRankings) unsubscribeRankings();
@@ -1543,6 +1543,7 @@ function initRealtimeRankings(){
   });
 }
 
+// 🏪 유저 간 거래소 실시간 리스너 수정
 let unsubscribeMarket = null;
 function initRealtimeMarket(){
   const select = $("marketSelectPet");
@@ -1570,7 +1571,7 @@ function initRealtimeMarket(){
   }
 
   if(unsubscribeMarket) unsubscribeMarket();
-  unsubscribeMarket = db.collection('global_market').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+  unsubscribeMarket = db.collection('global_market').onSnapshot((snapshot) => {
     container.innerHTML = "";
     if(snapshot.empty) {
       container.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:11px;'>현재 등록된 거래소 매물이 없습니다.</p>";
@@ -1629,6 +1630,7 @@ function registerMarketItem() {
     inputPrice.value = "";
     say("드론이 거래소에 성공적으로 등록되었습니다!");
     save();
+    initRealtimeMarket();
   }).catch(err => {
     say("거래소 등록 실패");
   });
@@ -1640,6 +1642,7 @@ function cancelMarketItem(docId, petId) {
     d.regCountToday = Math.min(3, d.regCountToday + 1);
     say("매물이 회수되어 격납고로 반환되었습니다.");
     save();
+    initRealtimeMarket();
   }).catch(err => {
     say("회수 실패");
   });
@@ -1660,6 +1663,7 @@ function buyMarketItem(docId, price, petId) {
     db.collection('global_market').doc(docId).delete().then(() => {
       say("거래소에서 드론을 성공적으로 구매했습니다!");
       save();
+      initRealtimeMarket();
     });
   });
 }
@@ -1697,7 +1701,7 @@ function sendChatMessage() {
   let text = input.value.trim();
   if(!text) return;
 
-  // 💡 /자랑 명령어 처리
+  // 💡 /자랑 명령어 처리 수정
   if(text === "/자랑") {
     let topGrade = "없음";
     let gradeRank = {'X':9, 'T':8, 'M':7, 'L':6, 'S':5, 'A':4, 'B':3, 'C':2};
@@ -1753,7 +1757,7 @@ function handleCredentialResponse(response) {
     };
     localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
     updateUserUI();
-    syncScoreToFirebase();
+    syncScoreToFirebase(true);
     initRealtimeRankings();
     say(`환영합니다, ${currentUser.name} 연구원님!`);
   }
@@ -1823,7 +1827,7 @@ function save(){
   checkAndDiscoverPets();
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
-  syncScoreToFirebase();
+  syncScoreToFirebase(true);
 }
 
 function fmt(n){return Math.floor(n).toLocaleString()}
@@ -1952,8 +1956,9 @@ function render(){
  if($("powerBtn")) $("powerBtn").textContent = fmt(350 * Math.pow(1.25, d.power - 1)) + " 에너지";
  if($("autoBtn")) $("autoBtn").textContent = fmt(1800 * Math.pow(1.28, d.cps)) + " 에너지";
 
- const box1Cost = Math.floor(12000 * Math.pow(1.15, d.box1Count));
- const box2Cost = Math.floor(120000 * Math.pow(1.18, d.box2Count));
+ // 💡 드론 뽑기 가격 변경: 뽑을 때마다 고정 150 에너지씩 증가
+ const box1Cost = 1200 + (d.box1Count * 150);
+ const box2Cost = 12000 + (d.box2Count * 150);
  if($("buyPetBox1")) $("buyPetBox1").textContent = `보급품 요청 (${fmt(box1Cost)} 에너지)`;
  if($("buyPetBox2")) $("buyPetBox2").textContent = `보급품 요청 (${fmt(box2Cost)} 에너지)`;
  
@@ -2239,7 +2244,7 @@ function sellPet(index){
 }
 
 function drawPet(boxType){
-  const cost = boxType === 1 ? Math.floor(12000 * Math.pow(1.15, d.box1Count)) : Math.floor(120000 * Math.pow(1.18, d.box2Count));
+  const cost = boxType === 1 ? (1200 + d.box1Count * 150) : (12000 + d.box2Count * 150);
   if(d.score < cost) return say("에너지가 부족합니다.");
   d.score -= cost;
 
@@ -2457,7 +2462,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(regRankBtn) {
     regRankBtn.onclick = () => {
       if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
-      syncScoreToFirebase();
+      syncScoreToFirebase(true);
       say("서버에 에너지가 즉시 동기화되었습니다!");
     };
   }
@@ -2716,7 +2721,7 @@ setInterval(() => {
   }
 
   syncCounter++;
-  if(syncCounter >= 3) {
+  if(syncCounter >= 1) { // 1초마다 실시간 순위 동기화 반영
     syncCounter = 0;
     if(currentUser) {
       syncScoreToFirebase();
