@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>넥서스 크로니클 - 사이버 펑크 텍스트 RPG</title>
+<title>구글 연동 코어 템플릿</title>
 
 <!-- 브라우저 탭 아이콘 (SVG Favicon) -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230b0f19%22/><text y=%22.8em%22 x=%2215%22 font-size=%2265%22 fill=%22%23a855f7%22>⚔️</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f172a%22/><text y=%22.8em%22 x=%2220%22 font-size=%2260%22 fill=%22%2338bdf8%22>🌐</text></svg>">
 
 <!-- Google Identity Services SDK -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -17,15 +17,13 @@
 
 <style>
 :root {
-  --bg-color: #0b0f19;
-  --card-bg: #131c2e;
-  --border-color: #1e293b;
-  --accent: #a855f7;
-  --accent-hover: #9333ea;
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --border-color: #334155;
+  --accent: #38bdf8;
+  --accent-hover: #0ea5e9;
   --text-main: #f8fafc;
   --text-sub: #94a3b8;
-  --hp-red: #ef4444;
-  --exp-blue: #38bdf8;
 }
 
 *{box-sizing:border-box}
@@ -42,7 +40,7 @@ body{
 }
 
 .game{
-  width: min(960px, 96vw);
+  width: min(600px, 96vw);
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 20px;
@@ -55,9 +53,8 @@ h1{
   font-size: 24px;
   text-align: center;
   margin: 0 0 4px;
-  color: var(--accent);
+  color: var(--text-main);
   font-weight: 700;
-  letter-spacing: 1px;
 }
 .sub{
   text-align: center;
@@ -108,7 +105,7 @@ h1{
 
 .alarm-btn {
   position: relative;
-  background: rgba(168, 85, 247, 0.1);
+  background: rgba(56, 189, 248, 0.1);
   border: 1px solid var(--accent);
   color: var(--accent);
 }
@@ -171,204 +168,52 @@ h1{
 }
 .patch-item h4 { margin: 0 0 4px; color: var(--text-main); font-size: 13px; }
 
-/* 전투 비주얼 & 모션 영역 */
-.combat-visual {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: rgba(7, 10, 18, 0.8);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
-  position: relative;
-  overflow: hidden;
-}
-.combat-unit {
-  text-align: center;
-  font-size: 13px;
-  transition: transform 0.1s ease;
-}
-.combat-avatar {
-  font-size: 40px;
-  margin-bottom: 6px;
-}
-/* 공격 모션 애니메이션 클래스 */
-.attack-motion-left {
-  animation: attackLeft 0.3s ease;
-}
-.attack-motion-right {
-  animation: attackRight 0.3s ease;
-}
-@keyframes attackLeft {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(25px) scale(1.1); }
-  100% { transform: translateX(0); }
-}
-@keyframes attackRight {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(-25px) scale(1.1); }
-  100% { transform: translateX(0); }
-}
-
-.stats-grid{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 15px;
-}
-.stat-card{
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
-}
-.stat-card span { font-size: 10px; color: var(--text-sub); }
-.stat-card b{display: block; font-size: 14px; margin-top: 3px; color: var(--accent); font-weight: 600;}
-
-.bars-area {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-.bar-box {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 8px 12px;
-}
-.bar-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: var(--text-sub); }
-.progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
-.progress-fill { height: 100%; transition: width 0.3s ease; }
-.hp-fill { background: var(--hp-red); }
-.exp-fill { background: var(--exp-blue); }
-
-.rpg-console {
-  background: #070a12;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 12px;
-  height: 140px;
-  overflow-y: auto;
-  font-size: 12px;
-  font-family: monospace;
-  margin-bottom: 15px;
-}
-.log-line { margin: 3px 0; color: #a5d6ff; }
-.log-hit { color: #f87171; }
-.log-crit { color: #fbbf24; font-weight: bold; }
-.log-reward { color: #34d399; }
-.log-potion { color: #38bdf8; font-weight: bold; }
-
-.tabs{
-  display: flex;
-  gap: 5px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-}
-.tab{
-  flex: 1;
-  min-width: 70px;
-  padding: 8px 4px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: rgba(255,255,255,0.02);
-  color: var(--text-sub);
-  font-weight: 600;
-  cursor: pointer;
-  text-align: center;
-  font-size: 11px;
-  transition: all 0.2s;
-}
-.tab:hover{background: rgba(255,255,255,0.05); color: var(--text-main);}
-.tab.active{
-  background: var(--accent);
-  color: #0f172a;
-  border-color: var(--accent);
-  font-weight: 700;
-}
-
 .panel{
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 16px;
-}
-.hidden{display:none}
-
-.grid-2{display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;}
-.card{
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.card h3{margin: 0 0 4px; font-size: 13px; color: var(--text-main);}
-.card p{color: var(--text-sub); font-size: 11px; margin: 0 0 10px; min-height: 28px;}
-
-button.r-btn, .btn-rpg {
-  padding: 7px 12px;
-  border: none;
-  border-radius: 6px;
-  background: var(--accent);
-  color: #0f172a;
-  font-weight: 600;
-  font-size: 11px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-button.r-btn:hover, .btn-rpg:hover { background: var(--accent-hover); }
-button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-color) !important; color: var(--text-sub);}
-
-.inventory-grid{display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 8px;}
-.item-card{
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 8px;
+  padding: 20px;
   text-align: center;
-}
-.badge-grade{display: inline-block; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; margin-bottom: 2px;}
-.grade-normal{background: #475569; color: #fff;}
-.grade-rare{background: #0284c7; color: #fff;}
-.grade-epic{background: #7c3aed; color: #fff;}
-.grade-legend{background: #d97706; color: #fff; box-shadow: 0 0 6px rgba(217,119,6,0.5);}
-
-.rank-table{width: 100%; border-collapse: collapse; margin-top: 8px;}
-.rank-table th, .rank-table td{padding: 8px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 11px;}
-.rank-table th{background: rgba(255,255,255,0.03); color: var(--accent); font-weight: 600;}
-.rank-user-info{display: flex; align-items: center; justify-content: center; gap: 6px;}
-.rank-user-avatar{width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--accent);}
-
-.my-rank-banner {
-  margin-top: 10px;
-  background: rgba(168, 85, 247, 0.08);
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  padding: 8px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent);
 }
 
 .google-box{
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  padding: 12px;
+  padding: 16px;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-@media(max-width: 750px){
-  .stats-grid{grid-template-columns: repeat(2, 1fr);}
-  .bars-area, .grid-2{grid-template-columns: 1fr;}
+.btn-game {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-game:hover { background: var(--accent-hover); }
+
+.rank-table{width: 100%; border-collapse: collapse; margin-top: 10px;}
+.rank-table th, .rank-table td{padding: 8px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 11px;}
+.rank-table th{background: rgba(255,255,255,0.03); color: var(--accent); font-weight: 600;}
+.rank-user-info{display: flex; align-items: center; justify-content: center; gap: 6px;}
+.rank-user-avatar{width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--accent);}
+
+.my-rank-banner {
+  margin-top: 12px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
 }
 </style>
 </head>
@@ -377,11 +222,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div class="top-tools">
   <div class="user-profile" id="userProfileArea">
     <img src="https://via.placeholder.com/32/7f8c8d/ffffff?text=?" id="userAvatar" class="user-avatar">
-    <span class="user-name" id="userName">방랑자 (미로그인)</span>
+    <span class="user-name" id="userName">게스트 (미로그인)</span>
   </div>
   <div class="top-right-btns">
     <button class="tool-btn alarm-btn" id="openPatchNoteBtn">📢 패치노트 <span class="alarm-badge active" id="alarmBadge"></span></button>
-    <button class="tool-btn" id="downloadGameBtn">📥 백업</button>
   </div>
 </div>
 
@@ -398,136 +242,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   </div>
 </div>
 
-<h1>⚔️ 넥서스 크로니클</h1>
-<div class="sub">사이버 펑크 텍스트 RPG & 던전 탐험</div>
+<h1>🌐 구글 연동 랭킹 코어</h1>
+<div class="sub">모든 콘텐츠가 초기화된 클린 템플릿</div>
 
-<!-- 전투 비주얼 & 애니메이션 모션 영역 -->
-<div class="combat-visual">
-  <div class="combat-unit" id="playerUnit">
-    <div class="combat-avatar" id="playerAvatar">🤺</div>
-    <div><b>플레이어</b></div>
-    <div style="font-size:10px;color:var(--text-sub);" id="playerCombatHp">HP: 100/100</div>
-  </div>
-  <div style="font-size:20px;font-weight:bold;color:var(--accent);">VS</div>
-  <div class="combat-unit" id="monsterUnit">
-    <div class="combat-avatar" id="mobAvatar">👾</div>
-    <div id="mobNameDisplay">대기 중...</div>
-    <div style="font-size:10px;color:var(--text-sub);" id="mobCombatHp">HP: -</div>
-  </div>
-</div>
-
-<!-- 캐릭터 스탯 요약 -->
-<div class="stats-grid">
-  <div class="stat-card"><span>레벨</span><b id="charLevel">1</b></div>
-  <div class="stat-card"><span>공격력</span><b id="charAtk">15</b></div>
-  <div class="stat-card"><span>방어력</span><b id="charDef">5</b></div>
-  <div class="stat-card"><span>물약 개수</span><b id="charPotions" style="color:#38bdf8;">3</b></div>
-</div>
-
-<!-- 체력 & 경험치 게이지 바 -->
-<div class="bars-area">
-  <div class="bar-box">
-    <div class="bar-label"><span>HP (체력)</span><span id="hpText">100 / 100</span></div>
-    <div class="progress-bg"><div class="progress-fill hp-fill" id="hpBar" style="width: 100%;"></div></div>
-  </div>
-  <div class="bar-box">
-    <div class="bar-label"><span>EXP (경험치)</span><span id="expText">0 / 100</span></div>
-    <div class="progress-bg"><div class="progress-fill exp-fill" id="expBar" style="width: 0%;"></div></div>
-  </div>
-</div>
-
-<!-- 전투 / 이벤트 콘솔 로그 -->
-<div class="rpg-console" id="rpgConsole">
-  <div class="log-line">&gt; 넥서스 시티에 접속하셨습니다. 사냥터를 선택해 전투를 시작하세요. (체력 40% 이하 시 물약 자동 소모)</div>
-</div>
-
-<div class="tabs">
-<button class="tab active" data-tab="huntPanel">🗺️ 사냥터</button>
-<button class="tab" data-tab="equipPanel">🛡️ 장비창</button>
-<button class="tab" data-tab="shopPanel">🛒 상인</button>
-<button class="tab" data-tab="skillsPanel">⚡ 스킬</button>
-<button class="tab" data-tab="dungeonPanel">💀 어비스</button>
-<button class="tab" data-tab="rankPanel">🏆 랭킹</button>
-</div>
-
-<!-- 사냥터 탭 -->
-<div id="huntPanel" class="panel">
-  <div class="grid-2">
-    <div class="card">
-      <h3>🌃 네온 슬럼가 (Lv.1 ~ 5)</h3>
-      <p>부랑자와 길거리 로봇이 출몰하는 빈민가입니다.</p>
-      <button class="btn-rpg" onclick="startHunt(1)">사냥 시작</button>
-    </div>
-    <div class="card">
-      <h3>🏭 사이버 공장 지대 (Lv.6 ~ 12)</h3>
-      <p>폭주한 경비 드론과 안드로이드가 지키는 공장입니다.</p>
-      <button class="btn-rpg" onclick="startHunt(2)">사냥 시작</button>
-    </div>
-  </div>
-</div>
-
-<!-- 장비창 탭 -->
-<div id="equipPanel" class="panel hidden">
-  <div class="grid-2" style="margin-bottom:10px;">
-    <div class="card">
-      <h3>⚔️ 장착 무기</h3>
-      <p id="equippedWeapon">없음 (공격력 +0)</p>
-    </div>
-    <div class="card">
-      <h3>🛡️ 장착 방어구</h3>
-      <p id="equippedArmor">없음 (방어력 +0)</p>
-    </div>
-  </div>
-  <h3 style="color:var(--text-main); font-size:13px; margin:10px 0 4px;">🎒 보유 인벤토리</h3>
-  <div id="inventoryList" class="inventory-grid"></div>
-</div>
-
-<!-- 상인 탭 -->
-<div id="shopPanel" class="panel hidden">
-  <div class="grid-2">
-    <div class="card">
-      <h3>🧪 전투용 힐링 포션 (HP 60 회복)</h3>
-      <p>전투 중 체력이 부족할 때 자동(또는 수동)으로 체력을 회복합니다. (가격: 80 크레딧)</p>
-      <button class="r-btn" onclick="buyItem('potion')">구매하기</button>
-    </div>
-    <div class="card">
-      <h3>📦 장비 보급 상자</h3>
-      <p>랜덤한 무기 또는 방어구를 획득합니다. (가격: 300 크레딧)</p>
-      <button class="r-btn" onclick="buyItem('gearBox')">구매하기</button>
-    </div>
-  </div>
-</div>
-
-<!-- 스킬 탭 -->
-<div id="skillsPanel" class="panel hidden">
-  <div class="grid-2">
-    <div class="card">
-      <h3>⚡ 오버클럭 스트라이크</h3>
-      <p>치명타 확률과 피해량을 증폭시키는 패시브입니다.</p>
-      <button class="r-btn" id="skillBtn1" onclick="upgradeSkill(1)">강화 (비용: 300 크레딧)</button>
-    </div>
-    <div class="card">
-      <h3>🛡️ 나노 머신 아머</h3>
-      <p>상시 방어력을 높여 받는 피해를 감소시킵니다.</p>
-      <button class="r-btn" id="skillBtn2" onclick="upgradeSkill(2)">강화 (비용: 300 크레딧)</button>
-    </div>
-  </div>
-</div>
-
-<!-- 어비스 던전 탭 -->
-<div id="dungeonPanel" class="panel hidden">
-  <div class="card" style="text-align:center; padding:18px;">
-    <h2 style="margin-top:0; font-size:15px; color:var(--accent);">💀 어비스 하층부 보스 레이드</h2>
-    <p style="color:var(--text-sub); font-size:11px;">강력한 사이버 보스와 1:1 결투를 벌이고 막대한 보상을 획득하세요!</p>
-    <p style="font-size:12px;">입장 조건: 레벨 5 이상 권장</p>
-    <button class="btn-rpg" style="margin-top:8px;" onclick="startBossRaid()">보스 레이드 도전</button>
-  </div>
-</div>
-
-<!-- 🏆 구글 연동 랭킹 탭 -->
-<div id="rankPanel" class="panel hidden">
+<div class="panel">
   <div class="google-box">
-    <h3 style="color:var(--accent);margin:0 0 8px;font-size:13px;">🌐 글로벌 방랑자 랭킹 연동</h3>
+    <h3 style="color:var(--text-main);margin:0 0 10px;font-size:14px;">Google 계정 로그인</h3>
     
     <div id="g_id_onload"
          data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
@@ -539,20 +259,19 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
     </div>
 
-    <div style="margin-top:10px;">
-      <p style="margin:4px 0; font-size:11px;">현재 보유 크레딧: <b id="myCurrentScore" style="color:var(--accent);">500</b> 크레딧</p>
-      <button id="registerRankBtn" class="btn-rpg" style="width:auto;padding:5px 12px;margin-top:4px;">🏆 서버에 랭킹 동기화</button>
+    <div style="margin-top:12px;">
+      <p style="margin:6px 0; font-size:12px;">내 기록 점수: <b id="myScore" style="color:var(--accent);">100</b> 포인트</p>
+      <button id="registerRankBtn" class="btn-game">🏆 서버에 점수 동기화</button>
     </div>
   </div>
 
-  <h3 style="text-align:center;color:var(--accent);font-size:13px;margin:10px 0 6px;">🏆 글로벌 방랑자 Top 10</h3>
+  <h3 style="text-align:center;color:var(--text-main);font-size:14px;margin:15px 0 8px;">🏆 글로벌 랭킹 Top 10</h3>
   <table class="rank-table">
     <thead>
       <tr>
         <th>순위</th>
-        <th>방랑자 ID</th>
-        <th>레벨</th>
-        <th>크레딧</th>
+        <th>사용자</th>
+        <th>점수</th>
       </tr>
     </thead>
     <tbody id="rankList"></tbody>
@@ -569,19 +288,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 // --- 패치노트 데이터 (보존) ---
 const patchNotes = [
   {
-    version: "v5.2 패치 (최신)",
-    title: "[전투 모션 & 자동 물약 시스템 추가]",
-    desc: "1) 사냥 시 캐릭터와 몬스터가 서로 공격하는 실시간 타격 애니메이션 모션이 추가되었습니다.\n2) 전투 중 체력이 40% 이하로 떨어지면 보유 중인 힐링 포션이 자동으로 소모되어 체력을 회복합니다.\n3) 구글 로그인 연동 및 글로벌 랭킹 시스템은 완벽히 유지됩니다."
-  },
-  {
-    version: "v2.0 패치",
-    title: "구글 연동 및 클라우드 랭킹 시스템 구축",
-    desc: "Google Identity Services 연동을 통한 실시간 글로벌 랭킹 시스템이 도입되었습니다."
+    version: "v1.0 패치 (클린 버전)",
+    title: "구글 연동 및 랭킹 전용 코어 템플릿",
+    desc: "1) 모든 기존 게임 콘텐츠와 로컬 저장 데이터가 완전히 초기화되었습니다.\n2) Google Identity Services 및 Firebase 클라우드 랭킹 시스템만 남겨진 순수 연동 템플릿입니다."
   }
 ];
 
 function renderPatchNotes() {
-  const container = $("patchNoteContent");
+  const container = document.getElementById("patchNoteContent");
   if(!container) return;
   container.innerHTML = "";
   patchNotes.forEach(note => {
@@ -597,7 +311,7 @@ function renderPatchNotes() {
   });
 }
 
-// --- Firebase 초기화 (랭킹용 보존) ---
+// --- Firebase 초기화 ---
 const firebaseConfig = {
     apiKey: "AIzaSyDVSpWYQJHulEzt5Z7pW4k6LWPWXAmQKYg",
     authDomain: "coin-rush-b8cdc.firebaseapp.com",
@@ -612,19 +326,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// 💡 데이터 저장 키
-const saveKey = "nexusRpg_SaveData_v2";
-let currentUser = JSON.parse(localStorage.getItem("nexusRpgGoogleUser") || "null");
-
-let p = JSON.parse(localStorage.getItem(saveKey) || "null") || {
- level: 1, exp: 0, maxExp: 100, hp: 100, maxHp: 100,
- atk: 15, def: 5, gold: 500, potions: 3,
- skill1Lv: 0, skill2Lv: 0,
- weapon: null, armor: null,
- inventory: []
-};
-
-const $ = id => document.getElementById(id);
+let currentUser = JSON.parse(localStorage.getItem("cleanGoogleUser") || "null");
+let myScore = 100; // 테스트용 기본 점수
 
 function parseJwt(token) {
   try {
@@ -646,155 +349,51 @@ function handleCredentialResponse(response) {
       picture: responsePayload.picture,
       email: responsePayload.email
     };
-    localStorage.setItem("nexusRpgGoogleUser", JSON.stringify(currentUser));
+    localStorage.setItem("cleanGoogleUser", JSON.stringify(currentUser));
     updateUserUI();
     syncScoreToFirebase();
-    appendLog(`> 구글 인증 완료: 환영합니다, ${currentUser.name} 방랑자님!`, "log-reward");
   }
 }
 
 function updateUserUI() {
-  const userAvatar = $("userAvatar");
-  const userName = $("userName");
+  const userAvatar = document.getElementById("userAvatar");
+  const userName = document.getElementById("userName");
   if (currentUser) {
     if(userAvatar) userAvatar.src = currentUser.picture;
     if(userName) userName.textContent = currentUser.name;
   } else {
     if(userAvatar) userAvatar.src = "https://via.placeholder.com/32/7f8c8d/ffffff?text=?";
-    if(userName) userName.textContent = "방랑자 (미로그인)";
+    if(userName) userName.textContent = "게스트 (미로그인)";
   }
   loadFirebaseRankings();
 }
 
-function save(){
-  localStorage.setItem(saveKey, JSON.stringify(p));
-  render();
-}
-
-function fmt(n){return Math.floor(n).toLocaleString()}
-
-function appendLog(text, className = "log-line") {
-  const consoleBox = $("rpgConsole");
-  if(!consoleBox) return;
-  const div = document.createElement("div");
-  div.className = className;
-  div.textContent = text;
-  consoleBox.appendChild(div);
-  consoleBox.scrollTop = consoleBox.scrollHeight;
-}
-
-// 공격 모션 효과 트리거
-function playMotion(type) {
-  const playerUnit = $("playerUnit");
-  const monsterUnit = $("monsterUnit");
-  if(!playerUnit || !monsterUnit) return;
-
-  if(type === 'playerAttack') {
-    playerUnit.classList.add("attack-motion-left");
-    setTimeout(() => playerUnit.classList.remove("attack-motion-left"), 300);
-  } else if(type === 'monsterAttack') {
-    monsterUnit.classList.add("attack-motion-right");
-    setTimeout(() => monsterUnit.classList.remove("attack-motion-right"), 300);
-  }
-}
-
-function render(){
-  if($("charLevel")) $("charLevel").textContent = p.level;
-  
-  let bonusAtk = p.weapon ? p.weapon.stat : 0;
-  let bonusDef = p.armor ? p.armor.stat : 0;
-  let skillBonusAtk = p.skill1Lv * 3;
-  let skillBonusDef = p.skill2Lv * 2;
-
-  if($("charAtk")) $("charAtk").textContent = (p.atk + bonusAtk + skillBonusAtk);
-  if($("charDef")) $("charDef").textContent = (p.def + bonusDef + skillBonusDef);
-  if($("charPotions")) $("charPotions").textContent = p.potions;
-  if($("myCurrentScore")) $("myCurrentScore").textContent = fmt(p.gold);
-
-  if($("hpText")) $("hpText").textContent = `${p.hp} / ${p.maxHp}`;
-  if($("hpBar")) $("hpBar").style.width = `${Math.max(0, Math.min(100, (p.hp / p.maxHp) * 100))}%`;
-  if($("playerCombatHp")) $("playerCombatHp").textContent = `HP: ${p.hp}/${p.maxHp}`;
-
-  if($("expText")) $("expText").textContent = `${p.exp} / ${p.maxExp}`;
-  if($("expBar")) $("expBar").style.width = `${Math.max(0, Math.min(100, (p.exp / p.maxExp) * 100))}%`;
-
-  if($("equippedWeapon")) {
-    $("equippedWeapon").textContent = p.weapon ? `${p.weapon.name} (공격력 +${p.weapon.stat})` : "없음 (공격력 +0)";
-  }
-  if($("equippedArmor")) {
-    $("equippedArmor").textContent = p.armor ? `${p.armor.name} (방어력 +${p.armor.stat})` : "없음 (방어력 +0)";
-  }
-
-  if($("skillBtn1")) $("skillBtn1").textContent = `강화 Lv.${p.skill1Lv} (비용: ${300 * (p.skill1Lv + 1)} 크레딧)`;
-  if($("skillBtn2")) $("skillBtn2").textContent = `강화 Lv.${p.skill2Lv} (비용: ${300 * (p.skill2Lv + 1)} 크레딧)`;
-
-  renderInventory();
-}
-
-function renderInventory(){
-  const container = $("inventoryList");
-  if(!container) return;
-  container.innerHTML = "";
-  if(!p.inventory || p.inventory.length === 0){
-    container.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:11px;'>인벤토리가 비어 있습니다.</p>";
-    return;
-  }
-
-  p.inventory.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "item-card";
-    card.innerHTML = `
-      <span class="badge-grade grade-${item.grade}">${item.grade.toUpperCase()}</span>
-      <b style="display:block;font-size:11px;color:var(--text-main);margin:2px 0;">${item.name}</b>
-      <span style="font-size:10px;color:var(--text-sub);">+${item.stat} ${item.type === 'weapon' ? '공격력' : '방어력'}</span>
-      <button class="tool-btn" style="width:100%;margin-top:6px;padding:3px;font-size:10px;" onclick="equipItem(${index})">장착</button>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function equipItem(index) {
-  const item = p.inventory[index];
-  p.inventory.splice(index, 1);
-
-  if(item.type === 'weapon') {
-    if(p.weapon) p.inventory.push(p.weapon);
-    p.weapon = item;
-    appendLog(`> 무기 장착: ${item.name}`, "log-reward");
-  } else {
-    if(p.armor) p.inventory.push(p.armor);
-    p.armor = item;
-    appendLog(`> 방어구 장착: ${item.name}`, "log-reward");
-  }
-  save();
-}
-
 function syncScoreToFirebase() {
-  if(!currentUser) return;
-  db.collection('rankings').doc(currentUser.googleId).set({
+  if(!currentUser) return alert("구글 계정으로 먼저 로그인해주세요.");
+  db.collection('clean_rankings').doc(currentUser.googleId).set({
     googleId: currentUser.googleId,
     name: currentUser.name,
     picture: currentUser.picture,
-    score: p.gold, 
-    level: p.level,
+    score: myScore,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
     loadFirebaseRankings();
+    alert("서버에 점수가 성공적으로 동기화되었습니다!");
   });
 }
 
 function loadFirebaseRankings(){
-  db.collection('rankings')
+  db.collection('clean_rankings')
     .orderBy('score', 'desc')
     .get()
     .then((snapshot) => {
-      const rankList = $("rankList");
-      const myRankDisplay = $("myRankDisplay");
+      const rankList = document.getElementById("rankList");
+      const myRankDisplay = document.getElementById("myRankDisplay");
       if(!rankList) return;
       rankList.innerHTML = "";
       
       if(snapshot.empty) {
-        rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
+        rankList.innerHTML = "<tr><td colspan='3' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
         if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
         return;
       }
@@ -809,12 +408,12 @@ function loadFirebaseRankings(){
         
         if(isMyRank) {
           myRankFound = true;
-          if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (크레딧: ${fmt(item.score)})`;
+          if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (점수: ${item.score.toLocaleString()})`;
         }
 
         if(index < 10) {
           let tr = document.createElement("tr");
-          if(isMyRank) tr.style.background = "rgba(168,85,247,0.05)";
+          if(isMyRank) tr.style.background = "rgba(56,189,248,0.05)";
 
           tr.innerHTML = `
             <td>${medal}${index + 1}위</td>
@@ -824,8 +423,7 @@ function loadFirebaseRankings(){
                 <b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}
               </div>
             </td>
-            <td>Lv.${item.level || 1}</td>
-            <td style="color:var(--accent);">${fmt(item.score)}</td>
+            <td style="color:var(--accent);">${item.score.toLocaleString()}</td>
           `;
           rankList.appendChild(tr);
         }
@@ -838,214 +436,17 @@ function loadFirebaseRankings(){
     });
 }
 
-// 💡 체력 자동 물약 회복 체크 함수
-function checkAndUsePotion() {
-  let hpPercent = p.hp / p.maxHp;
-  if (hpPercent <= 0.4 && p.potions > 0) {
-    p.potions--;
-    let healAmount = 60;
-    p.hp = Math.min(p.maxHp, p.hp + healAmount);
-    appendLog(`> 🧪 위기 상황! 포션을 자동 소모하여 HP ${healAmount}를 회복했습니다. (남은 포션: ${p.potions}개)`, "log-potion");
-  }
-}
-
-// 전투 시스템
-const MONSTERS = {
-  1: [
-    { name: "길거리 부랑자", hp: 40, atk: 12, def: 2, exp: 35, gold: 40, icon: "👤" },
-    { name: "폭주 안드로이드", hp: 65, atk: 18, def: 4, exp: 55, gold: 70, icon: "🤖" }
-  ],
-  2: [
-    { name: "경비 전투 드론", hp: 120, atk: 28, def: 10, exp: 90, gold: 130, icon: "🛸" },
-    { name: "사이버 사이코", hp: 180, atk: 38, def: 15, exp: 140, gold: 220, icon: "🦾" }
-  ]
-};
-
-function startHunt(zone) {
-  if(p.hp <= 0) {
-    p.hp = p.maxHp;
-    appendLog(`> 체력이 모두 소모되어 의료 포트를 통해 완전 부활했습니다.`, "log-hit");
-  }
-
-  const pool = MONSTERS[zone];
-  const mob = JSON.parse(JSON.stringify(pool[Math.floor(Math.random() * pool.length)]));
-  
-  $("mobNameDisplay").innerHTML = `<b>${mob.name}</b>`;
-  $("mobAvatar").textContent = mob.icon;
-  $("mobCombatHp").textContent = `HP: ${mob.hp}/${mob.hp}`;
-
-  appendLog(`> [전투 발생] 야생의 '${mob.name}'(이)가 나타났습니다!`);
-
-  let bonusAtk = (p.weapon ? p.weapon.stat : 0) + (p.skill1Lv * 3);
-  let bonusDef = (p.armor ? p.armor.stat : 0) + (p.skill2Lv * 2);
-  let totalAtk = p.atk + bonusAtk;
-  let totalDef = p.def + bonusDef;
-
-  // 턴 진행 루프
-  let originalMobHp = mob.hp;
-  while(mob.hp > 0 && p.hp > 0) {
-    // 플레이어 공격 모션 실행
-    playMotion('playerAttack');
-
-    let pDmg = Math.max(1, totalAtk - mob.def + Math.floor(Math.random() * 5));
-    let isCrit = Math.random() < 0.15;
-    if(isCrit) pDmg = Math.floor(pDmg * 1.5);
-
-    mob.hp -= pDmg;
-    if(isCrit) {
-      appendLog(`> 치명타 적중! '${mob.name}'에게 ${pDmg}의 피해를 입혔습니다!`, "log-crit");
-    } else {
-      appendLog(`> '${mob.name}'에게 ${pDmg}의 피해를 입혔습니다.`, "log-hit");
-    }
-
-    if(mob.hp <= 0) {
-      $("mobCombatHp").textContent = `HP: 0 / ${originalMobHp}`;
-      break;
-    }
-    $("mobCombatHp").textContent = `HP: ${mob.hp} / ${originalMobHp}`;
-
-    // 몬스터 반격 모션 실행
-    playMotion('monsterAttack');
-
-    let mMobDmg = Math.max(1, mob.atk - totalDef + Math.floor(Math.random() * 4));
-    p.hp -= mMobDmg;
-    appendLog(`> '${mob.name}'의 반격! 당신은 ${mMobDmg}의 피해를 입었습니다.`);
-
-    // 💡 피격 후 체력 체크 -> 물약 자동 소모
-    checkAndUsePotion();
-    render();
-  }
-
-  if(p.hp > 0) {
-    appendLog(`> 승리! '${mob.name}'을(를) 처치했습니다. (EXP +${mob.exp}, 골드 +${mob.gold})`, "log-reward");
-    p.gold += mob.gold;
-    p.exp += mob.exp;
-
-    // 레벨업 체크
-    if(p.exp >= p.maxExp) {
-      p.level++;
-      p.exp -= p.maxExp;
-      p.maxExp = Math.floor(p.maxExp * 1.3);
-      p.maxHp += 30;
-      p.hp = p.maxHp;
-      p.atk += 5;
-      p.def += 2;
-      appendLog(`> 🎉 레벨 업! Lv.${p.level}이 되었습니다! (전체 능력치 대폭 상승)`, "log-reward");
-    }
-  } else {
-    p.hp = 0;
-    appendLog(`> 패배... 전투에서 쓰러졌습니다. 안전지대로 후퇴합니다.`, "log-hit");
-  }
-
-  save();
-  if(currentUser) syncScoreToFirebase();
-}
-
-function startBossRaid() {
-  if(p.level < 5) return alert("레벨 5 이상만 어비스 던전에 도전할 수 있습니다!");
-  if(p.hp <= 0) p.hp = p.maxHp;
-
-  const boss = { name: "네서스 메인 가디언", hp: 500, atk: 55, def: 22, exp: 400, gold: 800, icon: "👑" };
-  $("mobNameDisplay").innerHTML = `<b>${boss.name}</b>`;
-  $("mobAvatar").textContent = boss.icon;
-  $("mobCombatHp").textContent = `HP: ${boss.hp}/${boss.hp}`;
-
-  appendLog(`> [보스 레이드] 최하층의 수호자 '${boss.name}'(이)가 깨어났습니다!`, "log-crit");
-
-  let bonusAtk = (p.weapon ? p.weapon.stat : 0) + (p.skill1Lv * 3);
-  let bonusDef = (p.armor ? p.armor.stat : 0) + (p.skill2Lv * 2);
-  let totalAtk = p.atk + bonusAtk;
-  let totalDef = p.def + bonusDef;
-  let originalBossHp = boss.hp;
-
-  while(boss.hp > 0 && p.hp > 0) {
-    playMotion('playerAttack');
-    let pDmg = Math.max(1, totalAtk - boss.def + Math.floor(Math.random() * 8));
-    boss.hp -= pDmg;
-    appendLog(`> 보스에게 ${pDmg}의 집중 타격을 가했습니다!`, "log-hit");
-
-    if(boss.hp <= 0) {
-      $("mobCombatHp").textContent = `HP: 0 / ${originalBossHp}`;
-      break;
-    }
-    $("mobCombatHp").textContent = `HP: ${boss.hp} / ${originalBossHp}`;
-
-    playMotion('monsterAttack');
-    let bDmg = Math.max(1, boss.atk - totalDef + Math.floor(Math.random() * 6));
-    p.hp -= bDmg;
-    appendLog(`> 보스의 광역 공격! ${bDmg}의 치명적인 피해를 입었습니다.`);
-
-    checkAndUsePotion();
-    render();
-  }
-
-  if(p.hp > 0) {
-    appendLog(`> 레이드 성공! 보스를 토벌하고 전설의 보상을 획득했습니다!`, "log-reward");
-    p.gold += boss.gold;
-    p.exp += boss.exp;
-
-    let drop = Math.random() < 0.5 ? 
-      { name: "플라즈마 블레이드", type: "weapon", grade: "legend", stat: 25 } :
-      { name: "나노 아머 슈트", type: "armor", grade: "epic", stat: 18 };
-    p.inventory.push(drop);
-    appendLog(`> 드랍 아이템 획득: [${drop.name}]`, "log-reward");
-  } else {
-    p.hp = 0;
-    appendLog(`> 레이드 실패... 압도적인 힘에 밀려 후퇴했습니다.`, "log-hit");
-  }
-  save();
-  if(currentUser) syncScoreToFirebase();
-}
-
-function buyItem(type) {
-  if(type === 'potion') {
-    if(p.gold < 80) return alert("크레딧이 부족합니다.");
-    p.gold -= 80;
-    p.potions++;
-    appendLog(`> 전투용 힐링 포션 구매 완료! (보유: ${p.potions}개)`, "log-reward");
-  } else if(type === 'gearBox') {
-    if(p.gold < 300) return alert("크레딧이 부족합니다.");
-    p.gold -= 300;
-    let grades = ['normal', 'rare', 'epic'];
-    let g = grades[Math.floor(Math.random() * grades.length)];
-    let isWeapon = Math.random() < 0.5;
-    let item = isWeapon ? 
-      { name: g === 'epic' ? "레이저 소스검" : g === 'rare' ? "콤바트 나이프" : "철제 파이프", type: "weapon", grade: g, stat: g === 'epic' ? 15 : g === 'rare' ? 9 : 4 } :
-      { name: g === 'epic' ? "컴뱃 자켓" : g === 'rare' ? "케블라 조끼" : "가죽 재킷", type: "armor", grade: g, stat: g === 'epic' ? 12 : g === 'rare' ? 7 : 3 };
-    p.inventory.push(item);
-    appendLog(`> 장비 보급 상자 개봉: [${item.name}] 획득!`, "log-reward");
-  }
-  save();
-  if(currentUser) syncScoreToFirebase();
-}
-
-function upgradeSkill(idx) {
-  let cost = 300 * (idx === 1 ? p.skill1Lv + 1 : p.skill2Lv + 1);
-  if(p.gold < cost) return alert("크레딧이 부족합니다.");
-  p.gold -= cost;
-  if(idx === 1) {
-    p.skill1Lv++;
-    appendLog(`> [오버클럭 스트라이크] Lv.${p.skill1Lv}로 강화 완료!`, "log-reward");
-  } else {
-    p.skill2Lv++;
-    appendLog(`> [나노 머신 아머] Lv.${p.skill2Lv}로 강화 완료!`, "log-reward");
-  }
-  save();
-  if(currentUser) syncScoreToFirebase();
-}
-
-// --- DOM 로드 및 이벤트 바인딩 ---
 document.addEventListener("DOMContentLoaded", () => {
-  const openBtn = $("openPatchNoteBtn");
-  const closeBtn = $("closePatchNoteBtn");
-  const patchModal = $("patchModal");
-  const alarmBadge = $("alarmBadge");
+  const openBtn = document.getElementById("openPatchNoteBtn");
+  const closeBtn = document.querySelector(".close-modal");
+  const patchModal = document.getElementById("patchModal");
+  const alarmBadge = document.getElementById("alarmBadge");
 
   if(openBtn) {
     openBtn.onclick = () => {
       if(patchModal) patchModal.classList.remove("hidden");
       if(alarmBadge) alarmBadge.classList.remove("active");
-      localStorage.setItem("lastCheckedPatch", patchNotes[0].version);
+      localStorage.setItem("cleanLastCheckedPatch", patchNotes[0].version);
     };
   }
 
@@ -1055,46 +456,17 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const downloadBtn = $("downloadGameBtn");
-  if(downloadBtn) {
-    downloadBtn.onclick = () => {
-      const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "nexus_rpg.html";
-      a.click();
-      appendLog(`> 캐릭터 세이브 파일 백업 완료.`);
-    };
-  }
-
-  const regRankBtn = $("registerRankBtn");
+  const regRankBtn = document.getElementById("registerRankBtn");
   if(regRankBtn) {
-    regRankBtn.onclick = () => {
-      if(!currentUser) return alert("구글 계정으로 먼저 로그인해주세요.");
-      syncScoreToFirebase();
-      appendLog(`> 글로벌 랭킹 서버에 캐릭터 정보가 동기화되었습니다.`, "log-reward");
-    };
+    regRankBtn.onclick = syncScoreToFirebase;
   }
 
-  document.querySelectorAll(".tab").forEach(t => {
-    t.onclick = () => {
-      document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
-      t.classList.add("active");
-      document.querySelectorAll(".panel").forEach(x => x.classList.add("hidden"));
-      const targetPanel = $(t.dataset.tab);
-      if(targetPanel) targetPanel.classList.remove("hidden");
-      if(t.dataset.tab === 'rankPanel') loadFirebaseRankings();
-    };
-  });
-
-  // 초기 실행
   renderPatchNotes();
-  const lastChecked = localStorage.getItem("lastCheckedPatch");
+  const lastChecked = localStorage.getItem("cleanLastCheckedPatch");
   if(alarmBadge && lastChecked === patchNotes[0].version) {
     alarmBadge.classList.remove("active");
   }
   updateUserUI();
-  render();
 });
 </script>
 </body>
