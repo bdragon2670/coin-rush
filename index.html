@@ -103,7 +103,6 @@ h1{
 }
 .tool-btn:hover{background: rgba(255,255,255,0.1);}
 
-/* 알람(패치노트) 버튼 스타일 */
 .alarm-btn {
   position: relative;
   background: rgba(56, 189, 248, 0.1);
@@ -122,7 +121,6 @@ h1{
 }
 .alarm-badge.active { display: block; }
 
-/* 패치노트 모달 팝업 */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -857,6 +855,7 @@ const patchNotes = [
 
 function renderPatchNotes() {
   const container = $("patchNoteContent");
+  if(!container) return;
   container.innerHTML = "";
   patchNotes.forEach(note => {
     const div = document.createElement("div");
@@ -872,23 +871,40 @@ function renderPatchNotes() {
 }
 
 // 패치노트 모달 제어
-$("openPatchNoteBtn").onclick = () => {
-  $("patchModal").classList.remove("hidden");
-  $("alarmBadge").classList.remove("active"); // 알람 확인 시 느낌표 제거
-  localStorage.setItem("lastCheckedPatch", patchNotes[0].version);
-};
+document.addEventListener("DOMContentLoaded", () => {
+  const openBtn = $("openPatchNoteBtn");
+  const closeBtn = $("closePatchNoteBtn");
+  const patchModal = $("patchModal");
+  const alarmBadge = $("alarmBadge");
 
-$("closePatchNoteBtn").onclick = () => {
-  $("patchModal").classList.add("hidden");
-};
+  if(openBtn) {
+    openBtn.onclick = () => {
+      if(patchModal) patchModal.classList.remove("hidden");
+      if(alarmBadge) alarmBadge.classList.remove("active");
+      localStorage.setItem("lastCheckedPatch", patchNotes[0].version);
+    };
+  }
 
-// 최초 접속 시 새로운 패치가 있으면 알람 표시
+  if(closeBtn) {
+    closeBtn.onclick = () => {
+      if(patchModal) patchModal.classList.add("hidden");
+    };
+  }
+
+  renderPatchNotes();
+  checkNewPatch();
+  updateUserUI();
+  render();
+});
+
 function checkNewPatch() {
   const lastChecked = localStorage.getItem("lastCheckedPatch");
+  const alarmBadge = $("alarmBadge");
+  if(!alarmBadge) return;
   if(lastChecked !== patchNotes[0].version) {
-    $("alarmBadge").classList.add("active");
+    alarmBadge.classList.add("active");
   } else {
-    $("alarmBadge").classList.remove("active");
+    alarmBadge.classList.remove("active");
   }
 }
 
@@ -902,7 +918,9 @@ const firebaseConfig = {
     appId: "1:531183128462:web:a9d9c88a6ef57827925edf",
     measurementId: "G-WHT7PS0L7D"
 };
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.firestore();
 
 // 💡 데이터가 절대 초기화되지 않는 고정 저장 키
@@ -977,24 +995,29 @@ function handleCredentialResponse(response) {
 }
 
 function updateUserUI() {
+  const userAvatar = $("userAvatar");
+  const userName = $("userName");
   if (currentUser) {
-    $("userAvatar").src = currentUser.picture;
-    $("userName").textContent = currentUser.name;
+    if(userAvatar) userAvatar.src = currentUser.picture;
+    if(userName) userName.textContent = currentUser.name;
   } else {
-    $("userAvatar").src = "https://via.placeholder.com/32/7f8c8d/ffffff?text=?";
-    $("userName").textContent = "연구원 (미로그인)";
+    if(userAvatar) userAvatar.src = "https://via.placeholder.com/32/7f8c8d/ffffff?text=?";
+    if(userName) userName.textContent = "연구원 (미로그인)";
   }
   loadFirebaseRankings();
 }
 
-$("downloadGameBtn").onclick = () => {
-  const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "energy_rush.html";
-  a.click();
-  say("시스템 파일이 다운로드되었습니다!");
-};
+const downloadBtn = $("downloadGameBtn");
+if(downloadBtn) {
+  downloadBtn.onclick = () => {
+    const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "energy_rush.html";
+    a.click();
+    say("시스템 파일이 다운로드되었습니다!");
+  };
+}
 
 function getWeaponBonus(){
   let bonus = 0;
@@ -1035,14 +1058,17 @@ function save(){
 }
 function fmt(n){return Math.floor(n).toLocaleString()}
 function say(t){
-  $("message").textContent=t;
+  const msg = $("message");
+  if(!msg) return;
+  msg.textContent=t;
   clearTimeout(msgTimer);
-  msgTimer=setTimeout(()=>{$("message").textContent=""},1500);
+  msgTimer=setTimeout(()=>{msg.textContent=""},1500);
 }
 
 function triggerLuckEffect(amount) {
   const coinBtn = $("coin");
   const mainArea = $("mainArea");
+  if(!coinBtn || !mainArea) return;
 
   coinBtn.classList.remove("luck-anim");
   void coinBtn.offsetWidth;
@@ -1062,36 +1088,42 @@ function render(){
  const totalPower = ((d.power + (d.permPower || 0) + getWeaponBonus())) * baseMult * petBonus.clickMult * petBonus.coinMult;
  const totalCps = ((d.cps + (d.permCps || 0) + getHuntBonus())) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
- $("score").textContent=fmt(d.score); 
- $("power").textContent=fmt(totalPower);
- $("cps").textContent=fmt(totalCps); 
- $("rebirth").textContent=fmt(d.rebirth);
- $("powerLv").textContent="Lv."+d.power; 
- $("autoLv").textContent="Lv."+d.cps;
- $("rp").textContent=fmt(d.rp);
- $("permRpDisplay").textContent=fmt(d.rp);
- $("myCurrentScore").textContent=fmt(d.score);
+ if($("score")) $("score").textContent=fmt(d.score); 
+ if($("power")) $("power").textContent=fmt(totalPower);
+ if($("cps")) $("cps").textContent=fmt(totalCps); 
+ if($("rebirth")) $("rebirth").textContent=fmt(d.rebirth);
+ if($("powerLv")) $("powerLv").textContent="Lv."+d.power; 
+ if($("autoLv")) $("autoLv").textContent="Lv."+d.cps;
+ if($("rp")) $("rp").textContent=fmt(d.rp);
+ if($("permRpDisplay")) $("permRpDisplay").textContent=fmt(d.rp);
+ if($("myCurrentScore")) $("myCurrentScore").textContent=fmt(d.score);
 
- $("permPowerLv").textContent = `+${d.permPower || 0}`;
- $("permCpsLv").textContent = `+${d.permCps || 0}`;
- $("permLuckLv").textContent = `+${(d.permLuck || 0)}%`;
+ if($("permPowerLv")) $("permPowerLv").textContent = `+${d.permPower || 0}`;
+ if($("permCpsLv")) $("permCpsLv").textContent = `+${d.permCps || 0}`;
+ if($("permLuckLv")) $("permLuckLv").textContent = `+${(d.permLuck || 0)}%`;
 
  const coinBtn = $("coin");
- coinBtn.textContent = d.coinIcon || '⚡';
- coinBtn.style.background = COLOR_GRADIENTS[d.coinColor || 'gold'];
+ if(coinBtn) {
+   coinBtn.textContent = d.coinIcon || '⚡';
+   coinBtn.style.background = COLOR_GRADIENTS[d.coinColor || 'gold'];
+ }
 
  const autoBtn = $("autoToggleBtn");
- autoBtn.textContent = d.autoEnabled ? "ON" : "OFF";
- autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
+ if(autoBtn) {
+   autoBtn.textContent = d.autoEnabled ? "ON" : "OFF";
+   autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
+ }
  
- $("equippedPetName").textContent = (d.equippedPet && PET_DB[d.equippedPet]) ? PET_DB[d.equippedPet].icon + " " + PET_DB[d.equippedPet].name : "없음";
+ if($("equippedPetName")) {
+   $("equippedPetName").textContent = (d.equippedPet && PET_DB[d.equippedPet]) ? PET_DB[d.equippedPet].icon + " " + PET_DB[d.equippedPet].name : "없음";
+ }
  
  let req = 500000 * Math.pow(2.2, d.rebirth); 
- $("req").textContent = fmt(req);
- $("rebirthBtn").disabled = d.score < req;
+ if($("req")) $("req").textContent = fmt(req);
+ if($("rebirthBtn")) $("rebirthBtn").disabled = d.score < req;
  
- $("powerBtn").textContent = fmt(200 * Math.pow(1.25, d.power - 1)) + " 에너지";
- $("autoBtn").textContent = fmt(1000 * Math.pow(1.28, d.cps)) + " 에너지";
+ if($("powerBtn")) $("powerBtn").textContent = fmt(200 * Math.pow(1.25, d.power - 1)) + " 에너지";
+ if($("autoBtn")) $("autoBtn").textContent = fmt(1000 * Math.pow(1.28, d.cps)) + " 에너지";
  
  const luckBtn=document.querySelector('[data-item="luck"]');
  const coreBtn=document.querySelector('[data-item="core"]');
@@ -1119,14 +1151,16 @@ function render(){
 
  const now = Date.now();
  const cooldown = 24 * 60 * 60 * 1000;
- $("attDays").textContent = d.attendDays;
- if(now - d.lastAttend >= cooldown){
-   $("attendBtn").disabled = false;
-   $("attStatus").textContent = "지원금을 수령할 수 있습니다!";
- } else {
-   $("attendBtn").disabled = true;
-   let leftSec = Math.ceil((cooldown - (now - d.lastAttend)) / 1000);
-   $("attStatus").textContent = `다음 지원까지: ${Math.floor(leftSec/3600)}시간 ${Math.floor((leftSec%3600)/60)}분`;
+ if($("attDays")) $("attDays").textContent = d.attendDays;
+ if($("attendBtn") && $("attStatus")) {
+   if(now - d.lastAttend >= cooldown){
+     $("attendBtn").disabled = false;
+     $("attStatus").textContent = "지원금을 수령할 수 있습니다!";
+   } else {
+     $("attendBtn").disabled = true;
+     let leftSec = Math.ceil((cooldown - (now - d.lastAttend)) / 1000);
+     $("attStatus").textContent = `다음 지원까지: ${Math.floor(leftSec/3600)}시간 ${Math.floor((leftSec%3600)/60)}분`;
+   }
  }
 
  renderPetList();
@@ -1170,36 +1204,45 @@ document.querySelectorAll(".buy-hunt").forEach(btn => {
   };
 });
 
-$("buyPermPowerBtn").onclick = () => {
-  let cost = 1;
-  if(d.rp >= cost){
-    d.rp -= cost;
-    d.permPower = (d.permPower || 0) + 10;
-    say("기초 채굴 효율 강화 성공!");
-    save();
-  } else say("승급 포인트(RP)가 부족합니다!");
-};
+const buyPermPower = $("buyPermPowerBtn");
+if(buyPermPower) {
+  buyPermPower.onclick = () => {
+    let cost = 1;
+    if(d.rp >= cost){
+      d.rp -= cost;
+      d.permPower = (d.permPower || 0) + 10;
+      say("기초 채굴 효율 강화 성공!");
+      save();
+    } else say("승급 포인트(RP)가 부족합니다!");
+  };
+}
 
-$("buyPermCpsBtn").onclick = () => {
-  let cost = 1;
-  if(d.rp >= cost){
-    d.rp -= cost;
-    d.permCps = (d.permCps || 0) + 25;
-    say("자동 채굴 강화 성공!");
-    save();
-  } else say("승급 포인트(RP)가 부족합니다!");
-};
+const buyPermCps = $("buyPermCpsBtn");
+if(buyPermCps) {
+  buyPermCps.onclick = () => {
+    let cost = 1;
+    if(d.rp >= cost){
+      d.rp -= cost;
+      d.permCps = (d.permCps || 0) + 25;
+      say("자동 채굴 강화 성공!");
+      save();
+    } else say("승급 포인트(RP)가 부족합니다!");
+  };
+}
 
-$("buyPermLuckBtn").onclick = () => {
-  let cost = 2;
-  if((d.permLuck || 0) >= 15) return say("최대 강화 한도에 도달했습니다.");
-  if(d.rp >= cost){
-    d.rp -= cost;
-    d.permLuck = (d.permLuck || 0) + 3;
-    say("행운 모듈 강화 성공!");
-    save();
-  } else say("승급 포인트(RP)가 부족합니다!");
-};
+const buyPermLuck = $("buyPermLuckBtn");
+if(buyPermLuck) {
+  buyPermLuck.onclick = () => {
+    let cost = 2;
+    if((d.permLuck || 0) >= 15) return say("최대 강화 한도에 도달했습니다.");
+    if(d.rp >= cost){
+      d.rp -= cost;
+      d.permLuck = (d.permLuck || 0) + 3;
+      say("행운 모듈 강화 성공!");
+      save();
+    } else say("승급 포인트(RP)가 부족합니다!");
+  };
+}
 
 document.querySelectorAll(".color-btn").forEach(btn => {
   btn.onclick = () => {
@@ -1237,10 +1280,13 @@ function loadFirebaseRankings(){
     .get()
     .then((snapshot) => {
       const rankList = $("rankList");
+      const myRankDisplay = $("myRankDisplay");
+      if(!rankList) return;
       rankList.innerHTML = "";
+      
       if(snapshot.empty) {
         rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
-        $("myRankDisplay").textContent = "내 순위: 랭킹 없음";
+        if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
         return;
       }
       
@@ -1254,7 +1300,7 @@ function loadFirebaseRankings(){
         
         if(isMyRank) {
           myRankFound = true;
-          $("myRankDisplay").innerHTML = `내 순위: <b>${index + 1}위</b> (보유 에너지: ${fmt(item.score)})`;
+          if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (보유 에너지: ${fmt(item.score)})`;
         }
 
         if(index < 10) {
@@ -1277,20 +1323,24 @@ function loadFirebaseRankings(){
         index++;
       });
 
-      if(!myRankFound) {
-        $("myRankDisplay").innerHTML = currentUser ? "내 순위: 10위 밖 (동기화 버튼을 눌러주세요)" : "내 순위: 미로그인 상태";
+      if(!myRankFound && myRankDisplay) {
+        myRankDisplay.innerHTML = currentUser ? "내 순위: 10위 밖 (동기화 버튼을 눌러주세요)" : "내 순위: 미로그인 상태";
       }
     });
 }
 
-$("registerRankBtn").onclick = () => {
-  if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
-  syncScoreToFirebase();
-  say("서버에 에너지가 동기화되었습니다.");
-};
+const regRankBtn = $("registerRankBtn");
+if(regRankBtn) {
+  regRankBtn.onclick = () => {
+    if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
+    syncScoreToFirebase();
+    say("서버에 에너지가 동기화되었습니다.");
+  };
+}
 
 function renderPetList(){
   const container = $("petList");
+  if(!container) return;
   container.innerHTML = "";
   if(!d.pets || d.pets.length === 0){
     container.innerHTML = "<p style='color:var(--text-sub);grid-column:1/-1;text-align:center;font-size:11px;'>보유한 드론이 없습니다.</p>";
@@ -1374,48 +1424,60 @@ function toggleEquipPet(petId){
   save();
 }
 
-$("autoToggleBtn").onclick = () => {
-  d.autoEnabled = !d.autoEnabled;
-  save();
-};
+const autoToggle = $("autoToggleBtn");
+if(autoToggle) {
+  autoToggle.onclick = () => {
+    d.autoEnabled = !d.autoEnabled;
+    save();
+  };
+}
 
-$("coin").onclick=()=>{
- const petBonus = getPetBonus();
- const baseMult = getBaseMult();
- 
- let currentPower = (d.power + (d.permPower || 0) + getWeaponBonus());
- let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
+const coinBtnMain = $("coin");
+if(coinBtnMain) {
+  coinBtnMain.onclick = () => {
+    const petBonus = getPetBonus();
+    const baseMult = getBaseMult();
+    
+    let currentPower = (d.power + (d.permPower || 0) + getWeaponBonus());
+    let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
 
- const totalLuckProb = petBonus.luckProb + ((d.permLuck || 0) / 100);
+    const totalLuckProb = petBonus.luckProb + ((d.permLuck || 0) / 100);
 
- if(d.luck && Math.random() < totalLuckProb){ 
-   gain *= 5; 
-   triggerLuckEffect(gain);
- }
- d.score += gain; 
- save();
- if(currentUser) syncScoreToFirebase();
-};
+    if(d.luck && Math.random() < totalLuckProb){ 
+      gain *= 5; 
+      triggerLuckEffect(gain);
+    }
+    d.score += gain; 
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
-$("powerBtn").onclick=()=>{
- let cost = Math.floor(200 * Math.pow(1.25, d.power - 1));
- if(d.score>=cost){
-   d.score-=cost;
-   d.power++;
-   save();
-   if(currentUser) syncScoreToFirebase();
- } else say("에너지가 부족합니다.");
-};
+const powerBtn = $("powerBtn");
+if(powerBtn) {
+  powerBtn.onclick = () => {
+    let cost = Math.floor(200 * Math.pow(1.25, d.power - 1));
+    if(d.score>=cost){
+      d.score-=cost;
+      d.power++;
+      save();
+      if(currentUser) syncScoreToFirebase();
+    } else say("에너지가 부족합니다.");
+  };
+}
 
-$("autoBtn").onclick=()=>{
- let cost = Math.floor(1000 * Math.pow(1.28, d.cps));
- if(d.score>=cost){
-   d.score-=cost;
-   d.cps++;
-   save();
-   if(currentUser) syncScoreToFirebase();
- } else say("에너지가 부족합니다.");
-};
+const autoBtn = $("autoBtn");
+if(autoBtn) {
+  autoBtn.onclick = () => {
+    let cost = Math.floor(1000 * Math.pow(1.28, d.cps));
+    if(d.score>=cost){
+      d.score-=cost;
+      d.cps++;
+      save();
+      if(currentUser) syncScoreToFirebase();
+    } else say("에너지가 부족합니다.");
+  };
+}
 
 document.querySelectorAll(".buy").forEach(btn=>btn.onclick=()=>{
  const type=btn.dataset.item, cost={luck:10000,core:50000,double:200000}[type];
@@ -1446,92 +1508,109 @@ function drawPet(boxType){
   if(currentUser) syncScoreToFirebase();
 }
 
-$("buyPetBox1").onclick = () => drawPet(1);
-$("buyPetBox2").onclick = () => drawPet(2);
+const box1 = $("buyPetBox1");
+const box2 = $("buyPetBox2");
+if(box1) box1.onclick = () => drawPet(1);
+if(box2) box2.onclick = () => drawPet(2);
 
-$("attendBtn").onclick = () => {
-  const now = Date.now();
-  if(now - d.lastAttend < 24*60*60*1000) return say("아직 지원금 수령 시간이 되지 않았습니다.");
+const attendBtn = $("attendBtn");
+if(attendBtn) {
+  attendBtn.onclick = () => {
+    const now = Date.now();
+    if(now - d.lastAttend < 24*60*60*1000) return say("아직 지원금 수령 시간이 되지 않았습니다.");
 
-  d.lastAttend = now;
-  d.attendDays += 1;
-  d.score += 10000 + (d.attendDays * 2000);
-  d.rp += 1;
-  save();
-  if(currentUser) syncScoreToFirebase();
-};
+    d.lastAttend = now;
+    d.attendDays += 1;
+    d.score += 10000 + (d.attendDays * 2000);
+    d.rp += 1;
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
-$("rebirthBtn").onclick=()=>{
- let req = 500000 * Math.pow(2.2, d.rebirth);
- if(d.score<req)return;
- d.rebirth++; 
- d.rp += 3;
- d.score=0; 
- d.power=1; 
- d.cps=0;
- say("시스템 승급 완료! (+3 RP)");
- save();
- if(currentUser) syncScoreToFirebase();
-};
+const rebirthBtn = $("rebirthBtn");
+if(rebirthBtn) {
+  rebirthBtn.onclick = () => {
+    let req = 500000 * Math.pow(2.2, d.rebirth);
+    if(d.score<req)return;
+    d.rebirth++; 
+    d.rp += 3;
+    d.score=0; 
+    d.power=1; 
+    d.cps=0;
+    say("시스템 승급 완료! (+3 RP)");
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
  t.classList.add("active");
  document.querySelectorAll(".panel").forEach(x=>x.classList.add("hidden"));
- $(t.dataset.tab).classList.remove("hidden");
+ const targetPanel = $(t.dataset.tab);
+ if(targetPanel) targetPanel.classList.remove("hidden");
  if(t.dataset.tab === 'rankPanel') loadFirebaseRankings();
 });
 
 /* 연구실 실험 로직 */
 const slotSymbols = ["⚡", "⚡", "⚡", "⚡", "🍀", "💎", "7️⃣", "🔋"];
-$("slotBtn").onclick = () => {
-  let bet = parseInt($("slotBet").value) || 0;
-  if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
-  d.score -= bet;
-  
-  let r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-  let r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-  let r3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-  
-  $("slotScreen").textContent = `${r1} ${r2} ${r3}`;
-  
-  if (r1 === r2 && r2 === r3 && r1 !== "⚡") { 
-    d.score += bet * 20; 
-    say(`대성공 잭팟! (+${fmt(bet*20)})`); 
-  } else if (r1 === "⚡" && r2 === "⚡" && r3 === "⚡") {
-    say("과부하 발생! 에너지가 소실되었습니다.");
-  } else if ((r1 === r2 || r2 === r3 || r1 === r3) && Math.random() < 0.3) { 
-    d.score += Math.floor(bet * 1.2); 
-    say("일부 환급되었습니다."); 
-  } else { 
-    say("실험 실패"); 
-  }
-  save();
-  if(currentUser) syncScoreToFirebase();
-};
+const slotBtn = $("slotBtn");
+if(slotBtn) {
+  slotBtn.onclick = () => {
+    let bet = parseInt($("slotBet").value) || 0;
+    if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+    d.score -= bet;
+    
+    let r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+    let r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+    let r3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+    
+    if($("slotScreen")) $("slotScreen").textContent = `${r1} ${r2} ${r3}`;
+    
+    if (r1 === r2 && r2 === r3 && r1 !== "⚡") { 
+      d.score += bet * 20; 
+      say(`대성공 잭팟! (+${fmt(bet*20)})`); 
+    } else if (r1 === "⚡" && r2 === "⚡" && r3 === "⚡") {
+      say("과부하 발생! 에너지가 소실되었습니다.");
+    } else if ((r1 === r2 || r2 === r3 || r1 === r3) && Math.random() < 0.3) { 
+      d.score += Math.floor(bet * 1.2); 
+      say("일부 환급되었습니다."); 
+    } else { 
+      say("실험 실패"); 
+    }
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
 let coinChoice = "head";
-$("btnHead").onclick = () => { coinChoice = "head"; $("btnHead").classList.add("selected"); $("btnTail").classList.remove("selected"); };
-$("btnTail").onclick = () => { coinChoice = "tail"; $("btnTail").classList.add("selected"); $("btnHead").classList.remove("selected"); };
+const btnHead = $("btnHead");
+const btnTail = $("btnTail");
+if(btnHead) btnHead.onclick = () => { coinChoice = "head"; btnHead.classList.add("selected"); if(btnTail) btnTail.classList.remove("selected"); };
+if(btnTail) btnTail.onclick = () => { coinChoice = "tail"; btnTail.classList.add("selected"); if(btnHead) btnHead.classList.remove("selected"); };
 
-$("coinFlipBtn").onclick = () => {
-  let bet = parseInt($("coinBet").value) || 0;
-  if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
-  d.score -= bet;
-  
-  let userWins = Math.random() < 0.35;
-  let isHead = userWins ? (coinChoice === "head") : (coinChoice !== "head");
-  
-  $("coinResult").textContent = isHead ? "결과: 상승 (A)" : "결과: 하락 (B)";
-  if (userWins) { 
-    d.score += Math.floor(bet * 2.5); 
-    say(`분석 적중! (+${fmt(bet*2.5)})`); 
-  } else { 
-    say("분석 예측 실패"); 
-  }
-  save();
-  if(currentUser) syncScoreToFirebase();
-};
+const coinFlipBtn = $("coinFlipBtn");
+if(coinFlipBtn) {
+  coinFlipBtn.onclick = () => {
+    let bet = parseInt($("coinBet").value) || 0;
+    if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+    d.score -= bet;
+    
+    let userWins = Math.random() < 0.35;
+    let isHead = userWins ? (coinChoice === "head") : (coinChoice !== "head");
+    
+    if($("coinResult")) $("coinResult").textContent = isHead ? "결과: 상승 (A)" : "결과: 하락 (B)";
+    if (userWins) { 
+      d.score += Math.floor(bet * 2.5); 
+      say(`분석 적중! (+${fmt(bet*2.5)})`); 
+    } else { 
+      say("분석 예측 실패"); 
+    }
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
 let selectedDice = 1;
 document.querySelectorAll(".dice-select").forEach(btn => {
@@ -1542,76 +1621,87 @@ document.querySelectorAll(".dice-select").forEach(btn => {
   };
 });
 
-$("diceRollBtn").onclick = () => {
-  let bet = parseInt($("diceBet").value) || 0;
-  if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
-  d.score -= bet;
-  
-  let roll = Math.floor(Math.random() * 8) + 1;
-  $("diceResult").textContent = `결과: [ ${roll} ]`;
-  
-  if (selectedDice === roll) { 
-    d.score += bet * 7; 
-    say(`양자 공명 당첨! (+${fmt(bet*7)})`); 
-  } else { 
-    say("파동 불일치"); 
-  }
-  save();
-  if(currentUser) syncScoreToFirebase();
-};
+const diceRollBtn = $("diceRollBtn");
+if(diceRollBtn) {
+  diceRollBtn.onclick = () => {
+    let bet = parseInt($("diceBet").value) || 0;
+    if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+    d.score -= bet;
+    
+    let roll = Math.floor(Math.random() * 8) + 1;
+    if($("diceResult")) $("diceResult").textContent = `결과: [ ${roll} ]`;
+    
+    if (selectedDice === roll) { 
+      d.score += bet * 7; 
+      say(`양자 공명 당첨! (+${fmt(bet*7)})`); 
+    } else { 
+      say("파동 불일치"); 
+    }
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
-$("rouletteSpinBtn").onclick = () => {
-  let bet = parseInt($("rouletteBet").value) || 0;
-  if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
-  d.score -= bet;
+const rouletteSpinBtn = $("rouletteSpinBtn");
+if(rouletteSpinBtn) {
+  rouletteSpinBtn.onclick = () => {
+    let bet = parseInt($("rouletteBet").value) || 0;
+    if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+    d.score -= bet;
 
-  let rand = Math.random();
-  let mult = 0;
-  if (rand < 0.65) mult = 0;
-  else if (rand < 0.85) mult = 0.5;
-  else if (rand < 0.95) mult = 2;
-  else if (rand < 0.99) mult = 4;
-  else mult = 10;
+    let rand = Math.random();
+    let mult = 0;
+    if (rand < 0.65) mult = 0;
+    else if (rand < 0.85) mult = 0.5;
+    else if (rand < 0.95) mult = 2;
+    else if (rand < 0.99) mult = 4;
+    else mult = 10;
 
-  const win = Math.floor(bet * mult);
-  $("rouletteResult").textContent = `배율: x${mult}`;
-  d.score += win;
+    const win = Math.floor(bet * mult);
+    if($("rouletteResult")) $("rouletteResult").textContent = `배율: x${mult}`;
+    d.score += win;
 
-  if(mult >= 4) say(`오버클럭 대성공! x${mult}`);
-  else if(mult > 0) say(`안정화 성공!`);
-  else say("오버클럭 실패");
-  save();
-  if(currentUser) syncScoreToFirebase();
-};
+    if(mult >= 4) say(`오버클럭 대성공! x${mult}`);
+    else if(mult > 0) say(`안정화 성공!`);
+    else say("오버클럭 실패");
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
 let currentCardNum = 8;
 let highLowChoice = "high";
-$("btnHigh").onclick = () => { highLowChoice = "high"; $("btnHigh").classList.add("selected"); $("btnLow").classList.remove("selected"); };
-$("btnLow").onclick = () => { highLowChoice = "low"; $("btnLow").classList.add("selected"); $("btnHigh").classList.remove("selected"); };
+const btnHigh = $("btnHigh");
+const btnLow = $("btnLow");
+if(btnHigh) btnHigh.onclick = () => { highLowChoice = "high"; btnHigh.classList.add("selected"); if(btnLow) btnLow.classList.remove("selected"); };
+if(btnLow) btnLow.onclick = () => { highLowChoice = "low"; btnLow.classList.add("selected"); if(btnHigh) btnHigh.classList.remove("selected"); };
 
-$("highLowBtn").onclick = () => {
-  let bet = parseInt($("highLowBet").value) || 0;
-  if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
-  d.score -= bet;
+const highLowBtn = $("highLowBtn");
+if(highLowBtn) {
+  highLowBtn.onclick = () => {
+    let bet = parseInt($("highLowBet").value) || 0;
+    if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+    d.score -= bet;
 
-  let isWin = Math.random() < 0.35;
-  let newNum = isWin ? 
-    (highLowChoice === "high" ? Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1 : Math.floor(Math.random() * (currentCardNum - 1)) + 1) : 
-    (highLowChoice === "high" ? Math.floor(Math.random() * currentCardNum) + 1 : Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1);
-  
-  if(isNaN(newNum) || newNum < 1 || newNum > 15) newNum = 8;
-  currentCardNum = newNum;
+    let isWin = Math.random() < 0.35;
+    let newNum = isWin ? 
+      (highLowChoice === "high" ? Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1 : Math.floor(Math.random() * (currentCardNum - 1)) + 1) : 
+      (highLowChoice === "high" ? Math.floor(Math.random() * currentCardNum) + 1 : Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1);
+    
+    if(isNaN(newNum) || newNum < 1 || newNum > 15) newNum = 8;
+    currentCardNum = newNum;
 
-  if (isWin) {
-    let win = Math.floor(bet * 2.5);
-    d.score += win;
-    say(`예측 적중! (+${fmt(win)})`);
-  } else {
-    say("예측 실패");
-  }
-  save();
-  if(currentUser) syncScoreToFirebase();
-};
+    if (isWin) {
+      let win = Math.floor(bet * 2.5);
+      d.score += win;
+      say(`예측 적중! (+${fmt(win)})`);
+    } else {
+      say("예측 실패");
+    }
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
 let rspChoice = "rock";
 document.querySelectorAll(".rsp-select").forEach(btn => {
@@ -1622,28 +1712,31 @@ document.querySelectorAll(".rsp-select").forEach(btn => {
   };
 });
 
-$("rspPlayBtn").onclick = () => {
-  let bet = parseInt($("rspBet").value) || 0;
-  if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
-  d.score -= bet;
+const rspPlayBtn = $("rspPlayBtn");
+if(rspPlayBtn) {
+  rspPlayBtn.onclick = () => {
+    let bet = parseInt($("rspBet").value) || 0;
+    if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+    d.score -= bet;
 
-  const winMap = { rock: "scissors", scissors: "paper", paper: "rock" };
-  const loseMap = { rock: "paper", scissors: "rock", paper: "scissors" };
-  let dealerChoice = Math.random() < 0.20 ? winMap[rspChoice] : (Math.random() < 0.30 ? rspChoice : loseMap[rspChoice]);
+    const winMap = { rock: "scissors", scissors: "paper", paper: "rock" };
+    const loseMap = { rock: "paper", scissors: "rock", paper: "scissors" };
+    let dealerChoice = Math.random() < 0.20 ? winMap[rspChoice] : (Math.random() < 0.30 ? rspChoice : loseMap[rspChoice]);
 
-  if (rspChoice === dealerChoice) {
-    d.score += Math.floor(bet * 0.5);
-    say("전력 상쇄 (절반 환급)");
-  } else if (dealerChoice === winMap[rspChoice]) {
-    let win = Math.floor(bet * 3.5);
-    d.score += win;
-    say(`방어 성공! (+${fmt(win)})`);
-  } else {
-    say("방어 실패");
-  }
-  save();
-  if(currentUser) syncScoreToFirebase();
-};
+    if (rspChoice === dealerChoice) {
+      d.score += Math.floor(bet * 0.5);
+      say("전력 상쇄 (절반 환급)");
+    } else if (dealerChoice === winMap[rspChoice]) {
+      let win = Math.floor(bet * 3.5);
+      d.score += win;
+      say(`방어 성공! (+${fmt(win)})`);
+    } else {
+      say("방어 실패");
+    }
+    save();
+    if(currentUser) syncScoreToFirebase();
+  };
+}
 
 setInterval(()=>{
  const autoCps = (d.cps + (d.permCps || 0) + getHuntBonus());
@@ -1653,11 +1746,6 @@ setInterval(()=>{
    if(currentUser) syncScoreToFirebase();
  }
 }, 1000);
-
-renderPatchNotes();
-checkNewPatch();
-updateUserUI();
-render();
 </script>
 </body>
 </html>
