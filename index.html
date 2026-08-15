@@ -37,6 +37,10 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 0.3s ease;
 }
 
 .layout-container {
@@ -346,7 +350,7 @@ h1{
 }
 .upgrade-row{display: flex; justify-content: space-between; align-items: center; gap: 10px;}
 
-button.buy, .upgrade-row button, .btn-game, .attend-btn {
+button.buy, .upgrade-row button, .btn-game, .attend-btn, button.gem-buy {
   padding: 7px 12px;
   border: none;
   border-radius: 6px;
@@ -357,10 +361,12 @@ button.buy, .upgrade-row button, .btn-game, .attend-btn {
   cursor: pointer;
   transition: background 0.2s;
 }
-button.buy:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover {
+button.buy:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover, button.gem-buy:hover {
   background: var(--accent-hover);
 }
-button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-color) !important; color: var(--text-sub);}
+button.gem-buy { background: #10b981; color: #fff; }
+button.gem-buy:hover { background: #059669; }
+button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-color) !important; color: var(--text-sub) !important;}
 
 .toggle-btn{
   padding: 4px 10px;
@@ -621,6 +627,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     </div>
     <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화</span></button>
     <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">상점</span></button>
+    <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">캐시상점</span></button>
     <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">커스텀</span></button>
     <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론</span></button>
     <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">도감</span></button>
@@ -694,42 +701,68 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 너프 및 추가된 상점 탭 -->
+    <!-- 상점 탭 (가격 소폭 인하, 너프 글자 삭제) -->
     <div id="shop" class="panel hidden">
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 5% 확률로 에너지 보너스 ×1.5 (너프됨)</p></div>
-          <button class="buy" data-item="luck">구매 40,000</button>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 5% 확률로 에너지 보너스 ×1.5</p></div>
+          <button class="buy" data-item="luck">구매 35,000</button>
         </div>
         <div class="shop-item">
-          <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +15% (너프됨)</p></div>
-          <button class="buy" data-item="core">구매 220,000</button>
+          <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +15%</p></div>
+          <button class="buy" data-item="core">구매 200,000</button>
         </div>
         <div class="shop-item">
-          <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +30% (너프됨)</p></div>
-          <button class="buy" data-item="double">구매 900,000</button>
+          <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +30%</p></div>
+          <button class="buy" data-item="double">구매 850,000</button>
         </div>
         <div class="shop-item">
           <div><h3>🔋 초정밀 냉각기</h3><p>클릭 효율 +20% 추가 증가</p></div>
-          <button class="buy" data-item="cooler">구매 1,500,000</button>
+          <button class="buy" data-item="cooler">구매 1,400,000</button>
         </div>
         <div class="shop-item">
           <div><h3>🪐 다중 중력 필터</h3><p>초당 자동 채굴량 +25% 증가</p></div>
-          <button class="buy" data-item="filter">구매 3,500,000</button>
+          <button class="buy" data-item="filter">구매 3,200,000</button>
         </div>
         <div class="shop-item">
           <div><h3>⚛️ 양자 가속 코어</h3><p>모든 에너지 획득량 +50%</p></div>
-          <button class="buy" data-item="quantum">구매 10,000,000</button>
+          <button class="buy" data-item="quantum">구매 9,000,000</button>
         </div>
       </div>
     </div>
 
-    <!-- 🎨 커스텀 탭 (사진 업로드 추가) -->
+    <!-- 💎 보석 캐시 상점 탭 (신규 추가) -->
+    <div id="gemShop" class="panel hidden">
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 보석 전용 캐시 상점</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">게임 내 도감 수집 및 지원금으로 획득한 보석을 사용하여 강력한 버프를 구매하세요!</p>
+      <div class="shop-grid">
+        <div class="shop-item">
+          <div><h3>⚡ 다이아 클리커 부스터</h3><p>클릭 에너지 영구 2배 증폭</p></div>
+          <button class="gem-buy" data-gemitem="gemClick">구매 💎 5</button>
+        </div>
+        <div class="shop-item">
+          <div><h3>🤖 오토마톤 오버드라이브</h3><p>자동 채굴량 영구 2배 증폭</p></div>
+          <button class="gem-buy" data-gemitem="gemAuto">구매 💎 10</button>
+        </div>
+        <div class="shop-item">
+          <div><h3>🍀 퀀텀 럭키 포춘</h3><p>대성공 확률 영구 +10% 추가</p></div>
+          <button class="gem-buy" data-gemitem="gemLuck">구매 💎 15</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🎨 커스텀 탭 (코어 이미지 및 배경 GIF 업로드) -->
     <div id="customPanel" class="panel hidden">
       <h3 style="color:var(--text-main); font-size:14px; margin-top:0;">🖼️ 내 사진으로 코어 커스텀</h3>
       <div style="margin-bottom: 14px;">
         <input type="file" id="customImageUpload" accept="image/*" style="font-size:12px; color:var(--text-sub);">
         <button class="btn-game" id="resetCustomImg" style="margin-top:6px; padding:4px 10px; background:#64748b !important;">기본 심볼로 초기화</button>
+      </div>
+
+      <h3 style="color:var(--text-main); font-size:14px; margin-top:10px;">🌌 배경 화면 이미지 / GIF 변경</h3>
+      <div style="margin-bottom: 14px;">
+        <input type="file" id="bgImageUpload" accept="image/*,image/gif" style="font-size:12px; color:var(--text-sub);">
+        <button class="btn-game" id="resetBgImg" style="margin-top:6px; padding:4px 10px; background:#64748b !important;">기본 배경으로 복원</button>
       </div>
 
       <h3 style="color:var(--text-main); font-size:14px; margin-top:10px;">🎨 에너지 코어 컬러 커스텀</h3>
@@ -754,17 +787,17 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 🐾 드론 탭 -->
+    <!-- 🐾 드론 탭 (확률 하향 조정 적용) -->
     <div id="petPanel" class="panel hidden">
       <div class="pet-box-grid">
         <div class="game-card">
           <h3>🎁 표준형 드론 보급품</h3>
-          <p style="color:var(--text-sub); font-size:11px;">C ~ B등급 드론 출현</p>
+          <p style="color:var(--text-sub); font-size:11px;">C ~ B등급 드론 출현 (확률 하향됨)</p>
           <button class="btn-game" id="buyPetBox1">보급품 요청 (12,000 에너지)</button>
         </div>
         <div class="game-card">
           <h3>🌟 특수형 드론 보급품</h3>
-          <p style="color:var(--text-sub); font-size:11px;">A ~ S등급 드론 출현</p>
+          <p style="color:var(--text-sub); font-size:11px;">A ~ S등급 드론 출현 (확률 하향됨)</p>
           <button class="btn-game" id="buyPetBox2">보급품 요청 (120,000 에너지)</button>
         </div>
       </div>
@@ -776,7 +809,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="petList" class="pet-list"></div>
     </div>
 
-    <!-- 📖 도감 탭 (보석 바 및 보상 연동) -->
+    <!-- 📖 도감 탭 -->
     <div id="encyclopediaPanel" class="panel hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감 & 수집 보상</h3>
@@ -791,7 +824,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="encyclopediaList" class="encyclopedia-list"></div>
     </div>
 
-    <!-- 출석체크 탭 (지원금 2000원 수정) -->
+    <!-- 출석체크 탭 -->
     <div id="attendPanel" class="panel hidden">
       <div class="attendance-card">
         <h2 style="margin-top:0; font-size:16px;">📅 연구소 일일 지원금 수령</h2>
@@ -802,7 +835,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 🔬 연구실 미니게임 탭 (최소 베팅 1500원 수정) -->
+    <!-- 🔬 연구실 미니게임 탭 -->
     <div id="minigames" class="panel hidden">
       <div class="minigame-grid" style="grid-template-columns: repeat(2, 1fr);">
         <div class="game-card">
@@ -854,7 +887,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- ✨ 영구 스탯 탭 -->
+    <!-- ✨ 영구 스탯 탭 (능력치 포인트 낮춰짐) -->
     <div id="permStatPanel" class="panel hidden">
       <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:16px;">✨ 영구 연구 스탯 상점</h2>
       <p style="text-align:center;color:var(--text-sub);font-size:11px;margin-bottom:14px;">
@@ -863,19 +896,19 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </p>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small>기초 클릭 채굴 파워 영구 강화</small></div>
+          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small>기초 클릭 채굴 파워 영구 강화 (+5씩 증가)</small></div>
           <button id="buyPermPowerBtn">2 RP</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small>초당 자동 채굴 능력 영구 강화</small></div>
+          <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small>초당 자동 채굴 능력 영구 강화 (+10씩 증가)</small></div>
           <button id="buyPermCpsBtn">2 RP</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small>대성공 확률 추가 (최대 +15%)</small></div>
+          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small>대성공 확률 추가 (최대 +10%, +2%씩 증가)</small></div>
           <button id="buyPermLuckBtn">4 RP</button>
         </div>
       </div>
@@ -1030,7 +1063,12 @@ function playFailSound() {
 // --- 패치노트 데이터 (누적 유지) ---
 const patchNotes = [
   {
-    version: "v3.2 패치 (최신)",
+    version: "v3.3 패치 (최신)",
+    title: "캐시상점 추가, 배경 GIF 커스텀 및 밸런스 조정",
+    desc: "1) 상점 아이템들의 구매 가격이 소폭 인하되었으며, '(너프됨)' 표기가 깔끔하게 삭제되었습니다.\n2) 보석(💎)으로 영구 버프를 구매할 수 있는 전용 캐시 상점이 추가되었습니다.\n3) 드론 보급품에서 상위 등급 드론이 출현할 확률이 하향 조정되었습니다.\n4) 영구 연구 스탯의 강화 수치(능력치 포인트)가 소폭 하향 조정되었습니다.\n5) 커스텀 탭에서 배경 화면을 원하는 이미지나 GIF 애니메이션으로 변경할 수 있게 되었습니다."
+  },
+  {
+    version: "v3.2 패치",
     title: "도감 보석 시스템, 상점 밸런스 및 커스텀 고도화",
     desc: "1) 패치노트들이 삭제되지 않고 누적되어 스크롤로 확인할 수 있습니다.\n2) 미니게임 최소 베팅 금액이 1,500 에너지로 상향되었고, 지원금으로 보석 2,000개가 지급됩니다.\n3) 도감을 채울 때마다 등급별 보석(💎)이 즉시 지급되며, 수집 진행도 바와 완료 시 보석 10개 보상이 추가되었습니다.\n4) 레전더리 이상 드론들의 판매가가 하락 조정되었습니다.\n5) 내 사진 파일을 불러와 에너지 코어 이미지를 커스텀할 수 있게 되었습니다.\n6) 상점 아이템들이 소폭 너프되었으며, 신규 아이템 3종이 추가되었습니다."
   },
@@ -1082,9 +1120,10 @@ const db = firebase.firestore();
 const saveKey = "energyRush_PermanentSaveData";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score:0, best:0, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false, cooler:false, filter:false, quantum:false,
+ gemClick:false, gemAuto:false, gemLuck:false,
  pets:[], equippedPets:[], discoveredPets:[], lastAttend:0, attendDays:0, autoEnabled:true,
  permPower:0, permCps:0, permLuck:0, gems:0,
- coinColor:'gold', coinIcon:'⚡', customImg: null
+ coinColor:'gold', coinIcon:'⚡', customImg: null, bgImg: null
 };
 
 if (!d.equippedPets) d.equippedPets = [];
@@ -1093,7 +1132,6 @@ if (d.gems === undefined) d.gems = 0;
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
-// 레전더리 이상 판매가 하락 조정된 드론 DB
 const PET_DB = {
  cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +2%', sellPrice: 300, gemReward: 1 },
  chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +3%', sellPrice: 300, gemReward: 1 },
@@ -1135,23 +1173,16 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-// 도감 등록 시 보석 지급 및 전체 도감 완료 체크
 function checkAndDiscoverPets() {
   if(!d.discoveredPets) d.discoveredPets = [];
-  let newlyDiscovered = false;
-
   d.pets.forEach(petId => {
     if(!d.discoveredPets.includes(petId)) {
       d.discoveredPets.push(petId);
-      newlyDiscovered = true;
       const pet = PET_DB[petId];
-      if(pet && pet.gemReward) {
-        d.gems += pet.gemReward;
-      }
+      if(pet && pet.gemReward) d.gems += pet.gemReward;
     }
   });
 
-  // 모든 도감(14개)을 다 모았을 때 추가 보석 10개 지급 (최초 1회)
   if(d.discoveredPets.length === Object.keys(PET_DB).length && !d.completedAllEncyclopedia) {
     d.completedAllEncyclopedia = true;
     d.gems += 10;
@@ -1369,10 +1400,12 @@ function render(){
  const baseMult = getBaseMult();
  
  let coolerBonus = d.cooler ? 1.2 : 1.0;
- const totalPower = ((d.power + (d.permPower || 0)) * coolerBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
+ let gemClickBonus = d.gemClick ? 2.0 : 1.0;
+ const totalPower = (((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
  
  let filterBonus = d.filter ? 1.25 : 1.0;
- const totalCps = ((d.cps + (d.permCps || 0)) * filterBonus) * baseMult * petBonus.cpsMult * petBonus.coinMult;
+ let gemAutoBonus = d.gemAuto ? 2.0 : 1.0;
+ const totalCps = (((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  if($("score")) $("score").textContent=fmt(d.score); 
  if($("power")) $("power").textContent=fmt(totalPower);
@@ -1399,6 +1432,13 @@ function render(){
    }
  }
 
+ // 배경 이미지 / GIF 적용
+ if(d.bgImg) {
+   document.body.style.backgroundImage = `url('${d.bgImg}')`;
+ } else {
+   document.body.style.backgroundImage = "none";
+ }
+
  const autoBtn = $("autoToggleBtn");
  if(autoBtn) {
    autoBtn.textContent = d.autoEnabled ? "ON" : "OFF";
@@ -1421,12 +1461,29 @@ function render(){
  const filterBtn = document.querySelector('[data-item="filter"]');
  const quantumBtn = document.querySelector('[data-item="quantum"]');
 
- if(luckBtn) luckBtn.textContent = d.luck ? "완료" : "구매 40,000";
- if(coreBtn) coreBtn.textContent = d.core ? "완료" : "구매 220,000";
- if(doubleBtn) doubleBtn.textContent = d.double ? "완료" : "구매 900,000";
- if(coolerBtn) coolerBtn.textContent = d.cooler ? "완료" : "구매 1,500,000";
- if(filterBtn) filterBtn.textContent = d.filter ? "완료" : "구매 3,500,000";
- if(quantumBtn) quantumBtn.textContent = d.quantum ? "완료" : "구매 10,000,000";
+ if(luckBtn) luckBtn.textContent = d.luck ? "완료" : "구매 35,000";
+ if(coreBtn) coreBtn.textContent = d.core ? "완료" : "구매 200,000";
+ if(doubleBtn) doubleBtn.textContent = d.double ? "완료" : "구매 850,000";
+ if(coolerBtn) coolerBtn.textContent = d.cooler ? "완료" : "구매 1,400,000";
+ if(filterBtn) filterBtn.textContent = d.filter ? "완료" : "구매 3,200,000";
+ if(quantumBtn) quantumBtn.textContent = d.quantum ? "완료" : "구매 9,000,000";
+
+ const gemClickBtn = document.querySelector('[data-gemitem="gemClick"]');
+ const gemAutoBtn = document.querySelector('[data-gemitem="gemAuto"]');
+ const gemLuckBtn = document.querySelector('[data-gemitem="gemLuck"]');
+
+ if(gemClickBtn) {
+   gemClickBtn.textContent = d.gemClick ? "보유 완료" : "구매 💎 5";
+   gemClickBtn.disabled = d.gemClick;
+ }
+ if(gemAutoBtn) {
+   gemAutoBtn.textContent = d.gemAuto ? "보유 완료" : "구매 💎 10";
+   gemAutoBtn.disabled = d.gemAuto;
+ }
+ if(gemLuckBtn) {
+   gemLuckBtn.textContent = d.gemLuck ? "보유 완료" : "구매 💎 15";
+   gemLuckBtn.disabled = d.gemLuck;
+ }
 
  const now = Date.now();
  const cooldown = 24 * 60 * 60 * 1000;
@@ -1673,6 +1730,7 @@ function sellPet(index){
   save();
 }
 
+// 드론 뜨는 확률 하향 조정
 function drawPet(boxType){
   const cost = boxType === 1 ? 12000 : 120000;
   if(d.score < cost) return say("에너지가 부족합니다.");
@@ -1680,11 +1738,11 @@ function drawPet(boxType){
   let obtained = 'cat';
   if(boxType === 1){
     let r = Math.random();
-    if(r < 0.85) obtained = Math.random() < 0.5 ? 'cat' : 'chick';
+    if(r < 0.90) obtained = Math.random() < 0.5 ? 'cat' : 'chick';
     else obtained = Math.random() < 0.5 ? 'dog' : 'rabbit';
   } else {
     let r = Math.random();
-    if(r < 0.70) obtained = Math.random() < 0.5 ? 'fox' : 'panda';
+    if(r < 0.80) obtained = Math.random() < 0.5 ? 'fox' : 'panda';
     else {
       let sPool = ['dragon', 'unicorn', 'phoenix', 'titan'];
       obtained = sPool[Math.floor(Math.random() * sPool.length)];
@@ -1735,7 +1793,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // 사진 업로드 커스텀 리스너
+  // 코어 사진 업로드 리스너
   const customImgUpload = $("customImageUpload");
   if(customImgUpload) {
     customImgUpload.onchange = (e) => {
@@ -1760,6 +1818,31 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  // 배경 이미지 / GIF 업로드 리스너
+  const bgImageUpload = $("bgImageUpload");
+  if(bgImageUpload) {
+    bgImageUpload.onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        d.bgImg = event.target.result;
+        say("배경 화면 GIF/이미지 적용 완료!");
+        save();
+      };
+      reader.readAsDataURL(file);
+    };
+  }
+
+  const resetBgImg = $("resetBgImg");
+  if(resetBgImg) {
+    resetBgImg.onclick = () => {
+      d.bgImg = null;
+      say("기본 배경 화면으로 복원되었습니다.");
+      save();
+    };
+  }
+
   const chatSendBtn = $("chatSendBtn");
   const chatInput = $("chatInput");
   if(chatSendBtn) chatSendBtn.onclick = sendChatMessage;
@@ -1767,10 +1850,11 @@ document.addEventListener("DOMContentLoaded", () => {
     chatInput.onkeydown = (e) => { if(e.key === 'Enter') sendChatMessage(); };
   }
 
+  // 영구 스탯 상향폭 낮춰짐 (+5, +10, +2%씩 증가)
   const buyPermPower = $("buyPermPowerBtn");
   if(buyPermPower) {
     buyPermPower.onclick = () => {
-      if(d.rp >= 2){ d.rp -= 2; d.permPower = (d.permPower || 0) + 10; say("기초 채굴 효율 강화 성공!"); save(); }
+      if(d.rp >= 2){ d.rp -= 2; d.permPower = (d.permPower || 0) + 5; say("기초 채굴 효율 강화 성공!"); save(); }
       else say("승급 포인트(RP)가 부족합니다! (필요: 2 RP)");
     };
   }
@@ -1778,7 +1862,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const buyPermCps = $("buyPermCpsBtn");
   if(buyPermCps) {
     buyPermCps.onclick = () => {
-      if(d.rp >= 2){ d.rp -= 2; d.permCps = (d.permCps || 0) + 25; say("자동 채굴 강화 성공!"); save(); }
+      if(d.rp >= 2){ d.rp -= 2; d.permCps = (d.permCps || 0) + 10; say("자동 채굴 강화 성공!"); save(); }
       else say("승급 포인트(RP)가 부족합니다! (필요: 2 RP)");
     };
   }
@@ -1786,8 +1870,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const buyPermLuck = $("buyPermLuckBtn");
   if(buyPermLuck) {
     buyPermLuck.onclick = () => {
-      if((d.permLuck || 0) >= 15) return say("최대 강화 한도에 도달했습니다.");
-      if(d.rp >= 4){ d.rp -= 4; d.permLuck = (d.permLuck || 0) + 3; say("행운 모듈 강화 성공!"); save(); }
+      if((d.permLuck || 0) >= 10) return say("최대 강화 한도에 도달했습니다.");
+      if(d.rp >= 4){ d.rp -= 4; d.permLuck = (d.permLuck || 0) + 2; say("행운 모듈 강화 성공!"); save(); }
       else say("승급 포인트(RP)가 부족합니다! (필요: 4 RP)");
     };
   }
@@ -1818,10 +1902,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
       let coolerBonus = d.cooler ? 1.2 : 1.0;
-      let currentPower = (d.power + (d.permPower || 0)) * coolerBonus;
+      let gemClickBonus = d.gemClick ? 2.0 : 1.0;
+      let currentPower = ((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus;
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
       
-      const totalLuckProb = (d.luck ? 0.05 : 0.0) + ((d.permLuck || 0) / 100);
+      const totalLuckProb = (d.luck ? 0.05 : 0.0) + ((d.permLuck || 0) / 100) + (d.gemLuck ? 0.10 : 0.0);
       if(Math.random() < totalLuckProb){ gain *= 1.5; triggerLuckEffect(gain); }
       d.score += gain; save();
     };
@@ -1843,13 +1928,29 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  // 상점 일반 아이템 구매 (가격 소폭 인하 반영)
   document.querySelectorAll(".buy").forEach(btn => {
     btn.onclick = () => {
       const type = btn.dataset.item;
-      const costs = { luck: 40000, core: 220000, double: 900000, cooler: 1500000, filter: 3500000, quantum: 10000000 };
+      const costs = { luck: 35000, core: 200000, double: 850000, cooler: 1400000, filter: 3200000, quantum: 9000000 };
       const cost = costs[type];
       if(d.score < cost) return say("에너지가 부족합니다.");
       d.score -= cost; d[type] = true; save();
+    };
+  });
+
+  // 보석 캐시상점 구매 리스너
+  document.querySelectorAll(".gem-buy").forEach(btn => {
+    btn.onclick = () => {
+      const item = btn.dataset.gemitem;
+      const costs = { gemClick: 5, gemAuto: 10, gemLuck: 15 };
+      const cost = costs[item];
+      if(d.gems < cost) return say("보석(💎)이 부족합니다!");
+      if(d[item]) return say("이미 보유한 상품입니다.");
+      d.gems -= cost;
+      d[item] = true;
+      say("캐시 상점 아이템 구매 성공!");
+      save();
     };
   });
 
@@ -1865,7 +1966,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(now - d.lastAttend < 24*60*60*1000) return say("아직 지원금 수령 시간이 되지 않았습니다.");
       d.lastAttend = now; d.attendDays += 1;
       d.score += 12000 + (d.attendDays * 2500); 
-      d.gems += 2000; // 지원금 보석 2,000개 수령
+      d.gems += 2000; 
       d.rp += 1; save();
       say("일일 지원금 수령 완료! (+보석 2,000개)");
     };
@@ -1986,7 +2087,8 @@ document.addEventListener("DOMContentLoaded", () => {
 let syncCounter = 0;
 setInterval(() => {
   let filterBonus = d.filter ? 1.25 : 1.0;
-  const autoCps = ((d.cps + (d.permCps || 0)) * filterBonus);
+  let gemAutoBonus = d.gemAuto ? 2.0 : 1.0;
+  const autoCps = (((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus);
   if(autoCps > 0 && d.autoEnabled){
     d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
     save();
