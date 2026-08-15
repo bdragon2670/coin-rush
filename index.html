@@ -732,7 +732,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 
     <div style="margin-top:10px;">
       <p style="margin:4px 0; font-size:12px;">현재 보유 에너지: <b id="myCurrentScore" style="color:var(--accent);">0</b> 에너지</p>
-      <button id="registerRankBtn" class="btn-game" style="width:auto;padding:6px 14px;margin-top:4px;">🏆 서버에 에너지 동기화</button>
+      <button id="registerRankBtn" class="btn-game" style="width:auto;padding:6px 14px;margin-top:4px;">🏆 서버에 에너지 즉시 동기화</button>
     </div>
   </div>
 
@@ -783,9 +783,9 @@ function playFailSound() {
 // --- 패치노트 데이터 정의 ---
 const patchNotes = [
   {
-    version: "v2.6 패치",
-    title: "구글 랭킹 실시간 최신화 동기화 최적화",
-    desc: "1) 로그인 후 점수 변동 시 자동 파이어스토어 동기화 로직이 강화되었습니다.\n2) 랭킹 조회 시 최신 데이터가 누락 없이 즉시 갱신되도록 개선되었습니다."
+    version: "v2.7 패치",
+    title: "실시간 랭킹 자동 반영 및 동기화 최적화",
+    desc: "1) 클릭 및 자동 채굴 시 실시간으로 점수가 서버에 반영되도록 최적화되었습니다.\n2) 랭킹 탭을 누를 때마다 서버에서 즉시 최신 순위를 불러옵니다."
   },
   {
     version: "v1.0 패치",
@@ -876,13 +876,9 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-// 💡 랭킹 자동 동기화 딜레이 제어 (서버 부하 방지 및 최신화 보장)
-let lastSyncTime = 0;
+// 💡 랭킹 실시간 동기화 함수 (채굴 및 중요 액션 시 즉시 반영)
 function syncScoreToFirebase(force = false) {
   if(!currentUser) return;
-  const now = Date.now();
-  if (!force && now - lastSyncTime < 10000) return; // 10초 쿨타임 (단, 수동 클릭 및 중요 이벤트 시 즉시 반영)
-  lastSyncTime = now;
 
   db.collection('rankings').doc(currentUser.googleId).set({
     googleId: currentUser.googleId,
@@ -892,7 +888,7 @@ function syncScoreToFirebase(force = false) {
     rebirth: d.rebirth,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
-    // 랭킹 탭이 열려있거나 현재 보고 있다면 즉시 재로드
+    // 랭킹 창이 켜져있다면 즉시 최신 데이터 반영
     if(!$("rankPanel").classList.contains("hidden")) {
       loadFirebaseRankings();
     }
@@ -952,7 +948,6 @@ function loadFirebaseRankings(){
       });
 
       if(!myRankFound && currentUser) {
-        // 탑 20에 없더라도 내 점수를 가져와서 순위 표시 시도
         db.collection('rankings').doc(currentUser.googleId).get().then(myDoc => {
           if(myDoc.exists && myRankDisplay) {
             myRankDisplay.innerHTML = `내 순위: 10위 밖 (내 에너지: ${fmt(myDoc.data().score)})`;
@@ -986,7 +981,7 @@ function handleCredentialResponse(response) {
     };
     localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
     updateUserUI();
-    syncScoreToFirebase(true); // 로그인 즉시 강제 동기화
+    syncScoreToFirebase();
     say(`환영합니다, ${currentUser.name} 연구원님!`);
   }
 }
@@ -1033,7 +1028,7 @@ function getBaseMult(){
 function save(){
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
-  syncScoreToFirebase(); // 점수 변경 시 실시간 동기화 호출
+  syncScoreToFirebase(); // 데이터 변경 시 서버에 실시간 동기화
 }
 
 function fmt(n){return Math.floor(n).toLocaleString()}
@@ -1443,8 +1438,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if(regRankBtn) {
     regRankBtn.onclick = () => {
       if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
-      syncScoreToFirebase(true); // 강제 즉시 동기화
-      say("서버에 에너지가 즉시 동기화되었습니다.");
+      syncScoreToFirebase();
+      loadFirebaseRankings();
+      say("서버에 에너지가 즉시 동기화되었습니다!");
     };
   }
 
@@ -1677,12 +1673,33 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// 자동 채굴 루프 (초당 실행)
+// 자동 채굴 및 주기적 서버 동기화 루프 (1초마다 실행)
+let syncCounter = 0;
 setInterval(() => {
   const autoCps = (d.cps + (d.permCps || 0));
   if(autoCps > 0 && d.autoEnabled){
     d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
     save();
+  }
+
+  // 5초마다 자동 백그라운드 랭킹 동기화 (서버 부하 없이 실시간 갱신 유지)
+  syncCounter++;
+  if(syncCounter >= 5) {
+    syncCounter = 0;
+    if(currentUser) {
+      db.collection('rankings').doc(currentUser.googleId).set({
+        googleId: currentUser.googleId,
+        name: currentUser.name,
+        picture: currentUser.picture,
+        score: d.score, 
+        rebirth: d.rebirth,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true }).then(() => {
+        if(!$("rankPanel").classList.contains("hidden")) {
+          loadFirebaseRankings();
+        }
+      }).catch(err => {});
+    }
   }
 }, 1000);
 </script>
