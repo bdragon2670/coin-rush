@@ -783,9 +783,9 @@ function playFailSound() {
 // --- 패치노트 데이터 정의 ---
 const patchNotes = [
   {
-    version: "v2.5 패치",
-    title: "신화(Mythic) 등급 드론 추가 및 레전더리 이상 합성 파괴 시스템 도입",
-    desc: "1) 신화 등급 드론 '초신성 제네시스'가 추가되었습니다.\n2) 레전더리 이상 합성 실패 시 리스크 시스템이 도입되었습니다."
+    version: "v2.6 패치",
+    title: "구글 랭킹 실시간 최신화 동기화 최적화",
+    desc: "1) 로그인 후 점수 변동 시 자동 파이어스토어 동기화 로직이 강화되었습니다.\n2) 랭킹 조회 시 최신 데이터가 누락 없이 즉시 갱신되도록 개선되었습니다."
   },
   {
     version: "v1.0 패치",
@@ -876,6 +876,94 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
+// 💡 랭킹 자동 동기화 딜레이 제어 (서버 부하 방지 및 최신화 보장)
+let lastSyncTime = 0;
+function syncScoreToFirebase(force = false) {
+  if(!currentUser) return;
+  const now = Date.now();
+  if (!force && now - lastSyncTime < 10000) return; // 10초 쿨타임 (단, 수동 클릭 및 중요 이벤트 시 즉시 반영)
+  lastSyncTime = now;
+
+  db.collection('rankings').doc(currentUser.googleId).set({
+    googleId: currentUser.googleId,
+    name: currentUser.name,
+    picture: currentUser.picture,
+    score: d.score, 
+    rebirth: d.rebirth,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true }).then(() => {
+    // 랭킹 탭이 열려있거나 현재 보고 있다면 즉시 재로드
+    if(!$("rankPanel").classList.contains("hidden")) {
+      loadFirebaseRankings();
+    }
+  }).catch(err => {
+    console.error("랭킹 동기화 실패:", err);
+  });
+}
+
+function loadFirebaseRankings(){
+  db.collection('rankings')
+    .orderBy('score', 'desc')
+    .limit(20)
+    .get()
+    .then((snapshot) => {
+      const rankList = $("rankList");
+      const myRankDisplay = $("myRankDisplay");
+      if(!rankList) return;
+      rankList.innerHTML = "";
+      
+      if(snapshot.empty) {
+        rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
+        if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
+        return;
+      }
+      
+      let index = 0;
+      let myRankFound = false;
+      
+      snapshot.forEach((doc) => {
+        const item = doc.data();
+        let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
+        let isMyRank = currentUser && item.googleId === currentUser.googleId;
+        
+        if(isMyRank) {
+          myRankFound = true;
+          if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (보유 에너지: ${fmt(item.score)})`;
+        }
+
+        if(index < 10) {
+          let tr = document.createElement("tr");
+          if(isMyRank) tr.style.background = "rgba(56,189,248,0.05)";
+
+          tr.innerHTML = `
+            <td>${medal}${index + 1}위</td>
+            <td>
+              <div class="rank-user-info">
+                <img src="${item.picture}" class="rank-user-avatar" onerror="this.src='https://via.placeholder.com/26'">
+                <b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}
+              </div>
+            </td>
+            <td style="color:var(--accent);">${fmt(item.score)}</td>
+            <td>${item.rebirth || 0}회</td>
+          `;
+          rankList.appendChild(tr);
+        }
+        index++;
+      });
+
+      if(!myRankFound && currentUser) {
+        // 탑 20에 없더라도 내 점수를 가져와서 순위 표시 시도
+        db.collection('rankings').doc(currentUser.googleId).get().then(myDoc => {
+          if(myDoc.exists && myRankDisplay) {
+            myRankDisplay.innerHTML = `내 순위: 10위 밖 (내 에너지: ${fmt(myDoc.data().score)})`;
+          }
+        });
+      } else if(!currentUser && myRankDisplay) {
+        myRankDisplay.innerHTML = "내 순위: 미로그인 상태";
+      }
+    });
+}
+
 function parseJwt(token) {
   try {
     const base64Url = token.split('.')[1];
@@ -898,7 +986,7 @@ function handleCredentialResponse(response) {
     };
     localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
     updateUserUI();
-    syncScoreToFirebase();
+    syncScoreToFirebase(true); // 로그인 즉시 강제 동기화
     say(`환영합니다, ${currentUser.name} 연구원님!`);
   }
 }
@@ -945,6 +1033,7 @@ function getBaseMult(){
 function save(){
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
+  syncScoreToFirebase(); // 점수 변경 시 실시간 동기화 호출
 }
 
 function fmt(n){return Math.floor(n).toLocaleString()}
@@ -1050,75 +1139,6 @@ function updateCustomUI(){
   });
 }
 
-function syncScoreToFirebase() {
-  if(!currentUser) return;
-  db.collection('rankings').doc(currentUser.googleId).set({
-    googleId: currentUser.googleId,
-    name: currentUser.name,
-    picture: currentUser.picture,
-    score: d.score, 
-    rebirth: d.rebirth,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true }).then(() => {
-    loadFirebaseRankings();
-  });
-}
-
-function loadFirebaseRankings(){
-  db.collection('rankings')
-    .orderBy('score', 'desc')
-    .get()
-    .then((snapshot) => {
-      const rankList = $("rankList");
-      const myRankDisplay = $("myRankDisplay");
-      if(!rankList) return;
-      rankList.innerHTML = "";
-      
-      if(snapshot.empty) {
-        rankList.innerHTML = "<tr><td colspan='4' style='color:var(--text-sub);'>등록된 랭킹이 없습니다.</td></tr>";
-        if(myRankDisplay) myRankDisplay.textContent = "내 순위: 랭킹 없음";
-        return;
-      }
-      
-      let index = 0;
-      let myRankFound = false;
-      
-      snapshot.forEach((doc) => {
-        const item = doc.data();
-        let medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-        let isMyRank = currentUser && item.googleId === currentUser.googleId;
-        
-        if(isMyRank) {
-          myRankFound = true;
-          if(myRankDisplay) myRankDisplay.innerHTML = `내 순위: <b>${index + 1}위</b> (보유 에너지: ${fmt(item.score)})`;
-        }
-
-        if(index < 10) {
-          let tr = document.createElement("tr");
-          if(isMyRank) tr.style.background = "rgba(56,189,248,0.05)";
-
-          tr.innerHTML = `
-            <td>${medal}${index + 1}위</td>
-            <td>
-              <div class="rank-user-info">
-                <img src="${item.picture}" class="rank-user-avatar" onerror="this.src='https://via.placeholder.com/26'">
-                <b>${item.name}</b> ${isMyRank ? '<small style="color:var(--accent)">(나)</small>' : ''}
-              </div>
-            </td>
-            <td style="color:var(--accent);">${fmt(item.score)}</td>
-            <td>${item.rebirth || 0}회</td>
-          `;
-          rankList.appendChild(tr);
-        }
-        index++;
-      });
-
-      if(!myRankFound && myRankDisplay) {
-        myRankDisplay.innerHTML = currentUser ? "내 순위: 10위 밖 (동기화 버튼을 눌러주세요)" : "내 순위: 미로그인 상태";
-      }
-    });
-}
-
 function renderPetList(){
   const container = $("petList");
   if(!container) return;
@@ -1194,7 +1214,6 @@ function renderPetList(){
             say(`✨ 레전더리 드론 [옴니버스 싱귤래리티] 합성 성공!`);
             draggedPetIdx = null;
             save();
-            if(currentUser) syncScoreToFirebase();
           } else {
             say("S등급 드론이 총 4개 필요합니다.");
           }
@@ -1228,7 +1247,6 @@ function renderPetList(){
             }
             draggedPetIdx = null;
             save();
-            if(currentUser) syncScoreToFirebase();
           } else {
             say("레전더리 등급 드론 2개가 필요합니다.");
           }
@@ -1255,7 +1273,6 @@ function renderPetList(){
           say(`업그레이드 성공: ${newPet.name}!`);
           draggedPetIdx = null;
           save();
-          if(currentUser) syncScoreToFirebase();
         } else {
           say("더 이상 일반 합성이 불가능한 등급입니다.");
         }
@@ -1299,7 +1316,6 @@ function sellPet(index){
   d.score += pet.sellPrice;
   say(`${pet.name} 판매 완료! (+${fmt(pet.sellPrice)} 에너지)`);
   save();
-  if(currentUser) syncScoreToFirebase();
 }
 
 function drawPet(boxType){
@@ -1324,7 +1340,6 @@ function drawPet(boxType){
   d.pets.push(obtained);
   say(`${PET_DB[obtained].name} 획득!`);
   save();
-  if(currentUser) syncScoreToFirebase();
 }
 
 // --- 애플리케이션 초기화 및 이벤트 연결 ---
@@ -1428,8 +1443,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if(regRankBtn) {
     regRankBtn.onclick = () => {
       if(!currentUser) return say("구글 계정으로 먼저 로그인해주세요.");
-      syncScoreToFirebase();
-      say("서버에 에너지가 동기화되었습니다.");
+      syncScoreToFirebase(true); // 강제 즉시 동기화
+      say("서버에 에너지가 즉시 동기화되었습니다.");
     };
   }
 
@@ -1458,7 +1473,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       d.score += gain; 
       save();
-      if(currentUser) syncScoreToFirebase();
     };
   }
 
@@ -1470,7 +1484,6 @@ document.addEventListener("DOMContentLoaded", () => {
         d.score-=cost;
         d.power++;
         save();
-        if(currentUser) syncScoreToFirebase();
       } else say("에너지가 부족합니다.");
     };
   }
@@ -1483,7 +1496,6 @@ document.addEventListener("DOMContentLoaded", () => {
         d.score-=cost;
         d.cps++;
         save();
-        if(currentUser) syncScoreToFirebase();
       } else say("에너지가 부족합니다.");
     };
   }
@@ -1497,7 +1509,6 @@ document.addEventListener("DOMContentLoaded", () => {
       d.score -= cost;
       d[type] = true;
       save();
-      if(currentUser) syncScoreToFirebase();
     };
   });
 
@@ -1517,7 +1528,6 @@ document.addEventListener("DOMContentLoaded", () => {
       d.score += 12000 + (d.attendDays * 2500);
       d.rp += 1;
       save();
-      if(currentUser) syncScoreToFirebase();
     };
   }
 
@@ -1533,7 +1543,6 @@ document.addEventListener("DOMContentLoaded", () => {
       d.cps = 0;
       say("시스템 승급 완료! (+3 RP)");
       save();
-      if(currentUser) syncScoreToFirebase();
     };
   }
 
@@ -1575,7 +1584,6 @@ document.addEventListener("DOMContentLoaded", () => {
         say("실험 실패"); 
       }
       save();
-      if(currentUser) syncScoreToFirebase();
     };
   }
 
@@ -1603,7 +1611,6 @@ document.addEventListener("DOMContentLoaded", () => {
         say("분석 예측 실패"); 
       }
       save();
-      if(currentUser) syncScoreToFirebase();
     };
   }
 
@@ -1633,7 +1640,6 @@ document.addEventListener("DOMContentLoaded", () => {
         say("파동 불일치"); 
       }
       save();
-      if(currentUser) syncScoreToFirebase();
     };
   }
 
@@ -1667,7 +1673,6 @@ document.addEventListener("DOMContentLoaded", () => {
         say("예측 실패");
       }
       save();
-      if(currentUser) syncScoreToFirebase();
     };
   }
 });
@@ -1678,7 +1683,6 @@ setInterval(() => {
   if(autoCps > 0 && d.autoEnabled){
     d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
     save();
-    if(currentUser) syncScoreToFirebase();
   }
 }, 1000);
 </script>
