@@ -318,6 +318,57 @@ h1{
   100% { opacity: 0; transform: translate(-50%, -40px); }
 }
 
+/* 10회 클릭 시 보석 팝업 */
+.gem-popup {
+  position: absolute;
+  top: -15px;
+  right: 20%;
+  font-size: 18px;
+  font-weight: 800;
+  color: #10b981;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  pointer-events: none;
+  animation: gemFloat 1s forwards ease-out;
+  z-index: 15;
+}
+@keyframes gemFloat {
+  0% { opacity: 0; transform: translateY(15px) scale(0.5); }
+  30% { opacity: 1; transform: translateY(-5px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(-35px) scale(1); }
+}
+
+/* 레전더리 이상 파괴 웅장한 폭발 효과 */
+.epic-explosion {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: radial-gradient(circle, rgba(239,68,68,0.8) 0%, rgba(15,23,42,0.95) 80%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: epicFlash 1.5s forwards ease-out;
+  pointer-events: none;
+}
+.epic-explosion h1 {
+  font-size: 32px;
+  color: #fef08a;
+  text-shadow: 0 0 20px #ef4444, 0 0 40px #f59e0b;
+  margin: 0 0 10px;
+  animation: epicTextZoom 1.5s forwards ease-out;
+}
+@keyframes epicFlash {
+  0% { opacity: 0; transform: scale(0.8); }
+  20% { opacity: 1; transform: scale(1.05); }
+  80% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.1); }
+}
+@keyframes epicTextZoom {
+  0% { transform: scale(0.5); opacity: 0; }
+  30% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
 #message{height: 22px; margin-top: 6px; color: var(--accent); font-weight: 600; font-size: 13px;}
 
 .panel{
@@ -350,7 +401,7 @@ h1{
 }
 .upgrade-row{display: flex; justify-content: space-between; align-items: center; gap: 10px;}
 
-button.buy, .upgrade-row button, .btn-game, .attend-btn, button.gem-buy {
+button.buy, .upgrade-row button, .btn-game, .attend-btn, button.gem-buy, .btn-stock {
   padding: 7px 12px;
   border: none;
   border-radius: 6px;
@@ -361,7 +412,7 @@ button.buy, .upgrade-row button, .btn-game, .attend-btn, button.gem-buy {
   cursor: pointer;
   transition: background 0.2s;
 }
-button.buy:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover, button.gem-buy:hover {
+button.buy:hover, .upgrade-row button:hover, .btn-game:hover, .attend-btn:hover, button.gem-buy:hover, .btn-stock:hover {
   background: var(--accent-hover);
 }
 button.gem-buy { background: #10b981; color: #fff; }
@@ -556,7 +607,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   transition: width 0.3s ease;
 }
 
-/* 주식 시스템 스타일 */
+/* 주식 시스템 스타일 및 그래프 */
 .stock-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -568,6 +619,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   border-radius: 10px;
   padding: 12px;
   text-align: center;
+}
+.stock-chart-canvas {
+  width: 100%;
+  height: 70px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  margin: 6px 0;
 }
 
 /* 채팅 패널 */
@@ -683,7 +742,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <div class="sub">실시간 자원 채굴 & 탐사 센터</div>
 
     <div class="stats">
-      <div class="stat"><span>에너지</span><b id="score">30</b></div>
+      <div class="stat"><span>에너지</span><b id="score">1</b></div>
       <div class="stat"><span>초당 채굴</span><b id="cps">0</b></div>
       <div class="stat"><span>채굴 효율</span><b id="power">1</b></div>
       <div class="stat"><span>보유 보석 💎</span><b id="gemCount">0</b></div>
@@ -746,7 +805,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 💎 보석 캐시 상점 탭 (물품 추가 및 가격 대폭 인상) -->
+    <!-- 💎 보석 캐시 상점 탭 -->
     <div id="gemShop" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 보석 전용 프리미엄 캐시 상점</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">도감 수집 및 지원금으로 모은 보석(💎)으로 강력한 영구 버프 및 특수 아이템을 구매하세요!</p>
@@ -778,27 +837,37 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 📈 주식시장 탭 (신규 추가) -->
+    <!-- 📈 주식시장 탭 (그래프 및 일괄 매수/매도 기능 추가) -->
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">시세 변동을 주시하며 저점에서 매수하고 고점에 매도하여 에너지를 불리세요!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">실시간 시세 그래프를 분석하여 일괄 매수 및 매도로 자산을 불리세요!</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
-          <p style="font-size:12px; margin:4px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">1,000</b> 에너지</p>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">1,000</b> 에너지</p>
+          <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
-          <div style="display:flex; gap:6px; margin-top:8px;">
-            <button class="btn-game" style="flex:1; padding:4px;" onclick="buyStock(1)">매수</button>
-            <button class="btn-game" style="flex:1; padding:4px; background:#ef4444 !important;" onclick="sellStock(1)">매도</button>
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <button class="btn-stock" style="flex:1;" onclick="buyStock(1, 1)">1주 매수</button>
+            <button class="btn-stock" style="flex:1; background:#0284c7 !important; color:#fff !important;" onclick="buyStock(1, 'max')">전부 매수</button>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <button class="btn-stock" style="flex:1; background:#ef4444 !important; color:#fff !important;" onclick="sellStock(1, 1)">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:#b91c1c !important; color:#fff !important;" onclick="sellStock(1, 'max')">전부 매도</button>
           </div>
         </div>
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">🌌 스페이스 다이내믹 (SPC)</h4>
-          <p style="font-size:12px; margin:4px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">5,000</b> 에너지</p>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">5,000</b> 에너지</p>
+          <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
-          <div style="display:flex; gap:6px; margin-top:8px;">
-            <button class="btn-game" style="flex:1; padding:4px;" onclick="buyStock(2)">매수</button>
-            <button class="btn-game" style="flex:1; padding:4px; background:#ef4444 !important;" onclick="sellStock(2)">매도</button>
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <button class="btn-stock" style="flex:1;" onclick="buyStock(2, 1)">1주 매수</button>
+            <button class="btn-stock" style="flex:1; background:#0284c7 !important; color:#fff !important;" onclick="buyStock(2, 'max')">전부 매수</button>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <button class="btn-stock" style="flex:1; background:#ef4444 !important; color:#fff !important;" onclick="sellStock(2, 1)">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:#b91c1c !important; color:#fff !important;" onclick="sellStock(2, 'max')">전부 매도</button>
           </div>
         </div>
       </div>
@@ -940,7 +1009,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- ✨ 영구 스탯 탭 -->
+    <!-- ✨ 영구 스탯 탭 (영구 스탯 1개만 남기고 초반 1개, 점진적 증가) -->
     <div id="permStatPanel" class="panel hidden">
       <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:16px;">✨ 영구 연구 스탯 상점</h2>
       <p style="text-align:center;color:var(--text-sub);font-size:11px;margin-bottom:14px;">
@@ -949,20 +1018,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </p>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small>기초 클릭 채굴 파워 영구 강화 (+5씩 증가)</small></div>
+          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+1</b></h3><small>초반 1개 시작, 다음부터 점진적으로 증가</small></div>
           <button id="buyPermPowerBtn">2 RP</button>
-        </div>
-      </div>
-      <div class="upgrades">
-        <div class="upgrade-row">
-          <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small>초당 자동 채굴 능력 영구 강화 (+10씩 증가)</small></div>
-          <button id="buyPermCpsBtn">2 RP</button>
-        </div>
-      </div>
-      <div class="upgrades">
-        <div class="upgrade-row">
-          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small>대성공 확률 추가 (최대 +10%, +2%씩 증가)</small></div>
-          <button id="buyPermLuckBtn">4 RP</button>
         </div>
       </div>
     </div>
@@ -1096,6 +1153,23 @@ function stopBGM() {
   if(bgmInterval) { clearInterval(bgmInterval); bgmInterval = null; }
 }
 
+function playEpicExplosionSound() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 1.2);
+    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 1.2);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 1.2);
+  } catch (e) {}
+}
+
 function playFailSound() {
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1116,7 +1190,12 @@ function playFailSound() {
 // --- 패치노트 데이터 (누적 유지) ---
 const patchNotes = [
   {
-    version: "v3.4 패치 (최신)",
+    version: "v3.5 패치 (최신)",
+    title: "일괄 매수/매도, 주식 실시간 그래프, 10회 클릭 보석 드랍 및 웅장한 폭발 연출 추가",
+    desc: "1) 주식시장 거래소에 1주 및 '전부 매수/매도' 일괄 거래 기능과 실시간 캔들/라인 차트 그래프가 추가되었습니다.\n2) 영구 연구 스탯이 1개로 간소화되었으며 초반 +1에서 점진적으로 증가하도록 개편되었습니다.\n3) 에너지 버튼을 10번 누를 때마다 옆에 보석 모양이 뜨며 1~10개의 보석이 랜덤 지급됩니다.\n4) 레전더리 이상 드론 파괴 시 화면 전체를 뒤흔드는 웅장한 시각/청각 효과가 재생됩니다."
+  },
+  {
+    version: "v3.4 패치",
     title: "캐시상점 확장, S등급 4개 합성 개편, 주식시장 및 보존 기능 강화",
     desc: "1) 보석(💎)으로 구매할 수 있는 전용 캐시상점 물품이 대폭 추가되었고 보석 가격이 상향 조정되었습니다.\n2) 스타트 에너지가 30으로 설정되었습니다.\n3) S등급 드론 종류별로 4개를 모아 합성 시 극악의 확률로 신화(M)등급에 도전하며, 실패 시 레전더리 드론이 확정 지급됩니다.\n4) 환생 시 보석과 도감 정보가 절대 사라지지 않고 영구 보존됩니다.\n5) 도감 등록 시 지급되는 보석 개수가 하향 조정되었습니다.\n6) 시세가 실시간으로 변동하는 '퀀텀 에너지 주식 거래소'가 오픈되었습니다."
   },
@@ -1174,13 +1253,13 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// 💡 로컬 스토리지 저장소 시스템 (스타트 에너지 30)
+// 💡 로컬 스토리지 저장소 시스템 (스타트 에너지 1)
 const saveKey = "energyRush_PermanentSaveData";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
- score:30, best:30, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false, cooler:false, filter:false, quantum:false,
+ score:1, best:1, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false, cooler:false, filter:false, quantum:false,
  gemClick:false, gemAuto:false, gemLuck:false, gemHyper:false, gemRing:false, gemDivine:false,
  pets:[], equippedPets:[], discoveredPets:[], lastAttend:0, attendDays:0, autoEnabled:true,
- permPower:0, permCps:0, permLuck:0, gems:0,
+ permPower:1, gems:0,
  coinColor:'gold', coinIcon:'⚡', customImg: null, bgImg: null,
  stock1: 0, stock2: 0
 };
@@ -1190,10 +1269,10 @@ if (!d.discoveredPets) d.discoveredPets = [];
 if (d.gems === undefined) d.gems = 0;
 if (d.stock1 === undefined) d.stock1 = 0;
 if (d.stock2 === undefined) d.stock2 = 0;
+if (d.permPower === undefined) d.permPower = 1;
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
-// 도감 보석 주는 갯수 대폭 하향 조정된 드론 DB
 const PET_DB = {
  cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +2%', sellPrice: 300, gemReward: 1 },
  chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +3%', sellPrice: 300, gemReward: 1 },
@@ -1235,8 +1314,10 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-// 주식 시세 데이터
+// 주식 시세 및 히스토리 (그래프용)
 let stockPrices = { 1: 1000, 2: 5000 };
+let stockHistory1 = [1000, 1020, 990, 1010, 1000];
+let stockHistory2 = [5000, 4900, 5100, 5050, 5000];
 
 function checkAndDiscoverPets() {
   if(!d.discoveredPets) d.discoveredPets = [];
@@ -1463,6 +1544,47 @@ function triggerLuckEffect(amount) {
   setTimeout(() => pop.remove(), 1200);
 }
 
+// 웅장한 폭발 연출 함수
+function triggerEpicExplosion(droneName) {
+  playEpicExplosionSound();
+  const overlay = document.createElement("div");
+  overlay.className = "epic-explosion";
+  overlay.innerHTML = `
+    <h1>⚠️ 과부하 대폭발! ⚠️</h1>
+    <p style="color:#f8fafc; font-size:16px; margin:0; text-shadow:0 0 10px #000;">${droneName} 파괴에너지 방출 중...</p>
+  `;
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.remove(), 1500);
+}
+
+// 주식 그래프 캔버스 렌더링 함수
+function drawStockChart(canvasId, historyData) {
+  const canvas = $(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const width = canvas.width = canvas.parentElement.clientWidth - 24;
+  const height = canvas.height = 70;
+  
+  ctx.clearRect(0, 0, width, height);
+  if(!historyData || historyData.length < 2) return;
+
+  const min = Math.min(...historyData);
+  const max = Math.max(...historyData);
+  const range = max - min || 1;
+
+  ctx.beginPath();
+  ctx.strokeStyle = "#38bdf8";
+  ctx.lineWidth = 2;
+
+  historyData.forEach((val, idx) => {
+    const x = (idx / (historyData.length - 1)) * (width - 10) + 5;
+    const y = height - 10 - ((val - min) / range) * (height - 20);
+    if(idx === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+}
+
 function render(){
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
@@ -1470,11 +1592,11 @@ function render(){
  let coolerBonus = d.cooler ? 1.2 : 1.0;
  let gemClickBonus = d.gemClick ? 2.0 : 1.0;
  let gemRingBonus = d.gemRing ? 1.50 : 1.0;
- const totalPower = ((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
+ const totalPower = ((((d.power + (d.permPower || 1)) * coolerBonus) * gemClickBonus) * gemRingBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
  
  let filterBonus = d.filter ? 1.25 : 1.0;
  let gemAutoBonus = d.gemAuto ? 2.0 : 1.0;
- const totalCps = ((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus) * baseMult * petBonus.cpsMult * petBonus.coinMult;
+ const totalCps = ((((d.cps + 0) * filterBonus) * gemAutoBonus) * gemRingBonus) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  if($("score")) $("score").textContent=fmt(d.score); 
  if($("power")) $("power").textContent=fmt(totalPower);
@@ -1486,9 +1608,7 @@ function render(){
  if($("permRpDisplay")) $("permRpDisplay").textContent=fmt(d.rp);
  if($("myCurrentScore")) $("myCurrentScore").textContent=fmt(d.score);
 
- if($("permPowerLv")) $("permPowerLv").textContent = `+${d.permPower || 0}`;
- if($("permCpsLv")) $("permCpsLv").textContent = `+${d.permCps || 0}`;
- if($("permLuckLv")) $("permLuckLv").textContent = `+${(d.permLuck || 0)}%`;
+ if($("permPowerLv")) $("permPowerLv").textContent = `+${d.permPower || 1}`;
 
  const coinBtn = $("coin");
  if(coinBtn) {
@@ -1536,7 +1656,6 @@ function render(){
  if(filterBtn) filterBtn.textContent = d.filter ? "완료" : "구매 3,200,000";
  if(quantumBtn) quantumBtn.textContent = d.quantum ? "완료" : "구매 9,000,000";
 
- // 캐시상점 버튼 렌더링
  const gemItems = ['gemClick', 'gemAuto', 'gemLuck', 'gemHyper', 'gemRing', 'gemDivine'];
  const gemCosts = { gemClick: 25, gemAuto: 50, gemLuck: 75, gemHyper: 100, gemRing: 200, gemDivine: 500 };
  gemItems.forEach(item => {
@@ -1547,11 +1666,12 @@ function render(){
    }
  });
 
- // 주식 UI 렌더링
  if($("stockPrice1")) $("stockPrice1").textContent = fmt(stockPrices[1]);
  if($("stockPrice2")) $("stockPrice2").textContent = fmt(stockPrices[2]);
  if($("stockOwned1")) $("stockOwned1").textContent = d.stock1;
  if($("stockOwned2")) $("stockOwned2").textContent = d.stock2;
+ drawStockChart("stockCanvas1", stockHistory1);
+ drawStockChart("stockCanvas2", stockHistory2);
 
  const now = Date.now();
  const cooldown = 24 * 60 * 60 * 1000;
@@ -1652,7 +1772,6 @@ function renderPetList(){
       const targetPet = PET_DB[d.pets[index]];
       if(sourcePet.grade === targetPet.grade) {
         if(sourcePet.grade === 'S') {
-          // S등급 드론 종류별로 4개 모아서 합성 -> 극악의 확률로 신화(M), 실패시 레전더리 확정
           let sIndices = [];
           d.pets.forEach((pId, idx) => { if(PET_DB[pId].grade === 'S') sIndices.push(idx); });
           if(sIndices.length >= 4) {
@@ -1664,12 +1783,11 @@ function renderPetList(){
               if(equipIdx !== -1) d.equippedPets.splice(equipIdx, 1);
               d.pets.splice(idx, 1);
             });
-            // 극악의 확률(3%)로 신화(M), 실패 시 레전더리(L)
             if(Math.random() < 0.03) {
               d.pets.push('mythic');
               say(`🎉 기적! S등급 4개 합성 성공으로 신화 드론 [초신성 제네시스] 획득!!`);
             } else {
-              playFailSound();
+              triggerEpicExplosion("S등급 드론들");
               d.pets.push('legend');
               say(`✨ S등급 합성 결과: [옴니버스 싱귤래리티] (레전더리) 획득!`);
             }
@@ -1691,7 +1809,7 @@ function renderPetList(){
               d.pets.push('mythic');
               say(`🎉 초대박! 신화 드론 [초신성 제네시스] 합성 성공!!`);
             } else {
-              playFailSound();
+              triggerEpicExplosion("레전더리 드론");
               indicesToRemove.forEach(idx => {
                 let removedPetId = d.pets[idx];
                 let equipIdx = d.equippedPets.indexOf(removedPetId);
@@ -1718,7 +1836,7 @@ function renderPetList(){
               d.pets.push('trans');
               say(`🌟 기적! 초월 드론 [에테르 오브 파라다이스] 합성 성공!!`);
             } else {
-              playFailSound();
+              triggerEpicExplosion("신화 드론");
               indicesToRemove.forEach(idx => {
                 let removedPetId = d.pets[idx];
                 let equipIdx = d.equippedPets.indexOf(removedPetId);
@@ -1745,7 +1863,7 @@ function renderPetList(){
               d.pets.push('chaos');
               say(`🔥 우주 탄생! 최상위 카오스 드론 [공허의 디바우러] 강림!!`);
             } else {
-              playFailSound();
+              triggerEpicExplosion("초월 드론");
               indicesToRemove.forEach(idx => {
                 let removedPetId = d.pets[idx];
                 let equipIdx = d.equippedPets.indexOf(removedPetId);
@@ -1799,7 +1917,12 @@ function sellPet(index){
   const pet = PET_DB[petId];
   if(!pet) return;
   let eqIdx = d.equippedPets.indexOf(petId);
-  if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
+  if(eqIdx !== -1) {
+    if(pet.grade === 'L' || pet.grade === 'M' || pet.grade === 'T' || pet.grade === 'X') {
+      triggerEpicExplosion(pet.name);
+    }
+    d.equippedPets.splice(eqIdx, 1);
+  }
   d.pets.splice(index, 1);
   d.score += pet.sellPrice;
   say(`${pet.name} 판매 완료! (+${fmt(pet.sellPrice)} 에너지)`);
@@ -1828,30 +1951,39 @@ function drawPet(boxType){
   save();
 }
 
-// 주식 거래 함수
-function buyStock(id) {
+// 주식 일괄 거래 함수 (매수/매도 max 지원)
+function buyStock(id, amount) {
   const price = stockPrices[id];
-  if(d.score < price) return say("에너지가 부족합니다.");
-  d.score -= price;
-  if(id === 1) d.stock1 = (d.stock1 || 0) + 1;
-  if(id === 2) d.stock2 = (d.stock2 || 0) + 1;
-  say("주식 1주 매수 완료!");
+  let qty = 0;
+  if(amount === 'max') {
+    qty = Math.floor(d.score / price);
+    if(qty <= 0) return say("에너지가 부족합니다.");
+  } else {
+    qty = amount;
+    if(d.score < price * qty) return say("에너지가 부족합니다.");
+  }
+  d.score -= price * qty;
+  if(id === 1) d.stock1 = (d.stock1 || 0) + qty;
+  if(id === 2) d.stock2 = (d.stock2 || 0) + qty;
+  say(`주식 ${qty}주 매수 완료!`);
   save();
 }
 
-function sellStock(id) {
+function sellStock(id, amount) {
   const price = stockPrices[id];
-  if(id === 1 && (d.stock1 || 0) > 0) {
-    d.stock1--;
-    d.score += price;
-    say(`테슬라 에너지 1주 매도 완료! (+${fmt(price)})`);
-  } else if(id === 2 && (d.stock2 || 0) > 0) {
-    d.stock2--;
-    d.score += price;
-    say(`스페이스 다이내믹 1주 매도 완료! (+${fmt(price)})`);
+  let owned = id === 1 ? (d.stock1 || 0) : (d.stock2 || 0);
+  let qty = 0;
+  if(amount === 'max') {
+    qty = owned;
+    if(qty <= 0) return say("보유한 주식이 없습니다.");
   } else {
-    say("보유한 주식이 없습니다.");
+    qty = amount;
+    if(owned < qty) return say("보유 주식이 부족합니다.");
   }
+  if(id === 1) d.stock1 -= qty;
+  if(id === 2) d.stock2 -= qty;
+  d.score += price * qty;
+  say(`주식 ${qty}주 매도 완료! (+${fmt(price * qty)})`);
   save();
 }
 
@@ -1950,28 +2082,17 @@ document.addEventListener("DOMContentLoaded", () => {
     chatInput.onkeydown = (e) => { if(e.key === 'Enter') sendChatMessage(); };
   }
 
+  // 영구 스탯 1개만 남기고 점진적 증가
   const buyPermPower = $("buyPermPowerBtn");
   if(buyPermPower) {
     buyPermPower.onclick = () => {
-      if(d.rp >= 2){ d.rp -= 2; d.permPower = (d.permPower || 0) + 5; say("기초 채굴 효율 강화 성공!"); save(); }
+      if(d.rp >= 2){ 
+        d.rp -= 2; 
+        d.permPower = (d.permPower || 1) + 2; 
+        say("기초 채굴 효율 영구 강화 성공!"); 
+        save(); 
+      }
       else say("승급 포인트(RP)가 부족합니다! (필요: 2 RP)");
-    };
-  }
-
-  const buyPermCps = $("buyPermCpsBtn");
-  if(buyPermCps) {
-    buyPermCps.onclick = () => {
-      if(d.rp >= 2){ d.rp -= 2; d.permCps = (d.permCps || 0) + 10; say("자동 채굴 강화 성공!"); save(); }
-      else say("승급 포인트(RP)가 부족합니다! (필요: 2 RP)");
-    };
-  }
-
-  const buyPermLuck = $("buyPermLuckBtn");
-  if(buyPermLuck) {
-    buyPermLuck.onclick = () => {
-      if((d.permLuck || 0) >= 10) return say("최대 강화 한도에 도달했습니다.");
-      if(d.rp >= 4){ d.rp -= 4; d.permLuck = (d.permLuck || 0) + 2; say("행운 모듈 강화 성공!"); save(); }
-      else say("승급 포인트(RP)가 부족합니다! (필요: 4 RP)");
     };
   }
 
@@ -1995,20 +2116,42 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoToggle = $("autoToggleBtn");
   if(autoToggle) autoToggle.onclick = () => { d.autoEnabled = !d.autoEnabled; save(); };
 
+  // 에너지 버튼 클릭 카운터 (10회마다 보석 1~10개 랜덤 드랍)
+  if(!window.clickCounter) window.clickCounter = 0;
   const coinBtnMain = $("coin");
   if(coinBtnMain) {
-    coinBtnMain.onclick = () => {
+    coinBtnMain.onclick = (e) => {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
       let coolerBonus = d.cooler ? 1.2 : 1.0;
       let gemClickBonus = d.gemClick ? 2.0 : 1.0;
       let gemRingBonus = d.gemRing ? 1.50 : 1.0;
-      let currentPower = (((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus;
+      let currentPower = (((d.power + (d.permPower || 1)) * coolerBonus) * gemClickBonus) * gemRingBonus;
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
       
       const totalLuckProb = (d.luck ? 0.05 : 0.0) + ((d.permLuck || 0) / 100) + (d.gemLuck ? 0.10 : 0.0);
       if(Math.random() < totalLuckProb){ gain *= 1.5; triggerLuckEffect(gain); }
-      d.score += gain; save();
+      d.score += gain;
+
+      // 10회 클릭 시 보석 지급 체크
+      window.clickCounter++;
+      if(window.clickCounter >= 10) {
+        window.clickCounter = 0;
+        let randomGems = Math.floor(Math.random() * 10) + 1;
+        d.gems += randomGems;
+        
+        // 보석 아이콘 팝업 애니메이션 생성
+        const mainArea = $("mainArea");
+        if(mainArea) {
+          const gemPop = document.createElement("div");
+          gemPop.className = "gem-popup";
+          gemPop.textContent = `💎 +${randomGems}`;
+          mainArea.appendChild(gemPop);
+          setTimeout(() => gemPop.remove(), 1000);
+        }
+      }
+
+      save();
     };
   }
 
@@ -2038,7 +2181,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  // 보석 캐시상점 구매 리스너 (가격 인상 및 신규 아이템 반영)
   document.querySelectorAll(".gem-buy").forEach(btn => {
     btn.onclick = () => {
       const item = btn.dataset.gemitem;
@@ -2071,13 +2213,12 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // 환생 시 보석과 도감 정보는 유지되도록 수정
   const rebirthBtn = $("rebirthBtn");
   if(rebirthBtn) {
     rebirthBtn.onclick = () => {
       let req = 1200000 * Math.pow(2.2, d.rebirth);
       if(d.score < req) return;
-      d.rebirth++; d.rp += 3; d.score = 30; d.power = 1; d.cps = 0;
+      d.rebirth++; d.rp += 3; d.score = 1; d.power = 1; d.cps = 0;
       say("시스템 승급 완료! (+3 RP, 보석 및 도감 보존)"); save();
     };
   }
@@ -2090,6 +2231,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetPanel = $(t.dataset.tab);
       if(targetPanel) targetPanel.classList.remove("hidden");
       if(t.dataset.tab === 'rankPanel') loadFirebaseRankings();
+      if(t.dataset.tab === 'stockPanel') {
+        drawStockChart("stockCanvas1", stockHistory1);
+        drawStockChart("stockCanvas2", stockHistory2);
+      }
     };
   });
 
@@ -2189,19 +2334,27 @@ setInterval(() => {
   let filterBonus = d.filter ? 1.25 : 1.0;
   let gemAutoBonus = d.gemAuto ? 2.0 : 1.0;
   let gemRingBonus = d.gemRing ? 1.50 : 1.0;
-  const autoCps = ((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus);
+  const autoCps = ((((d.cps + 0) * filterBonus) * gemAutoBonus) * gemRingBonus);
   if(autoCps > 0 && d.autoEnabled){
     d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
     save();
   }
 
-  // 주식 시세 무작위 변동 (8초마다)
-  if(Math.random() < 0.12) {
+  // 주식 시세 무작위 변동 및 그래프 데이터 축적 (6초마다)
+  if(Math.random() < 0.15) {
     stockPrices[1] = Math.max(200, Math.floor(stockPrices[1] * (0.85 + Math.random() * 0.35)));
     stockPrices[2] = Math.max(1000, Math.floor(stockPrices[2] * (0.80 + Math.random() * 0.40)));
+    
+    stockHistory1.push(stockPrices[1]);
+    if(stockHistory1.length > 20) stockHistory1.shift();
+    stockHistory2.push(stockPrices[2]);
+    if(stockHistory2.length > 20) stockHistory2.shift();
+
     if(!$("stockPanel").classList.contains("hidden")) {
       if($("stockPrice1")) $("stockPrice1").textContent = fmt(stockPrices[1]);
       if($("stockPrice2")) $("stockPrice2").textContent = fmt(stockPrices[2]);
+      drawStockChart("stockCanvas1", stockHistory1);
+      drawStockChart("stockCanvas2", stockHistory2);
     }
   }
 
