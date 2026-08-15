@@ -894,7 +894,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
             <button class="btn-stock" style="flex:1; background:#b91c1c !important; color:#fff !important;" onclick="sellStock(2, 'max')">전부 매도</button>
           </div>
         </div>
-        <!-- 3번 주식 (신규) -->
+        <!-- 3번 주식 -->
         <div class="stock-card" style="margin-top:10px;">
           <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
           <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">12,000</b> 에너지</p>
@@ -909,7 +909,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
             <button class="btn-stock" style="flex:1; background:#b91c1c !important; color:#fff !important;" onclick="sellStock(3, 'max')">전부 매도</button>
           </div>
         </div>
-        <!-- 4번 주식 (신규) -->
+        <!-- 4번 주식 -->
         <div class="stock-card" style="margin-top:10px;">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
           <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">35,000</b> 에너지</p>
@@ -1142,13 +1142,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <!-- 💬 실시간 채팅 탭 -->
     <div id="chatPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💬 연구원 실시간 소통 채널</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:10px;">구글 로그인 후 전 세계 연구원들과 실시간으로 대화를 나눠보세요!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:10px;">구글 로그인 후 전 세계 연구원들과 실시간으로 대화를 나눠보세요! (<b style="color:var(--accent);">/자랑</b> 명령어 사용 가능)</p>
       <div class="chat-container">
         <div class="chat-messages" id="chatMessages">
           <div style="color:var(--text-sub); text-align:center; font-size:11px; margin-top:20px;">채팅 기록을 불러오는 중...</div>
         </div>
         <div class="chat-input-area">
-          <input type="text" id="chatInput" class="chat-input" placeholder="메시지를 입력하세요 (로그인 필수)..." maxlength="150">
+          <input type="text" id="chatInput" class="chat-input" placeholder="메시지 또는 /자랑 입력..." maxlength="150">
           <button class="btn-game" id="chatSendBtn" style="padding: 6px 14px;">전송</button>
         </div>
       </div>
@@ -1283,9 +1283,9 @@ function playFailureSound() {
 // --- 패치노트 데이터 ---
 const patchNotes = [
   {
-    version: "v4.5 패치 (최신)",
-    title: "주식 4종으로 확장 및 실시간 서버 데이터 저장 연동",
-    desc: "1) 테슬라(TES), 엠비디아(NVDA)에 이어 스페이스코어(SPC), 양자 바이오(QBIO) 주식이 추가되었습니다.\n2) 4가지 주식의 시세와 보유량이 완벽하게 동기화 및 저장됩니다."
+    version: "v4.6 패치 (최신)",
+    title: "실시간 채팅 명령어(/자랑) 추가 및 거래소·주식 연동 안정화",
+    desc: "1) 실시간 채팅창에 '/자랑' 명령어를 입력하여 자신의 보유 에너지, 보석, 승급 횟수, 최고 등급 드론 정보를 전 세계 유저들에게 공유할 수 있습니다.\n2) 유저 간 드론 거래소 및 주식 4종의 서버 데이터 동기화가 더욱 강력하게 개선되었습니다."
   }
 ];
 
@@ -1321,7 +1321,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// 💡 로컬 스토리지 저장소 시스템 (주식 4종 변수 포함)
+// 💡 로컬 스토리지 저장소 시스템
 const saveKey = "energyRush_PermanentSaveData";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score:1, best:1, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false, cooler:false, filter:false, quantum:false,
@@ -1694,8 +1694,25 @@ function loadChatMessages() {
 function sendChatMessage() {
   if(!currentUser) return say("구글 로그인 후 채팅을 이용할 수 있습니다.");
   const input = $("chatInput");
-  const text = input.value.trim();
+  let text = input.value.trim();
   if(!text) return;
+
+  // 💡 /자랑 명령어 처리
+  if(text === "/자랑") {
+    let topGrade = "없음";
+    let gradeRank = {'X':9, 'T':8, 'M':7, 'L':6, 'S':5, 'A':4, 'B':3, 'C':2};
+    let maxGradeVal = 0;
+    if(d.pets && d.pets.length > 0) {
+      d.pets.forEach(pId => {
+        let p = PET_DB[pId];
+        if(p && gradeRank[p.grade] > maxGradeVal) {
+          maxGradeVal = gradeRank[p.grade];
+          topGrade = `${p.grade}급 (${p.name})`;
+        }
+      });
+    }
+    text = `✨ [자랑 시스템] 에너지: ${fmt(d.score)} | 보석: 💎${fmt(d.gems)} | 승급: ${d.rebirth}회 | 최고드론: ${topGrade}`;
+  }
 
   db.collection('global_chat').add({
     googleId: currentUser.googleId,
