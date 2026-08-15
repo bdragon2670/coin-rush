@@ -233,6 +233,7 @@ h1{
 .close-modal { background: none; border: none; color: var(--text-sub); font-size: 18px; cursor: pointer; }
 .modal-body {
   overflow-y: auto;
+  max-height: 50vh;
   font-size: 13px;
   color: var(--text-sub);
   line-height: 1.5;
@@ -277,7 +278,9 @@ h1{
   align-items: center;
   justify-content: center;
   transition: transform 0.1s ease, box-shadow 0.2s ease;
+  overflow: hidden;
 }
+.coin img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .coin:active{
   transform: scale(0.95);
   box-shadow: 0 2px 10px rgba(56, 189, 248, 0.2);
@@ -530,7 +533,24 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   margin-bottom: 10px;
 }
 
-/* 채팅 패널 스타일 */
+/* 도감 수집 프로그레스 바 */
+.progress-bar-container {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  height: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #10b981);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* 채팅 패널 */
 .chat-container {
   display: flex;
   flex-direction: column;
@@ -593,7 +613,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <body>
 
 <div class="layout-container">
-  <!-- 왼쪽 접고 펼치는 사이드바 메뉴 -->
+  <!-- 사이드바 메뉴 -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h3>📁 메뉴 네비게이션</h3>
@@ -644,7 +664,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div class="stat"><span>에너지</span><b id="score">0</b></div>
       <div class="stat"><span>초당 채굴</span><b id="cps">0</b></div>
       <div class="stat"><span>채굴 효율</span><b id="power">1</b></div>
-      <div class="stat"><span>장착 드론</span><b id="equippedPetCount">0/2</b></div>
+      <div class="stat"><span>보유 보석 💎</span><b id="gemCount">0</b></div>
     </div>
 
     <div class="main" id="mainArea">
@@ -674,27 +694,45 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       </div>
     </div>
 
-    <!-- 상점 탭 -->
+    <!-- 너프 및 추가된 상점 탭 -->
     <div id="shop" class="panel hidden">
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 10% 확률로 에너지 보너스 ×2</p></div>
-          <button class="buy" data-item="luck">구매 30,000</button>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 5% 확률로 에너지 보너스 ×1.5 (너프됨)</p></div>
+          <button class="buy" data-item="luck">구매 40,000</button>
         </div>
         <div class="shop-item">
-          <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +25%</p></div>
-          <button class="buy" data-item="core">구매 180,000</button>
+          <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +15% (너프됨)</p></div>
+          <button class="buy" data-item="core">구매 220,000</button>
         </div>
         <div class="shop-item">
-          <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +50%</p></div>
-          <button class="buy" data-item="double">구매 750,000</button>
+          <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +30% (너프됨)</p></div>
+          <button class="buy" data-item="double">구매 900,000</button>
+        </div>
+        <div class="shop-item">
+          <div><h3>🔋 초정밀 냉각기</h3><p>클릭 효율 +20% 추가 증가</p></div>
+          <button class="buy" data-item="cooler">구매 1,500,000</button>
+        </div>
+        <div class="shop-item">
+          <div><h3>🪐 다중 중력 필터</h3><p>초당 자동 채굴량 +25% 증가</p></div>
+          <button class="buy" data-item="filter">구매 3,500,000</button>
+        </div>
+        <div class="shop-item">
+          <div><h3>⚛️ 양자 가속 코어</h3><p>모든 에너지 획득량 +50%</p></div>
+          <button class="buy" data-item="quantum">구매 10,000,000</button>
         </div>
       </div>
     </div>
 
-    <!-- 🎨 커스텀 탭 -->
+    <!-- 🎨 커스텀 탭 (사진 업로드 추가) -->
     <div id="customPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); font-size:14px; margin-top:0;">🎨 에너지 코어 컬러 커스텀</h3>
+      <h3 style="color:var(--text-main); font-size:14px; margin-top:0;">🖼️ 내 사진으로 코어 커스텀</h3>
+      <div style="margin-bottom: 14px;">
+        <input type="file" id="customImageUpload" accept="image/*" style="font-size:12px; color:var(--text-sub);">
+        <button class="btn-game" id="resetCustomImg" style="margin-top:6px; padding:4px 10px; background:#64748b !important;">기본 심볼로 초기화</button>
+      </div>
+
+      <h3 style="color:var(--text-main); font-size:14px; margin-top:10px;">🎨 에너지 코어 컬러 커스텀</h3>
       <div class="custom-grid">
         <button class="color-btn" data-color="gold" style="background:linear-gradient(135deg, #38bdf8, #0284c7);"></button>
         <button class="color-btn" data-color="ruby" style="background:linear-gradient(135deg, #f43f5e, #be123c);"></button>
@@ -738,52 +776,57 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="petList" class="pet-list"></div>
     </div>
 
-    <!-- 📖 도감 탭 -->
+    <!-- 📖 도감 탭 (보석 바 및 보상 연동) -->
     <div id="encyclopediaPanel" class="panel hidden">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">
-        <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감 & 수집 보상</h3>
         <span style="font-size:12px; color:var(--accent);" id="encyclopediaCount">수집률: 0 / 14</span>
       </div>
-      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:12px;">모든 드론의 능력치 정보와 획득 여부를 확인할 수 있습니다.</p>
+      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:8px;">새로운 드론을 도감에 등록할 때마다 등급별 보석(💎)이 지급됩니다!</p>
+      
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="encyclopediaProgressBar"></div>
+      </div>
+
       <div id="encyclopediaList" class="encyclopedia-list"></div>
     </div>
 
-    <!-- 출석체크 탭 -->
+    <!-- 출석체크 탭 (지원금 2000원 수정) -->
     <div id="attendPanel" class="panel hidden">
       <div class="attendance-card">
         <h2 style="margin-top:0; font-size:16px;">📅 연구소 일일 지원금 수령</h2>
-        <p style="color:var(--text-sub); font-size:12px;">24시간마다 접속하여 무상 연구 자원과 승급 포인트를 지원받으세요!</p>
+        <p style="color:var(--text-sub); font-size:12px;">24시간마다 접속하여 무상 연구 자원과 보석 2,000개를 지원받으세요!</p>
         <p style="font-size:13px;">연속 지원일: <b id="attDays" style="color:var(--accent);">0</b>일차</p>
         <button id="attendBtn" class="attend-btn">🎁 지원금 수령하기</button>
         <p id="attStatus" style="font-size:11px;color:var(--text-sub);margin-top:8px;"></p>
       </div>
     </div>
 
-    <!-- 🔬 연구실 미니게임 탭 -->
+    <!-- 🔬 연구실 미니게임 탭 (최소 베팅 1500원 수정) -->
     <div id="minigames" class="panel hidden">
       <div class="minigame-grid" style="grid-template-columns: repeat(2, 1fr);">
         <div class="game-card">
           <h3>🔬 에너지 증폭 실험</h3>
           <div class="slot-display" id="slotScreen">❓ ❓ ❓</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">잭팟 확률 0.6%</p>
-          <input type="number" id="slotBet" class="bet-input" value="300" min="100" step="100">
+          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">최소 베팅 1,500 에너지</p>
+          <input type="number" id="slotBet" class="bet-input" value="1500" min="1500" step="500">
           <button class="btn-game" id="slotBtn">증폭 가동 (×15)</button>
         </div>
         <div class="game-card">
           <h3>📊 확률 데이터 분석</h3>
           <div class="slot-display" id="coinResult" style="font-size:13px;">상승 or 하락</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 30%</p>
+          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">최소 베팅 1,500 에너지</p>
           <div style="margin-bottom: 4px;">
             <button class="btn-mini selected" id="btnHead">상승</button>
             <button class="btn-mini" id="btnTail">하락</button>
           </div>
-          <input type="number" id="coinBet" class="bet-input" value="300" min="100" step="100">
+          <input type="number" id="coinBet" class="bet-input" value="1500" min="1500" step="500">
           <button class="btn-game" id="coinFlipBtn">동기화 (×2.2)</button>
         </div>
         <div class="game-card">
           <h3>🎲 양자 주사위 파동</h3>
           <div class="slot-display" id="diceResult" style="font-size:13px;">1~8 선택</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 6%</p>
+          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">최소 베팅 1,500 에너지</p>
           <div class="dice-buttons">
             <button class="btn-mini selected dice-select" data-num="1">1</button>
             <button class="btn-mini dice-select" data-num="2">2</button>
@@ -794,18 +837,18 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
             <button class="btn-mini dice-select" data-num="7">7</button>
             <button class="btn-mini dice-select" data-num="8">8</button>
           </div>
-          <input type="number" id="diceBet" class="bet-input" value="300" min="100" step="100">
+          <input type="number" id="diceBet" class="bet-input" value="1500" min="1500" step="500">
           <button class="btn-game" id="diceRollBtn">측정 (×6.5)</button>
         </div>
         <div class="game-card">
           <h3>📈 배율 예측</h3>
           <div class="slot-display" id="highLowCard" style="font-size:12px;">기준: <b>8</b></div>
-          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 30%</p>
+          <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">최소 베팅 1,500 에너지</p>
           <div style="margin-bottom: 4px;">
             <button class="btn-mini selected" id="btnHigh">UP</button>
             <button class="btn-mini" id="btnLow">DOWN</button>
           </div>
-          <input type="number" id="highLowBet" class="bet-input" value="300" min="100" step="100">
+          <input type="number" id="highLowBet" class="bet-input" value="1500" min="1500" step="500">
           <button class="btn-game" id="highLowBtn">검증 (×2.2)</button>
         </div>
       </div>
@@ -900,7 +943,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 </div>
 
 <script>
-// --- 사이드바 접기/펼치기 토글 ---
+// --- 사이드바 토글 ---
 const sidebar = document.getElementById("sidebar");
 const toggleSidebarBtn = document.getElementById("toggleSidebarBtn");
 if(toggleSidebarBtn) {
@@ -984,10 +1027,15 @@ function playFailSound() {
   } catch (e) {}
 }
 
-// --- 패치노트 데이터 ---
+// --- 패치노트 데이터 (누적 유지) ---
 const patchNotes = [
   {
-    version: "v3.1 패치 (최신)",
+    version: "v3.2 패치 (최신)",
+    title: "도감 보석 시스템, 상점 밸런스 및 커스텀 고도화",
+    desc: "1) 패치노트들이 삭제되지 않고 누적되어 스크롤로 확인할 수 있습니다.\n2) 미니게임 최소 베팅 금액이 1,500 에너지로 상향되었고, 지원금으로 보석 2,000개가 지급됩니다.\n3) 도감을 채울 때마다 등급별 보석(💎)이 즉시 지급되며, 수집 진행도 바와 완료 시 보석 10개 보상이 추가되었습니다.\n4) 레전더리 이상 드론들의 판매가가 하락 조정되었습니다.\n5) 내 사진 파일을 불러와 에너지 코어 이미지를 커스텀할 수 있게 되었습니다.\n6) 상점 아이템들이 소폭 너프되었으며, 신규 아이템 3종이 추가되었습니다."
+  },
+  {
+    version: "v3.1 패치",
     title: "왼쪽 사이드바 메뉴 및 실시간 채팅 시스템 구축",
     desc: "1) 카테고리 메뉴를 왼쪽으로 이동하여 접고 펼칠 수 있는 슬라이드 바로 개편했습니다.\n2) 전 세계 연구원들과 실시간으로 소통할 수 있는 채팅 시스템이 추가되었습니다.\n3) 최상위 초월/카오스 드론 및 도감 데이터가 영구 보존됩니다."
   },
@@ -1033,32 +1081,34 @@ const db = firebase.firestore();
 // 💡 로컬 스토리지 저장소 시스템
 const saveKey = "energyRush_PermanentSaveData";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
- score:0, best:0, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false,
+ score:0, best:0, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false, cooler:false, filter:false, quantum:false,
  pets:[], equippedPets:[], discoveredPets:[], lastAttend:0, attendDays:0, autoEnabled:true,
- permPower:0, permCps:0, permLuck:0,
- coinColor:'gold', coinIcon:'⚡'
+ permPower:0, permCps:0, permLuck:0, gems:0,
+ coinColor:'gold', coinIcon:'⚡', customImg: null
 };
 
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
+if (d.gems === undefined) d.gems = 0;
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
+// 레전더리 이상 판매가 하락 조정된 드론 DB
 const PET_DB = {
- cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +2%', sellPrice: 300 },
- chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +3%', sellPrice: 300 },
- dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +4%', sellPrice: 1500 },
- rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +5%', sellPrice: 1500 },
- fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +5%', sellPrice: 8000 },
- panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +6%', sellPrice: 8000 },
- dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.12배', sellPrice: 40000 },
- unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.15배', sellPrice: 40000 },
- phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +8% & 자동 +6%', sellPrice: 40000 },
- titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.18배', sellPrice: 40000 },
- legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:'M', desc:'모든 에너지 획득량 1.5배 & 행운 확률 +10%', sellPrice: 200000 },
- mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:'T', desc:'모든 에너지 획득량 3배 & 행운 확률 +25%', sellPrice: 1000000 },
- trans: { id:'trans', name:'에테르 오브 파라다이스', icon:'💎✨', grade:'T', nextGrade:'X', desc:'모든 에너지 획득량 7배 & 행운 확률 +40%', sellPrice: 5000000 },
- chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 획득량 20배 & 행운 확률 +70%', sellPrice: 25000000 }
+ cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +2%', sellPrice: 300, gemReward: 1 },
+ chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +3%', sellPrice: 300, gemReward: 1 },
+ dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +4%', sellPrice: 1500, gemReward: 2 },
+ rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +5%', sellPrice: 1500, gemReward: 2 },
+ fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +5%', sellPrice: 8000, gemReward: 4 },
+ panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +6%', sellPrice: 8000, gemReward: 4 },
+ dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.12배', sellPrice: 40000, gemReward: 8 },
+ unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.15배', sellPrice: 40000, gemReward: 8 },
+ phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +8% & 자동 +6%', sellPrice: 40000, gemReward: 8 },
+ titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.18배', sellPrice: 40000, gemReward: 8 },
+ legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:'M', desc:'모든 에너지 획득량 1.5배 & 행운 확률 +10%', sellPrice: 45000, gemReward: 15 },
+ mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:'T', desc:'모든 에너지 획득량 3배 & 행운 확률 +25%', sellPrice: 120000, gemReward: 25 },
+ trans: { id:'trans', name:'에테르 오브 파라다이스', icon:'💎✨', grade:'T', nextGrade:'X', desc:'모든 에너지 획득량 7배 & 행운 확률 +40%', sellPrice: 350000, gemReward: 40 },
+ chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 획득량 20배 & 행운 확률 +70%', sellPrice: 1000000, gemReward: 70 }
 };
 
 const PETS_BY_GRADE = {
@@ -1085,12 +1135,28 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-// 도감 자동 등록
+// 도감 등록 시 보석 지급 및 전체 도감 완료 체크
 function checkAndDiscoverPets() {
   if(!d.discoveredPets) d.discoveredPets = [];
+  let newlyDiscovered = false;
+
   d.pets.forEach(petId => {
-    if(!d.discoveredPets.includes(petId)) d.discoveredPets.push(petId);
+    if(!d.discoveredPets.includes(petId)) {
+      d.discoveredPets.push(petId);
+      newlyDiscovered = true;
+      const pet = PET_DB[petId];
+      if(pet && pet.gemReward) {
+        d.gems += pet.gemReward;
+      }
+    }
   });
+
+  // 모든 도감(14개)을 다 모았을 때 추가 보석 10개 지급 (최초 1회)
+  if(d.discoveredPets.length === Object.keys(PET_DB).length && !d.completedAllEncyclopedia) {
+    d.completedAllEncyclopedia = true;
+    d.gems += 10;
+    say("🎉 축하합니다! 통합 드론 도감 100% 완성 보상으로 보석 10개를 획득하셨습니다!");
+  }
 }
 
 function syncScoreToFirebase(force = false) {
@@ -1151,7 +1217,6 @@ function loadFirebaseRankings(){
   });
 }
 
-// 실시간 채팅 로드 및 전송
 function loadChatMessages() {
   db.collection('global_chat').orderBy('createdAt', 'asc').limit(50).onSnapshot((snapshot) => {
     const chatContainer = $("chatMessages");
@@ -1265,7 +1330,8 @@ function getPetBonus(){
 }
 
 function getBaseMult(){
-  return (d.core ? 1.2 : 1) * (d.double ? 1.4 : 1) * (1 + d.rp * 0.10);
+  let itemMult = (d.core ? 1.15 : 1) * (d.double ? 1.30 : 1) * (d.quantum ? 1.50 : 1);
+  return itemMult * (1 + d.rp * 0.10);
 }
 
 function save(){
@@ -1301,12 +1367,17 @@ function triggerLuckEffect(amount) {
 function render(){
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
- const totalPower = (d.power + (d.permPower || 0)) * baseMult * petBonus.clickMult * petBonus.coinMult;
- const totalCps = (d.cps + (d.permCps || 0)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
+ 
+ let coolerBonus = d.cooler ? 1.2 : 1.0;
+ const totalPower = ((d.power + (d.permPower || 0)) * coolerBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
+ 
+ let filterBonus = d.filter ? 1.25 : 1.0;
+ const totalCps = ((d.cps + (d.permCps || 0)) * filterBonus) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  if($("score")) $("score").textContent=fmt(d.score); 
  if($("power")) $("power").textContent=fmt(totalPower);
  if($("cps")) $("cps").textContent=fmt(totalCps); 
+ if($("gemCount")) $("gemCount").textContent=fmt(d.gems);
  if($("powerLv")) $("powerLv").textContent="Lv."+d.power; 
  if($("autoLv")) $("autoLv").textContent="Lv."+d.cps;
  if($("rp")) $("rp").textContent=fmt(d.rp);
@@ -1319,8 +1390,13 @@ function render(){
 
  const coinBtn = $("coin");
  if(coinBtn) {
-   coinBtn.textContent = d.coinIcon || '⚡';
-   coinBtn.style.background = COLOR_GRADIENTS[d.coinColor || 'gold'];
+   if(d.customImg) {
+     coinBtn.innerHTML = `<img src="${d.customImg}" alt="Custom Core">`;
+     coinBtn.style.background = "none";
+   } else {
+     coinBtn.textContent = d.coinIcon || '⚡';
+     coinBtn.style.background = COLOR_GRADIENTS[d.coinColor || 'gold'];
+   }
  }
 
  const autoBtn = $("autoToggleBtn");
@@ -1338,12 +1414,19 @@ function render(){
  if($("powerBtn")) $("powerBtn").textContent = fmt(350 * Math.pow(1.25, d.power - 1)) + " 에너지";
  if($("autoBtn")) $("autoBtn").textContent = fmt(1800 * Math.pow(1.28, d.cps)) + " 에너지";
  
- const luckBtn=document.querySelector('[data-item="luck"]');
- const coreBtn=document.querySelector('[data-item="core"]');
- const doubleBtn=document.querySelector('[data-item="double"]');
- if(luckBtn) luckBtn.textContent=d.luck?"완료":"구매 30,000";
- if(coreBtn) coreBtn.textContent=d.core?"완료":"구매 180,000";
- if(doubleBtn) doubleBtn.textContent=d.double?"완료":"구매 750,000";
+ const luckBtn = document.querySelector('[data-item="luck"]');
+ const coreBtn = document.querySelector('[data-item="core"]');
+ const doubleBtn = document.querySelector('[data-item="double"]');
+ const coolerBtn = document.querySelector('[data-item="cooler"]');
+ const filterBtn = document.querySelector('[data-item="filter"]');
+ const quantumBtn = document.querySelector('[data-item="quantum"]');
+
+ if(luckBtn) luckBtn.textContent = d.luck ? "완료" : "구매 40,000";
+ if(coreBtn) coreBtn.textContent = d.core ? "완료" : "구매 220,000";
+ if(doubleBtn) doubleBtn.textContent = d.double ? "완료" : "구매 900,000";
+ if(coolerBtn) coolerBtn.textContent = d.cooler ? "완료" : "구매 1,500,000";
+ if(filterBtn) filterBtn.textContent = d.filter ? "완료" : "구매 3,500,000";
+ if(quantumBtn) quantumBtn.textContent = d.quantum ? "완료" : "구매 10,000,000";
 
  const now = Date.now();
  const cooldown = 24 * 60 * 60 * 1000;
@@ -1366,26 +1449,31 @@ function render(){
 
 function updateCustomUI(){
   document.querySelectorAll(".color-btn").forEach(btn => {
-    btn.classList.toggle("selected", btn.dataset.color === (d.coinColor || 'gold'));
+    btn.classList.toggle("selected", btn.dataset.color === (d.coinColor || 'gold') && !d.customImg);
   });
   document.querySelectorAll(".icon-btn").forEach(btn => {
-    btn.classList.toggle("selected", btn.dataset.icon === (d.coinIcon || '⚡'));
+    btn.classList.toggle("selected", btn.dataset.icon === (d.coinIcon || '⚡') && !d.customImg);
   });
 }
 
 function renderEncyclopedia() {
   const container = $("encyclopediaList");
   const countDisplay = $("encyclopediaCount");
+  const progressBar = $("encyclopediaProgressBar");
   if(!container) return;
   container.innerHTML = "";
   if(!d.discoveredPets) d.discoveredPets = [];
   let totalKeys = Object.keys(PET_DB);
-  let discoveredCount = 0;
+  let discoveredCount = d.discoveredPets.length;
+
+  if(progressBar) {
+    let percent = (discoveredCount / totalKeys.length) * 100;
+    progressBar.style.width = percent + "%";
+  }
 
   totalKeys.forEach(petId => {
     const pet = PET_DB[petId];
     const isUnlocked = d.discoveredPets.includes(petId);
-    if(isUnlocked) discoveredCount++;
     const card = document.createElement("div");
     card.className = `encyclopedia-card ${isUnlocked ? 'unlocked' : 'locked'}`;
     card.innerHTML = `
@@ -1394,7 +1482,7 @@ function renderEncyclopedia() {
       <b style="color:var(--text-main); font-size:12px;">${isUnlocked ? pet.name : '??? (미확인)'}</b>
       <p style="font-size:10px; color:${isUnlocked ? 'var(--text-sub)' : '#64748b'}; margin:3px 0 6px;">${pet.desc}</p>
       <div style="font-size:10px; font-weight:600; color:${isUnlocked ? '#10b981' : '#ef4444'};">
-        ${isUnlocked ? '✅ 획득 완료' : '🔒 미획득'}
+        ${isUnlocked ? `✅ 획득완료 (+💎${pet.gemReward})` : `🔒 미획득 (보상 💎${pet.gemReward})`}
       </div>
     `;
     container.appendChild(card);
@@ -1647,6 +1735,31 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  // 사진 업로드 커스텀 리스너
+  const customImgUpload = $("customImageUpload");
+  if(customImgUpload) {
+    customImgUpload.onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        d.customImg = event.target.result;
+        say("커스텀 코어 이미지 적용 완료!");
+        save();
+      };
+      reader.readAsDataURL(file);
+    };
+  }
+
+  const resetCustomImg = $("resetCustomImg");
+  if(resetCustomImg) {
+    resetCustomImg.onclick = () => {
+      d.customImg = null;
+      say("기본 심볼 코어로 복원되었습니다.");
+      save();
+    };
+  }
+
   const chatSendBtn = $("chatSendBtn");
   const chatInput = $("chatInput");
   if(chatSendBtn) chatSendBtn.onclick = sendChatMessage;
@@ -1680,11 +1793,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.querySelectorAll(".color-btn").forEach(btn => {
-    btn.onclick = () => { d.coinColor = btn.dataset.color; say("코어 컬러가 변경되었습니다."); save(); };
+    btn.onclick = () => { d.coinColor = btn.dataset.color; d.customImg = null; say("코어 컬러가 변경되었습니다."); save(); };
   });
 
   document.querySelectorAll(".icon-btn").forEach(btn => {
-    btn.onclick = () => { d.coinIcon = btn.dataset.icon; say("코어 심볼이 변경되었습니다."); save(); };
+    btn.onclick = () => { d.coinIcon = btn.dataset.icon; d.customImg = null; say("코어 심볼이 변경되었습니다."); save(); };
   });
 
   const regRankBtn = $("registerRankBtn");
@@ -1704,10 +1817,12 @@ document.addEventListener("DOMContentLoaded", () => {
     coinBtnMain.onclick = () => {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
-      let currentPower = (d.power + (d.permPower || 0));
+      let coolerBonus = d.cooler ? 1.2 : 1.0;
+      let currentPower = (d.power + (d.permPower || 0)) * coolerBonus;
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
-      const totalLuckProb = petBonus.luckProb + ((d.permLuck || 0) / 100);
-      if(d.luck && Math.random() < totalLuckProb){ gain *= 2.0; triggerLuckEffect(gain); }
+      
+      const totalLuckProb = (d.luck ? 0.05 : 0.0) + ((d.permLuck || 0) / 100);
+      if(Math.random() < totalLuckProb){ gain *= 1.5; triggerLuckEffect(gain); }
       d.score += gain; save();
     };
   }
@@ -1731,7 +1846,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".buy").forEach(btn => {
     btn.onclick = () => {
       const type = btn.dataset.item;
-      const costs = { luck: 30000, core: 180000, double: 750000 };
+      const costs = { luck: 40000, core: 220000, double: 900000, cooler: 1500000, filter: 3500000, quantum: 10000000 };
       const cost = costs[type];
       if(d.score < cost) return say("에너지가 부족합니다.");
       d.score -= cost; d[type] = true; save();
@@ -1749,7 +1864,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const now = Date.now();
       if(now - d.lastAttend < 24*60*60*1000) return say("아직 지원금 수령 시간이 되지 않았습니다.");
       d.lastAttend = now; d.attendDays += 1;
-      d.score += 12000 + (d.attendDays * 2500); d.rp += 1; save();
+      d.score += 12000 + (d.attendDays * 2500); 
+      d.gems += 2000; // 지원금 보석 2,000개 수령
+      d.rp += 1; save();
+      say("일일 지원금 수령 완료! (+보석 2,000개)");
     };
   }
 
@@ -1763,7 +1881,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // 사이드바 메뉴 탭 전환
   document.querySelectorAll(".tab").forEach(t => {
     t.onclick = () => {
       document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
@@ -1775,13 +1892,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  // 미니게임 로직
+  // 미니게임 로직 (최소 베팅 1500원 적용)
   const slotSymbols = ["⚡", "⚡", "⚡", "⚡", "🍀", "💎", "7️⃣", "🔋"];
   const slotBtn = $("slotBtn");
   if(slotBtn) {
     slotBtn.onclick = () => {
       let bet = parseInt($("slotBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+      if (bet < 1500 || d.score < bet) return say("최소 투자 에너지는 1,500 이상입니다.");
       d.score -= bet;
       let r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
       let r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
@@ -1805,7 +1922,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(coinFlipBtn) {
     coinFlipBtn.onclick = () => {
       let bet = parseInt($("coinBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+      if (bet < 1500 || d.score < bet) return say("최소 투자 에너지는 1,500 이상입니다.");
       d.score -= bet;
       let userWins = Math.random() < 0.30;
       let isHead = userWins ? (coinChoice === "head") : (coinChoice !== "head");
@@ -1828,7 +1945,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(diceRollBtn) {
     diceRollBtn.onclick = () => {
       let bet = parseInt($("diceBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+      if (bet < 1500 || d.score < bet) return say("최소 투자 에너지는 1,500 이상입니다.");
       d.score -= bet;
       let roll = Math.floor(Math.random() * 8) + 1;
       if($("diceResult")) $("diceResult").textContent = `결과: [ ${roll} ]`;
@@ -1848,7 +1965,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(highLowBtn) {
     highLowBtn.onclick = () => {
       let bet = parseInt($("highLowBet").value) || 0;
-      if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
+      if (bet < 1500 || d.score < bet) return say("최소 투자 에너지는 1,500 이상입니다.");
       d.score -= bet;
       let isWin = Math.random() < 0.30;
       let newNum = isWin ? 
@@ -1865,10 +1982,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// 자동 채굴 루프 및 주기적 서버 동기화
+// 자동 채굴 및 주기적 서버 동기화
 let syncCounter = 0;
 setInterval(() => {
-  const autoCps = (d.cps + (d.permCps || 0));
+  let filterBonus = d.filter ? 1.25 : 1.0;
+  const autoCps = ((d.cps + (d.permCps || 0)) * filterBonus);
   if(autoCps > 0 && d.autoEnabled){
     d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
     save();
