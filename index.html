@@ -859,11 +859,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
       <div id="marketList" class="market-list"></div>
     </div>
 
-    <!-- 📈 주식시장 탭 -->
+    <!-- 📈 주식시장 탭 (총 4종) -->
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (글로벌 공용)</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (글로벌 공용 4종)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">모든 플레이어가 동일한 실시간 주식 그래프 시세를 공유하며 새로고침해도 유지됩니다!</p>
-      <div class="stock-grid">
+      <div class="stock-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <!-- 1번 주식 -->
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
           <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">1,000</b> 에너지</p>
@@ -878,6 +879,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
             <button class="btn-stock" style="flex:1; background:#b91c1c !important; color:#fff !important;" onclick="sellStock(1, 'max')">전부 매도</button>
           </div>
         </div>
+        <!-- 2번 주식 -->
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
           <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">5,000</b> 에너지</p>
@@ -890,6 +892,36 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
           <div style="display:flex; gap:6px; margin-top:4px;">
             <button class="btn-stock" style="flex:1; background:#ef4444 !important; color:#fff !important;" onclick="sellStock(2, 1)">1주 매도</button>
             <button class="btn-stock" style="flex:1; background:#b91c1c !important; color:#fff !important;" onclick="sellStock(2, 'max')">전부 매도</button>
+          </div>
+        </div>
+        <!-- 3번 주식 (신규) -->
+        <div class="stock-card" style="margin-top:10px;">
+          <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">12,000</b> 에너지</p>
+          <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
+          <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <button class="btn-stock" style="flex:1;" onclick="buyStock(3, 1)">1주 매수</button>
+            <button class="btn-stock" style="flex:1; background:#0284c7 !important; color:#fff !important;" onclick="buyStock(3, 'max')">전부 매수</button>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <button class="btn-stock" style="flex:1; background:#ef4444 !important; color:#fff !important;" onclick="sellStock(3, 1)">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:#b91c1c !important; color:#fff !important;" onclick="sellStock(3, 'max')">전부 매도</button>
+          </div>
+        </div>
+        <!-- 4번 주식 (신규) -->
+        <div class="stock-card" style="margin-top:10px;">
+          <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">35,000</b> 에너지</p>
+          <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
+          <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <button class="btn-stock" style="flex:1;" onclick="buyStock(4, 1)">1주 매수</button>
+            <button class="btn-stock" style="flex:1; background:#0284c7 !important; color:#fff !important;" onclick="buyStock(4, 'max')">전부 매수</button>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <button class="btn-stock" style="flex:1; background:#ef4444 !important; color:#fff !important;" onclick="sellStock(4, 1)">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:#b91c1c !important; color:#fff !important;" onclick="sellStock(4, 'max')">전부 매도</button>
           </div>
         </div>
       </div>
@@ -1251,9 +1283,9 @@ function playFailureSound() {
 // --- 패치노트 데이터 ---
 const patchNotes = [
   {
-    version: "v4.4 패치 (최신)",
-    title: "실시간 랭킹 즉시 반영 및 글로벌 주식·데이터 완벽 동기화",
-    desc: "1) 점수 변동 시 즉시 서버 랭킹에 반영되도록 개선되었습니다.\n2) 모든 유저들이 동일한 주식 시세와 그래프를 공유하도록 서버 공용 엔진이 강화되었습니다."
+    version: "v4.5 패치 (최신)",
+    title: "주식 4종으로 확장 및 실시간 서버 데이터 저장 연동",
+    desc: "1) 테슬라(TES), 엠비디아(NVDA)에 이어 스페이스코어(SPC), 양자 바이오(QBIO) 주식이 추가되었습니다.\n2) 4가지 주식의 시세와 보유량이 완벽하게 동기화 및 저장됩니다."
   }
 ];
 
@@ -1289,7 +1321,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// 💡 로컬 스토리지 저장소 시스템
+// 💡 로컬 스토리지 저장소 시스템 (주식 4종 변수 포함)
 const saveKey = "energyRush_PermanentSaveData";
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score:1, best:1, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false, cooler:false, filter:false, quantum:false,
@@ -1297,7 +1329,7 @@ let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  pets:[], equippedPets:[], discoveredPets:[], lastAttend:0, attendDays:0, autoEnabled:true,
  permPower:0, permCps:0, permLuck:0, gems:0,
  coinColor:'gold', coinIcon:'⚡', customImg: null, bgImg: null,
- stock1: 0, stock2: 0,
+ stock1: 0, stock2: 0, stock3: 0, stock4: 0,
  lastMarketReset: 0, regCountToday: 3, buyCountToday: 3,
  box1Count: 0, box2Count: 0
 };
@@ -1307,6 +1339,8 @@ if (!d.discoveredPets) d.discoveredPets = [];
 if (d.gems === undefined) d.gems = 0;
 if (d.stock1 === undefined) d.stock1 = 0;
 if (d.stock2 === undefined) d.stock2 = 0;
+if (d.stock3 === undefined) d.stock3 = 0;
+if (d.stock4 === undefined) d.stock4 = 0;
 if (d.permPower === undefined) d.permPower = 0;
 if (d.permCps === undefined) d.permCps = 0;
 if (d.permLuck === undefined) d.permLuck = 0;
@@ -1382,10 +1416,12 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-// 서버 전역 공용 주식 데이터 변수
-let stockPrices = { 1: 1000, 2: 5000 };
+// 서버 전역 공용 주식 데이터 변수 (총 4종)
+let stockPrices = { 1: 1000, 2: 5000, 3: 12000, 4: 35000 };
 let stockHistory1 = [1000, 1020, 990, 1010, 1000];
 let stockHistory2 = [5000, 4900, 5100, 5050, 5000];
+let stockHistory3 = [12000, 11800, 12100, 11950, 12000];
+let stockHistory4 = [35000, 34500, 35200, 34800, 35000];
 
 function checkAndDiscoverPets() {
   if(!d.discoveredPets) d.discoveredPets = [];
@@ -1417,21 +1453,25 @@ function syncScoreToFirebase(force = false) {
   }, { merge: true }).catch(err => {});
 }
 
-// 📈 서버 공용 주식 데이터 실시간 연동 (그래프 통일)
+// 📈 서버 공용 주식 데이터 실시간 연동 (4종 통일)
 let unsubscribeStock = null;
 function initRealtimeStock() {
   if(unsubscribeStock) unsubscribeStock();
-  unsubscribeStock = db.collection('global_stock').doc('market').onSnapshot((doc) => {
+  unsubscribeStock = db.collection('global_stock').doc('market_v4').onSnapshot((doc) => {
     if(doc.exists) {
       const data = doc.data();
       if(data.stockPrices) stockPrices = data.stockPrices;
       if(data.stockHistory1) stockHistory1 = data.stockHistory1;
       if(data.stockHistory2) stockHistory2 = data.stockHistory2;
+      if(data.stockHistory3) stockHistory3 = data.stockHistory3;
+      if(data.stockHistory4) stockHistory4 = data.stockHistory4;
     } else {
-      db.collection('global_stock').doc('market').set({
+      db.collection('global_stock').doc('market_v4').set({
         stockPrices: stockPrices,
         stockHistory1: stockHistory1,
         stockHistory2: stockHistory2,
+        stockHistory3: stockHistory3,
+        stockHistory4: stockHistory4,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
@@ -1442,10 +1482,18 @@ function initRealtimeStock() {
 function updateStockUI() {
   if($("stockPrice1")) $("stockPrice1").textContent = fmt(stockPrices[1]);
   if($("stockPrice2")) $("stockPrice2").textContent = fmt(stockPrices[2]);
+  if($("stockPrice3")) $("stockPrice3").textContent = fmt(stockPrices[3]);
+  if($("stockPrice4")) $("stockPrice4").textContent = fmt(stockPrices[4]);
+
   if($("stockOwned1")) $("stockOwned1").textContent = d.stock1;
   if($("stockOwned2")) $("stockOwned2").textContent = d.stock2;
+  if($("stockOwned3")) $("stockOwned3").textContent = d.stock3;
+  if($("stockOwned4")) $("stockOwned4").textContent = d.stock4;
+
   drawStockChart("stockCanvas1", stockHistory1);
   drawStockChart("stockCanvas2", stockHistory2);
+  drawStockChart("stockCanvas3", stockHistory3);
+  drawStockChart("stockCanvas4", stockHistory4);
 }
 
 // 🏆 실시간 랭킹 리스너
@@ -1758,7 +1806,7 @@ function save(){
   checkAndDiscoverPets();
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
-  syncScoreToFirebase(); // 점수 변경 시 실시간 반영
+  syncScoreToFirebase();
 }
 
 function fmt(n){return Math.floor(n).toLocaleString()}
@@ -1879,8 +1927,6 @@ function render(){
    autoBtn.textContent = d.autoEnabled ? "ON" : "OFF";
    autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
  }
- 
- if($("equippedPetCount")) $("equippedPetCount").textContent = `${d.equippedPets.length}/2`;
  
  let req = Math.max(200000, 1000000 * Math.pow(2.0, d.rebirth)); 
  if($("req")) $("req").textContent = fmt(req);
@@ -2209,13 +2255,15 @@ function buyStock(id, amount) {
   d.score -= price * qty;
   if(id === 1) d.stock1 = (d.stock1 || 0) + qty;
   if(id === 2) d.stock2 = (d.stock2 || 0) + qty;
+  if(id === 3) d.stock3 = (d.stock3 || 0) + qty;
+  if(id === 4) d.stock4 = (d.stock4 || 0) + qty;
   say(`주식 ${qty}주 매수 완료!`);
   save();
 }
 
 function sellStock(id, amount) {
   const price = stockPrices[id];
-  let owned = id === 1 ? (d.stock1 || 0) : (d.stock2 || 0);
+  let owned = id === 1 ? (d.stock1 || 0) : id === 2 ? (d.stock2 || 0) : id === 3 ? (d.stock3 || 0) : (d.stock4 || 0);
   let qty = 0;
   if(amount === 'max') {
     qty = owned;
@@ -2226,6 +2274,8 @@ function sellStock(id, amount) {
   }
   if(id === 1) d.stock1 -= qty;
   if(id === 2) d.stock2 -= qty;
+  if(id === 3) d.stock3 -= qty;
+  if(id === 4) d.stock4 -= qty;
   d.score += price * qty;
   say(`주식 ${qty}주 매도 완료! (+${fmt(price * qty)})`);
   save();
@@ -2626,20 +2676,24 @@ setInterval(() => {
     save();
   }
 
-  // 📈 주식 변동 업데이트 (전역 공용 갱신)
+  // 📈 주식 4종 시세 변동 업데이트 (전역 공용 갱신)
   if(Math.random() < 0.2) {
     stockPrices[1] = Math.max(200, Math.floor(stockPrices[1] * (0.88 + Math.random() * 0.26)));
     stockPrices[2] = Math.max(1000, Math.floor(stockPrices[2] * (0.82 + Math.random() * 0.38)));
+    stockPrices[3] = Math.max(3000, Math.floor(stockPrices[3] * (0.80 + Math.random() * 0.40)));
+    stockPrices[4] = Math.max(8000, Math.floor(stockPrices[4] * (0.75 + Math.random() * 0.45)));
     
-    stockHistory1.push(stockPrices[1]);
-    if(stockHistory1.length > 20) stockHistory1.shift();
-    stockHistory2.push(stockPrices[2]);
-    if(stockHistory2.length > 20) stockHistory2.shift();
+    stockHistory1.push(stockPrices[1]); if(stockHistory1.length > 20) stockHistory1.shift();
+    stockHistory2.push(stockPrices[2]); if(stockHistory2.length > 20) stockHistory2.shift();
+    stockHistory3.push(stockPrices[3]); if(stockHistory3.length > 20) stockHistory3.shift();
+    stockHistory4.push(stockPrices[4]); if(stockHistory4.length > 20) stockHistory4.shift();
 
-    db.collection('global_stock').doc('market').set({
+    db.collection('global_stock').doc('market_v4').set({
       stockPrices: stockPrices,
       stockHistory1: stockHistory1,
       stockHistory2: stockHistory2,
+      stockHistory3: stockHistory3,
+      stockHistory4: stockHistory4,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge: true }).catch(err => {});
   }
