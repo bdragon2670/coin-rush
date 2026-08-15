@@ -442,6 +442,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 .grade-S{background: #d97706; color: #fff;}
 .grade-L{background: #e11d48; color: #fff; box-shadow: 0 0 8px rgba(225,29,72,0.6);}
 .grade-M{background: linear-gradient(135deg, #9333ea, #c084fc); color: #fff; box-shadow: 0 0 12px rgba(168,85,247,0.8);}
+.grade-T{background: linear-gradient(135deg, #0284c7, #38bdf8); color: #0f172a; font-weight:800; box-shadow: 0 0 12px rgba(56,189,248,0.8);}
+.grade-X{background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; font-weight:800; box-shadow: 0 0 14px rgba(239,68,68,0.9);}
 
 .attendance-card{
   background: rgba(255,255,255,0.02);
@@ -493,6 +495,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
     <span class="user-name" id="userName">연구원 (미로그인)</span>
   </div>
   <div class="top-right-btns">
+    <button class="tool-btn" id="bgmToggleBtn" style="background:rgba(16, 185, 129, 0.1); border-color:#10b981; color:#10b981;">🎵 BGM 끄기</button>
     <button class="tool-btn alarm-btn" id="openPatchNoteBtn">📢 패치노트 <span class="alarm-badge active" id="alarmBadge"></span></button>
     <button class="tool-btn" id="downloadGameBtn">📥 다운</button>
   </div>
@@ -629,7 +632,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div id="encyclopediaPanel" class="panel hidden">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">
     <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감</h3>
-    <span style="font-size:12px; color:var(--accent);" id="encyclopediaCount">수집률: 0 / 12</span>
+    <span style="font-size:12px; color:var(--accent);" id="encyclopediaCount">수집률: 0 / 16</span>
   </div>
   <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:12px;">모든 드론의 능력치 정보와 획득 여부를 확인할 수 있습니다.</p>
   <div id="encyclopediaList" class="encyclopedia-list"></div>
@@ -789,6 +792,76 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 </div>
 
 <script>
+// --- 배경음악(BGM) 신디사이저 엔진 ---
+let bgmAudioCtx = null;
+let bgmInterval = null;
+let isBgmPlaying = false;
+
+function toggleBGM() {
+  const btn = $("bgmToggleBtn");
+  if(!isBgmPlaying) {
+    startBGM();
+    isBgmPlaying = true;
+    if(btn) {
+      btn.textContent = "🎵 BGM 끄기";
+      btn.style.background = "rgba(16, 185, 129, 0.1)";
+      btn.style.borderColor = "#10b981";
+      btn.style.color = "#10b981";
+    }
+  } else {
+    stopBGM();
+    isBgmPlaying = false;
+    if(btn) {
+      btn.textContent = "🔇 BGM 켜기";
+      btn.style.background = "rgba(239, 68, 68, 0.1)";
+      btn.style.borderColor = "#ef4444";
+      btn.style.color = "#ef4444";
+    }
+  }
+}
+
+function startBGM() {
+  try {
+    if(!bgmAudioCtx) {
+      bgmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(bgmAudioCtx.state === 'suspended') {
+      bgmAudioCtx.resume();
+    }
+
+    const notes = [220.00, 246.94, 293.66, 329.63, 392.00, 440.00]; // 앰비언트 우주 사운드 노트
+    let noteIndex = 0;
+
+    bgmInterval = setInterval(() => {
+      if(!isBgmPlaying || !bgmAudioCtx) return;
+      try {
+        const osc = bgmAudioCtx.createOscillator();
+        const gain = bgmAudioCtx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(notes[noteIndex % notes.length], bgmAudioCtx.currentTime);
+        noteIndex++;
+
+        gain.gain.setValueAtTime(0.02, bgmAudioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, bgmAudioCtx.currentTime + 3.0);
+
+        osc.connect(gain);
+        gain.connect(bgmAudioCtx.destination);
+
+        osc.start();
+        osc.stop(bgmAudioCtx.currentTime + 3.0);
+      } catch(e){}
+    }, 2500);
+  } catch(e){}
+}
+
+function stopBGM() {
+  if(bgmInterval) {
+    clearInterval(bgmInterval);
+    bgmInterval = null;
+  }
+}
+
 // --- 웹 오디오 API (합성 실패 효과음) ---
 function playFailSound() {
   try {
@@ -814,9 +887,9 @@ function playFailSound() {
 // --- 패치노트 데이터 정의 ---
 const patchNotes = [
   {
-    version: "v2.8 패치 (최신)",
-    title: "통합 드론 도감 시스템 추가",
-    desc: "1) 모든 드론의 정보와 능력치를 확인할 수 있는 '도감' 탭이 신설되었습니다.\n2) 미획득 드론은 잠금 표시 및 흐리게 표시되며, 획득한 드론은 수집 상태가 표시됩니다.\n3) 도감 데이터 및 수집 이력은 로컬 스토리지에 영구 보존됩니다."
+    version: "v3.0 패치 (최신)",
+    title: "BGM 사운드 시스템 및 초월/카오스 등급 드론 대거 추가",
+    desc: "1) 브라우저 자체 앰비언트 BGM(켜기/끄기 가능)이 도입되었습니다.\n2) 레전더리 위 등급인 [초월: 에테르 오브 파라다이스], [신화: 초신성 제네시스], [카오스: 공허의 디바우러], [제네시스: 오메가 싱귤래리티] 등 궁극의 드론들이 추가되었습니다.\n3) 확장된 모든 드론이 통합 도감에 자동 반영됩니다."
   },
   {
     version: "v1.0 패치",
@@ -883,7 +956,9 @@ const PET_DB = {
  phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +8% & 자동 +6%', sellPrice: 40000 },
  titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.18배', sellPrice: 40000 },
  legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:'M', desc:'모든 에너지 획득량 1.5배 & 행운 확률 +10%', sellPrice: 200000 },
- mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:null, desc:'모든 에너지 획득량 3배 & 행운 확률 +25%', sellPrice: 1000000 }
+ mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:'T', desc:'모든 에너지 획득량 3배 & 행운 확률 +25%', sellPrice: 1000000 },
+ trans: { id:'trans', name:'에테르 오브 파라다이스', icon:'💎✨', grade:'T', nextGrade:'X', desc:'모든 에너지 획득량 7배 & 행운 확률 +40%', sellPrice: 5000000 },
+ chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 획득량 20배 & 행운 확률 +70%', sellPrice: 25000000 }
 };
 
 const PETS_BY_GRADE = {
@@ -892,7 +967,9 @@ const PETS_BY_GRADE = {
  'A': ['fox', 'panda'],
  'S': ['dragon', 'unicorn', 'phoenix', 'titan'],
  'L': ['legend'],
- 'M': ['mythic']
+ 'M': ['mythic'],
+ 'T': ['trans'],
+ 'X': ['chaos']
 };
 
 const COLOR_GRADIENTS = {
@@ -908,7 +985,7 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-// 드론 획득 시 도감에 자동 등록 체크
+// 도감 자동 등록 체크
 function checkAndDiscoverPets() {
   if(!d.discoveredPets) d.discoveredPets = [];
   d.pets.forEach(petId => {
@@ -918,7 +995,6 @@ function checkAndDiscoverPets() {
   });
 }
 
-// 랭킹 실시간 동기화 함수
 function syncScoreToFirebase(force = false) {
   if(!currentUser) return;
 
@@ -1055,6 +1131,8 @@ function getPetBonus(){
     if(petId === 'titan') coinMult *= 1.18;
     if(petId === 'legend') { coinMult *= 1.5; luckProb += 0.10; }
     if(petId === 'mythic') { coinMult *= 3.0; luckProb += 0.25; }
+    if(petId === 'trans') { coinMult *= 7.0; luckProb += 0.40; }
+    if(petId === 'chaos') { coinMult *= 20.0; luckProb += 0.70; }
   });
 
   return { clickMult, cpsMult, coinMult, luckProb };
@@ -1321,7 +1399,73 @@ function renderPetList(){
           } else {
             say("레전더리 등급 드론 2개가 필요합니다.");
           }
-        } else if(sourcePet.nextGrade && sourcePet.nextGrade !== 'L' && sourcePet.nextGrade !== 'M') {
+        } else if(sourcePet.grade === 'M') {
+          let mIndices = [];
+          d.pets.forEach((pId, idx) => {
+            if(PET_DB[pId].grade === 'M') mIndices.push(idx);
+          });
+          if(mIndices.length >= 2) {
+            let indicesToRemove = [draggedPetIdx, index];
+            indicesToRemove.sort((a,b) => b - a);
+            
+            if(Math.random() < 0.20) {
+              indicesToRemove.forEach(idx => {
+                let removedPetId = d.pets[idx];
+                let equipIdx = d.equippedPets.indexOf(removedPetId);
+                if(equipIdx !== -1) d.equippedPets.splice(equipIdx, 1);
+                d.pets.splice(idx, 1);
+              });
+              d.pets.push('trans');
+              say(`🌟 기적! 초월 드론 [에테르 오브 파라다이스] 합성 성공!!`);
+            } else {
+              playFailSound();
+              indicesToRemove.forEach(idx => {
+                let removedPetId = d.pets[idx];
+                let equipIdx = d.equippedPets.indexOf(removedPetId);
+                if(equipIdx !== -1) d.equippedPets.splice(equipIdx, 1);
+                d.pets.splice(idx, 1);
+              });
+              say(`💥 합성 실패! 신화 드론이 파괴되었습니다...`);
+            }
+            draggedPetIdx = null;
+            save();
+          } else {
+            say("신화 등급 드론 2개가 필요합니다.");
+          }
+        } else if(sourcePet.grade === 'T') {
+          let tIndices = [];
+          d.pets.forEach((pId, idx) => {
+            if(PET_DB[pId].grade === 'T') tIndices.push(idx);
+          });
+          if(tIndices.length >= 2) {
+            let indicesToRemove = [draggedPetIdx, index];
+            indicesToRemove.sort((a,b) => b - a);
+            
+            if(Math.random() < 0.15) {
+              indicesToRemove.forEach(idx => {
+                let removedPetId = d.pets[idx];
+                let equipIdx = d.equippedPets.indexOf(removedPetId);
+                if(equipIdx !== -1) d.equippedPets.splice(equipIdx, 1);
+                d.pets.splice(idx, 1);
+              });
+              d.pets.push('chaos');
+              say(`🔥 우주 탄생! 최상위 카오스 드론 [공허의 디바우러] 강림!!`);
+            } else {
+              playFailSound();
+              indicesToRemove.forEach(idx => {
+                let removedPetId = d.pets[idx];
+                let equipIdx = d.equippedPets.indexOf(removedPetId);
+                if(equipIdx !== -1) d.equippedPets.splice(equipIdx, 1);
+                d.pets.splice(idx, 1);
+              });
+              say(`💥 합성 실패! 초월 드론이 공허 속으로 사라졌습니다...`);
+            }
+            draggedPetIdx = null;
+            save();
+          } else {
+            say("초월 등급 드론 2개가 필요합니다.");
+          }
+        } else if(sourcePet.nextGrade && sourcePet.nextGrade !== 'L' && sourcePet.nextGrade !== 'M' && sourcePet.nextGrade !== 'T' && sourcePet.nextGrade !== 'X') {
           const nextGradeCandidates = PETS_BY_GRADE[sourcePet.nextGrade];
           let unowned = nextGradeCandidates.filter(id => !d.pets.includes(id));
           let newPetId = unowned.length > 0 ? unowned[0] : nextGradeCandidates[Math.floor(Math.random() * nextGradeCandidates.length)];
@@ -1424,6 +1568,11 @@ document.addEventListener("DOMContentLoaded", () => {
   checkAndDiscoverPets();
   updateUserUI();
   render();
+
+  const bgmToggle = $("bgmToggleBtn");
+  if(bgmToggle) {
+    bgmToggle.onclick = toggleBGM;
+  }
 
   const openBtn = $("openPatchNoteBtn");
   const closeBtn = $("closePatchNoteBtn");
