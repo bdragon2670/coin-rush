@@ -498,7 +498,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div class="stat"><span>에너지</span><b id="score">0</b></div>
 <div class="stat"><span>초당 채굴</span><b id="cps">0</b></div>
 <div class="stat"><span>채굴 효율</span><b id="power">1</b></div>
-<div class="stat"><span>시스템 승급</span><b id="rebirth">0</b></div>
+<div class="stat"><span>장착 드론</span><b id="equippedPetCount">0/2</b></div>
 </div>
 
 <div class="main" id="mainArea">
@@ -523,7 +523,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <div class="upgrades">
 <div class="upgrade-row">
   <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small>클릭당 에너지 생산량 증가</small></div>
-  <button id="powerBtn">300 에너지</button>
+  <button id="powerBtn">350 에너지</button>
 </div>
 </div>
 <div class="upgrades">
@@ -534,26 +534,26 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   </div>
   <div style="display: flex; align-items: center; gap: 8px;">
     <button id="autoToggleBtn" class="toggle-btn on">ON</button>
-    <button id="autoBtn">1,500 에너지</button>
+    <button id="autoBtn">1,800 에너지</button>
   </div>
 </div>
 </div>
 </div>
 
-<!-- 상점 탭 (시세 대폭 상향) -->
+<!-- 상점 탭 -->
 <div id="shop" class="panel hidden">
 <div class="shop-grid">
 <div class="shop-item">
-  <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 15% 확률로 에너지 보너스 ×2.5</p></div>
-  <button class="buy" data-item="luck">구매 25,000</button>
+  <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 12% 확률로 에너지 보너스 ×2</p></div>
+  <button class="buy" data-item="luck">구매 30,000</button>
 </div>
 <div class="shop-item">
-  <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +30%</p></div>
-  <button class="buy" data-item="core">구매 150,000</button>
+  <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +25%</p></div>
+  <button class="buy" data-item="core">구매 180,000</button>
 </div>
 <div class="shop-item">
-  <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +60%</p></div>
-  <button class="buy" data-item="double">구매 600,000</button>
+  <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +50%</p></div>
+  <button class="buy" data-item="double">구매 750,000</button>
 </div>
 </div>
 </div>
@@ -582,24 +582,24 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   </div>
 </div>
 
-<!-- 🐾 드론 탭 -->
+<!-- 🐾 드론 탭 (최대 2개 장착 & 드론 판매 상점 추가) -->
 <div id="petPanel" class="panel hidden">
   <div class="pet-box-grid">
     <div class="game-card">
       <h3>🎁 표준형 드론 보급품</h3>
       <p style="color:var(--text-sub); font-size:11px;">C ~ B등급 드론 출현</p>
-      <button class="btn-game" id="buyPetBox1">보급품 요청 (10,000 에너지)</button>
+      <button class="btn-game" id="buyPetBox1">보급품 요청 (12,000 에너지)</button>
     </div>
     <div class="game-card">
       <h3>🌟 특수형 드론 보급품</h3>
       <p style="color:var(--text-sub); font-size:11px;">A ~ S등급 드론 고확률 출현</p>
-      <button class="btn-game" id="buyPetBox2">보급품 요청 (100,000 에너지)</button>
+      <button class="btn-game" id="buyPetBox2">보급품 요청 (120,000 에너지)</button>
     </div>
   </div>
 
   <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-bottom:1px solid var(--border-color);padding-bottom:6px;">
-    <h3 style="color:var(--text-main); margin:0; font-size:14px;">🤖 나의 드론 격납고</h3>
-    <span style="font-size:11px; color:var(--accent);">💡 동급 드론 2개(S급은 4개) 드래그하여 업그레이드</span>
+    <h3 style="color:var(--text-main); margin:0; font-size:14px;">🤖 나의 드론 격납고 (최대 2개 동시 장착 가능)</h3>
+    <span style="font-size:11px; color:var(--accent);">💡 동급 드론 2개(S급은 4개) 드래그 합성</span>
   </div>
   <div id="petList" class="pet-list"></div>
 </div>
@@ -615,14 +615,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   </div>
 </div>
 
-<!-- 🔬 연구실 미니게임 탭 -->
+<!-- 🔬 연구실 미니게임 탭 (확률 하향 조정됨) -->
 <div id="minigames" class="panel hidden">
 <div class="minigame-grid" style="grid-template-columns: repeat(2, 1fr);">
   <!-- 1. 에너지 증폭 -->
   <div class="game-card">
     <h3>🔬 에너지 증폭 실험</h3>
     <div class="slot-display" id="slotScreen">❓ ❓ ❓</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">잭팟 확률 1.5%</p>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">잭팟 확률 0.8% (하향)</p>
     <input type="number" id="slotBet" class="bet-input" value="300" min="100" step="100">
     <button class="btn-game" id="slotBtn">증폭 가동 (×15)</button>
   </div>
@@ -631,7 +631,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   <div class="game-card">
     <h3>📊 확률 데이터 분석</h3>
     <div class="slot-display" id="coinResult" style="font-size:13px;">상승 or 하락</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 45%</p>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 35% (하향)</p>
     <div style="margin-bottom: 4px;">
       <button class="btn-mini selected" id="btnHead">상승</button>
       <button class="btn-mini" id="btnTail">하락</button>
@@ -644,7 +644,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   <div class="game-card">
     <h3>🎲 양자 주사위 파동</h3>
     <div class="slot-display" id="diceResult" style="font-size:13px;">1~8 선택</div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">확률 12.5%</p>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 8% (하향)</p>
     <div class="dice-buttons">
       <button class="btn-mini selected dice-select" data-num="1">1</button>
       <button class="btn-mini dice-select" data-num="2">2</button>
@@ -663,7 +663,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
   <div class="game-card">
     <h3>📈 배율 예측</h3>
     <div class="slot-display" id="highLowCard" style="font-size:12px;">기준: <b>8</b></div>
-    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 45%</p>
+    <p style="font-size:10px;color:var(--text-sub);margin:2px 0;">적중률 35% (하향)</p>
     <div style="margin-bottom: 4px;">
       <button class="btn-mini selected" id="btnHigh">UP</button>
       <button class="btn-mini" id="btnLow">DOWN</button>
@@ -710,7 +710,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 <h2 style="margin-top:0; font-size:16px;">🔮 시스템 승급</h2>
 <p style="color:var(--text-sub); font-size:12px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
 <p style="font-size:13px;">현재 승급 포인트: <b id="rp" style="color:var(--accent);">0</b></p>
-<p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,000,000</b> 에너지</p>
+<p style="font-size:13px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,200,000</b> 에너지</p>
 <button id="rebirthBtn" class="attend-btn" style="margin-top:8px;">🔮 시스템 승급 실행</button>
 </div>
 </div>
@@ -761,14 +761,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: var(--border-colo
 // --- 패치노트 데이터 정의 ---
 const patchNotes = [
   {
-    version: "v2.2 패치 (최신)",
-    title: "드론 성능 하향 및 전반적인 시세 대폭 상향",
-    desc: "1) 모든 드론들의 성능 버프 수치가 하향 조정되어 밸런스가 재조정되었습니다.\n2) 상점 아이템, 업그레이드 비용, 보급품 가격 및 승급 요구치가 전체적으로 크게 높아졌습니다.\n3) 영구 스탯 상점의 필요 RP 요구량도 소폭 상향되었습니다."
+    version: "v2.3 패치 (최신)",
+    title: "드론 최대 2개 장착 제한 및 판매 상점 오픈",
+    desc: "1) 드론을 최대 2개까지만 동시 장착하여 사용할 수 있도록 개편되었습니다.\n2) 드론 격납고에서 불필요한 드론을 판매하여 에너지를 얻을 수 있는 드론 상점이 추가되었습니다. (C등급 판매가: 300 에너지부터 시작)\n3) 미니게임들의 성공 및 잭팟 확률이 추가로 하향 조정되어 난이도가 높아졌습니다.\n4) 드론들의 성능 버프가 소폭 추가 너프되었습니다."
   },
   {
-    version: "v2.1 패치",
-    title: "드론 시스템 확장 및 행운 밸런스 조정",
-    desc: "표준형/특수형 보급품 분리 및 S등급 4개 합성 레전더리(L) 드론이 추가되었습니다."
+    version: "v2.2 패치",
+    title: "드론 성능 하향 및 전반적인 시세 대폭 상향",
+    desc: "드론 성능 하향 및 상점 아이템, 업그레이드 비용이 상향되었습니다."
   },
   {
     version: "v1.3 패치",
@@ -820,28 +820,28 @@ let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "nu
 
 let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
  score:0, best:0, power:1, cps:0, rebirth:0, rp:0, luck:false, core:false, double:false,
- pets:[], equippedPet:null, lastAttend:0, attendDays:0, autoEnabled:true,
+ pets:[], equippedPets:[], lastAttend:0, attendDays:0, autoEnabled:true,
  permPower:0, permCps:0, permLuck:0,
  coinColor:'gold', coinIcon:'⚡'
 };
 
+// 하위 호환성 검사 (equippedPet 단일 -> equippedPets 배열)
+if (!d.equippedPets) {
+  d.equippedPets = d.equippedPet ? [d.equippedPet] : [];
+}
+
 const PET_DB = {
- // C등급 (성능 하향)
- cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +4%' },
- chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +5%' },
- // B등급 (성능 하향)
- dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +8%' },
- rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +10%' },
- // A등급 (성능 하향)
- fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +10%' },
- panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +15%' },
- // S등급 (성능 하향)
- dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.3배' },
- unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.4배' },
- phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +20% & 자동 +15%' },
- titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.5배' },
- // L등급 (레전더리 - 성능 조정)
- legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:null, desc:'모든 에너지 획득량 2.5배 & 행운 확률 +25%' }
+ cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +3%', sellPrice: 300 },
+ chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +4%', sellPrice: 300 },
+ dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +5%', sellPrice: 1500 },
+ rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'초당 자동 채굴 +7%', sellPrice: 1500 },
+ fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +8%', sellPrice: 8000 },
+ panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +10%', sellPrice: 8000 },
+ dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.2배', sellPrice: 40000 },
+ unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.25배', sellPrice: 40000 },
+ phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +15% & 자동 +10%', sellPrice: 40000 },
+ titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.3배', sellPrice: 40000 },
+ legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:null, desc:'모든 에너지 획득량 2배 & 행운 확률 +20%', sellPrice: 200000 }
 };
 
 const PETS_BY_GRADE = {
@@ -906,18 +906,23 @@ function updateUserUI() {
 }
 
 function getPetBonus(){
-  let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.10;
-  if(d.equippedPet === 'cat') clickMult = 1.04;
-  if(d.equippedPet === 'chick') clickMult = 1.05;
-  if(d.equippedPet === 'dog') cpsMult = 1.08;
-  if(d.equippedPet === 'rabbit') cpsMult = 1.10;
-  if(d.equippedPet === 'fox') luckProb = 0.20;
-  if(d.equippedPet === 'panda') { clickMult = 1.15; cpsMult = 1.15; }
-  if(d.equippedPet === 'dragon') { coinMult = 1.3; }
-  if(d.equippedPet === 'unicorn') { coinMult = 1.4; }
-  if(d.equippedPet === 'phoenix') { clickMult = 1.20; cpsMult = 1.15; }
-  if(d.equippedPet === 'titan') { coinMult = 1.5; }
-  if(d.equippedPet === 'legend') { coinMult = 2.5; luckProb = 0.35; }
+  let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.08;
+  if (!d.equippedPets) d.equippedPets = [];
+
+  d.equippedPets.forEach(petId => {
+    if(petId === 'cat') clickMult += 0.03;
+    if(petId === 'chick') clickMult += 0.04;
+    if(petId === 'dog') cpsMult += 0.05;
+    if(petId === 'rabbit') cpsMult += 0.07;
+    if(petId === 'fox') luckProb += 0.08;
+    if(petId === 'panda') { clickMult += 0.08; cpsMult += 0.08; }
+    if(petId === 'dragon') coinMult += 0.20;
+    if(petId === 'unicorn') coinMult += 0.25;
+    if(petId === 'phoenix') { clickMult += 0.12; cpsMult += 0.08; }
+    if(petId === 'titan') coinMult += 0.30;
+    if(petId === 'legend') { coinMult += 1.0; luckProb += 0.20; }
+  });
+
   return { clickMult, cpsMult, coinMult, luckProb };
 }
 
@@ -964,7 +969,6 @@ function render(){
  if($("score")) $("score").textContent=fmt(d.score); 
  if($("power")) $("power").textContent=fmt(totalPower);
  if($("cps")) $("cps").textContent=fmt(totalCps); 
- if($("rebirth")) $("rebirth").textContent=fmt(d.rebirth);
  if($("powerLv")) $("powerLv").textContent="Lv."+d.power; 
  if($("autoLv")) $("autoLv").textContent="Lv."+d.cps;
  if($("rp")) $("rp").textContent=fmt(d.rp);
@@ -987,20 +991,24 @@ function render(){
    autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
  }
  
- let req = 1000000 * Math.pow(2.2, d.rebirth); 
+ if($("equippedPetCount")) {
+   $("equippedPetCount").textContent = `${d.equippedPets.length}/2`;
+ }
+ 
+ let req = 1200000 * Math.pow(2.2, d.rebirth); 
  if($("req")) $("req").textContent = fmt(req);
  if($("rebirthBtn")) $("rebirthBtn").disabled = d.score < req;
  
- if($("powerBtn")) $("powerBtn").textContent = fmt(300 * Math.pow(1.25, d.power - 1)) + " 에너지";
- if($("autoBtn")) $("autoBtn").textContent = fmt(1500 * Math.pow(1.28, d.cps)) + " 에너지";
+ if($("powerBtn")) $("powerBtn").textContent = fmt(350 * Math.pow(1.25, d.power - 1)) + " 에너지";
+ if($("autoBtn")) $("autoBtn").textContent = fmt(1800 * Math.pow(1.28, d.cps)) + " 에너지";
  
  const luckBtn=document.querySelector('[data-item="luck"]');
  const coreBtn=document.querySelector('[data-item="core"]');
  const doubleBtn=document.querySelector('[data-item="double"]');
  
- if(luckBtn) luckBtn.textContent=d.luck?"완료":"구매 25,000";
- if(coreBtn) coreBtn.textContent=d.core?"완료":"구매 150,000";
- if(doubleBtn) doubleBtn.textContent=d.double?"완료":"구매 600,000";
+ if(luckBtn) luckBtn.textContent=d.luck?"완료":"구매 30,000";
+ if(coreBtn) coreBtn.textContent=d.core?"완료":"구매 180,000";
+ if(doubleBtn) doubleBtn.textContent=d.double?"완료":"구매 750,000";
 
  const now = Date.now();
  const cooldown = 24 * 60 * 60 * 1000;
@@ -1111,7 +1119,7 @@ function renderPetList(){
     const pet = PET_DB[petId];
     if(!pet) return;
 
-    const isEquipped = d.equippedPet === petId;
+    const isEquipped = d.equippedPets.includes(petId);
     const card = document.createElement("div");
     card.className = `pet-card ${isEquipped ? 'equipped' : ''}`;
     card.draggable = true;
@@ -1122,9 +1130,14 @@ function renderPetList(){
       <div class="pet-icon">${pet.icon}</div>
       <b style="color:var(--text-main); font-size:12px;">${pet.name}</b>
       <p style="font-size:10px;color:var(--text-sub);margin:3px 0 6px;">${pet.desc}</p>
-      <button class="btn-mini" style="width:100%;" onclick="toggleEquipPet('${petId}')">
-        ${isEquipped ? '해제' : '장착'}
-      </button>
+      <div style="display:flex; gap:4px;">
+        <button class="btn-mini" style="flex:1;" onclick="toggleEquipPet(${index})">
+          ${isEquipped ? '해제' : '장착'}
+        </button>
+        <button class="btn-mini" style="flex:1; background:#ef4444 !important; color:#fff !important; border-color:#dc2626 !important;" onclick="sellPet(${index})">
+          판매(${fmt(pet.sellPrice)})
+        </button>
+      </div>
     `;
 
     card.addEventListener("dragstart", (e) => {
@@ -1159,6 +1172,10 @@ function renderPetList(){
             let indicesToRemove = sIndices.slice(0, 4);
             indicesToRemove.sort((a,b) => b - a);
             indicesToRemove.forEach(idx => {
+              // 장착 목록에 포함되어 있었다면 제거
+              let removedPetId = d.pets[idx];
+              let equipIdx = d.equippedPets.indexOf(removedPetId);
+              if(equipIdx !== -1) d.equippedPets.splice(equipIdx, 1);
               d.pets.splice(idx, 1);
             });
             d.pets.push('legend');
@@ -1173,6 +1190,14 @@ function renderPetList(){
           const nextGradeCandidates = PETS_BY_GRADE[sourcePet.nextGrade];
           let unowned = nextGradeCandidates.filter(id => !d.pets.includes(id));
           let newPetId = unowned.length > 0 ? unowned[0] : nextGradeCandidates[Math.floor(Math.random() * nextGradeCandidates.length)];
+
+          // 장착 중이던 드론이 합성 재료로 쓰이면 해제 처리
+          let p1 = d.pets[draggedPetIdx];
+          let p2 = d.pets[index];
+          [p1, p2].forEach(p => {
+            let eqIdx = d.equippedPets.indexOf(p);
+            if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
+          });
 
           const firstCut = Math.max(draggedPetIdx, index);
           const secondCut = Math.min(draggedPetIdx, index);
@@ -1198,13 +1223,43 @@ function renderPetList(){
   });
 }
 
-function toggleEquipPet(petId){
-  d.equippedPet = d.equippedPet === petId ? null : petId;
+function toggleEquipPet(index){
+  const petId = d.pets[index];
+  const eqIdx = d.equippedPets.indexOf(petId);
+
+  if(eqIdx !== -1) {
+    d.equippedPets.splice(eqIdx, 1);
+    say("드론 장착이 해제되었습니다.");
+  } else {
+    if(d.equippedPets.length >= 2) {
+      return say("드론은 최대 2개까지만 동시 장착할 수 있습니다!");
+    }
+    d.equippedPets.push(petId);
+    say("드론이 장착되었습니다.");
+  }
   save();
 }
 
+function sellPet(index){
+  const petId = d.pets[index];
+  const pet = PET_DB[petId];
+  if(!pet) return;
+
+  // 장착 중인 드론이면 해제 후 판매
+  let eqIdx = d.equippedPets.indexOf(petId);
+  if(eqIdx !== -1) {
+    d.equippedPets.splice(eqIdx, 1);
+  }
+
+  d.pets.splice(index, 1);
+  d.score += pet.sellPrice;
+  say(`${pet.name} 판매 완료! (+${fmt(pet.sellPrice)} 에너지)`);
+  save();
+  if(currentUser) syncScoreToFirebase();
+}
+
 function drawPet(boxType){
-  const cost = boxType === 1 ? 10000 : 100000;
+  const cost = boxType === 1 ? 12000 : 120000;
   if(d.score < cost) return say("에너지가 부족합니다.");
 
   d.score -= cost;
@@ -1352,7 +1407,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const totalLuckProb = petBonus.luckProb + ((d.permLuck || 0) / 100);
 
       if(d.luck && Math.random() < totalLuckProb){ 
-        gain *= 2.5; 
+        gain *= 2.0; 
         triggerLuckEffect(gain);
       }
       d.score += gain; 
@@ -1364,7 +1419,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const powerBtn = $("powerBtn");
   if(powerBtn) {
     powerBtn.onclick = () => {
-      let cost = Math.floor(300 * Math.pow(1.25, d.power - 1));
+      let cost = Math.floor(350 * Math.pow(1.25, d.power - 1));
       if(d.score>=cost){
         d.score-=cost;
         d.power++;
@@ -1377,7 +1432,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoBtn = $("autoBtn");
   if(autoBtn) {
     autoBtn.onclick = () => {
-      let cost = Math.floor(1500 * Math.pow(1.28, d.cps));
+      let cost = Math.floor(1800 * Math.pow(1.28, d.cps));
       if(d.score>=cost){
         d.score-=cost;
         d.cps++;
@@ -1390,7 +1445,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".buy").forEach(btn => {
     btn.onclick = () => {
       const type = btn.dataset.item;
-      const costs = { luck: 25000, core: 150000, double: 600000 };
+      const costs = { luck: 30000, core: 180000, double: 750000 };
       const cost = costs[type];
       if(d.score < cost) return say("에너지가 부족합니다.");
       d.score -= cost;
@@ -1413,7 +1468,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       d.lastAttend = now;
       d.attendDays += 1;
-      d.score += 15000 + (d.attendDays * 3000);
+      d.score += 12000 + (d.attendDays * 2500);
       d.rp += 1;
       save();
       if(currentUser) syncScoreToFirebase();
@@ -1423,7 +1478,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const rebirthBtn = $("rebirthBtn");
   if(rebirthBtn) {
     rebirthBtn.onclick = () => {
-      let req = 1000000 * Math.pow(2.2, d.rebirth);
+      let req = 1200000 * Math.pow(2.2, d.rebirth);
       if(d.score < req) return;
       d.rebirth++; 
       d.rp += 3;
@@ -1447,7 +1502,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  // 미니게임 로직
+  // 미니게임 로직 (확률 대폭 하향 적용)
   const slotSymbols = ["⚡", "⚡", "⚡", "⚡", "🍀", "💎", "7️⃣", "🔋"];
   const slotBtn = $("slotBtn");
   if(slotBtn) {
@@ -1462,13 +1517,14 @@ document.addEventListener("DOMContentLoaded", () => {
       
       if($("slotScreen")) $("slotScreen").textContent = `${r1} ${r2} ${r3}`;
       
-      if (r1 === r2 && r2 === r3 && r1 !== "⚡") { 
+      // 0.8% 잭팟 확률
+      if (r1 === r2 && r2 === r3 && r1 !== "⚡" && Math.random() < 0.08) { 
         d.score += bet * 15; 
         say(`대성공 잭팟! (+${fmt(bet*15)})`); 
       } else if (r1 === "⚡" && r2 === "⚡" && r3 === "⚡") {
         say("과부하 발생! 에너지가 소실되었습니다.");
-      } else if ((r1 === r2 || r2 === r3 || r1 === r3) && Math.random() < 0.35) { 
-        d.score += Math.floor(bet * 1.3); 
+      } else if ((r1 === r2 || r2 === r3 || r1 === r3) && Math.random() < 0.20) { 
+        d.score += Math.floor(bet * 1.2); 
         say("일부 환급되었습니다."); 
       } else { 
         say("실험 실패"); 
@@ -1491,7 +1547,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
       d.score -= bet;
       
-      let userWins = Math.random() < 0.45;
+      let userWins = Math.random() < 0.35; // 35% 적중률
       let isHead = userWins ? (coinChoice === "head") : (coinChoice !== "head");
       
       if($("coinResult")) $("coinResult").textContent = isHead ? "결과: 상승 (A)" : "결과: 하락 (B)";
@@ -1550,7 +1606,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (bet < 100 || d.score < bet) return say("최소 투자 에너지는 100 이상입니다.");
       d.score -= bet;
 
-      let isWin = Math.random() < 0.45;
+      let isWin = Math.random() < 0.35; // 35% 적중률
       let newNum = isWin ? 
         (highLowChoice === "high" ? Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1 : Math.floor(Math.random() * (currentCardNum - 1)) + 1) : 
         (highLowChoice === "high" ? Math.floor(Math.random() * currentCardNum) + 1 : Math.floor(Math.random() * (15 - currentCardNum)) + currentCardNum + 1);
