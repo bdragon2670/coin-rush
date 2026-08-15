@@ -1085,7 +1085,6 @@ function checkAndDiscoverPets() {
   }
 }
 
-// 💡 랭킹 동기화 최적화 (오류 방지용 예외처리 포함)
 function syncScoreToFirebase(force = false) {
   if(!currentUser) return;
   db.collection('rankings').doc(currentUser.googleId).set({
@@ -1100,7 +1099,6 @@ function syncScoreToFirebase(force = false) {
   });
 }
 
-// 📈 주식 실시간 연동
 let unsubscribeStock = null;
 function initRealtimeStock() {
   if(unsubscribeStock) unsubscribeStock();
@@ -1143,7 +1141,6 @@ function updateStockUI() {
   drawStockChart("stockCanvas4", stockHistory4);
 }
 
-// 🏆 랭킹 실시간 연동 (지연 현상 완벽 해결)
 let unsubscribeRankings = null;
 function initRealtimeRankings(){
   if(unsubscribeRankings) unsubscribeRankings();
@@ -1190,7 +1187,6 @@ function initRealtimeRankings(){
   }, err => {});
 }
 
-// 🏪 거래소 실시간 연동 최적화
 let unsubscribeMarket = null;
 function initRealtimeMarket(){
   const select = $("marketSelectPet");
@@ -1315,7 +1311,6 @@ function buyMarketItem(docId, price, petId) {
   }).catch(err => {});
 }
 
-// 💬 채팅 및 /자랑 명령어 최적화
 function loadChatMessages() {
   db.collection('global_chat').orderBy('createdAt', 'asc').limit(50).onSnapshot((snapshot) => {
     const chatContainer = $("chatMessages");
