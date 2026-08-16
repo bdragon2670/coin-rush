@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v13.6 P2P 유저거래소</title>
+<title>에너지 러시 - 퀀텀 에디션 v13.7 P2P 유저거래소</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -494,7 +494,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.6</h1>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.7</h1>
     <div class="sub">구글 유저간 P2P 유저거래소 (보유 드론 전체 선택 & 최소 1,000원 제한)</div>
 
     <div class="stats">
@@ -1180,9 +1180,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.6 P2P 유저거래소 패치",
-    title: "보유 드론 전체 선택 및 최소 1,000원 가격 제한 적용",
-    desc: "1) 🌐 P2P 유저거래소에서 내가 가진 모든 드론 중 원하는 드론을 선택해 등록할 수 있습니다.\n2) 판매 가격은 최소 1,000원(에너지) 이상으로 설정해야만 등록 가능합니다.\n3) 소수점 연타 감지 시 5초 자동 잠금 및 클라우드 데이터 동기화가 완벽 적용되었습니다."
+    version: "v13.7 P2P 유저거래소 패치",
+    title: "선택한 특정 드론 반영 및 최소 1,000원 제한 완벽 적용",
+    desc: "1) 🌐 P2P 유저거래소에서 드롭다운으로 선택한 바로 그 특정 드론이 정확히 등록됩니다.\n2) 최소 판매 가격 1,000원(에너지) 이상 제한 및 실시간 데이터 저장이 보장됩니다."
   }
 ];
 
@@ -1217,8 +1217,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v136";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v135") || localStorage.getItem("energyRush_PermanentSaveData_v134");
+const saveKey = "energyRush_PermanentSaveData_v137";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v136") || localStorage.getItem("energyRush_PermanentSaveData_v135");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1739,7 +1739,6 @@ function registerP2PItem() {
   const type = document.getElementById("p2pItemType").value;
   const price = parseInt(document.getElementById("p2pPrice").value) || 0;
   
-  // 최소 1,000원 이상 제한
   if(price < 1000) return say("판매 가격은 최소 1,000 에너지 이상이어야 합니다.");
 
   if(type === 'gem') {
@@ -1768,6 +1767,7 @@ function registerP2PItem() {
     const petIdx = parseInt(selectEl.value);
     if(isNaN(petIdx) || !d.pets[petIdx]) return say("등록할 드론을 올바르게 선택해주세요.");
 
+    // 사용자가 선택한 바로 그 드론(petId)을 정확히 가져옴
     const petId = d.pets[petIdx];
     const pet = PET_DB[petId];
 
@@ -1777,6 +1777,8 @@ function registerP2PItem() {
 
     let eqIdx = d.equippedPets.indexOf(petIdx);
     if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
+    
+    // 정확히 해당 인덱스의 드론을 격납고(pets)에서 제거
     d.pets.splice(petIdx, 1);
     d.equippedPets = d.equippedPets.map(eIdx => eIdx > petIdx ? eIdx - 1 : eIdx);
 
