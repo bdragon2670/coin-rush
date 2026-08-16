@@ -166,7 +166,7 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 }
 .tool-btn:hover{background: rgba(245, 158, 11, 0.1); border-color: var(--accent); color: var(--accent);}
 
-/* 화면 옆에서 나왔다가 다시 들어가며 사라지는 슬라이드 알람 애니메이션 */
+/* 화면 옆에서 슬라이드 되어 나타났다 들어가는 알람 토스트 애니메이션 */
 .stock-alert-toast {
   position: fixed;
   top: 30px;
@@ -407,7 +407,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-/* 안좋은 뉴스 빨간색, 좋은 뉴스 하늘색 */
 .news-bad { color: #fca5a5 !important; }
 .news-good { color: #38bdf8 !important; }
 
@@ -425,7 +424,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 </head>
 <body>
 
-<!-- 화면 옆에서 슬라이드 되어 나타났다 들어가는 알람 토스트 컨테이너 -->
 <div id="stockAlertContainer"></div>
 
 <div class="layout-container">
@@ -627,11 +625,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널</h3>
       
-      <!-- 주식 채널 이용/잠김 상태 표시 박스 -->
+      <!-- 주식 채널 이용/잠김 상태 표시 박스 (수동 닫기 버튼 삭제됨) -->
       <div id="stockChannelStatusBox" style="background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.3); border-radius:12px; padding:12px; margin-bottom:14px; text-align:center;">
         <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 채널 이용 가능 (남은 시간: 5분 0초)</h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0 0 8px;" id="channelStateDesc">채널을 열고 닫을 수 있습니다. 5분 이용 후 10분간 잠깁니다.</p>
-        <button class="btn-game" id="toggleChannelOpenBtn" style="padding:6px 16px; font-size:11px; background:linear-gradient(135deg, #ef4444, #dc2626) !important;">🔒 주식 채널 강제 닫기 (잠금)</button>
+        <p style="font-size:11px; color:var(--text-sub); margin:0;" id="channelStateDesc">5분 이용 후 자동으로 10분간 잠깁니다.</p>
       </div>
 
       <div class="news-ticker-box" id="newsTickerBox">
@@ -640,7 +637,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">5초마다 갱신되며, 나쁜 소식은 빨간색, 좋은 소식은 하늘색으로 표시됩니다. 보유 주식 150 이상 변동 시 '띵' 소리와 함께 슬라이드 알람이 나타납니다!</p>
       
-      <!-- 주식 거래 컨테이너 (채널 닫힐 시 숨김) -->
+      <!-- 주식 거래 컨테이너 (채널 잠길 시 숨김) -->
       <div id="stockTradingContainer">
         <div class="stock-grid">
           <div class="stock-card">
@@ -1096,9 +1093,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v12.7 주식 슬라이드 알람, 5초 그래프, 채널 5분용/10분잠금 패치",
-    title: "알람 슬라이드 애니메이션, 5초 주식 갱신, 주식 채널 5분 이용/10분 잠김 시스템 적용",
-    desc: "1) 🔔 주식 알람이 화면 옆에서 슬라이드 되어 나타났다가 다시 들어가며 사라집니다.\n2) 📈 주식 그래프 변동 주기가 5초로 변경되었습니다.\n3) ⏳ 주식 채널은 5분 동안 이용할 수 있으며, 닫히거나 만료되면 10분간 잠깁니다.\n4) 📢 안좋은 속보는 빨간색, 좋은 속보는 하늘색으로 표시됩니다."
+    version: "v12.8 주식 채널 수동 닫기 버튼 삭제 및 자동 순환 시스템",
+    title: "수동 닫기 버튼 제거, 5분 이용 / 10분 잠김 자동 순환 및 슬라이드 알람 유지",
+    desc: "1) 🔔 주식 알람 슬라이드 애니메이션 및 5초 주기가 유지됩니다.\n2) ⏳ 주식 채널 수동 제어 버튼이 삭제되고 5분 이용 / 10분 잠금이 완전 자동으로 작동합니다.\n3) 📢 안좋은 속보는 빨간색, 좋은 속보는 하늘색으로 표시됩니다."
   }
 ];
 
@@ -1133,8 +1130,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v127";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v126") || localStorage.getItem("energyRush_PermanentSaveData_v125");
+const saveKey = "energyRush_PermanentSaveData_v128";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v127") || localStorage.getItem("energyRush_PermanentSaveData_v126");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1149,8 +1146,8 @@ let d = JSON.parse(savedRawData || "null") || {
  stockSellCooldowns: {},
  latestNews: "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.",
  newsType: 'good',
- stockChannelActiveUntil: 0, // 5분 이용 만료 타임스탬프
- stockChannelLockedUntil: 0 // 10분 잠금 만료 타임스탬프
+ stockChannelActiveUntil: 0,
+ stockChannelLockedUntil: 0
 };
 
 if (!d.equippedPets) d.equippedPets = [];
@@ -1294,7 +1291,6 @@ let idPenaltyActive = false;
 let penaltyTimerCountdown = 0;
 let penaltyInterval = null;
 
-// 알람이 화면 옆에서 부드럽게 나타났다가 들어가며 사라지는 슬라이드 애니메이션 구현
 function showStockAlertToast(msg, isUp = true) {
   playAlertDingSound();
   const container = $("stockAlertContainer");
@@ -1305,12 +1301,10 @@ function showStockAlertToast(msg, isUp = true) {
   toast.innerHTML = `🔔 ${msg}`;
   container.appendChild(toast);
 
-  // 나타나기 (right: 30px)
   setTimeout(() => {
     toast.classList.add("show");
   }, 50);
 
-  // 사라지기 (다시 안으로 들어가기)
   setTimeout(() => {
     toast.classList.remove("show");
     setTimeout(() => toast.remove(), 500);
@@ -1401,35 +1395,26 @@ function updateStockUI() {
     content4.classList.toggle("hidden", !d.stockUnlocked4);
   }
 
-  // 주식 채널 상태 UI 갱신 (5분 이용 / 10분 잠김)
   const tradingContainer = $("stockTradingContainer");
   const channelTitle = $("channelStateTitle");
   const channelDesc = $("channelStateDesc");
-  const toggleBtn = $("toggleChannelOpenBtn");
 
-  if(tradingContainer && channelTitle && channelDesc && toggleBtn) {
+  if(tradingContainer && channelTitle && channelDesc) {
     if(d.stockChannelLockedUntil > now) {
-      // 잠김 상태 (10분)
       let remSec = Math.ceil((d.stockChannelLockedUntil - now) / 1000);
       let rMin = Math.floor(remSec / 60);
       let rSec = remSec % 60;
       channelTitle.textContent = `🔴 주식 채널 잠김 상태 (해제까지: ${rMin}분 ${rSec}초)`;
-      channelDesc.textContent = "10분 잠금 시간이 지나면 다시 채널을 열 수 있습니다.";
-      toggleBtn.textContent = "🔓 주식 채널 강제 열기 (잠금 해제)";
-      toggleBtn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+      channelDesc.textContent = "10분 잠금 시간이 지나면 자동으로 채널이 열립니다.";
       tradingContainer.classList.add("hidden");
     } else if(d.stockChannelActiveUntil > now) {
-      // 이용 가능 상태 (5분)
       let remSec = Math.ceil((d.stockChannelActiveUntil - now) / 1000);
       let rMin = Math.floor(remSec / 60);
       let rSec = remSec % 60;
       channelTitle.textContent = `🟢 주식 채널 이용 가능 (남은 시간: ${rMin}분 ${rSec}초)`;
-      channelDesc.textContent = "채널이 열려있어 자유롭게 매매할 수 있습니다. (5분 후 10분간 자동 잠김)";
-      toggleBtn.textContent = "🔒 주식 채널 강제 닫기 (잠금)";
-      toggleBtn.style.background = "linear-gradient(135deg, #ef4444, #dc2626)";
+      channelDesc.textContent = "5분 이용 후 자동으로 10분간 잠깁니다.";
       tradingContainer.classList.remove("hidden");
     } else {
-      // 만료 또는 최초 상태 -> 자동으로 5분 이용 시작 부여
       d.stockChannelActiveUntil = now + (5 * 60 * 1000);
       save();
     }
@@ -1439,23 +1424,6 @@ function updateStockUI() {
   if(d.stockUnlocked2) drawStockChart("stockCanvas2", d.stockHistories[2]);
   if(d.stockUnlocked3) drawStockChart("stockCanvas3", d.stockHistories[3]);
   if(d.stockUnlocked4) drawStockChart("stockCanvas4", d.stockHistories[4]);
-}
-
-function toggleStockChannelOpenState() {
-  const now = Date.now();
-  if(d.stockChannelLockedUntil > now) {
-    // 잠금 상태였다면 강제 해제 후 5분 이용 시작
-    d.stockChannelLockedUntil = 0;
-    d.stockChannelActiveUntil = now + (5 * 60 * 1000);
-    say("🔓 주식 채널이 강제로 열렸습니다! (5분간 이용 가능)");
-  } else {
-    // 이용 중이었다면 닫고 10분 잠금 진입
-    d.stockChannelActiveUntil = 0;
-    d.stockChannelLockedUntil = now + (10 * 60 * 1000);
-    say("🔒 주식 채널이 닫혔습니다. (10분간 잠김)");
-  }
-  playSuccessSound();
-  save();
 }
 
 function unlockStock(id) {
@@ -2482,7 +2450,7 @@ function startMultiBoxOpeningInteraction(count){
 function buyStock(id, amount) {
   const now = Date.now();
   if(d.stockChannelLockedUntil > now || d.stockChannelActiveUntil < now) {
-    return say("현재 주식 채널이 닫혀있거나 잠겨있어 매매할 수 없습니다!");
+    return say("현재 주식 채널이 잠겨있어 매매할 수 없습니다!");
   }
 
   const coolEnd = d.stockSellCooldowns[id] || 0;
@@ -2515,7 +2483,7 @@ function buyStock(id, amount) {
 function sellStock(id, amount) {
   const now = Date.now();
   if(d.stockChannelLockedUntil > now || d.stockChannelActiveUntil < now) {
-    return say("현재 주식 채널이 닫혀있거나 잠겨있어 매매할 수 없습니다!");
+    return say("현재 주식 채널이 잠겨있어 매매할 수 없습니다!");
   }
 
   const price = d.stockPrices[id];
@@ -2553,11 +2521,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const bgmToggle = $("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
-
-  const toggleChannelBtn = $("toggleChannelOpenBtn");
-  if(toggleChannelBtn) {
-    toggleChannelBtn.onclick = toggleStockChannelOpenState;
-  }
 
   const openBtn = $("openPatchNoteBtn");
   const closeBtn = $("closePatchNoteBtn");
@@ -3042,7 +3005,7 @@ const companyNames = {
   1: "테슬라 에너지 (TES)",
   2: "엠비디아 (NVDA)",
   3: "스페이스코어 (SPC)",
-  4: "양자 바이オ (QBIO)"
+  4: "양자 바이오 (QBIO)"
 };
 
 const badNewsList = [
@@ -3058,7 +3021,6 @@ const goodNewsList = [
   "글로벌 대기업과 조단위 독점 공급 계약 체결 뉴스가 보도되었습니다!"
 ];
 
-// 주식 그래프 변동 주기 5초 (5000ms) 설정
 setInterval(() => {
   autoMiningTimer++;
   if(autoMiningTimer >= 1) {
@@ -3076,7 +3038,6 @@ setInterval(() => {
 
   const now = Date.now();
 
-  // 채널 시간 체크 (5분 이용 완료 시 자동으로 10분 잠금 진입)
   if(d.stockChannelActiveUntil > 0 && now >= d.stockChannelActiveUntil && d.stockChannelLockedUntil === 0) {
     d.stockChannelActiveUntil = 0;
     d.stockChannelLockedUntil = now + (10 * 60 * 1000);
@@ -3084,7 +3045,6 @@ setInterval(() => {
     save();
   }
 
-  // 잠금 시간 체크 (10분 완료 시 자동으로 해제 후 5분 이용 가능)
   if(d.stockChannelLockedUntil > 0 && now >= d.stockChannelLockedUntil) {
     d.stockChannelLockedUntil = 0;
     d.stockChannelActiveUntil = now + (5 * 60 * 1000);
@@ -3096,7 +3056,7 @@ setInterval(() => {
   let targetStockId = 0;
   let isNewsTriggered = false;
 
-  if(newsTickerTimer >= 4) { // 뉴스 속보 주기
+  if(newsTickerTimer >= 4) {
     newsTickerTimer = 0;
     targetStockId = Math.floor(Math.random() * 4) + 1;
     let isBad = Math.random() < 0.55; 
@@ -3105,11 +3065,11 @@ setInterval(() => {
     if(isBad) {
       let randomMsg = badNewsList[Math.floor(Math.random() * badNewsList.length)];
       d.latestNews = `🚨 [속보] ${compName}: ${randomMsg}`;
-      d.newsType = 'bad'; // 빨간색
+      d.newsType = 'bad';
     } else {
       let randomMsg = goodNewsList[Math.floor(Math.random() * goodNewsList.length)];
       d.latestNews = `🚀 [속보] ${compName}: ${randomMsg}`;
-      d.newsType = 'good'; // 하늘색
+      d.newsType = 'good';
     }
     isNewsTriggered = true;
   }
