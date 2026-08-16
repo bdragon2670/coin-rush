@@ -427,88 +427,89 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="upgrade" class="panel">
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);">클릭당 에너지 생산량 증가</small></div>
-          <button id="powerBtn">300 에너지</button>
+          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);">클릭당 에너지 생산량 증가 (20% 인하 적용)</small></div>
+          <button id="powerBtn">240 에너지</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
           <div>
             <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b></h3>
-            <small style="color:var(--text-sub);">5초마다 자동 채굴</small>
+            <small style="color:var(--text-sub);">5초마다 자동 채굴 (20% 인하 적용)</small>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <button id="autoToggleBtn" class="toggle-btn on">ON</button>
-            <button id="autoBtn">3,000 에너지</button>
+            <button id="autoBtn">2,400 에너지</button>
           </div>
         </div>
       </div>
     </div>
 
     <div id="shop" class="panel hidden">
+      <p style="color:var(--accent); font-size:11px; margin-top:0; margin-bottom:12px;">🛒 테크 상점 전 품목 가격 20% 인하 적용됨!</p>
       <div class="shop-grid">
         <div class="shop-item">
           <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 1% 확률로 에너지 보너스 ×1.05</p></div>
-          <button class="buy" data-item="luck">구매 90,000</button>
+          <button class="buy" data-item="luck">구매 72,000</button>
         </div>
         <div class="shop-item">
           <div><h3>💎 고성능 코어</h3><p>모든 에너지 채굴량 +15%</p></div>
-          <button class="buy" data-item="core">구매 550,000</button>
+          <button class="buy" data-item="core">구매 440,000</button>
         </div>
         <div class="shop-item">
           <div><h3>🔥 오버클럭 장치</h3><p>모든 에너지 채굴량 +30%</p></div>
-          <button class="buy" data-item="double">구매 2,400,000</button>
+          <button class="buy" data-item="double">구매 1,920,000</button>
         </div>
         <div class="shop-item">
           <div><h3>🔋 초정밀 냉각기</h3><p>클릭 효율 +20% 추가 증가</p></div>
-          <button class="buy" data-item="cooler">구매 5,000,000</button>
+          <button class="buy" data-item="cooler">구매 4,000,000</button>
         </div>
         <div class="shop-item">
           <div><h3>🪐 다중 중력 필터</h3><p>자동 채굴량 +25% 증가</p></div>
-          <button class="buy" data-item="filter">구매 11,000,000</button>
+          <button class="buy" data-item="filter">구매 8,800,000</button>
         </div>
         <div class="shop-item">
           <div><h3>⚛️ 양자 가속 코어</h3><p>모든 에너지 획득량 +50%</p></div>
-          <button class="buy" data-item="quantum">구매 30,000,000</button>
+          <button class="buy" data-item="quantum">구매 24,000,000</button>
         </div>
       </div>
     </div>
 
     <div id="gemShop" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 프리미엄 퀀텀 캐시 상점</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 프리미엄 퀀텀 캐시 상점 (20% 인하 적용)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보석(💎)으로 구매하는 프리미엄 스탯 상점입니다.</p>
       <div class="shop-grid">
         <div class="shop-item">
           <div><h3>⚡ 클리커 가속기</h3><p>클릭 에너지 영구 +10%</p></div>
-          <button class="gem-buy" data-gemitem="gemClick">구매 💎 150</button>
+          <button class="gem-buy" data-gemitem="gemClick">구매 💎 120</button>
         </div>
         <div class="shop-item">
           <div><h3>🤖 오토마톤 코어</h3><p>자동 채굴량 영구 +12%</p></div>
-          <button class="gem-buy" data-gemitem="gemAuto">구매 💎 300</button>
+          <button class="gem-buy" data-gemitem="gemAuto">구매 💎 240</button>
         </div>
         <div class="shop-item">
           <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +0.3%</p></div>
-          <button class="gem-buy" data-gemitem="gemLuck">구매 💎 450</button>
+          <button class="gem-buy" data-gemitem="gemLuck">구매 💎 360</button>
         </div>
         <div class="shop-item">
           <div><h3>🚀 하이퍼 드라이브</h3><p>모든 에너지 획득량 영구 +4%</p></div>
-          <button class="gem-buy" data-gemitem="gemHyper">구매 💎 600</button>
+          <button class="gem-buy" data-gemitem="gemHyper">구매 💎 480</button>
         </div>
         <div class="shop-item">
           <div><h3>🌌 싱귤래리티 링</h3><p>클릭 및 자동 채굴 영구 +8%</p></div>
-          <button class="gem-buy" data-gemitem="gemRing">구매 💎 1,200</button>
+          <button class="gem-buy" data-gemitem="gemRing">구매 💎 960</button>
         </div>
         <div class="shop-item">
           <div><h3>👑 디바인 싱크론</h3><p>모든 에너지 획득량 영구 +15%</p></div>
-          <button class="gem-buy" data-gemitem="gemDivine">구매 💎 3,000</button>
+          <button class="gem-buy" data-gemitem="gemDivine">구매 💎 2,400</button>
         </div>
         <div class="shop-item">
           <div><h3>🔮 크로노스 가속기</h3><p>자동 채굴 효율 영구 +15%</p></div>
-          <button class="gem-buy" data-gemitem="gemChronos">구매 💎 2,100</button>
+          <button class="gem-buy" data-gemitem="gemChronos">구매 💎 1,680</button>
         </div>
         <div class="shop-item">
           <div><h3>🛡️ 소울 프로텍터</h3><p>드론 합성 실패 시 파괴 방지 (1회용)</p></div>
-          <button class="gem-buy" data-gemitem="gemProtector">구매 💎 900</button>
+          <button class="gem-buy" data-gemitem="gemProtector">구매 💎 720</button>
         </div>
       </div>
     </div>
@@ -528,7 +529,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="blacksmithPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚒️ 퀀텀 대장간 (무기 강화 시스템 - 최대 20강)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다. (비용 배수 1.5배 적용)</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다.</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 무기 강화 레벨: <b id="blacksmithLvDisplay" style="font-size:18px;">+0</b> / 20강</h4>
         <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">다음 강화 시 클릭 파워 추가 상승 & 사냥터 성공률/보상 소폭 증가</p>
@@ -537,14 +538,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="armoryPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚔️ 퀀텀 무기 상점 (검 장착 및 구매)</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚔️ 퀀텀 무기 상점 (검 장착 및 구매 - 20% 인하)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">다양한 검을 구매하고 장착하여 사냥터 성공 확률과 보상을 극대화하세요!</p>
       <div class="shop-grid" id="weaponShopGrid"></div>
     </div>
 
     <div id="huntingPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (확률 너프 반영 레이드)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">사냥터 성공 확률이 하향 조정되었습니다. 강력한 무기와 드론을 장착하여 도전하세요!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (에너지 레이드)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">강력한 무기와 드론을 장착하여 사냥터에 도전하세요!</p>
       <div class="shop-grid">
         <div class="game-card">
           <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#ef4444;" id="huntProb1">(기본 30%)</span></h3>
@@ -559,14 +560,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <div class="game-card">
           <h3>🐉 타이탄 랜섬웨어 <span style="font-size:10px; color:#ef4444;" id="huntProb3">(기본 5%)</span></h3>
           <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward3" style="color:var(--accent);">150,000</b> 에너지</p>
-          <button class="btn-game" id="huntBtn3">소탕 작전 (비용 50,000)</button>
+          <button class="btn-game" id="huntBtn3">소탈 작전 (비용 50,000)</button>
         </div>
       </div>
     </div>
 
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (매도 후 5분간 매수 제한 적용)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식을 한 번이라도 매도하면 **5분(300초) 동안 해당 주식을 다시 매수할 수 없습니다!** 신중하게 거래하세요.</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (마이너스 하락세 도입)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식 시장에 **하락세(마이너스 변동성)**가 반영되었습니다! 매도 후 **5분간 매수 제한**이 적용됩니다.</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES) [기본 개방]</h4>
@@ -719,9 +720,9 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="encyclopediaPanel" class="panel hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감 (총 50종) & 수집 보상</h3>
-        <span style="font-size:12px; color:var(--accent); font-weight:700;" id="encyclopediaCount">수집률: 0 / 50</span>
+        <button class="btn-game" id="claimAllEncyclopediaBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; padding:6px 12px; font-size:11px;">✨ 미수령 보상 모두 받기</button>
       </div>
-      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:10px;">새로운 드론을 등록하고 수령 버튼을 눌러 보석(💎)을 획득하세요!</p>
+      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:10px;">새로운 드론을 등록하고 보석(💎)을 획득하세요!</p>
       
       <div class="progress-bar-container">
         <div class="progress-bar-fill" id="encyclopediaProgressBar"></div>
@@ -999,9 +1000,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v10.0 드론 50종 확장 & 사냥터 너프 패치",
-    title: "드론 50종 대폭 추가, 동일 드론 중복 장착 허용, 사냥터 확률 하향",
-    desc: "1) 🤖 드론 종류가 총 **50종**으로 대폭 확장되었습니다!\n2) 🤖 동일한 드론을 여러 개 보유하고 **동시에 중복 장착**할 수 있습니다.\n3) 🎯 사냥터 성공 확률이 하향 조정되어 도전 난이도가 높아졌습니다.\n4) 📖 도감 보상 수동 수령 및 5회/10회 뽑기 가격 정비가 유지됩니다.\n5) 💾 데이터 영구 저장 및 클라우드 연동 완벽 반영."
+    version: "v10.1 경제 안정화 패치",
+    title: "상점 20% 인하, 도감 모두받기 추가, 주식 하락세(마이너스) 도입",
+    desc: "1) 🛒 테크 상점, 캐시 상점, 무기 상점의 모든 품목 가격이 **20% 인하**되었습니다!\n2) 📖 통합 도감에 미수령 보석을 한 번에 수령하는 **'모두 받기' 버튼**이 추가되었습니다.\n3) 📈 주식 거래소 변동성에 **마이너스(하락세) 확률**이 정밀 도입되어 더욱 현실적인 투자가 가능합니다.\n4) 🤖 드론 50종 및 중복 장착/데이터 영구 저장 시스템이 완벽히 유지됩니다."
   }
 ];
 
@@ -1036,8 +1037,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v100";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v99") || localStorage.getItem("energyRush_PermanentSaveData_v98");
+const saveKey = "energyRush_PermanentSaveData_v101";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v100") || localStorage.getItem("energyRush_PermanentSaveData_v99");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1085,21 +1086,20 @@ if (!d.stockHistories) d.stockHistories = {
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
+// 무기 가격 20% 인하 적용
 const WEAPONS_DB = [
   { id: 0, name: "나무검", icon: "🪵⚔️", price: 0, bonusProb: 0.00, bonusReward: 1.00, desc: "기본적인 나무 검." },
-  { id: 1, name: "돌검", icon: "🪨⚔️", price: 8000, bonusProb: 0.01, bonusReward: 1.05, desc: "단단한 돌로 만든 검." },
-  { id: 2, name: "철검", icon: "⚙️⚔️", price: 40000, bonusProb: 0.02, bonusReward: 1.10, desc: "제련된 철 검." },
-  { id: 3, name: "금검", icon: "✨⚔️", price: 150000, bonusProb: 0.035, bonusReward: 1.18, desc: "황금빛 검." },
-  { id: 4, name: "다이아검", icon: "💎⚔️", price: 600000, bonusProb: 0.05, bonusReward: 1.28, desc: "다이아몬드 검." },
-  { id: 5, name: "루비검", icon: "🔴⚔️", price: 2500000, bonusProb: 0.07, bonusReward: 1.40, desc: "붉은 보석 루비 검." },
-  { id: 6, name: "에메랄드 검", icon: "🟢⚔️", price: 10000000, bonusProb: 0.095, bonusReward: 1.55, desc: "찬란한 에메랄드 검." },
-  { id: 7, name: "신비의 검", icon: "🔮⚔️", price: 45000000, bonusProb: 0.12, bonusReward: 1.75, desc: "고대 마력이 담긴 검." },
-  { id: 8, name: "전설의 검", icon: "👑🔥⚔️", price: 180000000, bonusProb: 0.16, bonusReward: 2.10, desc: "궁극의 전설 검." }
+  { id: 1, name: "돌검", icon: "🪨⚔️", price: Math.round(8000 * 0.8), bonusProb: 0.01, bonusReward: 1.05, desc: "단단한 돌로 만든 검." },
+  { id: 2, name: "철검", icon: "⚙️⚔️", price: Math.round(40000 * 0.8), bonusProb: 0.02, bonusReward: 1.10, desc: "제련된 철 검." },
+  { id: 3, name: "금검", icon: "✨⚔️", price: Math.round(150000 * 0.8), bonusProb: 0.035, bonusReward: 1.18, desc: "황금빛 검." },
+  { id: 4, name: "다이아검", icon: "💎⚔️", price: Math.round(600000 * 0.8), bonusProb: 0.05, bonusReward: 1.28, desc: "다이아몬드 검." },
+  { id: 5, name: "루비검", icon: "🔴⚔️", price: Math.round(2500000 * 0.8), bonusProb: 0.07, bonusReward: 1.40, desc: "붉은 보석 루비 검." },
+  { id: 6, name: "에메랄드 검", icon: "🟢⚔️", price: Math.round(10000000 * 0.8), bonusProb: 0.095, bonusReward: 1.55, desc: "찬란한 에메랄드 검." },
+  { id: 7, name: "신비의 검", icon: "🔮⚔️", price: Math.round(45000000 * 0.8), bonusProb: 0.12, bonusReward: 1.75, desc: "고대 마력이 담긴 검." },
+  { id: 8, name: "전설의 검", icon: "👑🔥⚔️", price: Math.round(180000000 * 0.8), bonusProb: 0.16, bonusReward: 2.10, desc: "궁극의 전설 검." }
 ];
 
-// 총 50종 드론 DB 구축
 const PET_DB = {
- // C등급 (1~10)
  cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.05%', sellPrice: 150, gemReward: 1 },
  chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.08%', sellPrice: 150, gemReward: 1 },
  sparrow: { id:'sparrow', name:'초소형 정찰기', icon:'🦅', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.06%', sellPrice: 150, gemReward: 1 },
@@ -1111,7 +1111,6 @@ const PET_DB = {
  c9: { id:'c9', name:'델타 스카우트', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.07%', sellPrice: 150, gemReward: 1 },
  c10: { id:'c10', name:'프로토 센서', icon:'📡', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.08%', sellPrice: 150, gemReward: 1 },
 
- // B등급 (11~20)
  dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.10%', sellPrice: 600, gemReward: 1 },
  rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.12%', sellPrice: 600, gemReward: 1 },
  hamster: { id:'hamster', name:'회전축 제너레이터', icon:'🐹', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.11%', sellPrice: 600, gemReward: 1 },
@@ -1123,7 +1122,6 @@ const PET_DB = {
  b9: { id:'b9', name:'제트 오토마톤', icon:'🦾', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.14%', sellPrice: 600, gemReward: 1 },
  b10: { id:'b10', name:'플라즈마 몰', icon:'⛏️', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.15%', sellPrice: 600, gemReward: 1 },
 
- // A등급 (21~30)
  fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +0.1%', sellPrice: 3000, gemReward: 2 },
  panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +0.15%', sellPrice: 3000, gemReward: 2 },
  wolf: { id:'wolf', name:'텍틱스 프로세서', icon:'🐺', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +0.12%', sellPrice: 3000, gemReward: 2 },
@@ -1135,7 +1133,6 @@ const PET_DB = {
  a9: { id:'a9', name:'네온 발키리', icon:'⚡', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.22%', sellPrice: 3000, gemReward: 2 },
  a10: { id:'a10', name:'타키온 가드', icon:'🛡️', grade:'A', nextGrade:'S', desc:'자동 채굴 +0.22%', sellPrice: 3000, gemReward: 2 },
 
- // S등급 (31~38)
  dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 1.004배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 1.005배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +0.25% (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
@@ -1145,23 +1142,19 @@ const PET_DB = {
  s7: { id:'s7', name:'네뷸라 스트라이커', icon:'🌠', grade:'S', nextGrade:'L', desc:'모든 에너지 1.008배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  s8: { id:'s8', name:'코스믹 레이레이', icon:'☄️', grade:'S', nextGrade:'L', desc:'모든 에너지 1.009배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
 
- // L등급 (39~43)
  legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:'M', desc:'모든 에너지 1.015배 (파괴위험)', sellPrice: 20000, gemReward: 5 },
  leviathan: { id:'leviathan', name:'심해 레비아탄', icon:'🐉', grade:'L', nextGrade:'M', desc:'모든 에너지 1.018배 (파괴위험)', sellPrice: 22000, gemReward: 5 },
  wraith: { id:'wraith', name:'퀀텀 레이스', icon:'👻', grade:'L', nextGrade:'M', desc:'모든 에너지 1.020배 (파괴위험)', sellPrice: 25000, gemReward: 5 },
  l4: { id:'l4', name:'스타 버스터', icon:'⭐', grade:'L', nextGrade:'M', desc:'모든 에너지 1.022배 (파괴위험)', sellPrice: 27000, gemReward: 5 },
  l5: { id:'l5', name:'이클립스 코어', icon:'🌑', grade:'L', nextGrade:'M', desc:'모든 에너지 1.025배 (파괴위험)', sellPrice: 30000, gemReward: 5 },
 
- // M등급 (44~46)
  mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:'T', desc:'모든 에너지 1.045배 (파괴위험)', sellPrice: 50000, gemReward: 8 },
  chronos: { id:'chronos', name:'크로노스 웨이브', icon:'⏳', grade:'M', nextGrade:'T', desc:'모든 에너지 1.035배 (파괴위험)', sellPrice: 55000, gemReward: 8 },
  m3: { id:'m3', name:'싱귤래리티 하트', icon:'💓', grade:'M', nextGrade:'T', desc:'모든 에너지 1.050배 (파괴위험)', sellPrice: 60000, gemReward: 8 },
 
- // T등급 (47~48)
  trans: { id:'trans', name:'에테르 오브 파라다이스', icon:'💎✨', grade:'T', nextGrade:'X', desc:'모든 에너지 1.10배 (파괴위험)', sellPrice: 150000, gemReward: 12 },
  infinity: { id:'infinity', name:'인피니티 게이트', icon:'🌀', grade:'T', nextGrade:'X', desc:'모든 에너지 1.12배 (파괴위험)', sellPrice: 160000, gemReward: 12 },
 
- // X등급 (49~50)
  chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 1.35배 (파괴위험)', sellPrice: 400000, gemReward: 20 },
  voidmaster: { id:'voidmaster', name:'오블리비언 싱귤래리티', icon:'🖤⚛️', grade:'X', nextGrade:null, desc:'모든 에너지 1.45배 (파괴위험)', sellPrice: 500000, gemReward: 25 }
 };
@@ -1310,6 +1303,33 @@ function claimEncyclopediaReward(petId) {
     say(`📖 도감 보상 획득! 보석 💎 +${pet.gemReward} 개 지급!`);
     save();
   }
+}
+
+function claimAllEncyclopediaRewards() {
+  if(!d.discoveredPets) d.discoveredPets = [];
+  if(!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
+  let totalGemsGained = 0;
+  let claimedCount = 0;
+
+  d.discoveredPets.forEach(petId => {
+    if(!d.claimedEncyclopedia.includes(petId)) {
+      const pet = PET_DB[petId];
+      if(pet && pet.gemReward) {
+        totalGemsGained += pet.gemReward;
+        d.claimedEncyclopedia.push(petId);
+        claimedCount++;
+      }
+    }
+  });
+
+  if(claimedCount === 0) {
+    return say("수령할 수 있는 미수령 도감 보상이 없습니다.");
+  }
+
+  d.gems += totalGemsGained;
+  playSuccessSound();
+  say(`✨ 도감 미수령 보상 모두 받기 완료! 보석 💎 +${totalGemsGained} 개 획득!`);
+  save();
 }
 
 function saveToCloud() {
@@ -1610,7 +1630,6 @@ function render(){
  const extraProb = (weapon ? weapon.bonusProb : 0) + (bsLevel * 0.005);
  const extraRew = (weapon ? weapon.bonusReward : 1.0) * (1 + bsLevel * 0.03);
 
- // 사냥터 확률 너프 반영 (기본 확률 하향)
  if($("huntProb1")) $("huntProb1").textContent = `(적용 확률: ${Math.min(90, Math.round((0.30 + extraProb)*100))}%)`;
  if($("huntProb2")) $("huntProb2").textContent = `(적용 확률: ${Math.min(85, Math.round((0.15 + extraProb)*100))}%)`;
  if($("huntProb3")) $("huntProb3").textContent = `(적용 확률: ${Math.min(80, Math.round((0.05 + extraProb)*100))}%)`;
@@ -1659,7 +1678,8 @@ function render(){
  const rebirthBtnEl = $("rebirthBtn");
  if(rebirthBtnEl) rebirthBtnEl.disabled = d.score < req;
  
- if($("powerBtn")) $("powerBtn").textContent = fmt(300 * Math.floor(Math.pow(d.power, 2.1))) + " 에너지";
+ // 테크 상점 가격 20% 인하 반영
+ if($("powerBtn")) $("powerBtn").textContent = fmt(Math.round(300 * Math.floor(Math.pow(d.power, 2.1)) * 0.8)) + " 에너지";
 
  const autoUpgradeBtn = $("autoBtn");
  if(autoUpgradeBtn) {
@@ -1667,7 +1687,7 @@ function render(){
      autoUpgradeBtn.textContent = "보유 완료";
      autoUpgradeBtn.disabled = true;
    } else {
-     autoUpgradeBtn.textContent = "3,000 에너지";
+     autoUpgradeBtn.textContent = fmt(Math.round(3000 * 0.8)) + " 에너지";
      autoUpgradeBtn.disabled = false;
    }
  }
@@ -1686,15 +1706,16 @@ function render(){
  const filterBtn = document.querySelector('[data-item="filter"]');
  const quantumBtn = document.querySelector('[data-item="quantum"]');
 
- if(luckBtn) luckBtn.textContent = d.luck ? "완료" : "구매 90,000";
- if(coreBtn) coreBtn.textContent = d.core ? "완료" : "구매 550,000";
- if(doubleBtn) doubleBtn.textContent = d.double ? "완료" : "구매 2,400,000";
- if(coolerBtn) coolerBtn.textContent = d.cooler ? "완료" : "구매 5,000,000";
- if(filterBtn) filterBtn.textContent = d.filter ? "완료" : "구매 11,000,000";
- if(quantumBtn) quantumBtn.textContent = d.quantum ? "완료" : "구매 30,000,000";
+ if(luckBtn) luckBtn.textContent = d.luck ? "완료" : `구매 ${fmt(Math.round(90000 * 0.8))}`;
+ if(coreBtn) coreBtn.textContent = d.core ? "완료" : `구매 ${fmt(Math.round(550000 * 0.8))}`;
+ if(doubleBtn) doubleBtn.textContent = d.double ? "완료" : `구매 ${fmt(Math.round(2400000 * 0.8))}`;
+ if(coolerBtn) coolerBtn.textContent = d.cooler ? "완료" : `구매 ${fmt(Math.round(5000000 * 0.8))}`;
+ if(filterBtn) filterBtn.textContent = d.filter ? "완료" : `구매 ${fmt(Math.round(11000000 * 0.8))}`;
+ if(quantumBtn) quantumBtn.textContent = d.quantum ? "완료" : `구매 ${fmt(Math.round(30000000 * 0.8))}`;
 
+ // 캐시 상점 가격 20% 인하 반영
  const gemItems = ['gemClick', 'gemAuto', 'gemLuck', 'gemHyper', 'gemRing', 'gemDivine', 'gemChronos', 'gemProtector'];
- const gemCosts = { gemClick: 150, gemAuto: 300, gemLuck: 450, gemHyper: 600, gemRing: 1200, gemDivine: 3000, gemChronos: 2100, gemProtector: 900 };
+ const gemCosts = { gemClick: 120, gemAuto: 240, gemLuck: 360, gemHyper: 480, gemRing: 960, gemDivine: 2400, gemChronos: 1680, gemProtector: 720 };
  gemItems.forEach(item => {
    const btn = document.querySelector(`[data-gemitem="${item}"]`);
    if(btn) {
@@ -1881,7 +1902,7 @@ function upgradeBlacksmithRPG() {
 function huntMonster(tier) {
   let costs = { 1: 2000, 2: 10000, 3: 50000 };
   let baseRewards = { 1: 4500, 2: 25000, 3: 150000 };
-  let baseProbs = { 1: 0.30, 2: 0.15, 3: 0.05 }; // 사냥터 확률 너프 반영
+  let baseProbs = { 1: 0.30, 2: 0.15, 3: 0.05 };
   
   let cost = costs[tier];
   let bsLevel = d.blacksmithLevel || 0;
@@ -2405,6 +2426,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if(unlockStock3Btn) unlockStock3Btn.onclick = () => unlockStock(3);
   if(unlockStock4Btn) unlockStock4Btn.onclick = () => unlockStock(4);
 
+  const claimAllEncyclopediaBtn = $("claimAllEncyclopediaBtn");
+  if(claimAllEncyclopediaBtn) claimAllEncyclopediaBtn.onclick = claimAllEncyclopediaRewards;
+
   const huntBtn1 = $("huntBtn1");
   const huntBtn2 = $("huntBtn2");
   const huntBtn3 = $("huntBtn3");
@@ -2626,7 +2650,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const powerBtn = $("powerBtn");
   if(powerBtn) {
     powerBtn.onclick = () => {
-      let cost = Math.floor(300 * Math.floor(Math.pow(d.power, 2.1)));
+      let cost = Math.round(300 * Math.floor(Math.pow(d.power, 2.1)) * 0.8);
       if(d.score >= cost){ 
         d.score -= cost; 
         d.power++; 
@@ -2641,7 +2665,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(autoBtn) {
     autoBtn.onclick = () => {
       if(d.autoPurchased) return say("이미 자동 채굴 장치를 보유하고 있습니다.");
-      let cost = 3000;
+      let cost = Math.round(3000 * 0.8);
       if(d.score >= cost) {
         d.score -= cost;
         d.autoPurchased = true;
@@ -2658,7 +2682,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".buy").forEach(btn => {
     btn.onclick = () => {
       const type = btn.dataset.item;
-      const costs = { luck: 90000, core: 550000, double: 2400000, cooler: 5000000, filter: 11000000, quantum: 30000000 };
+      const costs = { luck: Math.round(90000 * 0.8), core: Math.round(550000 * 0.8), double: Math.round(2400000 * 0.8), cooler: Math.round(5000000 * 0.8), filter: Math.round(11000000 * 0.8), quantum: Math.round(30000000 * 0.8) };
       const cost = costs[type];
       if(d.score < cost) return say("에너지가 부족합니다.");
       d.score -= cost; d[type] = true; save();
@@ -2668,7 +2692,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".gem-buy").forEach(btn => {
     btn.onclick = () => {
       const item = btn.dataset.gemitem;
-      const costs = { gemClick: 150, gemAuto: 300, gemLuck: 450, gemHyper: 600, gemRing: 1200, gemDivine: 3000, gemChronos: 2100, gemProtector: 900 };
+      // 캐시 상점 가격 20% 인하 적용
+      const costs = { gemClick: 120, gemAuto: 240, gemLuck: 360, gemHyper: 480, gemRing: 960, gemDivine: 2400, gemChronos: 1680, gemProtector: 720 };
       const cost = costs[item];
       if(d.gems < cost) return say("보석(💎)이 부족합니다!");
       
@@ -2852,8 +2877,11 @@ setInterval(() => {
   if(Math.random() < 0.35) {
     let updated = false;
     for(let i = 1; i <= 4; i++) {
-      let multiplier = (Math.random() < 0.48 ? (0.65 + Math.random() * 0.3) : (0.7 + Math.random() * 0.55)) * 1.05;
-      d.stockPrices[i] = Math.min(50000, Math.max(1000, Math.floor(d.stockPrices[i] * multiplier)));
+      // 주식 변동성에 마이너스(하락세) 포함한 비율 적용 (상승 55%, 하락 45%)
+      let isDrop = Math.random() < 0.45;
+      let multiplier = isDrop ? (0.85 + Math.random() * 0.12) : (1.02 + Math.random() * 0.18);
+      
+      d.stockPrices[i] = Math.max(1000, Math.floor(d.stockPrices[i] * multiplier));
       
       d.stockHistories[i].push(d.stockPrices[i]); 
       if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
