@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.0 카테고리별 사이드바 완벽 정리</title>
+<title>에너지 러시 - 퀀텀 에디션 v15.0 칭호 시스템 & 자동채굴 10레벨 확장</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -63,7 +63,7 @@ body::before {
 }
 
 .sidebar {
-  width: 250px;
+  width: 240px;
   background: var(--card-bg);
   backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
@@ -71,7 +71,7 @@ body::before {
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   max-height: 88vh;
@@ -90,27 +90,6 @@ body::before {
 .sidebar.collapsed .sidebar-header h3 { display: none; }
 .toggle-sidebar-btn { background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 16px; transition: color 0.2s; }
 .toggle-sidebar-btn:hover { color: var(--accent); }
-
-.nav-category-title {
-  font-size: 11px;
-  color: var(--accent);
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  margin: 4px 0 2px 4px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.sidebar.collapsed .nav-category-title { display: none; }
-
-.nav-category-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.nav-category-group:last-child { border-bottom: none; }
 
 .tab {
   width: 100%;
@@ -454,12 +433,38 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   background: rgba(245, 158, 11, 0.06);
 }
 
+.title-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+.title-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.title-card.unlocked {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.04);
+}
+.title-card.equipped {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.06);
+}
+
 @media(max-width: 780px){
   .layout-container { flex-direction: column; }
   .sidebar { width: 100% !important; flex-direction: row; flex-wrap: wrap; justify-content: center; }
-  .sidebar-header, .sidebar.collapsed .sidebar-header, .nav-category-title { display: none; }
+  .sidebar-header { display: none; }
   .stats{grid-template-columns: repeat(2, 1fr);}
-  .shop-grid, .minigame-grid, .pet-box-grid, .stock-grid{grid-template-columns: 1fr;}
+  .shop-grid, .minigame-grid, .pet-box-grid, .stock-grid, .title-grid{grid-template-columns: 1fr;}
   .coin{width: 130px; height: 130px; font-size: 45px;}
 }
 </style>
@@ -475,49 +480,26 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <button class="toggle-sidebar-btn" id="toggleSidebarBtn">◀</button>
     </div>
 
-    <!-- 1. 성장 및 육성 그룹 -->
-    <div class="nav-category-title">⚡ 성장 및 육성</div>
-    <div class="nav-category-group">
-      <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화 센터</span></button>
-      <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
-      <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석</span></button>
-      <button class="tab" data-tab="autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소</span></button>
-      <button class="tab" data-tab="converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소</span></button>
-    </div>
-
-    <!-- 2. 탐험 및 전투 그룹 -->
-    <div class="nav-category-title">🎯 탐험 및 전투</div>
-    <div class="nav-category-group">
-      <button class="tab" data-tab="minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span></button>
-      <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
-      <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
-      <button class="tab" data-tab="minigames"><span class="tab-icon">🔬</span><span class="tab-text">연구실 게임</span></button>
-    </div>
-
-    <!-- 3. 드론 및 컬렉션 그룹 -->
-    <div class="nav-category-title">🤖 드론 및 컬렉션</div>
-    <div class="nav-category-group">
-      <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
-      <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">통합 도감</span></button>
-      <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">코어 커스텀</span></button>
-    </div>
-
-    <!-- 4. 경제 및 소셜 그룹 -->
-    <div class="nav-category-title">🌐 경제 및 소셜</div>
-    <div class="nav-category-group">
-      <button class="tab" data-tab="stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span></button>
-      <button class="tab" data-tab="p2pPanel"><span class="tab-icon">🌐</span><span class="tab-text">P2P 유저거래소</span></button>
-      <button class="tab" data-tab="rankingPanel"><span class="tab-icon">🏆</span><span class="tab-text">글로벌 랭킹</span></button>
-      <button class="tab" data-tab="attendPanel"><span class="tab-icon">📅</span><span class="tab-text">30일 출석체크</span></button>
-    </div>
-
-    <!-- 5. 시스템 및 환생 그룹 -->
-    <div class="nav-category-title">🔮 시스템 및 클라우드</div>
-    <div class="nav-category-group">
-      <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구 스탯</span></button>
-      <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">시스템 승급</span></button>
-      <button class="tab" data-tab="cloudPanel"><span class="tab-icon">☁️</span><span class="tab-text">구글 클라우드</span></button>
-    </div>
+    <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화 센터</span></button>
+    <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
+    <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석 상점</span></button>
+    <button class="tab" data-tab="autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소</span></button>
+    <button class="tab" data-tab="converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소</span></button>
+    <button class="tab" data-tab="minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span></button>
+    <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
+    <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
+    <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
+    <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">통합 도감</span></button>
+    <button class="tab" data-tab="titlePanel"><span class="tab-icon">🏷️</span><span class="tab-text">칭호 센터</span></button>
+    <button class="tab" data-tab="stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span></button>
+    <button class="tab" data-tab="p2pPanel"><span class="tab-icon">🌐</span><span class="tab-text">P2P 유저거래소</span></button>
+    <button class="tab" data-tab="minigames"><span class="tab-icon">🔬</span><span class="tab-text">연구실 게임</span></button>
+    <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">코어 커스텀</span></button>
+    <button class="tab" data-tab="rankingPanel"><span class="tab-icon">🏆</span><span class="tab-text">글로벌 랭킹</span></button>
+    <button class="tab" data-tab="attendPanel"><span class="tab-icon">📅</span><span class="tab-text">30일 출석체크</span></button>
+    <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구 스탯 상점</span></button>
+    <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">시스템 승급</span></button>
+    <button class="tab" data-tab="cloudPanel"><span class="tab-icon">☁️</span><span class="tab-text">구글 클라우드</span></button>
   </div>
 
   <div class="game">
@@ -542,8 +524,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.0</h1>
-    <div class="sub">카테고리별 연관 채널 그룹화 완료 (성장, 탐험/전투, 드론, 경제/소셜, 시스템)</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v15.0</h1>
+    <div class="sub">자동채굴 10레벨 확장 및 칭호 시스템(장착 시 행운 증가) 도입 완료</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -570,8 +552,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <div class="upgrades">
         <div class="upgrade-row">
           <div>
-            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b></h3>
-            <small style="color:var(--text-sub);">5초마다 자동 채굴</small>
+            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b> <span id="autoMaxText" style="font-size:11px; color:#10b981;">(최대 10Lv)</span></h3>
+            <small style="color:var(--text-sub);">5초마다 자동 채굴 (레벨이 높을수록 폭발적 생산)</small>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <button id="autoToggleBtn" class="toggle-btn on">ON</button>
@@ -722,6 +704,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <button class="btn-game" id="huntBtn3">소탕 작전 (비용 50,000)</button>
         </div>
       </div>
+    </div>
+
+    <!-- 칭호 센터 패널 -->
+    <div id="titlePanel" class="panel hidden">
+      <h3 style="color:var(--accent); margin:0 0 4px; font-size:15px;">🏷️ 연구원 칭호 시스템</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">특정 조건을 달성해 칭호를 해제하고 장착하세요! 칭호를 장착하면 <b>행운 대성공 확률이 추가로 증가</b>합니다.</p>
+      <div id="titleGridContainer" class="title-grid"></div>
     </div>
 
     <div id="stockPanel" class="panel hidden">
@@ -1181,7 +1170,7 @@ function playLegendaryEpicSound() {
       gain.gain.setValueAtTime(0.3, audioCtx.currentTime + idx * 0.15);
       gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.15 + 1.5);
       osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      gain.connect(bgmAudioCtx ? bgmAudioCtx.destination : audioCtx.destination);
       osc.start(audioCtx.currentTime + idx * 0.15);
       osc.stop(audioCtx.currentTime + idx * 0.15 + 1.5);
     });
@@ -1228,9 +1217,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v14.0 사이드바 카테고리 개편 패치",
-    title: "연관 채널 그룹화 완료",
-    desc: "1) ⚡ [성장 및 육성], 🎯 [탐험 및 전투], 🤖 [드론 및 컬렉션], 🌐 [경제 및 소셜], 🔮 [시스템 및 클라우드] 등 5가지 핵심 테마별로 좌측 채널들을 깔끔하게 그룹화했습니다.\n2) 유저거래소 선택 및 드론 등록 버그가 온전하게 유지되며 가독성과 편의성이 극대화되었습니다."
+    version: "v15.0 칭호 및 자동채굴 10레벨 확장 패치",
+    title: "칭호 시스템 및 채굴 확장",
+    desc: "1) 🤖 자동 채굴 장치 레벨 한도가 **최대 10레벨**까지 확장되었습니다!\n2) 🏷️ 새로운 **칭호 센터**가 추가되었습니다. 각 조건을 달성해 칭호를 해제하고 장착하면 **행운 대성공 확률이 추가 증가**합니다."
   }
 ];
 
@@ -1265,8 +1254,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v140";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v139") || localStorage.getItem("energyRush_PermanentSaveData_v138");
+const saveKey = "energyRush_PermanentSaveData_v150";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v140");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1286,7 +1275,9 @@ let d = JSON.parse(savedRawData || "null") || {
   stockChannelActiveUntil: 0,
   stockChannelLockedUntil: 0,
   autoclickPurchased: false,
-  autoclickLevel: 0
+  autoclickLevel: 0,
+  unlockedTitles: [],
+  equippedTitle: null
 };
 
 const nowInit = Date.now();
@@ -1297,6 +1288,8 @@ if (d.stockChannelActiveUntil === 0 && d.stockChannelLockedUntil === 0) {
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
 if (!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
+if (!d.unlockedTitles) d.unlockedTitles = [];
+if (d.equippedTitle === undefined) d.equippedTitle = null;
 if (d.gems === undefined) d.gems = 0;
 if (d.stock1 === undefined) d.stock1 = 0;
 if (d.stock2 === undefined) d.stock2 = 0;
@@ -1331,6 +1324,17 @@ if (!d.stockHistories) d.stockHistories = {
 };
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
+
+const TITLES_DB = [
+  { id: 'novice', name: '초보 연구원', bonusLuck: 0.005, desc: '기본 칭호 (행운 대성공 +0.5%)', conditionText: '기본 해제', check: () => true },
+  { id: 'clicker1', name: '에너지 연타광', bonusLuck: 0.01, desc: '클릭 파워 20 이상 달성 시', conditionText: '클릭 파워 20 이상', check: () => d.power >= 20 },
+  { id: 'auto1', name: '오토마톤 마스터', bonusLuck: 0.015, desc: '자동 채굴 장치 5레벨 달성 시', conditionText: '자동 채굴 5Lv 이상', check: () => d.cps >= 5 },
+  { id: 'autoMax', name: '완벽한 자동화 공장', bonusLuck: 0.025, desc: '자동 채굴 장치 10레벨(만렙) 달성 시', conditionText: '자동 채굴 10Lv 도달', check: () => d.cps >= 10 },
+  { id: 'hunter1', name: '바이러스 퇴치사', bonusLuck: 0.012, desc: '무기 3종 이상 보유 시', conditionText: '무기 3개 이상 구매', check: () => d.ownedWeapons && d.ownedWeapons.length >= 3 },
+  { id: 'rich1', name: '퀀텀 재벌', bonusLuck: 0.02, desc: '누적 에너지 1,000,000 이상 보유 시', conditionText: '에너지 1백만 이상', check: () => d.score >= 1000000 },
+  { id: 'drone1', name: '드론 수집가', bonusLuck: 0.02, desc: '드론 10종 이상 발견 시', conditionText: '도감 드론 10종 이상 발견', check: () => d.discoveredPets && d.discoveredPets.length >= 10 },
+  { id: 'god', name: '우주 신(神)', bonusLuck: 0.05, desc: '시스템 승급(환생) 1회 이상 완료 시', conditionText: '시스템 승급 1회 이상', check: () => d.rebirth >= 1 }
+];
 
 const WEAPONS_DB = [
   { id: 0, name: "나무검", icon: "🪵⚔️", price: 0, bonusProb: 0.00, bonusReward: 1.00, desc: "기본적인 나무 검." },
@@ -1588,6 +1592,67 @@ function checkAndDiscoverPets() {
       d.discoveredPets.push(petId);
     }
   });
+}
+
+function checkAndUnlockTitles() {
+  if(!d.unlockedTitles) d.unlockedTitles = [];
+  TITLES_DB.forEach(t => {
+    if(!d.unlockedTitles.includes(t.id)) {
+      if(t.check()) {
+        d.unlockedTitles.push(t.id);
+        playSuccessSound();
+        showStockAlertToast(`🏆 [칭호 해제] 새로운 칭호 "${t.name}"을(를) 획득했습니다!`, true);
+      }
+    }
+  });
+}
+
+function renderTitlesUI() {
+  const container = document.getElementById("titleGridContainer");
+  if(!container) return;
+  container.innerHTML = "";
+  checkAndUnlockTitles();
+
+  TITLES_DB.forEach(t => {
+    const isUnlocked = d.unlockedTitles.includes(t.id);
+    const isEquipped = d.equippedTitle === t.id;
+
+    const card = document.createElement("div");
+    card.className = `title-card ${isUnlocked ? 'unlocked' : ''} ${isEquipped ? 'equipped' : ''}`;
+    
+    let actionBtn = "";
+    if(!isUnlocked) {
+      actionBtn = `<button class="btn-game" style="background:#4b5563 !important; font-size:11px; padding:6px;" disabled>🔒 미해제</button>`;
+    } else if(isEquipped) {
+      actionBtn = `<button class="btn-game" style="background:#10b981 !important; font-size:11px; padding:6px;" onclick="equipTitle(null)">장착 해제</button>`;
+    } else {
+      actionBtn = `<button class="btn-game" style="font-size:11px; padding:6px;" onclick="equipTitle('${t.id}')">칭호 장착</button>`;
+    }
+
+    card.innerHTML = `
+      <div>
+        <b style="color:var(--accent); font-size:14px;">[${t.name}]</b>
+        <p style="font-size:11px; color:var(--text-sub); margin:6px 0;">조건: ${t.conditionText}</p>
+        <p style="font-size:10px; color:#10b981; margin:0 0 10px;">효과: 행운 대성공 확률 +${(t.bonusLuck * 100).toFixed(1)}%</p>
+      </div>
+      <div>
+        ${actionBtn}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function equipTitle(titleId) {
+  d.equippedTitle = titleId;
+  playSuccessSound();
+  if(titleId) {
+    const tObj = TITLES_DB.find(x => x.id === titleId);
+    say(`🏷️ 칭호 [${tObj ? tObj.name : titleId}] 장착 완료!`);
+  } else {
+    say("칭호 장착이 해제되었습니다.");
+  }
+  save();
 }
 
 function claimEncyclopediaReward(petId) {
@@ -1959,6 +2024,13 @@ function updateUserUI() {
 
 function getPetBonus(){
   let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.01;
+
+  // 장착된 칭호 행운 보너스 적용
+  if(d.equippedTitle) {
+    const tObj = TITLES_DB.find(x => x.id === d.equippedTitle);
+    if(tObj) luckProb += tObj.bonusLuck;
+  }
+
   if (!d.equippedPets) d.equippedPets = [];
   d.equippedPets.forEach(index => {
     const petId = d.pets[index];
@@ -2027,6 +2099,7 @@ function getBaseMult(){
 
 function save(){
   checkAndDiscoverPets();
+  checkAndUnlockTitles();
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
 }
@@ -2197,7 +2270,11 @@ function render(){
  
  let filterBonus = d.filter ? 1.25 : 1.0;
  let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
- let totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
+ let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
+ 
+ // 자동채굴 10레벨까지 확장 배율 적용 (레벨당 약 2배씩 증가)
+ let autoLevelMult = Math.pow(1.9, d.cps);
+ let totalCps = ((((( (d.cps > 0 ? autoLevelMult : 0) + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  if(document.getElementById("score")) document.getElementById("score").textContent=fmt(d.score); 
  if(document.getElementById("power")) document.getElementById("power").textContent=fmt(totalPower);
@@ -2282,6 +2359,7 @@ function render(){
  if(document.getElementById("huntReward3")) document.getElementById("huntReward3").textContent = fmt(Math.round(150000 * extraRew));
 
  renderWeaponShop();
+ renderTitlesUI();
 
  const coinBtn = document.getElementById("coin");
  if(coinBtn) {
@@ -2322,11 +2400,15 @@ function render(){
 
  const autoUpgradeBtn = document.getElementById("autoBtn");
  if(autoUpgradeBtn) {
-   if(d.autoPurchased) {
-     autoUpgradeBtn.textContent = "보유 완료";
+   if(d.cps >= 10) {
+     autoUpgradeBtn.textContent = "최대 레벨 (10Lv)";
      autoUpgradeBtn.disabled = true;
+   } else if(!d.autoPurchased) {
+     autoUpgradeBtn.textContent = fmt(1200) + " 에너지";
+     autoUpgradeBtn.disabled = false;
    } else {
-     autoUpgradeBtn.textContent = fmt(Math.round(1200)) + " 에너지";
+     let nextCost = Math.round(1200 * Math.pow(2.4, d.cps));
+     autoUpgradeBtn.textContent = fmt(nextCost) + " 에너지";
      autoUpgradeBtn.disabled = false;
    }
  }
@@ -3194,7 +3276,8 @@ document.addEventListener("DOMContentLoaded", () => {
       let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
       let gemRingBonus = d.gemRing ? 1.08 : 1.0;
       let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
-      const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
+      let autoLevelMult = Math.pow(1.9, d.cps);
+      const autoCps = ( (d.cps > 0 ? autoLevelMult : 0) + (d.permCps || 0)) * filterBonus * gemAutoBonus * gemRingBonus * gemChronosBonus;
       let bonusGain = (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 720;
       if(bonusGain <= 0) bonusGain = 10000;
       d.score += bonusGain;
@@ -3393,17 +3476,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoBtn = document.getElementById("autoBtn");
   if(autoBtn) {
     autoBtn.onclick = () => {
-      if(d.autoPurchased) return say("이미 자동 채굴 장치를 보유하고 있습니다.");
-      let cost = 1200;
-      if(d.score >= cost) {
-        d.score -= cost;
-        d.autoPurchased = true;
-        d.cps = 1;
-        d.autoEnabled = true;
-        say("🤖 자동 채굴 장치 설치 완료!");
-        save();
+      if(!d.autoPurchased) {
+        let cost = 1200;
+        if(d.score >= cost) {
+          d.score -= cost;
+          d.autoPurchased = true;
+          d.cps = 1;
+          d.autoEnabled = true;
+          say("🤖 자동 채굴 장치 설치 완료 (Lv.1)!");
+          save();
+        } else {
+          say("에너지가 부족합니다.");
+        }
       } else {
-        say("에너지가 부족합니다.");
+        if(d.cps >= 10) return say("자동 채굴 장치는 이미 최대 10레벨(만렙)입니다!");
+        let nextCost = Math.round(1200 * Math.pow(2.4, d.cps));
+        if(d.score >= nextCost) {
+          d.score -= nextCost;
+          d.cps++;
+          playSuccessSound();
+          say(`🤖 자동 채굴 장치 레벨 업! (Lv.${d.cps})`);
+          save();
+        } else {
+          say("업그레이드에 에너지가 부족합니다.");
+        }
       }
     };
   }
@@ -3478,6 +3574,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(t.dataset.tab === 'rankingPanel') loadGlobalRanking();
       if(t.dataset.tab === 'p2pPanel') { loadP2PMarket(); updateP2PDroneSelect(); }
       if(t.dataset.tab === 'attendPanel') renderAttendanceUI();
+      if(t.dataset.tab === 'titlePanel') renderTitlesUI();
     };
   });
 
@@ -3605,7 +3702,8 @@ setInterval(() => {
     let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
     let gemRingBonus = d.gemRing ? 1.08 : 1.0;
     let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
-    const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
+    let autoLevelMult = Math.pow(1.9, d.cps);
+    const autoCps = ( (d.cps > 0 ? autoLevelMult : 0) + (d.permCps || 0)) * filterBonus * gemAutoBonus * gemRingBonus * gemChronosBonus;
     if(autoCps > 0 && d.autoEnabled && d.autoPurchased){
       d.score += (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 5;
       save();
