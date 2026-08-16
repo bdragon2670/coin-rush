@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v13.5 P2P 유저거래소</title>
+<title>에너지 러시 - 퀀텀 에디션 v13.6 P2P 유저거래소</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -494,8 +494,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.5</h1>
-    <div class="sub">구글 유저간 P2P 유저거래소 & 소수점 연타 감지 보안 에디션</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.6</h1>
+    <div class="sub">구글 유저간 P2P 유저거래소 (보유 드론 전체 선택 & 최소 1,000원 제한)</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -604,7 +604,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="autoclickPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🖱️ 오토클릭 자율 구동 연구소 (최대 3레벨 제한)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">비정상적인 소수점 연타 및 매크로가 감지되면 5초간 클릭이 정지되는 방지 시스템이 가동됩니다.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">소수점 연타 및 비정상 초고속 연타가 감지되면 5초간 클릭이 정지됩니다.</p>
       
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center; margin-bottom:14px;">
         <h4 style="color:var(--accent); margin:0 0 4px; font-size:14px;">오토클릭 상태: <b id="autoclickStatusDisplay" style="color:#ef4444;">미구동 (비활성)</b></h4>
@@ -790,17 +790,25 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <h3 style="color:var(--accent); margin:0; font-size:15px;">🌐 구글 유저 실시간 P2P 유저거래소</h3>
         <button class="tool-btn" id="refreshP2PBtn">🔄 매물 새로고침</button>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">구글 로그인한 연구원들끼리 보석(💎)이나 드론(🤖)을 에너지(⚡)로 안전하게 등록하고 거래하세요!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보유한 모든 드론 중 원하는 드론을 선택하거나 보석(💎)을 최소 1,000원(에너지) 이상으로 등록하고 거래하세요!</p>
       
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; margin-bottom:16px;">
         <h4 style="color:var(--text-main); margin:0 0 10px; font-size:13px;">📦 새 매물 등록하기</h4>
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <select id="p2pItemType" class="p2p-input" style="flex:1; min-width:120px;">
+          <select id="p2pItemType" class="p2p-input" style="flex:1; min-width:120px;" onchange="toggleP2PItemTypeSelector()">
             <option value="gem">보석 (💎)</option>
-            <option value="drone">드론 (🤖 보유 드론)</option>
+            <option value="drone">보유 드론 (🤖)</option>
           </select>
-          <input type="number" id="p2pItemCount" class="p2p-input" placeholder="수량/종류" value="1" min="1" style="flex:1; min-width:80px;">
-          <input type="number" id="p2pPrice" class="p2p-input" placeholder="판매 가격 (에너지)" value="10000" min="1" style="flex:1.5; min-width:120px;">
+          
+          <div id="p2pGemInputArea" style="flex:1; min-width:100px;">
+            <input type="number" id="p2pGemCount" class="p2p-input" placeholder="보석 수량" value="1" min="1">
+          </div>
+          
+          <div id="p2pDroneInputArea" class="hidden" style="flex:1; min-width:140px;">
+            <select id="p2pSelectedDroneIndex" class="p2p-input"></select>
+          </div>
+
+          <input type="number" id="p2pPrice" class="p2p-input" placeholder="판매 가격 (최소 1,000 에너지)" value="1000" min="1000" style="flex:1.5; min-width:140px;">
           <button class="btn-game" id="registerP2PBtn" style="flex:1; background:linear-gradient(135deg, #10b981, #059669) !important;">🚀 매물 등록</button>
         </div>
       </div>
@@ -1172,9 +1180,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.5 P2P 유저거래소 패치",
-    title: "구글 유저 간 실시간 유저거래 및 보안 강화",
-    desc: "1) 🌐 P2P 유저거래소 탭을 통해 유저간 보석 및 드론의 등록, 실시간 조회, 즉시 구매, 본인 매물 회수가 완벽히 연동됩니다.\n2) 소수점 단위 또는 비정상적인 초고속 연타가 감지되면 클릭 버튼이 5초간 자동 잠기는 보안 시스템이 추가되었습니다.\n3) 파이어스토어 및 로컬 데이터 저장 시스템이 고도화되었습니다."
+    version: "v13.6 P2P 유저거래소 패치",
+    title: "보유 드론 전체 선택 및 최소 1,000원 가격 제한 적용",
+    desc: "1) 🌐 P2P 유저거래소에서 내가 가진 모든 드론 중 원하는 드론을 선택해 등록할 수 있습니다.\n2) 판매 가격은 최소 1,000원(에너지) 이상으로 설정해야만 등록 가능합니다.\n3) 소수점 연타 감지 시 5초 자동 잠금 및 클라우드 데이터 동기화가 완벽 적용되었습니다."
   }
 ];
 
@@ -1209,8 +1217,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v135";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v134") || localStorage.getItem("energyRush_PermanentSaveData_v133");
+const saveKey = "energyRush_PermanentSaveData_v136";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v135") || localStorage.getItem("energyRush_PermanentSaveData_v134");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1647,6 +1655,39 @@ function loadGlobalRanking() {
 }
 
 /* P2P 유저거래소 관련 로직 */
+function toggleP2PItemTypeSelector() {
+  const type = document.getElementById("p2pItemType").value;
+  const gemArea = document.getElementById("p2pGemInputArea");
+  const droneArea = document.getElementById("p2pDroneInputArea");
+  if(type === 'gem') {
+    gemArea.classList.remove("hidden");
+    droneArea.classList.add("hidden");
+  } else {
+    gemArea.classList.add("hidden");
+    droneArea.classList.remove("hidden");
+    updateP2PDroneSelect();
+  }
+}
+
+function updateP2PDroneSelect() {
+  const select = document.getElementById("p2pSelectedDroneIndex");
+  if(!select) return;
+  select.innerHTML = "";
+  if(!d.pets || d.pets.length === 0) {
+    select.innerHTML = `<option value="">보유한 드론 없음</option>`;
+    return;
+  }
+  d.pets.forEach((petId, idx) => {
+    const pet = PET_DB[petId];
+    if(pet) {
+      const opt = document.createElement("option");
+      opt.value = idx;
+      opt.textContent = `${pet.icon} ${pet.name} (${pet.grade}급)`;
+      select.appendChild(opt);
+    }
+  });
+}
+
 function loadP2PMarket() {
   const container = document.getElementById("p2pMarketList");
   if(!container) return;
@@ -1697,11 +1738,13 @@ function registerP2PItem() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해야 유저거래소를 이용할 수 있습니다.");
   const type = document.getElementById("p2pItemType").value;
   const price = parseInt(document.getElementById("p2pPrice").value) || 0;
-  if(price <= 0) return say("올바른 가격을 입력해주세요.");
+  
+  // 최소 1,000원 이상 제한
+  if(price < 1000) return say("판매 가격은 최소 1,000 에너지 이상이어야 합니다.");
 
   if(type === 'gem') {
-    const count = parseInt(document.getElementById("p2pItemCount").value) || 0;
-    if(count <= 0) return say("수량을 입력해주세요.");
+    const count = parseInt(document.getElementById("p2pGemCount").value) || 0;
+    if(count <= 0) return say("수량을 올바르게 입력해주세요.");
     if(d.gems < count) return say("보유한 보석(💎)이 부족합니다.");
 
     d.gems -= count;
@@ -1721,7 +1764,10 @@ function registerP2PItem() {
     });
   } else {
     if(!d.pets || d.pets.length === 0) return say("등록할 드론이 없습니다.");
-    const petIdx = 0;
+    const selectEl = document.getElementById("p2pSelectedDroneIndex");
+    const petIdx = parseInt(selectEl.value);
+    if(isNaN(petIdx) || !d.pets[petIdx]) return say("등록할 드론을 올바르게 선택해주세요.");
+
     const petId = d.pets[petIdx];
     const pet = PET_DB[petId];
 
@@ -1747,6 +1793,7 @@ function registerP2PItem() {
       say(`🤖 [${pet.name}] 드론이 유저거래소에 성공적으로 등록되었습니다!`);
       save();
       loadP2PMarket();
+      updateP2PDroneSelect();
     });
   }
 }
@@ -1786,6 +1833,7 @@ function buyP2PItem(docId, sellerId, price, type, count, petId) {
       say("✨ 유저거래소 거래가 성공적으로 완료되었습니다!");
       save();
       loadP2PMarket();
+      updateP2PDroneSelect();
     });
   });
 }
@@ -1808,6 +1856,7 @@ function cancelP2PItem(docId) {
       say("매물이 성공적으로 회수되었습니다.");
       save();
       loadP2PMarket();
+      updateP2PDroneSelect();
     });
   });
 }
@@ -2268,6 +2317,7 @@ function render(){
  renderEncyclopedia();
  updateCustomUI();
  setupAutoclickLoop();
+ updateP2PDroneSelect();
 }
 
 function renderWeaponShop() {
@@ -2611,6 +2661,7 @@ function renderPetList(){
     });
     container.appendChild(card);
   });
+  updateP2PDroneSelect();
 }
 
 function toggleEquipPet(index){
@@ -2892,7 +2943,6 @@ function performClickAction(e) {
     return;
   }
 
-  // 소수점 단위 클릭 감지 (예: 마우스 이벤트가 정수가 아니거나 가상 조작인 경우 / 또는 1초 내 과도한 연타)
   if (e && (e.detail % 1 !== 0 || (e.clientX && e.clientX % 1 !== 0))) {
     isClickBlocked = true;
     playFailureSound();
@@ -3364,7 +3414,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(targetPanel) targetPanel.classList.remove("hidden");
       if(t.dataset.tab === 'stockPanel') updateStockUI();
       if(t.dataset.tab === 'rankingPanel') loadGlobalRanking();
-      if(t.dataset.tab === 'p2pPanel') loadP2PMarket();
+      if(t.dataset.tab === 'p2pPanel') { loadP2PMarket(); updateP2PDroneSelect(); }
       if(t.dataset.tab === 'attendPanel') renderAttendanceUI();
     };
   });
