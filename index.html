@@ -320,7 +320,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .pet-card.equipped{border: 1px solid var(--accent); box-shadow: 0 0 15px rgba(245,158,11,0.25); background: rgba(245,158,11,0.03);}
 .pet-icon{font-size: 28px; margin-bottom: 4px; pointer-events: none;}
 
-.encyclopedia-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; text-align: center; }
+.encyclopedia-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
 .encyclopedia-card.locked { opacity: 0.35; filter: grayscale(100%); background: rgba(0,0,0,0.3); }
 .encyclopedia-card.unlocked { border: 1px solid #10b981; background: rgba(16, 185, 129, 0.03); }
 
@@ -399,7 +399,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div class="modal-overlay hidden" id="patchModal">
       <div class="modal-box">
         <div class="modal-header">
-          <h2>📜 대규모 하드코어 패치노트</h2>
+          <h2>📜 패치노트</h2>
           <button class="close-modal" id="closePatchNoteBtn">&times;</button>
         </div>
         <div class="modal-body" id="patchNoteContent"></div>
@@ -448,7 +448,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="shop" class="panel hidden">
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 1% 확률로 에너지 보너스 ×1.05 (대너프)</p></div>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 1% 확률로 에너지 보너스 ×1.05</p></div>
           <button class="buy" data-item="luck">구매 90,000</button>
         </div>
         <div class="shop-item">
@@ -475,35 +475,35 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="gemShop" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 프리미엄 퀀텀 캐시 상점 (행운/스탯 대너프 적용)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보석(💎)으로 구매하는 프리미엄 스탯의 행운 및 효율이 대폭 하향 조정되었습니다.</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 프리미엄 퀀텀 캐시 상점</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보석(💎)으로 구매하는 프리미엄 스탯 상점입니다.</p>
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>⚡ 클리커 가속기</h3><p>클릭 에너지 영구 +10% (너프)</p></div>
+          <div><h3>⚡ 클리커 가속기</h3><p>클릭 에너지 영구 +10%</p></div>
           <button class="gem-buy" data-gemitem="gemClick">구매 💎 150</button>
         </div>
         <div class="shop-item">
-          <div><h3>🤖 오토마톤 코어</h3><p>자동 채굴량 영구 +12% (너프)</p></div>
+          <div><h3>🤖 오토마톤 코어</h3><p>자동 채굴량 영구 +12%</p></div>
           <button class="gem-buy" data-gemitem="gemAuto">구매 💎 300</button>
         </div>
         <div class="shop-item">
-          <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +0.3% (대너프)</p></div>
+          <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +0.3%</p></div>
           <button class="gem-buy" data-gemitem="gemLuck">구매 💎 450</button>
         </div>
         <div class="shop-item">
-          <div><h3>🚀 하이퍼 드라이브</h3><p>모든 에너지 획득량 영구 +4% (너프)</p></div>
+          <div><h3>🚀 하이퍼 드라이브</h3><p>모든 에너지 획득량 영구 +4%</p></div>
           <button class="gem-buy" data-gemitem="gemHyper">구매 💎 600</button>
         </div>
         <div class="shop-item">
-          <div><h3>🌌 싱귤래리티 링</h3><p>클릭 및 자동 채굴 영구 +8% (너프)</p></div>
+          <div><h3>🌌 싱귤래리티 링</h3><p>클릭 및 자동 채굴 영구 +8%</p></div>
           <button class="gem-buy" data-gemitem="gemRing">구매 💎 1,200</button>
         </div>
         <div class="shop-item">
-          <div><h3>👑 디바인 싱크론</h3><p>모든 에너지 획득량 영구 +15% (너프)</p></div>
+          <div><h3>👑 디바인 싱크론</h3><p>모든 에너지 획득량 영구 +15%</p></div>
           <button class="gem-buy" data-gemitem="gemDivine">구매 💎 3,000</button>
         </div>
         <div class="shop-item">
-          <div><h3>🔮 크로노스 가속기</h3><p>자동 채굴 효율 영구 +15% (너프)</p></div>
+          <div><h3>🔮 크로노스 가속기</h3><p>자동 채굴 효율 영구 +15%</p></div>
           <button class="gem-buy" data-gemitem="gemChronos">구매 💎 2,100</button>
         </div>
         <div class="shop-item">
@@ -528,7 +528,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="blacksmithPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚒️ 퀀텀 대장간 (무기 강화 시스템 - 최대 20강)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다. (비용 배수 1.5배 적용)</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 무기 강화 레벨: <b id="blacksmithLvDisplay" style="font-size:18px;">+0</b> / 20강</h4>
         <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">다음 강화 시 클릭 파워 추가 상승 & 사냥터 성공률/보상 소폭 증가</p>
@@ -544,21 +544,21 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="huntingPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (에너지 약탈 레이드)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">장착된 무기와 대장간 강화로 바이러스를 소탕하세요.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보상이 대폭 상향되어 손해를 보지 않도록 개편되었습니다.</p>
       <div class="shop-grid">
         <div class="game-card">
-          <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#f43f5e;" id="huntProb1">(기본 45%)</span></h3>
-          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward1" style="color:var(--accent);">2,500</b> 에너지</p>
+          <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#10b981;" id="huntProb1">(기본 45%)</span></h3>
+          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward1" style="color:var(--accent);">4,500</b> 에너지</p>
           <button class="btn-game" id="huntBtn1">소탕 작전 (비용 2,000)</button>
         </div>
         <div class="game-card">
-          <h3>👾 글리치 워머 <span style="font-size:10px; color:#f43f5e;" id="huntProb2">(기본 25%)</span></h3>
-          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward2" style="color:var(--accent);">14,000</b> 에너지</p>
+          <h3>👾 글리치 워머 <span style="font-size:10px; color:#10b981;" id="huntProb2">(기본 25%)</span></h3>
+          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward2" style="color:var(--accent);">25,000</b> 에너지</p>
           <button class="btn-game" id="huntBtn2">소탕 작전 (비용 10,000)</button>
         </div>
         <div class="game-card">
-          <h3>🐉 타이탄 랜섬웨어 <span style="font-size:10px; color:#f43f5e;" id="huntProb3">(기본 10%)</span></h3>
-          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward3" style="color:var(--accent);">75,000</b> 에너지</p>
+          <h3>🐉 타이탄 랜섬웨어 <span style="font-size:10px; color:#10b981;" id="huntProb3">(기본 10%)</span></h3>
+          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward3" style="color:var(--accent);">150,000</b> 에너지</p>
           <button class="btn-game" id="huntBtn3">소탕 작전 (비용 50,000)</button>
         </div>
       </div>
@@ -721,7 +721,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감 & 수집 보상</h3>
         <span style="font-size:12px; color:var(--accent); font-weight:700;" id="encyclopediaCount">수집률: 0 / 40</span>
       </div>
-      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:10px;">새로운 드론 등록 시 보석(💎)이 즉시 지급됩니다!</p>
+      <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:10px;">새로운 드론을 등록하고 수령 버튼을 눌러 보석(💎)을 획득하세요!</p>
       
       <div class="progress-bar-container">
         <div class="progress-bar-fill" id="encyclopediaProgressBar"></div>
@@ -753,71 +753,70 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="minigames" class="panel hidden">
       <div style="text-align:center; margin-bottom:16px;">
-        <h3 style="color:var(--accent); margin:0 0 4px; font-size:15px;">🔬 하이퍼 하드코어 퀀텀 연구실</h3>
-        <p style="color:var(--text-sub); font-size:11px; margin:0;">성공 시 엄청난 배율의 에너지를 독식합니다!</p>
+        <h3 style="color:var(--accent); margin:0 0 4px; font-size:15px;">🔬 퀀텀 연구실 미니게임 (오리지널 확률)</h3>
+        <p style="color:var(--text-sub); font-size:11px; margin:0;">예전 오리지널 버전의 확률과 배율로 복원되었습니다!</p>
       </div>
       <div class="minigame-grid">
         <div class="game-card">
-          <h3>⚡ 싱귤래리티 터널 <span style="font-size:10px; color:#ef4444;">(성공률 3%)</span></h3>
+          <h3>⚡ 싱귤래리티 터널 <span style="font-size:10px; color:var(--accent);">(성공률 35%)</span></h3>
           <div class="slot-display" id="game1Display">안정 구역 대기중</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×50</b> 배</p>
-          <input type="number" id="game1Bet" class="bet-input" value="3000" min="3000" step="500">
-          <button class="btn-game" id="game1Btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);">극한의 터널 진입 (×50)</button>
+          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×2</b> 배</p>
+          <input type="number" id="game1Bet" class="bet-input" value="1000" min="500" step="100">
+          <button class="btn-game" id="game1Btn">터널 진입 (×2)</button>
         </div>
 
         <div class="game-card">
-          <h3>🎯 퀀텀 러시안룰렛 <span style="font-size:10px; color:#ef4444;">(성공률 5%)</span></h3>
+          <h3>🎯 퀀텀 러시안룰렛 <span style="font-size:10px; color:var(--accent);">(성공률 20%)</span></h3>
           <div class="slot-display" id="game2Display">방아쇠 장전 완료</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×30</b> 배</p>
-          <input type="number" id="game2Bet" class="bet-input" value="3000" min="3000" step="500">
-          <button class="btn-game" id="game2Btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);">방아쇠 당기기 (×30)</button>
+          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×4</b> 배</p>
+          <input type="number" id="game2Bet" class="bet-input" value="1000" min="500" step="100">
+          <button class="btn-game" id="game2Btn">방아쇠 당기기 (×4)</button>
         </div>
 
         <div class="game-card">
-          <h3>🎰 초신성 잭팟 슬롯 <span style="font-size:10px; color:#ef4444;">(성공률 0.5%)</span></h3>
+          <h3>🎰 초신성 잭팟 슬롯 <span style="font-size:10px; color:var(--accent);">(성공률 5%)</span></h3>
           <div class="slot-display" id="game3Display">🌌 🌌 🌌</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×300</b> 배</p>
-          <input type="number" id="game3Bet" class="bet-input" value="3000" min="3000" step="500">
-          <button class="btn-game" id="game3Btn" style="background:linear-gradient(135deg, #9333ea, #6b21a8);">초신성 스핀 (×300)</button>
+          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×10</b> 배</p>
+          <input type="number" id="game3Bet" class="bet-input" value="1000" min="500" step="100">
+          <button class="btn-game" id="game3Btn">초신성 스핀 (×10)</button>
         </div>
 
         <div class="game-card">
-          <h3>⏳ 크로노스 오라클 <span style="font-size:10px; color:#ef4444;">(성공률 8%)</span></h3>
+          <h3>⏳ 크로노스 오라클 <span style="font-size:10px; color:var(--accent);">(성공률 50%)</span></h3>
           <div class="slot-display" id="game4Display">미래 시각 동기화 대기</div>
-          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×15</b> 배</p>
-          <input type="number" id="game4Bet" class="bet-input" value="3000" min="3000" step="500">
-          <button class="btn-game" id="game4Btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);">오라클 예측 (×15)</button>
+          <p style="font-size:10px;color:var(--text-sub);margin:0 0 6px;">성공 보상: 베팅액의 <b>×1.8</b> 배</p>
+          <input type="number" id="game4Bet" class="bet-input" value="1000" min="500" step="100">
+          <button class="btn-game" id="game4Btn">오라클 예측 (×1.8)</button>
         </div>
       </div>
     </div>
 
     <div id="permStatPanel" class="panel hidden">
-      <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:18px;">✨ 영구 연구 스탯 상점 (대너프 적용)</h2>
+      <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:18px;">✨ 영구 연구 스탯 상점</h2>
       <p style="text-align:center;color:var(--text-sub);font-size:11px;margin-bottom:16px;">
-        보유 승급 포인트(RP): <b id="permRpDisplay" style="color:var(--accent);font-size:16px;">0</b><br>
-        * 영구 연구 스탯 및 행운 효과가 대폭 너프되었습니다!
+        보유 승급 포인트(RP): <b id="permRpDisplay" style="color:var(--accent);font-size:16px;">0</b>
       </p>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small style="color:var(--text-sub);">클릭 채굴 파워 영구 강화 (+1)</small></div>
+          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small style="color:var(--text-sub);">클릭 채굴 파워 영구 강화 (+2)</small></div>
           <button id="buyPermPowerBtn"><span id="costPermPower">1</span> RP</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small style="color:var(--text-sub);">자동 채굴 능력 영구 강화 (+2)</small></div>
+          <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small style="color:var(--text-sub);">자동 채굴 능력 영구 강화 (+4)</small></div>
           <button id="buyPermCpsBtn"><span id="costPermCps">1</span> RP</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">대성공 확률 추가 (+0.2% 너프)</small></div>
+          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">대성공 확률 추가 (+0.5%)</small></div>
           <button id="buyPermLuckBtn"><span id="costPermLuck">1</span> RP</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>💎 영구 보석 수집 증폭 <b id="permGemLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">광산 보석 획득량 증가 (+2% 너프)</small></div>
+          <div><h3>💎 영구 보석 수집 증폭 <b id="permGemLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">광산 보석 획득량 증가 (+5%)</small></div>
           <button id="buyPermGemBtn"><span id="costPermGem">2</span> RP</button>
         </div>
       </div>
@@ -1000,9 +999,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v9.8 하드코어 밸런스 패치",
-    title: "S급 이상만 파괴 적용, 캐시/영구스탯 행운 대너프, 주식 매도 후 5분 매수 제한",
-    desc: "1) 🤖 드론 합성은 이제 **S급 이상(S, L, M, T, X)에서만** 실패/과부하 시 파괴 효과가 발생합니다! (C, B, A급은 안전 합성)\n2) 💎 캐시 상점 및 ✨ 영구 연구 스탯 상점의 행운 및 추가 효율 스탯이 대폭 너프되었습니다.\n3) 📈 주식을 한 번이라도 매도하면 **5분(300초) 동안 해당 주식 매수가 잠깁니다.**\n4) 💾 데이터 영구 저장 및 클라우드 연동 완벽 적용."
+    version: "v9.9 최신 업데이트",
+    title: "대장간 완화, 사냥터 개편, 도감 보석 수동 수령, 미니게임 오리지널 복원",
+    desc: "1) ⚒️ 대장간 강화 가격 상승 배수가 **1.5배**로 완화되었습니다.\n2) 🎯 사냥터 보상이 대폭 상향되어 이제 손해를 보지 않습니다.\n3) 📖 통합 도감 보석 보상이 **직접 수령 버튼**을 눌러 받는 방식으로 변경되었습니다.\n4) 🔬 연구실 미니게임이 예전 오리지널 버전 확률과 배율로 복원되었습니다.\n5) 🎁 드론 5회/10회 뽑기 가격이 1회 뽑기 가격 기준에 맞게 정밀 조정되었습니다."
   }
 ];
 
@@ -1037,12 +1036,12 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v98";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v97") || localStorage.getItem("energyRush_PermanentSaveData_v96");
+const saveKey = "energyRush_PermanentSaveData_v99";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v98") || localStorage.getItem("energyRush_PermanentSaveData_v97");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
- pets: [], equippedPets: [], discoveredPets: [], lastAttend: 0, attendDays: 0, autoEnabled: true, autoPurchased: false,
+ pets: [], equippedPets: [], discoveredPets: [], claimedEncyclopedia: [], lastAttend: 0, attendDays: 0, autoEnabled: true, autoPurchased: false,
  permPower: 0, permCps: 0, permLuck: 0, permGem: 0, gems: 0,
  coinColor: 'gold', coinIcon: '⚡', customImg: null, bgImg: null,
  stock1: 0, stock2: 0, stock3: 0, stock4: 0,
@@ -1055,6 +1054,7 @@ let d = JSON.parse(savedRawData || "null") || {
 
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
+if (!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
 if (d.gems === undefined) d.gems = 0;
 if (d.stock1 === undefined) d.stock1 = 0;
 if (d.stock2 === undefined) d.stock2 = 0;
@@ -1273,15 +1273,22 @@ function checkAndDiscoverPets() {
   d.pets.forEach(petId => {
     if(!d.discoveredPets.includes(petId)) {
       d.discoveredPets.push(petId);
-      const pet = PET_DB[petId];
-      if(pet && pet.gemReward) d.gems += pet.gemReward;
     }
   });
+}
 
-  if(d.discoveredPets.length === Object.keys(PET_DB).length && !d.completedAllEncyclopedia) {
-    d.completedAllEncyclopedia = true;
-    d.gems += 10;
-    say("🎉 축하합니다! 통합 드론 도감 40종 100% 완성 보상으로 보석 10개를 획득하셨습니다!");
+function claimEncyclopediaReward(petId) {
+  if(!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
+  if(d.claimedEncyclopedia.includes(petId)) return say("이미 수령한 보상입니다.");
+  if(!d.discoveredPets.includes(petId)) return say("아직 발견하지 않은 드론입니다.");
+  
+  const pet = PET_DB[petId];
+  if(pet && pet.gemReward) {
+    d.gems += pet.gemReward;
+    d.claimedEncyclopedia.push(petId);
+    playSuccessSound();
+    say(`📖 도감 보상 획득! 보석 💎 +${pet.gemReward} 개 지급!`);
+    save();
   }
 }
 
@@ -1452,11 +1459,11 @@ function getPetBonus(){
 
 function getBaseMult(){
   let itemMult = (d.core ? 1.15 : 1) * (d.double ? 1.30 : 1) * (d.quantum ? 1.50 : 1);
-  let gemHyperBonus = d.gemHyper ? 1.04 : 1.0; // 너프 (1.10 -> 1.04)
-  let gemRingBonus = d.gemRing ? 1.08 : 1.0;   // 너프 (1.20 -> 1.08)
-  let gemDivineBonus = d.gemDivine ? 1.15 : 1.0; // 너프 (1.35 -> 1.15)
-  let gemChronosBonus = d.gemChronos ? 1.15 : 1.0; // 너프 (1.40 -> 1.15)
-  return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * (1 + d.rp * 0.04); // 영구연구 너프 (0.08 -> 0.04)
+  let gemHyperBonus = d.gemHyper ? 1.04 : 1.0;
+  let gemRingBonus = d.gemRing ? 1.08 : 1.0;
+  let gemDivineBonus = d.gemDivine ? 1.15 : 1.0;
+  let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
+  return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * (1 + d.rp * 0.04);
 }
 
 function save(){
@@ -1523,13 +1530,13 @@ function render(){
  const baseMult = getBaseMult();
  
  let coolerBonus = d.cooler ? 1.2 : 1.0;
- let gemClickBonus = d.gemClick ? 1.10 : 1.0; // 너프 (1.25 -> 1.10)
- let gemRingBonus = d.gemRing ? 1.08 : 1.0;   // 너프
+ let gemClickBonus = d.gemClick ? 1.10 : 1.0;
+ let gemRingBonus = d.gemRing ? 1.08 : 1.0;
  let blacksmithBonus = (d.blacksmithLevel || 0) * 35;
  const totalPower = (((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) + blacksmithBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
  
  let filterBonus = d.filter ? 1.25 : 1.0;
- let gemAutoBonus = d.gemAuto ? 1.12 : 1.0; // 너프 (1.30 -> 1.12)
+ let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
  const totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  if($("score")) $("score").textContent=fmt(d.score); 
@@ -1543,8 +1550,8 @@ function render(){
 
  if($("permPowerLv")) $("permPowerLv").textContent = `+${d.permPower || 0}`;
  if($("permCpsLv")) $("permCpsLv").textContent = `+${d.permCps || 0}`;
- if($("permLuckLv")) $("permLuckLv").textContent = `+${(d.permLuck || 0) * 0.2}%`; // 너프
- if($("permGemLv")) $("permGemLv").textContent = `+${(d.permGem || 0) * 2}%`; // 너프
+ if($("permLuckLv")) $("permLuckLv").textContent = `+${(d.permLuck || 0) * 0.5}%`;
+ if($("permGemLv")) $("permGemLv").textContent = `+${(d.permGem || 0) * 5}%`;
 
  const powerCost = 1 + Math.floor((d.permPower || 0) / 4);
  const cpsCost = 1 + Math.floor((d.permCps || 0) / 8);
@@ -1565,7 +1572,7 @@ function render(){
  if($("mineUpgradeCost")) $("mineUpgradeCost").textContent = fmt(mineUpgradeCost);
 
  const bsLevel = d.blacksmithLevel || 0;
- const bsCost = Math.floor(30000 * Math.pow(2.2, bsLevel));
+ const bsCost = Math.floor(30000 * Math.pow(1.5, bsLevel)); // 배수 1.5배 적용
  if($("blacksmithLvDisplay")) $("blacksmithLvDisplay").textContent = `+${bsLevel}`;
  if($("blacksmithCostDisplay")) $("blacksmithCostDisplay").textContent = bsLevel >= 20 ? "최고 강화 달성" : fmt(bsCost);
  const bsBtn = $("upgradeBlacksmithRPGBtn");
@@ -1583,13 +1590,13 @@ function render(){
  const extraProb = (weapon ? weapon.bonusProb : 0) + (bsLevel * 0.005);
  const extraRew = (weapon ? weapon.bonusReward : 1.0) * (1 + bsLevel * 0.03);
 
- if($("huntProb1")) $("huntProb1").textContent = `(적용 확률: ${Math.min(90, Math.round((0.40 + extraProb)*100))}%)`;
- if($("huntProb2")) $("huntProb2").textContent = `(적용 확률: ${Math.min(85, Math.round((0.22 + extraProb)*100))}%)`;
- if($("huntProb3")) $("huntProb3").textContent = `(적용 확률: ${Math.min(80, Math.round((0.08 + extraProb)*100))}%)`;
+ if($("huntProb1")) $("huntProb1").textContent = `(적용 확률: ${Math.min(90, Math.round((0.45 + extraProb)*100))}%)`;
+ if($("huntProb2")) $("huntProb2").textContent = `(적용 확률: ${Math.min(85, Math.round((0.25 + extraProb)*100))}%)`;
+ if($("huntProb3")) $("huntProb3").textContent = `(적용 확률: ${Math.min(80, Math.round((0.10 + extraProb)*100))}%)`;
 
- if($("huntReward1")) $("huntReward1").textContent = fmt(Math.round(2500 * extraRew));
- if($("huntReward2")) $("huntReward2").textContent = fmt(Math.round(14000 * extraRew));
- if($("huntReward3")) $("huntReward3").textContent = fmt(Math.round(75000 * extraRew));
+ if($("huntReward1")) $("huntReward1").textContent = fmt(Math.round(4500 * extraRew));
+ if($("huntReward2")) $("huntReward2").textContent = fmt(Math.round(25000 * extraRew));
+ if($("huntReward3")) $("huntReward3").textContent = fmt(Math.round(150000 * extraRew));
 
  renderWeaponShop();
 
@@ -1645,8 +1652,8 @@ function render(){
  }
 
  const box1Cost = 2500 + (d.box1Count * 300);
- const box5Cost = box1Cost * 5;
- const box10Cost = box1Cost * 10;
+ const box5Cost = box1Cost * 5;  // 1회 뽑기 5번 가격
+ const box10Cost = box1Cost * 10; // 1회 뽑기 10번 가격
  if($("costBox1")) $("costBox1").textContent = fmt(box1Cost);
  if($("costBox5")) $("costBox5").textContent = fmt(box5Cost);
  if($("costBox10")) $("costBox10").textContent = fmt(box10Cost);
@@ -1756,7 +1763,7 @@ function exploreMine() {
   let success = Math.random() < (prob / 100);
   if(success) {
     let baseGems = Math.floor(Math.random() * (mineDepth * 2)) + 1;
-    let gemMultiplier = 1 + ((d.permGem || 0) * 0.02); // 너프 (0.05 -> 0.02)
+    let gemMultiplier = 1 + ((d.permGem || 0) * 0.05);
     let earnedGems = Math.round(baseGems * gemMultiplier);
     d.gems += earnedGems;
     playSuccessSound();
@@ -1795,6 +1802,8 @@ function renderEncyclopedia() {
   if(!container) return;
   container.innerHTML = "";
   if(!d.discoveredPets) d.discoveredPets = [];
+  if(!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
+
   let totalKeys = Object.keys(PET_DB);
   let discoveredCount = d.discoveredPets.length;
 
@@ -1806,15 +1815,29 @@ function renderEncyclopedia() {
   totalKeys.forEach(petId => {
     const pet = PET_DB[petId];
     const isUnlocked = d.discoveredPets.includes(petId);
+    const isClaimed = d.claimedEncyclopedia.includes(petId);
+
     const card = document.createElement("div");
     card.className = `encyclopedia-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+    
+    let btnHtml = "";
+    if(!isUnlocked) {
+      btnHtml = `<button class="btn-game" style="background:#4b5563 !important; font-size:10px; padding:4px;" disabled>🔒 미획득</button>`;
+    } else if(isClaimed) {
+      btnHtml = `<button class="btn-game" style="background:#10b981 !important; font-size:10px; padding:4px;" disabled>✅ 수령완료</button>`;
+    } else {
+      btnHtml = `<button class="btn-game" style="font-size:10px; padding:4px;" onclick="claimEncyclopediaReward('${petId}')">🎁 보상수령 (💎${pet.gemReward})</button>`;
+    }
+
     card.innerHTML = `
-      <span class="badge-grade grade-${pet.grade}">${pet.grade}급</span>
-      <div class="pet-icon">${pet.icon}</div>
-      <b style="color:var(--text-main); font-size:12px;">${isUnlocked ? pet.name : '??? (미확인)'}</b>
-      <p style="font-size:10px; color:${isUnlocked ? 'var(--text-sub)' : '#6b7280'}; margin:3px 0 6px;">${pet.desc}</p>
-      <div style="font-size:10px; font-weight:700; color:${isUnlocked ? '#10b981' : '#ef4444'};">
-        ${isUnlocked ? `✅ 획득완료 (+💎${pet.gemReward})` : `🔒 미획득 (보상 💎${pet.gemReward})`}
+      <div>
+        <span class="badge-grade grade-${pet.grade}">${pet.grade}급</span>
+        <div class="pet-icon">${pet.icon}</div>
+        <b style="color:var(--text-main); font-size:12px;">${isUnlocked ? pet.name : '??? (미확인)'}</b>
+        <p style="font-size:10px; color:${isUnlocked ? 'var(--text-sub)' : '#6b7280'}; margin:3px 0 6px;">${pet.desc}</p>
+      </div>
+      <div style="margin-top:6px;">
+        ${btnHtml}
       </div>
     `;
     container.appendChild(card);
@@ -1825,7 +1848,7 @@ function renderEncyclopedia() {
 function upgradeBlacksmithRPG() {
   let bsLevel = d.blacksmithLevel || 0;
   if(bsLevel >= 20) return say("최고 강화 레벨(20강)에 도달했습니다!");
-  let cost = Math.floor(30000 * Math.pow(2.2, bsLevel));
+  let cost = Math.floor(30000 * Math.pow(1.5, bsLevel)); // 배수 1.5배 적용
   if(d.score < cost) return say("무기 강화에 필요한 에너지가 부족합니다.");
   d.score -= cost;
   d.blacksmithLevel = bsLevel + 1;
@@ -1836,8 +1859,8 @@ function upgradeBlacksmithRPG() {
 
 function huntMonster(tier) {
   let costs = { 1: 2000, 2: 10000, 3: 50000 };
-  let baseRewards = { 1: 2500, 2: 14000, 3: 75000 };
-  let baseProbs = { 1: 0.40, 2: 0.22, 3: 0.08 };
+  let baseRewards = { 1: 4500, 2: 25000, 3: 150000 }; // 보상 상향 (손해 없도록 변경)
+  let baseProbs = { 1: 0.45, 2: 0.25, 3: 0.10 };
   
   let cost = costs[tier];
   let bsLevel = d.blacksmithLevel || 0;
@@ -1884,7 +1907,6 @@ function performMergeAll() {
       let indicesToRemove = [p1.index, p2.index].sort((a,b) => b - a);
       let sourcePet = PET_DB[p1.id];
 
-      // **핵심 변경: S급 이상(S, L, M, T 등)에서만 파괴 위험 적용! C, B, A급은 100% 안전 합성**
       let isHighGrade = ['S', 'L', 'M', 'T', 'X'].includes(sourcePet.grade);
       let destructChance = isHighGrade ? (sourcePet.grade === 'S' ? 0.15 : 0.30) : 0.0;
 
@@ -1990,7 +2012,6 @@ function renderPetList(){
             draggedPetIdx = null; save();
           } else say("S등급 드론이 총 4개 필요합니다.");
         } else {
-          // **핵심 변경: S급 이상에서만 파괴 확률 적용! C, B, A급은 파괴되지 않음**
           let isHighGrade = ['S', 'L', 'M', 'T', 'X'].includes(sourcePet.grade);
           let destructChance = isHighGrade ? (sourcePet.grade === 'S' ? 0.18 : 0.35) : 0.0;
 
@@ -2147,10 +2168,10 @@ function startBoxOpeningInteraction(count = 1){
 
 function startMultiBoxOpeningInteraction(count){
   const singleCost = 2500 + (d.box1Count * 300);
-  const totalCost = singleCost * count;
+  const totalCost = singleCost * count; // 5회면 singleCost * 5, 10회면 singleCost * 10
   if(d.score < totalCost) return say("에너지가 부족합니다.");
   d.score -= totalCost;
-  d.box1Count += count;
+  d.box1Count += count; // 뽑기 횟수 누적 증가
 
   let obtainedPets = [];
   for(let i = 0; i < count; i++) {
@@ -2295,7 +2316,6 @@ function sellStock(id, amount) {
   if(id === 4) d.stock4 -= qty;
   d.score += price * qty;
 
-  // **핵심 변경: 주식 매도 시 5분(300초) 동안 매수 쿨타임 적용!**
   d.stockSellCooldowns[id] = Date.now() + (5 * 60 * 1000);
 
   say(`주식 ${qty}주 매도 완료! (+${fmt(price * qty)}) ⚠️ 5분간 매수 잠김`);
@@ -2440,7 +2460,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let cost = 1 + Math.floor((d.permPower || 0) / 4);
       if(d.rp >= cost){ 
         d.rp -= cost; 
-        d.permPower = (d.permPower || 0) + 1; // 너프 (+2 -> +1)
+        d.permPower = (d.permPower || 0) + 2; 
         say("기초 채굴 효율 강화 성공!"); 
         save(); 
       }
@@ -2455,7 +2475,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let cost = 1 + Math.floor((d.permCps || 0) / 8);
       if(d.rp >= cost){ 
         d.rp -= cost; 
-        d.permCps = (d.permCps || 0) + 2; // 너프 (+4 -> +2)
+        d.permCps = (d.permCps || 0) + 4; 
         say("자동 채굴 강화 성공!"); 
         save(); 
       }
@@ -2553,8 +2573,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
       let coolerBonus = d.cooler ? 1.2 : 1.0;
-      let gemClickBonus = d.gemClick ? 1.10 : 1.0; // 너프 반영
-      let gemRingBonus = d.gemRing ? 1.08 : 1.0;     // 너프 반영
+      let gemClickBonus = d.gemClick ? 1.10 : 1.0;
+      let gemRingBonus = d.gemRing ? 1.08 : 1.0;
       let blacksmithBonus = (d.blacksmithLevel || 0) * 35;
       let currentPower = ((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) + blacksmithBonus;
       
@@ -2564,9 +2584,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * randomGainCount;
       
-      // 행운 확률 너프 반영 (기본 1% + 영구행운 + 캐시상점행운 + 펫행운)
-      let gemLuckBonus = d.gemLuck ? 0.003 : 0.0; // 너프 (0.015 -> 0.003)
-      const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.2) / 100) + gemLuckBonus + petBonus.luckProb;
+      let gemLuckBonus = d.gemLuck ? 0.015 : 0.0;
+      const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.5) / 100) + gemLuckBonus + petBonus.luckProb;
       if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
       d.score += gain;
 
@@ -2699,16 +2718,17 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
+  // 연구실 미니게임 (오리지널 확률 및 배율 복원)
   const game1Btn = $("game1Btn");
   if(game1Btn) {
     game1Btn.onclick = () => {
       let bet = parseInt($("game1Bet").value) || 0;
-      if (bet < 3000 || d.score < bet) return say("최소 투자 에너지는 3,000 이상입니다.");
+      if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
-      let success = Math.random() < 0.03;
-      if($("game1Display")) $("game1Display").textContent = success ? "⚡ 싱귤래리티 탈출 성공!" : "💥 차원 붕괴 (실패)";
+      let success = Math.random() < 0.35; // 오리지널 확률 35%
+      if($("game1Display")) $("game1Display").textContent = success ? "⚡ 터널 탈출 성공!" : "💥 차원 붕괴 (실패)";
       if (success) { 
-        let reward = Math.floor(bet * 50);
+        let reward = Math.floor(bet * 2); // 오리지널 배율 ×2
         d.score += reward; 
         playSuccessSound();
         say(`터널 탈출 대성공! (+${fmt(reward)})`); 
@@ -2724,12 +2744,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if(game2Btn) {
     game2Btn.onclick = () => {
       let bet = parseInt($("game2Bet").value) || 0;
-      if (bet < 3000 || d.score < bet) return say("최소 투자 에너지는 3,000 이상입니다.");
+      if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
-      let success = Math.random() < 0.05;
-      if($("game2Display")) $("game2Display").textContent = success ? "🎯 생존 및 코어 회수 성공!" : "💀 오버클럭 실격 (실패)";
+      let success = Math.random() < 0.20; // 오리지널 확률 20%
+      if($("game2Display")) $("game2Display").textContent = success ? "🎯 방아쇠 격발 성공!" : "💀 실격 (실패)";
       if (success) { 
-        let reward = Math.floor(bet * 30);
+        let reward = Math.floor(bet * 4); // 오리지널 배율 ×4
         d.score += reward; 
         playSuccessSound();
         say(`러시안룰렛 적중! (+${fmt(reward)})`); 
@@ -2745,20 +2765,20 @@ document.addEventListener("DOMContentLoaded", () => {
   if(game3Btn) {
     game3Btn.onclick = () => {
       let bet = parseInt($("game3Bet").value) || 0;
-      if (bet < 3000 || d.score < bet) return say("최소 투자 에너지는 3,000 이상입니다.");
+      if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
       const icons = ["🌌", "💎", "⚡", "🚀", "⚛️", "💀"];
       let r1 = icons[Math.floor(Math.random() * icons.length)];
       let r2 = icons[Math.floor(Math.random() * icons.length)];
       let r3 = icons[Math.floor(Math.random() * icons.length)];
       
-      let jackpot = Math.random() < 0.005;
+      let jackpot = Math.random() < 0.05; // 오리지널 잭팟 확률 5%
       if(jackpot) { r1 = "🌌"; r2 = "🌌"; r3 = "🌌"; }
 
       if($("game3Display")) $("game3Display").textContent = `${r1} ${r2} ${r3}`;
       
       if (jackpot) { 
-        let reward = Math.floor(bet * 300);
+        let reward = Math.floor(bet * 10); // 오리지널 배율 ×10
         d.score += reward; 
         playLegendaryEpicSound();
         say(`🌌 초신성 잭팟 대폭발!! (+${fmt(reward)})`); 
@@ -2774,12 +2794,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if(game4Btn) {
     game4Btn.onclick = () => {
       let bet = parseInt($("game4Bet").value) || 0;
-      if (bet < 3000 || d.score < bet) return say("최소 투자 에너지는 3,000 이상입니다.");
+      if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
-      let success = Math.random() < 0.08;
-      if($("game4Display")) $("game4Display").textContent = success ? "⏳ 미래 오라클 동기화 성공!" : "🌀 시공간 왜곡 (실패)";
+      let success = Math.random() < 0.50; // 오리지널 확률 50%
+      if($("game4Display")) $("game4Display").textContent = success ? "⏳ 오라클 예측 적중!" : "🌀 시공간 왜곡 (실패)";
       if (success) { 
-        let reward = Math.floor(bet * 15);
+        let reward = Math.floor(bet * 1.8); // 오리지널 배율 ×1.8
         d.score += reward; 
         playSuccessSound();
         say(`오라클 예측 적중! (+${fmt(reward)})`); 
@@ -2799,9 +2819,9 @@ setInterval(() => {
   if(autoMiningTimer >= 5) {
     autoMiningTimer = 0;
     let filterBonus = d.filter ? 1.25 : 1.0;
-    let gemAutoBonus = d.gemAuto ? 1.12 : 1.0; // 너프 반영
-    let gemRingBonus = d.gemRing ? 1.08 : 1.0;   // 너프 반영
-    let gemChronosBonus = d.gemChronos ? 1.15 : 1.0; // 너프 반영
+    let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
+    let gemRingBonus = d.gemRing ? 1.08 : 1.0;
+    let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
     const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
     if(autoCps > 0 && d.autoEnabled && d.autoPurchased){
       d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
