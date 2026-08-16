@@ -3340,20 +3340,26 @@ document.addEventListener("DOMContentLoaded", () => {
     return e.returnValue;
   });
 
+  window.onload = function() {
   try {
     if (window.google && google.accounts && google.accounts.id) {
       google.accounts.id.initialize({
         client_id: "458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com",
-        callback: handleCredentialResponse
+        callback: window.handleCredentialResponse
       });
-      google.accounts.id.renderButton(
-        document.querySelector(".g_id_signin"),
-        { theme: "outline", size: "large", text: "sign_in_with", shape: "rectangular" }
-      );
+      
+      const signinBtn = document.querySelector(".g_id_signin");
+      if (signinBtn) {
+        google.accounts.id.renderButton(
+          signinBtn,
+          { theme: "outline", size: "large", text: "sign_in_with", shape: "rectangular" }
+        );
+      }
     }
   } catch(e) {
-    console.log("Google Auth Init Warning in local mode:", e);
+    console.log("Google Auth Init Warning:", e);
   }
+};
 
   const bgmToggle = document.getElementById("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
