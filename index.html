@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v13.9 P2P 유저거래소 완벽 수정</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.0 와이드 풀스크린 & 칭호 시스템</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -15,13 +15,13 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 :root {
-  --bg-color: #07090e;
-  --card-bg: rgba(18, 24, 38, 0.85);
-  --card-solid: #121826;
-  --border-color: rgba(217, 119, 6, 0.2);
-  --border-hover: rgba(245, 158, 11, 0.5);
+  --bg-color: #040609;
+  --card-bg: rgba(13, 17, 26, 0.92);
+  --card-solid: #0d111a;
+  --border-color: rgba(217, 119, 6, 0.25);
+  --border-hover: rgba(245, 158, 11, 0.6);
   --accent: #f59e0b;
-  --accent-glow: rgba(245, 158, 11, 0.3);
+  --accent-glow: rgba(245, 158, 11, 0.4);
   --gold-grad: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
   --text-main: #fef3c7;
   --text-sub: #9ca3af;
@@ -34,7 +34,7 @@ body{
   background: var(--bg-color);
   color: var(--text-main);
   min-height:100vh;
-  padding: 20px;
+  padding: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,41 +47,48 @@ body{
 body::before {
   content: '';
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: radial-gradient(circle at 50% 20%, rgba(217, 119, 6, 0.08) 0%, transparent 60%),
-              radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.05) 0%, transparent 50%);
+  background: radial-gradient(circle at 50% 20%, rgba(217, 119, 6, 0.08) 0%, transparent 70%),
+              radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.06) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
 
+/* 와이드 풀스크린 레이아웃 컨테이너 (브라우저 창을 넓게 활용) */
 .layout-container {
   display: flex;
-  gap: 20px;
-  width: min(1240px, 98vw);
-  align-items: flex-start;
+  gap: 16px;
+  width: 98vw;
+  max-width: 1800px;
+  height: 94vh;
+  align-items: stretch;
   position: relative;
   z-index: 1;
 }
 
 .sidebar {
-  width: 240px;
+  width: 260px;
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--border-color);
   border-radius: 20px;
-  padding: 16px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  gap: 6px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.06);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  max-height: 100%;
 }
-.sidebar.collapsed { width: 72px; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.2); border-radius: 4px; }
+.sidebar.collapsed { width: 76px; }
 .sidebar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  padding-bottom: 10px;
+  margin-bottom: 6px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--border-color);
 }
 .sidebar-header h3 { margin: 0; font-size: 13px; color: var(--accent); white-space: nowrap; overflow: hidden; letter-spacing: 1px; }
@@ -91,7 +98,7 @@ body::before {
 
 .tab {
   width: 100%;
-  padding: 11px 14px;
+  padding: 10px 12px;
   border: 1px solid transparent;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.01);
@@ -109,31 +116,34 @@ body::before {
 }
 .tab span.tab-icon { font-size: 15px; min-width: 18px; text-align: center; }
 .sidebar.collapsed .tab span.tab-text { display: none; }
-.tab:hover { background: rgba(245, 158, 11, 0.08); color: var(--text-main); border-color: rgba(245, 158, 11, 0.15); }
-.tab.active { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(180, 83, 9, 0.2)); color: var(--accent); border-color: var(--accent); font-weight: 700; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15); }
+.tab:hover { background: rgba(245, 158, 11, 0.08); color: var(--text-main); border-color: rgba(245, 158, 11, 0.2); }
+.tab.active { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(180, 83, 9, 0.25)); color: var(--accent); border-color: var(--accent); font-weight: 700; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2); }
 
 .game{
   flex: 1;
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--border-color);
   border-radius: 24px;
-  padding: 30px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.06);
+  padding: 24px 30px;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255,255,255,0.08);
   position: relative;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  max-height: 100%;
 }
 
-h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main); font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.sub{ text-align: center; color: var(--text-sub); margin-bottom: 24px; font-size: 13px; letter-spacing: 0.5px; }
+h1{ font-size: 26px; text-align: center; margin: 0 0 4px; color: var(--text-main); font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.sub{ text-align: center; color: var(--text-sub); margin-bottom: 18px; font-size: 12px; letter-spacing: 0.5px; }
 
 .top-tools{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--border-color);
   flex-wrap: wrap;
   gap: 12px;
@@ -198,28 +208,28 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 
 .modal-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(7, 9, 14, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000;
+  background: rgba(4, 6, 9, 0.88); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000;
 }
 .modal-overlay.hidden { display: none; }
 .modal-box {
   background: var(--card-solid); border: 1px solid var(--border-hover); border-radius: 20px;
-  width: min(560px, 90vw); max-height: 80vh; display: flex; flex-direction: column; padding: 24px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(245, 158, 11, 0.15);
+  width: min(600px, 90vw); max-height: 80vh; display: flex; flex-direction: column; padding: 24px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(245, 158, 11, 0.2);
 }
 .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px; }
 .modal-header h2 { margin: 0; font-size: 18px; color: var(--accent); font-weight: 700; }
 .close-modal { background: none; border: none; color: var(--text-sub); font-size: 20px; cursor: pointer; transition: color 0.2s; }
 .close-modal:hover { color: var(--text-main); }
-.modal-body { overflow-y: auto; max-height: 52vh; font-size: 13px; color: var(--text-sub); line-height: 1.6; padding-right: 4px; }
-.patch-item { margin-bottom: 14px; background: rgba(7, 9, 14, 0.6); padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); }
+.modal-body { overflow-y: auto; max-height: 55vh; font-size: 13px; color: var(--text-sub); line-height: 1.6; padding-right: 4px; }
+.patch-item { margin-bottom: 14px; background: rgba(4, 6, 9, 0.6); padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); }
 .patch-item h4 { margin: 0 0 6px; color: var(--text-main); font-size: 14px; }
 
-.stats{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-.stat{ background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px 10px; text-align: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
+.stats{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.stat{ background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px 10px; text-align: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
 .stat span { font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
-.stat b{display: block; font-size: 16px; margin-top: 5px; color: var(--accent); font-weight: 700;}
+.stat b{display: block; font-size: 16px; margin-top: 4px; color: var(--accent); font-weight: 700;}
 
-.main{text-align: center; position: relative; margin-bottom: 24px;}
+.main{text-align: center; position: relative; margin-bottom: 18px;}
 .coin-container {
   display: inline-flex;
   align-items: center;
@@ -238,10 +248,10 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
   white-space: nowrap;
 }
 .coin{
-  width: 150px; height: 150px; border: none; border-radius: 50%;
+  width: 140px; height: 140px; border: none; border-radius: 50%;
   background: var(--gold-grad);
   box-shadow: 0 10px 35px rgba(245, 158, 11, 0.4), inset 0 2px 5px rgba(255,255,255,0.4), inset 0 -4px 8px rgba(0,0,0,0.4);
-  cursor: pointer; font-size: 55px; display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 50px; display: inline-flex; align-items: center; justify-content: center;
   transition: transform 0.1s ease, box-shadow 0.2s ease; overflow: hidden;
   position: relative;
 }
@@ -275,18 +285,29 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 }
 @keyframes floatUp { 0% { opacity: 0; transform: translate(-50%, 15px); } 30% { opacity: 1; transform: translate(-50%, -5px); } 100% { opacity: 0; transform: translate(-50%, -45px); } }
 
-#message{height: 24px; margin-top: 8px; color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.5px;}
+#message{height: 22px; margin-top: 6px; color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.5px;}
 
-.panel{ background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
+.panel{ 
+  background: rgba(255, 255, 255, 0.015); 
+  border: 1px solid var(--border-color); 
+  border-radius: 18px; 
+  padding: 20px; 
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); 
+  flex: 1; 
+  overflow-y: auto; 
+  max-height: 100%;
+}
+.panel::-webkit-scrollbar { width: 6px; }
+.panel::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.25); border-radius: 4px; }
 .hidden{display:none}
 
-.shop-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;}
+.shop-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;}
 .shop-item{
   background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px;
   padding: 14px; display: flex; flex-direction: column; justify-content: space-between;
   transition: all 0.25s ease;
 }
-.shop-item:hover { border-color: var(--border-hover); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.08); transform: translateY(-2px); }
+.shop-item:hover { border-color: var(--border-hover); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.1); transform: translateY(-2px); }
 .shop-item h3{margin: 0 0 4px; font-size: 13px; color: var(--text-main); font-weight: 700;}
 .shop-item p{color: var(--text-sub); font-size: 11px; margin: 0 0 12px; min-height: 28px; line-height: 1.4;}
 
@@ -311,23 +332,23 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .color-btn.selected, .icon-btn.selected{ border: 2px solid var(--accent) !important; box-shadow: 0 0 12px rgba(245, 158, 11, 0.5); }
 .icon-btn{ padding: 8px; font-size: 18px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
 
-.minigame-grid{display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;}
+.minigame-grid{display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;}
 .game-card{
   background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 16px;
-  padding: 18px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;
+  padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .game-card h3{margin: 0 0 6px; font-size: 14px; color: var(--text-main); font-weight: 700; display:flex; align-items:center; justify-content:center; gap:6px;}
 
 .slot-display{
-  font-size: 14px; background: rgba(7, 9, 14, 0.9); border: 1px solid var(--border-color);
+  font-size: 14px; background: rgba(4, 6, 9, 0.9); border: 1px solid var(--border-color);
   padding: 12px; border-radius: 12px; margin: 10px 0; letter-spacing: 0.5px; min-height: 48px;
   display: flex; align-items: center; justify-content: center; color: var(--accent); font-weight: 700;
   box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
 }
 .bet-input, .stock-qty-input, .p2p-input{
   width: 100%; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color);
-  background: rgba(7, 9, 14, 0.9); color: var(--text-main); text-align: center; margin-bottom: 6px; font-size: 13px; font-weight: 600;
+  background: rgba(4, 6, 9, 0.9); color: var(--text-main); text-align: center; margin-bottom: 6px; font-size: 13px; font-weight: 600;
 }
 
 .pet-box-grid{display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px;}
@@ -343,6 +364,15 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .encyclopedia-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
 .encyclopedia-card.locked { opacity: 0.35; filter: grayscale(100%); background: rgba(0,0,0,0.3); }
 .encyclopedia-card.unlocked { border: 1px solid #10b981; background: rgba(16, 185, 129, 0.03); }
+
+/* 칭호 시스템 카드 그리드 */
+.title-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 14px; }
+.title-card {
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px;
+  padding: 14px; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s;
+}
+.title-card.unlocked { border-color: #10b981; background: rgba(16,185,129,0.04); }
+.title-card.equipped { border-color: var(--accent); box-shadow: 0 0 15px rgba(245,158,11,0.3); background: rgba(245,158,11,0.06); }
 
 .badge-grade{display: inline-block; padding: 2px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; margin-bottom: 4px;}
 .grade-C{background: #374151; color: #fff;}
@@ -360,9 +390,9 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .progress-bar-container { width: 100%; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid var(--border-color); height: 12px; margin-bottom: 14px; overflow: hidden; }
 .progress-bar-fill { height: 100%; background: var(--gold-grad); width: 0%; transition: width 0.4s ease; }
 
-.stock-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.stock-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 .stock-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
-.stock-chart-canvas { width: 100%; height: 75px; background: rgba(7, 9, 14, 0.7); border: 1px solid var(--border-color); border-radius: 10px; margin: 8px 0; }
+.stock-chart-canvas { width: 100%; height: 75px; background: rgba(4, 6, 9, 0.7); border: 1px solid var(--border-color); border-radius: 10px; margin: 8px 0; }
 
 .news-ticker-box {
   background: rgba(239, 68, 68, 0.08);
@@ -431,13 +461,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   background: rgba(245, 158, 11, 0.06);
 }
 
-@media(max-width: 780px){
-  .layout-container { flex-direction: column; }
+@media(max-width: 900px){
+  .layout-container { flex-direction: column; height: auto; }
   .sidebar { width: 100% !important; flex-direction: row; flex-wrap: wrap; justify-content: center; }
   .sidebar-header, .sidebar.collapsed .sidebar-header { display: none; }
   .stats{grid-template-columns: repeat(2, 1fr);}
   .shop-grid, .minigame-grid, .pet-box-grid, .stock-grid{grid-template-columns: 1fr;}
-  .coin{width: 130px; height: 130px; font-size: 45px;}
+  .coin{width: 120px; height: 120px; font-size: 40px;}
 }
 </style>
 </head>
@@ -454,6 +484,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화 센터</span></button>
     <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
     <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석</span></button>
+    <button class="tab" data-tab="titlePanel"><span class="tab-icon">🏅</span><span class="tab-text">칭호 시스템</span></button>
     <button class="tab" data-tab="autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소</span></button>
     <button class="tab" data-tab="minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span></button>
     <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
@@ -494,8 +525,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.9</h1>
-    <div class="sub">구글 유저간 P2P 유저거래소 (드론 선택 오류 및 등록 버그 완전 해결)</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.0</h1>
+    <div class="sub">와이드 풀스크린 확장 UI 및 업적 달성 칭호 시스템 완벽 도입</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -531,6 +562,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- 칭호 시스템 패널 추가 -->
+    <div id="titlePanel" class="panel hidden">
+      <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">🏅 퀀텀 연구원 칭호 시스템</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">특정 조건을 달성하여 강력한 버프를 주는 칭호를 해제하고 장착하세요!</p>
+      <div class="title-grid" id="titleGridContainer"></div>
     </div>
 
     <div id="shop" class="panel hidden">
@@ -784,7 +822,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- P2P 유저거래소 패널 -->
     <div id="p2pPanel" class="panel hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="color:var(--accent); margin:0; font-size:15px;">🌐 구글 유저 실시간 P2P 유저거래소</h3>
@@ -1180,9 +1217,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.9 P2P 유저거래소 패치",
-    title: "유저거래소 선택 및 등록 오류 전면 수정",
-    desc: "1) 🌐 드론 및 보석 선택 드롭다운 이벤트 핸들러가 누락되거나 작동하지 않던 버그를 완전히 해결했습니다.\n2) 유저거래 매물 등록 시 선택한 고유 인덱스와 파라미터가 정확하게 파이어스토어에 저장되도록 수정했습니다."
+    version: "v14.0 와이드 풀스크린 & 칭호 시스템 패치",
+    title: "와이드 UI 전면 개편 및 칭호 시스템 도입",
+    desc: "1) 브라우저 화면 전체를 활용하는 와이드 풀스크린 레이아웃(최대 1800px)으로 시인성과 몰입감을 대폭 향상했습니다.\n2) 에너지 누적, 드론 수집, 시스템 승급 등 조건 달성 시 해제하고 장착 가능한 강력한 버프형 '칭호 시스템'이 추가되었습니다."
   }
 ];
 
@@ -1217,8 +1254,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v139";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v138") || localStorage.getItem("energyRush_PermanentSaveData_v137");
+const saveKey = "energyRush_PermanentSaveData_v140";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v139") || localStorage.getItem("energyRush_PermanentSaveData_v138");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1238,7 +1275,10 @@ let d = JSON.parse(savedRawData || "null") || {
   stockChannelActiveUntil: 0,
   stockChannelLockedUntil: 0,
   autoclickPurchased: false,
-  autoclickLevel: 0
+  autoclickLevel: 0,
+  unlockedTitles: ['novice'],
+  equippedTitle: 'novice',
+  totalEnergyEarned: 0
 };
 
 const nowInit = Date.now();
@@ -1249,6 +1289,9 @@ if (d.stockChannelActiveUntil === 0 && d.stockChannelLockedUntil === 0) {
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
 if (!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
+if (!d.unlockedTitles) d.unlockedTitles = ['novice'];
+if (!d.equippedTitle) d.equippedTitle = 'novice';
+if (d.totalEnergyEarned === undefined) d.totalEnergyEarned = d.score;
 if (d.gems === undefined) d.gems = 0;
 if (d.stock1 === undefined) d.stock1 = 0;
 if (d.stock2 === undefined) d.stock2 = 0;
@@ -1283,6 +1326,16 @@ if (!d.stockHistories) d.stockHistories = {
 };
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
+
+/* 칭호 시스템 정의 */
+const TITLES_DB = {
+  novice: { id: 'novice', name: '초보 연구원', desc: '기본 지급 칭호', effectDesc: '효과 없음', check: () => true },
+  energy_apprentice: { id: 'energy_apprentice', name: '에너지 수집가', desc: '누적 에너지 100,000 달성', effectDesc: '모든 에너지 획득량 +3%', check: () => d.totalEnergyEarned >= 100000 },
+  energy_master: { id: 'energy_master', name: '에너지 연출가', desc: '누적 에너지 10,000,000 달성', effectDesc: '모든 에너지 획득량 +10%', check: () => d.totalEnergyEarned >= 10000000 },
+  drone_collector: { id: 'drone_collector', name: '드론 마스터', desc: '드론 15종 이상 발견', effectDesc: '클릭 효율 +15%', check: () => (d.discoveredPets || []).length >= 15 },
+  stock_tycoon: { id: 'stock_tycoon', name: '퀀텀 주식왕', desc: '주식 4개 모두 해제 완료', effectDesc: '자동 채굴량 +20%', check: () => d.stockUnlocked2 && d.stockUnlocked3 && d.stockUnlocked4 },
+  rebirth_lord: { id: 'rebirth_lord', name: '시공간 초월자', desc: '시스템 승급 3회 이상 완료', effectDesc: '모든 에너지 획득량 +25%', check: () => d.rebirth >= 3 }
+};
 
 const WEAPONS_DB = [
   { id: 0, name: "나무검", icon: "🪵⚔️", price: 0, bonusProb: 0.00, bonusReward: 1.00, desc: "기본적인 나무 검." },
@@ -1530,6 +1583,7 @@ function unlockStock(id) {
   if(id === 4) d.stockUnlocked4 = true;
   playSuccessSound();
   say(`🔓 주식 #${id} 잠금 해제 완료!`);
+  checkTitles();
   save();
 }
 
@@ -1540,6 +1594,70 @@ function checkAndDiscoverPets() {
       d.discoveredPets.push(petId);
     }
   });
+  checkTitles();
+}
+
+/* 칭호 달성 체크 및 관리 로직 */
+function checkTitles() {
+  if(!d.unlockedTitles) d.unlockedTitles = ['novice'];
+  Object.keys(TITLES_DB).forEach(tId => {
+    if(!d.unlockedTitles.includes(tId)) {
+      if(TITLES_DB[tId].check()) {
+        d.unlockedTitles.push(tId);
+        showStockAlertToast(`🏅 새 칭호 [${TITLES_DB[tId].name}] 해제 완료!`, true);
+      }
+    }
+  });
+}
+
+function equipTitle(tId) {
+  if(!d.unlockedTitles.includes(tId)) return say("아직 해제하지 않은 칭호입니다.");
+  d.equippedTitle = tId;
+  playSuccessSound();
+  say(`🏅 칭호 [${TITLES_DB[tId].name}] 장착 완료!`);
+  save();
+}
+
+function renderTitles() {
+  const container = document.getElementById("titleGridContainer");
+  if(!container) return;
+  container.innerHTML = "";
+  Object.keys(TITLES_DB).forEach(tId => {
+    const title = TITLES_DB[tId];
+    const isUnlocked = d.unlockedTitles.includes(tId);
+    const isEquipped = d.equippedTitle === tId;
+
+    const card = document.createElement("div");
+    card.className = `title-card ${isUnlocked ? 'unlocked' : ''} ${isEquipped ? 'equipped' : ''}`;
+    card.innerHTML = `
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="margin:0; font-size:13px; color:var(--text-main);">🏅 ${title.name}</h4>
+          <span style="font-size:10px; font-weight:700; color:${isEquipped ? 'var(--accent)' : isUnlocked ? '#10b981' : 'var(--text-sub)'};">
+            ${isEquipped ? '장착 중' : isUnlocked ? '보유중' : '잠김'}
+          </span>
+        </div>
+        <p style="font-size:11px; color:var(--text-sub); margin:0 0 4px;">${title.desc}</p>
+        <p style="font-size:11px; color:var(--accent); margin:0 0 10px;">버프: ${title.effectDesc}</p>
+      </div>
+      <div>
+        ${isEquipped ? `<button class="btn-game" style="width:100%; background:#10b981 !important;" disabled>장착 중</button>` :
+          isUnlocked ? `<button class="btn-game" style="width:100%;" onclick="equipTitle('${tId}')">장착하기</button>` :
+          `<button class="btn-game" style="width:100%; background:#4b5563 !important;" disabled>달성 필요</button>`}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function getTitleBonus() {
+  let tId = d.equippedTitle || 'novice';
+  if(tId === 'energy_apprentice') return { energyMult: 1.03, clickMult: 1.0, cpsMult: 1.0 };
+  if(tId === 'energy_master') return { energyMult: 1.10, clickMult: 1.0, cpsMult: 1.0 };
+  if(tId === 'drone_collector') return { energyMult: 1.0, clickMult: 1.15, cpsMult: 1.0 };
+  if(tId === 'stock_tycoon') return { energyMult: 1.0, clickMult: 1.0, cpsMult: 1.20 };
+  if(tId === 'rebirth_lord') return { energyMult: 1.25, clickMult: 1.0, cpsMult: 1.0 };
+  return { energyMult: 1.0, clickMult: 1.0, cpsMult: 1.0 };
 }
 
 function claimEncyclopediaReward(petId) {
@@ -1654,7 +1772,6 @@ function loadGlobalRanking() {
   });
 }
 
-/* P2P 유저거래소 관련 로직 (완전 수정 및 버그 방어) */
 function toggleP2PItemTypeSelector() {
   const typeEl = document.getElementById("p2pItemType");
   if(!typeEl) return;
@@ -1683,7 +1800,7 @@ function updateP2PDroneSelect() {
     const pet = PET_DB[petId];
     if(pet) {
       const opt = document.createElement("option");
-      opt.value = idx; // 격납고 실제 인덱스 고정 바인딩
+      opt.value = idx;
       opt.textContent = `${pet.icon} ${pet.name} (${pet.grade}급) [#${idx+1}]`;
       select.appendChild(opt);
     }
@@ -1821,6 +1938,7 @@ function buyP2PItem(docId, sellerId, price, type, count, petId) {
     } else {
       if(!d.pets) d.pets = [];
       d.pets.push(petId);
+      checkAndDiscoverPets();
     }
 
     db.collection('quantum_users').doc(sellerId).get().then(sellerDoc => {
@@ -1858,6 +1976,7 @@ function cancelP2PItem(docId) {
     } else {
       if(!d.pets) d.pets = [];
       d.pets.push(data.petId);
+      checkAndDiscoverPets();
     }
 
     db.collection('quantum_p2p_market').doc(docId).delete().then(() => {
@@ -1974,11 +2093,13 @@ function getBaseMult(){
   let gemRingBonus = d.gemRing ? 1.08 : 1.0;
   let gemDivineBonus = d.gemDivine ? 1.15 : 1.0;
   let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
-  return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * (1 + d.rp * 0.04);
+  let titleBonus = getTitleBonus();
+  return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * titleBonus.energyMult * (1 + d.rp * 0.04);
 }
 
 function save(){
   checkAndDiscoverPets();
+  checkTitles();
   localStorage.setItem(saveKey, JSON.stringify(d));
   render();
 }
@@ -2010,7 +2131,7 @@ function triggerEpicExplosion(droneName) {
   playEpicExplosionSound();
   const overlay = document.createElement("div");
   overlay.className = "modal-overlay";
-  overlay.style.background = "radial-gradient(circle, rgba(239,68,68,0.85) 0%, rgba(7,9,14,0.95) 80%)";
+  overlay.style.background = "radial-gradient(circle, rgba(239,68,68,0.85) 0%, rgba(4,6,9,0.95) 80%)";
   overlay.innerHTML = `
     <div style="text-align:center; color:#fff;">
       <h1 style="font-size:28px; color:#ef4444; margin-bottom:8px;">⚠️ S급 이상 드론 과부하 대폭발! ⚠️</h1>
@@ -2025,7 +2146,7 @@ function triggerLegendaryEpic(droneName, grade) {
   playLegendaryEpicSound();
   const overlay = document.createElement("div");
   overlay.className = "modal-overlay";
-  overlay.style.background = "radial-gradient(circle, rgba(217,119,6,0.85) 0%, rgba(7,9,14,0.95) 80%)";
+  overlay.style.background = "radial-gradient(circle, rgba(217,119,6,0.85) 0%, rgba(4,6,9,0.95) 80%)";
   overlay.innerHTML = `
     <div style="text-align:center; color:#fff;">
       <h1 style="font-size:28px; color:#f59e0b; margin-bottom:8px;">✨ [${grade}등급] ${droneName} 획득! ✨</h1>
@@ -2129,6 +2250,7 @@ function claimTodayAttendance() {
   const rew = ATTEND_REWARDS[d.attendDays - 1];
   if(rew.type === 'energy') {
     d.score += rew.amount;
+    d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + rew.amount;
   } else if(rew.type === 'gems') {
     d.gems += rew.amount;
   }
@@ -2141,15 +2263,16 @@ function claimTodayAttendance() {
 function render(){
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
+ const titleBonus = getTitleBonus();
  
  let coolerBonus = d.cooler ? 1.2 : 1.0;
  let gemClickBonus = d.gemClick ? 1.10 : 1.0;
  let gemRingBonus = d.gemRing ? 1.08 : 1.0;
- let totalPower = ((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
+ let totalPower = ((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) * baseMult * petBonus.clickMult * petBonus.coinMult * titleBonus.clickMult;
  
  let filterBonus = d.filter ? 1.25 : 1.0;
  let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
- let totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
+ let totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult * titleBonus.cpsMult;
 
  if(document.getElementById("score")) document.getElementById("score").textContent=fmt(d.score); 
  if(document.getElementById("power")) document.getElementById("power").textContent=fmt(totalPower);
@@ -2234,6 +2357,7 @@ function render(){
  if(document.getElementById("huntReward3")) document.getElementById("huntReward3").textContent = fmt(Math.round(150000 * extraRew));
 
  renderWeaponShop();
+ renderTitles();
 
  const coinBtn = document.getElementById("coin");
  if(coinBtn) {
@@ -2484,6 +2608,7 @@ function huntMonster(tier) {
   let success = Math.random() < prob;
   if(success) {
     d.score += reward;
+    d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + reward;
     playSuccessSound();
     say(`🎯 사냥 소탕 성공! (+${fmt(reward)} 에너지 획득)`);
   } else {
@@ -2939,6 +3064,7 @@ function sellStock(id, amount) {
   if(id === 3) d.stock3 -= qty;
   if(id === 4) d.stock4 -= qty;
   d.score += price * qty;
+  d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + (price * qty);
 
   d.stockSellCooldowns[id] = Date.now() + (1 * 60 * 1000);
 
@@ -2982,6 +3108,7 @@ function performClickAction(e) {
 
   const petBonus = getPetBonus();
   const baseMult = getBaseMult();
+  const titleBonus = getTitleBonus();
   let coolerBonus = d.cooler ? 1.2 : 1.0;
   let gemClickBonus = d.gemClick ? 1.10 : 1.0;
   let gemRingBonus = d.gemRing ? 1.08 : 1.0;
@@ -2991,13 +3118,14 @@ function performClickAction(e) {
   const clickGainBadge = document.getElementById("clickGainBadge");
   if(clickGainBadge) clickGainBadge.textContent = `클릭 보상: ${randomGainCount}개 지급`;
 
-  let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * randomGainCount;
+  let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * titleBonus.clickMult * randomGainCount;
   
   let gemLuckBonus = d.gemLuck ? 0.015 : 0.0;
   const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.5) / 100) + gemLuckBonus + petBonus.luckProb;
   if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
   
   d.score = Number(d.score) + Number(gain);
+  d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + Number(gain);
 
   const coinBtnMain = document.getElementById("coin");
   if(coinBtnMain) {
@@ -3150,6 +3278,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let bonusGain = (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 720;
       if(bonusGain <= 0) bonusGain = 10000;
       d.score += bonusGain;
+      d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + bonusGain;
       playSuccessSound();
       say(`⚡ 1시간 자동채굴 가속 완료! (+${fmt(bonusGain)} 에너지)`);
       save();
@@ -3414,6 +3543,7 @@ document.addEventListener("DOMContentLoaded", () => {
       d.equippedWeapon = 0;
       d.ownedWeapons = [0];
       d.mineDepth = 1;
+      checkTitles();
       say(`시스템 승급 완료! (+${rpGained} RP)`); 
       save();
     };
@@ -3430,6 +3560,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(t.dataset.tab === 'rankingPanel') loadGlobalRanking();
       if(t.dataset.tab === 'p2pPanel') { loadP2PMarket(); updateP2PDroneSelect(); }
       if(t.dataset.tab === 'attendPanel') renderAttendanceUI();
+      if(t.dataset.tab === 'titlePanel') renderTitles();
     };
   });
 
@@ -3444,6 +3575,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (success) { 
         let reward = Math.floor(bet * 2);
         d.score += reward; 
+        d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + reward;
         playSuccessSound();
         say(`터널 탈출 대성공! (+${fmt(reward)})`); 
       } else { 
@@ -3465,6 +3597,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (success) { 
         let reward = Math.floor(bet * 4);
         d.score += reward; 
+        d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + reward;
         playSuccessSound();
         say(`러시안룰렛 적중! (+${fmt(reward)})`); 
       } else { 
@@ -3494,6 +3627,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (jackpot) { 
         let reward = Math.floor(bet * 10);
         d.score += reward; 
+        d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + reward;
         playLegendaryEpicSound();
         say(`🌌 초신성 잭팟 대폭발!! (+${fmt(reward)})`); 
       } else { 
@@ -3515,6 +3649,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (success) { 
         let reward = Math.floor(bet * 1.8);
         d.score += reward; 
+        d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + reward;
         playSuccessSound();
         say(`오라클 예측 적중! (+${fmt(reward)})`); 
       } else { 
@@ -3557,9 +3692,12 @@ setInterval(() => {
     let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
     let gemRingBonus = d.gemRing ? 1.08 : 1.0;
     let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
+    let titleBonus = getTitleBonus();
     const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
     if(autoCps > 0 && d.autoEnabled && d.autoPurchased){
-      d.score += (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 5;
+      let gain = (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult * titleBonus.cpsMult) * 5;
+      d.score += gain;
+      d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + gain;
       save();
     }
   }
