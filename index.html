@@ -448,7 +448,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="shop" class="panel hidden">
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 2% 확률로 에너지 보너스 ×1.15</p></div>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 1% 확률로 에너지 보너스 ×1.05 (대너프)</p></div>
           <button class="buy" data-item="luck">구매 90,000</button>
         </div>
         <div class="shop-item">
@@ -475,35 +475,35 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="gemShop" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 프리미엄 퀀텀 캐시 상점 (밸런스 리조트)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">광산 탐사 및 지원금으로 모은 보석(💎)으로 영구적인 프레스티지 버프를 구매하세요!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 프리미엄 퀀텀 캐시 상점 (행운/스탯 대너프 적용)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보석(💎)으로 구매하는 프리미엄 스탯의 행운 및 효율이 대폭 하향 조정되었습니다.</p>
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>⚡ 클리커 가속기</h3><p>클릭 에너지 영구 +25%</p></div>
+          <div><h3>⚡ 클리커 가속기</h3><p>클릭 에너지 영구 +10% (너프)</p></div>
           <button class="gem-buy" data-gemitem="gemClick">구매 💎 150</button>
         </div>
         <div class="shop-item">
-          <div><h3>🤖 오토마톤 코어</h3><p>자동 채굴량 영구 +30%</p></div>
+          <div><h3>🤖 오토마톤 코어</h3><p>자동 채굴량 영구 +12% (너프)</p></div>
           <button class="gem-buy" data-gemitem="gemAuto">구매 💎 300</button>
         </div>
         <div class="shop-item">
-          <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +1.5%</p></div>
+          <div><h3>🍀 포춘 오브젝트</h3><p>대성공 확률 영구 +0.3% (대너프)</p></div>
           <button class="gem-buy" data-gemitem="gemLuck">구매 💎 450</button>
         </div>
         <div class="shop-item">
-          <div><h3>🚀 하이퍼 드라이브</h3><p>모든 에너지 획득량 영구 +10%</p></div>
+          <div><h3>🚀 하이퍼 드라이브</h3><p>모든 에너지 획득량 영구 +4% (너프)</p></div>
           <button class="gem-buy" data-gemitem="gemHyper">구매 💎 600</button>
         </div>
         <div class="shop-item">
-          <div><h3>🌌 싱귤래리티 링</h3><p>클릭 및 자동 채굴 영구 +20%</p></div>
+          <div><h3>🌌 싱귤래리티 링</h3><p>클릭 및 자동 채굴 영구 +8% (너프)</p></div>
           <button class="gem-buy" data-gemitem="gemRing">구매 💎 1,200</button>
         </div>
         <div class="shop-item">
-          <div><h3>👑 디바인 싱크론</h3><p>모든 에너지 획득량 영구 +35%</p></div>
+          <div><h3>👑 디바인 싱크론</h3><p>모든 에너지 획득량 영구 +15% (너프)</p></div>
           <button class="gem-buy" data-gemitem="gemDivine">구매 💎 3,000</button>
         </div>
         <div class="shop-item">
-          <div><h3>🔮 크로노스 가속기</h3><p>자동 채굴 효율 영구 +40%</p></div>
+          <div><h3>🔮 크로노스 가속기</h3><p>자동 채굴 효율 영구 +15% (너프)</p></div>
           <button class="gem-buy" data-gemitem="gemChronos">구매 💎 2,100</button>
         </div>
         <div class="shop-item">
@@ -515,7 +515,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="minePanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⛏️ 퀀텀 지하 광산 (보석 채굴 시스템)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">광산 탐사 가격 대폭 인상 적용! 깊은 층으로 탐사하여 보석(💎)을 발굴하세요.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">깊은 층으로 탐사하여 보석(💎)을 발굴하세요.</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 광산 탐사 깊이: <b id="mineDepthDisplay" style="font-size:18px;">1층 (지표면)</b></h4>
         <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">탐사 비용: <span id="mineCostDisplay">25,000</span> 에너지 | 보석 획득 확률: <span id="mineProbDisplay">45%</span></p>
@@ -528,7 +528,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="blacksmithPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚒️ 퀀텀 대장간 (무기 강화 시스템 - 최대 20강)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 비용이 급증하며 클릭 파워와 사냥터 보너스가 강력해집니다!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다.</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 무기 강화 레벨: <b id="blacksmithLvDisplay" style="font-size:18px;">+0</b> / 20강</h4>
         <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">다음 강화 시 클릭 파워 추가 상승 & 사냥터 성공률/보상 소폭 증가</p>
@@ -543,8 +543,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="huntingPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (에너지 약탈 레이드) - 대너프 적용</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">사냥터 보상이 하향 조정되었습니다! 장착된 무기와 대장간 강화로 극복하세요.</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (에너지 약탈 레이드)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">장착된 무기와 대장간 강화로 바이러스를 소탕하세요.</p>
       <div class="shop-grid">
         <div class="game-card">
           <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#f43f5e;" id="huntProb1">(기본 45%)</span></h3>
@@ -565,14 +565,15 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (잠금 해제 비용 1.5배 인상)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">초기에는 테슬라(TES) 1개만 열려 있으며, 나머지 주식은 인상된 에너지를 지불하여 잠금을 해제해야 합니다!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (매도 후 5분간 매수 제한 적용)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식을 한 번이라도 매도하면 **5분(300초) 동안 해당 주식을 다시 매수할 수 없습니다!** 신중하게 거래하세요.</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES) [기본 개방]</h4>
           <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">50,000</b> 에너지</p>
           <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
+          <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer1"></p>
           <div style="display:flex; gap:6px; margin-top:8px;">
             <button class="btn-stock" style="flex:1;" id="buyStock1_1">1주 매수</button>
             <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock1_max">전부 매수</button>
@@ -594,6 +595,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">50,000</b> 에너지</p>
             <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
+            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
             <div style="display:flex; gap:6px; margin-top:8px;">
               <button class="btn-stock" style="flex:1;" id="buyStock2_1">1주 매수</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock2_max">전부 매수</button>
@@ -616,6 +618,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">50,000</b> 에너지</p>
             <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
+            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
             <div style="display:flex; gap:6px; margin-top:8px;">
               <button class="btn-stock" style="flex:1;" id="buyStock3_1">1주 매수</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock3_max">전부 매수</button>
@@ -638,6 +641,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">50,000</b> 에너지</p>
             <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
+            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
             <div style="display:flex; gap:6px; margin-top:8px;">
               <button class="btn-stock" style="flex:1;" id="buyStock4_1">1주 매수</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock4_max">전부 매수</button>
@@ -689,8 +693,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="petPanel" class="panel hidden">
       <div class="pet-box-grid">
         <div class="game-card">
-          <h3>🎁 드론뽑기상자 (확률 대폭 하향 적용)</h3>
-          <p style="color:var(--text-sub); font-size:11px;">상위 등급 드론 획득 난이도가 대폭 상승했습니다!</p>
+          <h3>🎁 드론뽑기상자</h3>
+          <p style="color:var(--text-sub); font-size:11px;">상위 등급 드론을 획득하세요!</p>
           <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
             <button class="btn-game" style="flex:1;" id="buyPetBox1">1회 뽑기 (<span id="costBox1">2,500</span>)</button>
             <button class="btn-game" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyPetBox5">5회 뽑기 (<span id="costBox5">12,500</span>)</button>
@@ -701,13 +705,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:14px; margin-bottom:14px; text-align:center;">
         <h3 style="color:var(--accent); margin:0 0 4px; font-size:14px;">⚡ 전체 드론 '모두 합성' 자동 가동</h3>
-        <p style="color:var(--text-sub); font-size:11px; margin:0 0 10px;">동일 등급 드론들을 한번에 최상위 등급까지 연쇄 합성합니다!</p>
+        <p style="color:var(--text-sub); font-size:11px; margin:0 0 10px;">동일 등급 드론들을 한번에 연쇄 합성합니다! (**S급 이상만 파괴 위험 적용**)</p>
         <button class="btn-game" id="mergeAllBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; color:#fff !important; padding:8px 24px;">🤖 모두 합성 실행</button>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-bottom:1px solid var(--border-color);padding-bottom:8px;">
         <h3 style="color:var(--text-main); margin:0; font-size:14px;">🤖 나의 드론 격납고 <span style="font-size:11px; color:#10b981;">(최대 장착 2개 제한)</span></h3>
-        <span style="font-size:11px; color:var(--accent);">💡 드래그하여 업그레이드 (S급 이상 파괴 위험!)</span>
+        <span style="font-size:11px; color:var(--accent);">💡 드래그하여 업그레이드 (S급 이상부터만 파괴 위험!)</span>
       </div>
       <div id="petList" class="pet-list"></div>
     </div>
@@ -750,7 +754,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="minigames" class="panel hidden">
       <div style="text-align:center; margin-bottom:16px;">
         <h3 style="color:var(--accent); margin:0 0 4px; font-size:15px;">🔬 하이퍼 하드코어 퀀텀 연구실</h3>
-        <p style="color:var(--text-sub); font-size:11px; margin:0;">성공 확률은 극악이지만, 성공 시 엄청난 배율의 에너지를 독식합니다!</p>
+        <p style="color:var(--text-sub); font-size:11px; margin:0;">성공 시 엄청난 배율의 에너지를 독식합니다!</p>
       </div>
       <div class="minigame-grid">
         <div class="game-card">
@@ -791,29 +795,29 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <h2 style="text-align:center;color:var(--text-main);margin-top:0;font-size:18px;">✨ 영구 연구 스탯 상점 (대너프 적용)</h2>
       <p style="text-align:center;color:var(--text-sub);font-size:11px;margin-bottom:16px;">
         보유 승급 포인트(RP): <b id="permRpDisplay" style="color:var(--accent);font-size:16px;">0</b><br>
-        * 영구 연구 효과가 하향 조정되었습니다!
+        * 영구 연구 스탯 및 행운 효과가 대폭 너프되었습니다!
       </p>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small style="color:var(--text-sub);">클릭 채굴 파워 영구 강화 (+2)</small></div>
+          <div><h3>⚡ 영구 기초 채굴 효율 <b id="permPowerLv" style="color:var(--accent);">+0</b></h3><small style="color:var(--text-sub);">클릭 채굴 파워 영구 강화 (+1)</small></div>
           <button id="buyPermPowerBtn"><span id="costPermPower">1</span> RP</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small style="color:var(--text-sub);">자동 채굴 능력 영구 강화 (+4)</small></div>
+          <div><h3>🤖 영구 자동 채굴 드론 <b id="permCpsLv" style="color:var(--accent);">+0</b></h3><small style="color:var(--text-sub);">자동 채굴 능력 영구 강화 (+2)</small></div>
           <button id="buyPermCpsBtn"><span id="costPermCps">1</span> RP</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">대성공 확률 추가 (+1%)</small></div>
+          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">대성공 확률 추가 (+0.2% 너프)</small></div>
           <button id="buyPermLuckBtn"><span id="costPermLuck">1</span> RP</button>
         </div>
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>💎 영구 보석 수집 증폭 <b id="permGemLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">광산 보석 획득량 증가 (+5%)</small></div>
+          <div><h3>💎 영구 보석 수집 증폭 <b id="permGemLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">광산 보석 획득량 증가 (+2% 너프)</small></div>
           <button id="buyPermGemBtn"><span id="costPermGem">2</span> RP</button>
         </div>
       </div>
@@ -996,9 +1000,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v9.7 하드코어 대격변 패치",
-    title: "광산 인상, 자산 60% 압수, 사냥터 및 영구연구 너프, 드론 장착 2개 제한 & S급 이상 파괴 효과 도입",
-    desc: "1) 📉 전 유저 보유 에너지의 60%가 강제 압수되었습니다.\n2) ⛏️ 광산 탐사 및 확장 비용이 대폭 인상되었습니다.\n3) 🎯 사냥터 보상이 대폭 너프되었습니다.\n4) 🤖 드론 성능 5% 너프 및 최대 동시 장착 제한이 2개로 축소되었습니다.\n5) 💥 S급 이상의 고등급 드론 합성 실패/합성 시에도 파괴 효과가 적용되며 확률이 증가했습니다.\n6) ✨ 영구 연구 스탯 효율이 너프되었습니다.\n7) 📈 주식 잠금해제 비용이 1.5배 인상되었습니다."
+    version: "v9.8 하드코어 밸런스 패치",
+    title: "S급 이상만 파괴 적용, 캐시/영구스탯 행운 대너프, 주식 매도 후 5분 매수 제한",
+    desc: "1) 🤖 드론 합성은 이제 **S급 이상(S, L, M, T, X)에서만** 실패/과부하 시 파괴 효과가 발생합니다! (C, B, A급은 안전 합성)\n2) 💎 캐시 상점 및 ✨ 영구 연구 스탯 상점의 행운 및 추가 효율 스탯이 대폭 너프되었습니다.\n3) 📈 주식을 한 번이라도 매도하면 **5분(300초) 동안 해당 주식 매수가 잠깁니다.**\n4) 💾 데이터 영구 저장 및 클라우드 연동 완벽 적용."
   }
 ];
 
@@ -1033,8 +1037,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v97";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v96");
+const saveKey = "energyRush_PermanentSaveData_v98";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v97") || localStorage.getItem("energyRush_PermanentSaveData_v96");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1046,14 +1050,8 @@ let d = JSON.parse(savedRawData || "null") || {
  box1Count: 0,
  blacksmithLevel: 0, equippedWeapon: 0, ownedWeapons: [0],
  mineDepth: 1,
- assetsConfiscated_v97: false
+ stockSellCooldowns: {}
 };
-
-// 전 유저 돈 60% 압수 처리 (최초 1회)
-if(!d.assetsConfiscated_v97) {
-  d.score = Math.floor(d.score * 0.4);
-  d.assetsConfiscated_v97 = true;
-}
 
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
@@ -1075,6 +1073,7 @@ if (d.blacksmithLevel === undefined) d.blacksmithLevel = 0;
 if (d.equippedWeapon === undefined) d.equippedWeapon = 0;
 if (d.ownedWeapons === undefined) d.ownedWeapons = [0];
 if (d.mineDepth === undefined) d.mineDepth = 1;
+if (!d.stockSellCooldowns) d.stockSellCooldowns = {};
 
 if (!d.stockPrices) d.stockPrices = { 1: 50000, 2: 50000, 3: 50000, 4: 50000 };
 if (!d.stockHistories) d.stockHistories = {
@@ -1087,11 +1086,11 @@ if (!d.stockHistories) d.stockHistories = {
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
 const WEAPONS_DB = [
-  { id: 0, name: "나무검", icon: "🪵⚔️", price: 0, bonusProb: 0.00, bonusReward: 1.00, desc: "기본적인 나무 검. (추가 보정 없음)" },
+  { id: 0, name: "나무검", icon: "🪵⚔️", price: 0, bonusProb: 0.00, bonusReward: 1.00, desc: "기본적인 나무 검." },
   { id: 1, name: "돌검", icon: "🪨⚔️", price: 8000, bonusProb: 0.01, bonusReward: 1.05, desc: "단단한 돌로 만든 검." },
   { id: 2, name: "철검", icon: "⚙️⚔️", price: 40000, bonusProb: 0.02, bonusReward: 1.10, desc: "제련된 철 검." },
   { id: 3, name: "금검", icon: "✨⚔️", price: 150000, bonusProb: 0.035, bonusReward: 1.18, desc: "황금빛 검." },
-  { id: 4, name: "다이아검", icon: "💎⚔️", price: 600000, bonusProb: 0.05, bonusReward: 1.28, desc: "단단한 다이아몬드 검." },
+  { id: 4, name: "다이아검", icon: "💎⚔️", price: 600000, bonusProb: 0.05, bonusReward: 1.28, desc: "다이아몬드 검." },
   { id: 5, name: "루비검", icon: "🔴⚔️", price: 2500000, bonusProb: 0.07, bonusReward: 1.40, desc: "붉은 보석 루비 검." },
   { id: 6, name: "에메랄드 검", icon: "🟢⚔️", price: 10000000, bonusProb: 0.095, bonusReward: 1.55, desc: "찬란한 에메랄드 검." },
   { id: 7, name: "신비의 검", icon: "🔮⚔️", price: 45000000, bonusProb: 0.12, bonusReward: 1.75, desc: "고대 마력이 담긴 검." },
@@ -1099,52 +1098,52 @@ const WEAPONS_DB = [
 ];
 
 const PET_DB = {
- cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.09975%', sellPrice: 150, gemReward: 1 },
- chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.1596%', sellPrice: 150, gemReward: 1 },
- sparrow: { id:'sparrow', name:'초소형 정찰기', icon:'🦅', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.1197%', sellPrice: 150, gemReward: 1 },
- beetle: { id:'beetle', name:'딱정벌레 채굴기', icon:'🐞', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.13965%', sellPrice: 150, gemReward: 1 },
- ant: { id:'ant', name:'나노 앤트 드론', icon:'🐜', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.17955%', sellPrice: 150, gemReward: 1 },
- bee: { id:'bee', name:'사이버 헌터비', icon:'🐝', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.1995%', sellPrice: 150, gemReward: 1 },
- bug1: { id:'bug1', name:'글리치 파이터', icon:'🐞', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.1197%', sellPrice: 150, gemReward: 1 },
- bug2: { id:'bug2', name:'로보 파이어', icon:'🦗', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.13965%', sellPrice: 150, gemReward: 1 },
+ cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.05%', sellPrice: 150, gemReward: 1 },
+ chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.08%', sellPrice: 150, gemReward: 1 },
+ sparrow: { id:'sparrow', name:'초소형 정찰기', icon:'🦅', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.06%', sellPrice: 150, gemReward: 1 },
+ beetle: { id:'beetle', name:'딱정벌레 채굴기', icon:'🐞', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.07%', sellPrice: 150, gemReward: 1 },
+ ant: { id:'ant', name:'나노 앤트 드론', icon:'🐜', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.09%', sellPrice: 150, gemReward: 1 },
+ bee: { id:'bee', name:'사이버 헌터비', icon:'🐝', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.10%', sellPrice: 150, gemReward: 1 },
+ bug1: { id:'bug1', name:'글리치 파이터', icon:'🐞', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.06%', sellPrice: 150, gemReward: 1 },
+ bug2: { id:'bug2', name:'로보 파이어', icon:'🦗', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.07%', sellPrice: 150, gemReward: 1 },
  
- dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.1995%', sellPrice: 600, gemReward: 1 },
- rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.2394%', sellPrice: 600, gemReward: 1 },
- hamster: { id:'hamster', name:'회전축 제너레이터', icon:'🐹', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.21945%', sellPrice: 600, gemReward: 1 },
- frog: { id:'frog', name:'점프 드라이브', icon:'🐸', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.25935%', sellPrice: 600, gemReward: 1 },
- turtle: { id:'turtle', name:'쉴드 제너레이터', icon:'🐢', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.2793%', sellPrice: 600, gemReward: 1 },
- mouse: { id:'mouse', name:'와이어리스 랫', icon:'🐭', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.29925%', sellPrice: 600, gemReward: 1 },
- beast1: { id:'beast1', name:'아이언 바이크', icon:'🏍️', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.2394%', sellPrice: 600, gemReward: 1 },
- beast2: { id:'beast2', name:'스틸 호버', icon:'🛸', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.25935%', sellPrice: 600, gemReward: 1 },
+ dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.10%', sellPrice: 600, gemReward: 1 },
+ rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.12%', sellPrice: 600, gemReward: 1 },
+ hamster: { id:'hamster', name:'회전축 제너레이터', icon:'🐹', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.11%', sellPrice: 600, gemReward: 1 },
+ frog: { id:'frog', name:'점프 드라이브', icon:'🐸', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.13%', sellPrice: 600, gemReward: 1 },
+ turtle: { id:'turtle', name:'쉴드 제너레이터', icon:'🐢', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.14%', sellPrice: 600, gemReward: 1 },
+ mouse: { id:'mouse', name:'와이어리스 랫', icon:'🐭', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.15%', sellPrice: 600, gemReward: 1 },
+ beast1: { id:'beast1', name:'아이언 바이크', icon:'🏍️', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.12%', sellPrice: 600, gemReward: 1 },
+ beast2: { id:'beast2', name:'스틸 호버', icon:'🛸', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.13%', sellPrice: 600, gemReward: 1 },
 
- fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +0.29925%', sellPrice: 3000, gemReward: 2 },
- panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +0.29925%', sellPrice: 3000, gemReward: 2 },
- wolf: { id:'wolf', name:'텍틱스 프로세서', icon:'🐺', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +0.3591%', sellPrice: 3000, gemReward: 2 },
- owl: { id:'owl', name:'나이트 옵틱스', icon:'🦉', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.3591%', sellPrice: 3000, gemReward: 2 },
- tiger: { id:'tiger', name:'썬더 바이브', icon:'🐯', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.399%', sellPrice: 3000, gemReward: 2 },
- bear: { id:'bear', name:'헤비 코어 유닛', icon:'🐻', grade:'A', nextGrade:'S', desc:'자동 채굴 +0.399%', sellPrice: 3000, gemReward: 2 },
- mecha1: { id:'mecha1', name:'배틀 액소슈트', icon:'🦾', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.33915%', sellPrice: 3000, gemReward: 2 },
- mecha2: { id:'mecha2', name:'사이버 레이븐', icon:'🦅', grade:'A', nextGrade:'S', desc:'행운 확률 +0.399%', sellPrice: 3000, gemReward: 2 },
+ fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +0.1%', sellPrice: 3000, gemReward: 2 },
+ panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +0.15%', sellPrice: 3000, gemReward: 2 },
+ wolf: { id:'wolf', name:'텍틱스 프로세서', icon:'🐺', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +0.12%', sellPrice: 3000, gemReward: 2 },
+ owl: { id:'owl', name:'나이트 옵틱스', icon:'🦉', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.18%', sellPrice: 3000, gemReward: 2 },
+ tiger: { id:'tiger', name:'썬더 바이브', icon:'🐯', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.20%', sellPrice: 3000, gemReward: 2 },
+ bear: { id:'bear', name:'헤비 코어 유닛', icon:'🐻', grade:'A', nextGrade:'S', desc:'자동 채굴 +0.20%', sellPrice: 3000, gemReward: 2 },
+ mecha1: { id:'mecha1', name:'배틀 액소슈트', icon:'🦾', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.17%', sellPrice: 3000, gemReward: 2 },
+ mecha2: { id:'mecha2', name:'사이버 레이븐', icon:'🦅', grade:'A', nextGrade:'S', desc:'행운 확률 +0.20%', sellPrice: 3000, gemReward: 2 },
 
- dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.00798배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
- unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.009975배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
- phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +0.49875% (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
- titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.01197배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
- hydra: { id:'hydra', name:'멀티 코어 히드라', icon:'🐉', grade:'S', nextGrade:'L', desc:'모든 에너지 획득량 1.013965배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
- griffin: { id:'griffin', name:'에테르 그리핀', icon:'🦅', grade:'S', nextGrade:'L', desc:'클릭 효율 +0.5985% (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
+ dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 1.004배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
+ unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 1.005배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
+ phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +0.25% (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
+ titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 1.006배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
+ hydra: { id:'hydra', name:'멀티 코어 히드라', icon:'🐉', grade:'S', nextGrade:'L', desc:'모든 에너지 1.007배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
+ griffin: { id:'griffin', name:'에테르 그리핀', icon:'🦅', grade:'S', nextGrade:'L', desc:'클릭 효율 +0.30% (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  
- legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:'M', desc:'모든 에너지 획득량 1.029925배', sellPrice: 20000, gemReward: 5 },
- leviathan: { id:'leviathan', name:'심해 레비아탄', icon:'🐉', grade:'L', nextGrade:'M', desc:'모든 에너지 획득량 1.03591배', sellPrice: 22000, gemReward: 5 },
- wraith: { id:'wraith', name:'퀀텀 레이스', icon:'👻', grade:'L', nextGrade:'M', desc:'모든 에너지 획득량 1.0399배', sellPrice: 25000, gemReward: 5 },
+ legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:'M', desc:'모든 에너지 1.015배 (파괴위험)', sellPrice: 20000, gemReward: 5 },
+ leviathan: { id:'leviathan', name:'심해 레비아탄', icon:'🐉', grade:'L', nextGrade:'M', desc:'모든 에너지 1.018배 (파괴위험)', sellPrice: 22000, gemReward: 5 },
+ wraith: { id:'wraith', name:'퀀텀 레이스', icon:'👻', grade:'L', nextGrade:'M', desc:'모든 에너지 1.020배 (파괴위험)', sellPrice: 25000, gemReward: 5 },
 
- mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:'T', desc:'모든 에너지 획득량 1.09725배', sellPrice: 50000, gemReward: 8 },
- chronos: { id:'chronos', name:'크로노스 웨이브', icon:'⏳', grade:'M', nextGrade:'T', desc:'모든 에너지 획득량 1.0697배', sellPrice: 55000, gemReward: 8 },
+ mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:'T', desc:'모든 에너지 1.045배 (파괴위험)', sellPrice: 50000, gemReward: 8 },
+ chronos: { id:'chronos', name:'크로노스 웨이브', icon:'⏳', grade:'M', nextGrade:'T', desc:'모든 에너지 1.035배 (파괴위험)', sellPrice: 55000, gemReward: 8 },
 
- trans: { id:'trans', name:'에테르 오브 파라다이스', icon:'💎✨', grade:'T', nextGrade:'X', desc:'모든 에너지 획득량 1.29675배', sellPrice: 150000, gemReward: 12 },
- infinity: { id:'infinity', name:'인피니티 게이트', icon:'🌀', grade:'T', nextGrade:'X', desc:'모든 에너지 획득량 1.3091배', sellPrice: 160000, gemReward: 12 },
+ trans: { id:'trans', name:'에테르 오브 파라다이스', icon:'💎✨', grade:'T', nextGrade:'X', desc:'모든 에너지 1.10배 (파괴위험)', sellPrice: 150000, gemReward: 12 },
+ infinity: { id:'infinity', name:'인피니티 게이트', icon:'🌀', grade:'T', nextGrade:'X', desc:'모든 에너지 1.12배 (파괴위험)', sellPrice: 160000, gemReward: 12 },
 
- chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 획득량 1.995배', sellPrice: 400000, gemReward: 20 },
- voidmaster: { id:'voidmaster', name:'오블리비언 싱귤래리티', icon:'🖤⚛️', grade:'X', nextGrade:null, desc:'모든 에너지 획득량 2.29425배', sellPrice: 500000, gemReward: 25 }
+ chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 1.35배 (파괴위험)', sellPrice: 400000, gemReward: 20 },
+ voidmaster: { id:'voidmaster', name:'오블리비언 싱귤래리티', icon:'🖤⚛️', grade:'X', nextGrade:null, desc:'모든 에너지 1.45배 (파괴위험)', sellPrice: 500000, gemReward: 25 }
 };
 
 const PETS_BY_GRADE = {
@@ -1218,6 +1217,20 @@ function updateStockUI() {
   if($("stockOwned2")) $("stockOwned2").textContent = d.stock2;
   if($("stockOwned3")) $("stockOwned3").textContent = d.stock3;
   if($("stockOwned4")) $("stockOwned4").textContent = d.stock4;
+
+  const now = Date.now();
+  for(let i = 1; i <= 4; i++) {
+    const timerEl = $(`stockTimer${i}`);
+    const sellTime = d.stockSellCooldowns[i] || 0;
+    const diff = sellTime - now;
+    if(diff > 0) {
+      let minRem = Math.floor(diff / 60000);
+      let secRem = Math.floor((diff % 60000) / 1000);
+      if(timerEl) timerEl.textContent = `⏳ 매수 제한 남은 시간: ${minRem}분 ${secRem}초`;
+    } else {
+      if(timerEl) timerEl.textContent = "";
+    }
+  }
 
   const lock2 = $("stockLock2"), content2 = $("stockContent2");
   const lock3 = $("stockLock3"), content3 = $("stockContent3");
@@ -1382,68 +1395,68 @@ function updateUserUI() {
 }
 
 function getPetBonus(){
-  let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.05;
+  let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.01;
   if (!d.equippedPets) d.equippedPets = [];
   d.equippedPets.forEach(index => {
     const petId = d.pets[index];
     if(!petId) return;
-    if(petId === 'cat') clickMult += 0.0009975;
-    if(petId === 'chick') clickMult += 0.001596;
-    if(petId === 'sparrow') clickMult += 0.001197;
-    if(petId === 'beetle') clickMult += 0.0013965;
-    if(petId === 'ant') clickMult += 0.0017955;
-    if(petId === 'bee') clickMult += 0.001995;
-    if(petId === 'bug1') clickMult += 0.001197;
-    if(petId === 'bug2') clickMult += 0.0013965;
+    if(petId === 'cat') clickMult += 0.0005;
+    if(petId === 'chick') clickMult += 0.0008;
+    if(petId === 'sparrow') clickMult += 0.0006;
+    if(petId === 'beetle') clickMult += 0.0007;
+    if(petId === 'ant') clickMult += 0.0009;
+    if(petId === 'bee') clickMult += 0.0010;
+    if(petId === 'bug1') clickMult += 0.0006;
+    if(petId === 'bug2') clickMult += 0.0007;
 
-    if(petId === 'dog') cpsMult += 0.001995;
-    if(petId === 'rabbit') cpsMult += 0.002394;
-    if(petId === 'hamster') cpsMult += 0.0021945;
-    if(petId === 'frog') cpsMult += 0.0025935;
-    if(petId === 'turtle') cpsMult += 0.002793;
-    if(petId === 'mouse') cpsMult += 0.0029925;
-    if(petId === 'beast1') cpsMult += 0.002394;
-    if(petId === 'beast2') cpsMult += 0.0025935;
+    if(petId === 'dog') cpsMult += 0.0010;
+    if(petId === 'rabbit') cpsMult += 0.0012;
+    if(petId === 'hamster') cpsMult += 0.0011;
+    if(petId === 'frog') cpsMult += 0.0013;
+    if(petId === 'turtle') cpsMult += 0.0014;
+    if(petId === 'mouse') cpsMult += 0.0015;
+    if(petId === 'beast1') cpsMult += 0.0012;
+    if(petId === 'beast2') cpsMult += 0.0013;
 
-    if(petId === 'fox') luckProb += 0.0029925;
-    if(petId === 'panda') { clickMult += 0.0029925; cpsMult += 0.0029925; }
-    if(petId === 'wolf') luckProb += 0.003591;
-    if(petId === 'owl') clickMult += 0.003591;
-    if(petId === 'tiger') clickMult += 0.00399;
-    if(petId === 'bear') cpsMult += 0.00399;
-    if(petId === 'mecha1') clickMult += 0.0033915;
-    if(petId === 'mecha2') luckProb += 0.00399;
+    if(petId === 'fox') luckProb += 0.001;
+    if(petId === 'panda') { clickMult += 0.0015; cpsMult += 0.0015; }
+    if(petId === 'wolf') luckProb += 0.0012;
+    if(petId === 'owl') clickMult += 0.0018;
+    if(petId === 'tiger') clickMult += 0.0020;
+    if(petId === 'bear') cpsMult += 0.0020;
+    if(petId === 'mecha1') clickMult += 0.0017;
+    if(petId === 'mecha2') luckProb += 0.0020;
 
-    if(petId === 'dragon') coinMult *= 1.00798;
-    if(petId === 'unicorn') coinMult *= 1.009975;
-    if(petId === 'phoenix') { clickMult += 0.0049875; cpsMult += 0.0029925; }
-    if(petId === 'titan') coinMult *= 1.01197;
-    if(petId === 'hydra') coinMult *= 1.013965;
-    if(petId === 'griffin') clickMult += 0.005985;
+    if(petId === 'dragon') coinMult *= 1.004;
+    if(petId === 'unicorn') coinMult *= 1.005;
+    if(petId === 'phoenix') { clickMult += 0.0025; cpsMult += 0.0015; }
+    if(petId === 'titan') coinMult *= 1.006;
+    if(petId === 'hydra') coinMult *= 1.007;
+    if(petId === 'griffin') clickMult += 0.0030;
 
-    if(petId === 'legend') { coinMult *= 1.029925; luckProb += 0.005985; }
-    if(petId === 'leviathan') coinMult *= 1.03591;
-    if(petId === 'wraith') coinMult *= 1.0399;
+    if(petId === 'legend') { coinMult *= 1.015; luckProb += 0.002; }
+    if(petId === 'leviathan') coinMult *= 1.018;
+    if(petId === 'wraith') coinMult *= 1.020;
 
-    if(petId === 'mythic') { coinMult *= 1.09725; luckProb += 0.01596; }
-    if(petId === 'chronos') coinMult *= 1.0697;
+    if(petId === 'mythic') { coinMult *= 1.045; luckProb += 0.005; }
+    if(petId === 'chronos') coinMult *= 1.035;
 
-    if(petId === 'trans') { coinMult *= 1.29675; luckProb += 0.029925; }
-    if(petId === 'infinity') coinMult *= 1.3091;
+    if(petId === 'trans') { coinMult *= 1.10; luckProb += 0.01; }
+    if(petId === 'infinity') coinMult *= 1.12;
 
-    if(petId === 'chaos') { coinMult *= 1.995; luckProb += 0.049875; }
-    if(petId === 'voidmaster') coinMult *= 2.29425;
+    if(petId === 'chaos') { coinMult *= 1.35; luckProb += 0.015; }
+    if(petId === 'voidmaster') coinMult *= 1.45;
   });
   return { clickMult, cpsMult, coinMult, luckProb };
 }
 
 function getBaseMult(){
   let itemMult = (d.core ? 1.15 : 1) * (d.double ? 1.30 : 1) * (d.quantum ? 1.50 : 1);
-  let gemHyperBonus = d.gemHyper ? 1.10 : 1.0;
-  let gemRingBonus = d.gemRing ? 1.20 : 1.0;
-  let gemDivineBonus = d.gemDivine ? 1.35 : 1.0;
-  let gemChronosBonus = d.gemChronos ? 1.40 : 1.0;
-  return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * (1 + d.rp * 0.08); // 영구연구 너프
+  let gemHyperBonus = d.gemHyper ? 1.04 : 1.0; // 너프 (1.10 -> 1.04)
+  let gemRingBonus = d.gemRing ? 1.08 : 1.0;   // 너프 (1.20 -> 1.08)
+  let gemDivineBonus = d.gemDivine ? 1.15 : 1.0; // 너프 (1.35 -> 1.15)
+  let gemChronosBonus = d.gemChronos ? 1.15 : 1.0; // 너프 (1.40 -> 1.15)
+  return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * (1 + d.rp * 0.04); // 영구연구 너프 (0.08 -> 0.04)
 }
 
 function save(){
@@ -1482,7 +1495,7 @@ function triggerEpicExplosion(droneName) {
   overlay.style.background = "radial-gradient(circle, rgba(239,68,68,0.85) 0%, rgba(7,9,14,0.95) 80%)";
   overlay.innerHTML = `
     <div style="text-align:center; color:#fff;">
-      <h1 style="font-size:28px; color:#ef4444; margin-bottom:8px;">⚠️ 과부하 대폭발! ⚠️</h1>
+      <h1 style="font-size:28px; color:#ef4444; margin-bottom:8px;">⚠️ S급 이상 드론 과부하 대폭발! ⚠️</h1>
       <p style="font-size:14px; color:#fef3c7;">${droneName} 파괴에너지 방출 중...</p>
     </div>
   `;
@@ -1510,13 +1523,13 @@ function render(){
  const baseMult = getBaseMult();
  
  let coolerBonus = d.cooler ? 1.2 : 1.0;
- let gemClickBonus = d.gemClick ? 1.25 : 1.0;
- let gemRingBonus = d.gemRing ? 1.20 : 1.0;
+ let gemClickBonus = d.gemClick ? 1.10 : 1.0; // 너프 (1.25 -> 1.10)
+ let gemRingBonus = d.gemRing ? 1.08 : 1.0;   // 너프
  let blacksmithBonus = (d.blacksmithLevel || 0) * 35;
  const totalPower = (((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) + blacksmithBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
  
  let filterBonus = d.filter ? 1.25 : 1.0;
- let gemAutoBonus = d.gemAuto ? 1.30 : 1.0;
+ let gemAutoBonus = d.gemAuto ? 1.12 : 1.0; // 너프 (1.30 -> 1.12)
  const totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  if($("score")) $("score").textContent=fmt(d.score); 
@@ -1530,8 +1543,8 @@ function render(){
 
  if($("permPowerLv")) $("permPowerLv").textContent = `+${d.permPower || 0}`;
  if($("permCpsLv")) $("permCpsLv").textContent = `+${d.permCps || 0}`;
- if($("permLuckLv")) $("permLuckLv").textContent = `+${(d.permLuck || 0)}%`;
- if($("permGemLv")) $("permGemLv").textContent = `+${(d.permGem || 0) * 5}%`;
+ if($("permLuckLv")) $("permLuckLv").textContent = `+${(d.permLuck || 0) * 0.2}%`; // 너프
+ if($("permGemLv")) $("permGemLv").textContent = `+${(d.permGem || 0) * 2}%`; // 너프
 
  const powerCost = 1 + Math.floor((d.permPower || 0) / 4);
  const cpsCost = 1 + Math.floor((d.permCps || 0) / 8);
@@ -1543,7 +1556,7 @@ function render(){
  if($("costPermGem")) $("costPermGem").textContent = gemCost;
 
  const mineDepth = d.mineDepth || 1;
- const mineCost = Math.floor(25000 * Math.pow(1.6, mineDepth - 1)); // 광산 탐사 가격 인상
+ const mineCost = Math.floor(25000 * Math.pow(1.6, mineDepth - 1));
  const mineUpgradeCost = Math.floor(120000 * Math.pow(2.1, mineDepth - 1));
  const mineProb = Math.min(85, 40 + (mineDepth * 3));
  if($("mineDepthDisplay")) $("mineDepthDisplay").textContent = `${mineDepth}층 광산`;
@@ -1743,7 +1756,7 @@ function exploreMine() {
   let success = Math.random() < (prob / 100);
   if(success) {
     let baseGems = Math.floor(Math.random() * (mineDepth * 2)) + 1;
-    let gemMultiplier = 1 + ((d.permGem || 0) * 0.05);
+    let gemMultiplier = 1 + ((d.permGem || 0) * 0.02); // 너프 (0.05 -> 0.02)
     let earnedGems = Math.round(baseGems * gemMultiplier);
     d.gems += earnedGems;
     playSuccessSound();
@@ -1823,7 +1836,7 @@ function upgradeBlacksmithRPG() {
 
 function huntMonster(tier) {
   let costs = { 1: 2000, 2: 10000, 3: 50000 };
-  let baseRewards = { 1: 2500, 2: 14000, 3: 75000 }; // 사냥터 보상 대너프
+  let baseRewards = { 1: 2500, 2: 14000, 3: 75000 };
   let baseProbs = { 1: 0.40, 2: 0.22, 3: 0.08 };
   
   let cost = costs[tier];
@@ -1869,12 +1882,13 @@ function performMergeAll() {
       let p2 = gradeIndices.shift();
 
       let indicesToRemove = [p1.index, p2.index].sort((a,b) => b - a);
-
       let sourcePet = PET_DB[p1.id];
 
-      // S급 이상도 파괴 효과 적용 (S급은 15%, 고등급은 30% 확률 파괴)
-      let destructChance = sourcePet.grade === 'S' ? 0.15 : 0.30;
-      if(Math.random() < destructChance) {
+      // **핵심 변경: S급 이상(S, L, M, T 등)에서만 파괴 위험 적용! C, B, A급은 100% 안전 합성**
+      let isHighGrade = ['S', 'L', 'M', 'T', 'X'].includes(sourcePet.grade);
+      let destructChance = isHighGrade ? (sourcePet.grade === 'S' ? 0.15 : 0.30) : 0.0;
+
+      if(isHighGrade && Math.random() < destructChance) {
         if(d.gemProtectorCount && d.gemProtectorCount > 0) {
           d.gemProtectorCount--;
           say("🛡️ 소울 프로텍터가 발동하여 드론 파괴를 막아냈습니다!");
@@ -1885,7 +1899,7 @@ function performMergeAll() {
           });
           triggerEpicExplosion(`${sourcePet.grade}급 드론`);
           playFailureSound();
-          say(`💥 연쇄 합성 중 ${sourcePet.grade}급 드론이 과부하로 파괴되었습니다!`);
+          say(`💥 고등급 합성 중 과부하로 드론이 파괴되었습니다!`);
           break;
         }
       }
@@ -1965,20 +1979,22 @@ function renderPetList(){
             if(Math.random() < 0.02) {
               d.pets.push('mythic');
               triggerLegendaryEpic("초신성 제네시스", "M");
-              say(`🎉 기적! S등급 4개 합성 성공으로 신화 드론 [초신성 제네시스] 획득!!`);
+              say(`🎉 기적! S등급 4개 합성 성공으로 신화 드론 획득!!`);
             } else {
               triggerEpicExplosion("S등급 드론들");
               playFailureSound();
               d.pets.push('legend');
               triggerLegendaryEpic("옴니버스 싱귤래리티", "L");
-              say(`✨ S등급 합성 결과: [옴니버스 싱귤래리티] 획득!`);
+              say(`✨ S등급 합성 결과 획득!`);
             }
             draggedPetIdx = null; save();
           } else say("S등급 드론이 총 4개 필요합니다.");
         } else {
-          // S급 이상 및 모든 등급에 파괴 효과 적용 (등급이 높을수록 파괴 확률 증가)
-          let destructChance = sourcePet.grade === 'C' ? 0.05 : sourcePet.grade === 'B' ? 0.08 : sourcePet.grade === 'A' ? 0.12 : sourcePet.grade === 'S' ? 0.18 : 0.35;
-          if(Math.random() < destructChance) {
+          // **핵심 변경: S급 이상에서만 파괴 확률 적용! C, B, A급은 파괴되지 않음**
+          let isHighGrade = ['S', 'L', 'M', 'T', 'X'].includes(sourcePet.grade);
+          let destructChance = isHighGrade ? (sourcePet.grade === 'S' ? 0.18 : 0.35) : 0.0;
+
+          if(isHighGrade && Math.random() < destructChance) {
             let indicesToRemove = [draggedPetIdx, index];
             indicesToRemove.sort((a,b) => b - a);
             
@@ -2035,7 +2051,7 @@ function toggleEquipPet(index){
     d.equippedPets.splice(eqIdx, 1);
     say("드론 장착이 해제되었습니다.");
   } else {
-    if(d.equippedPets.length >= 2) return say("드론은 최대 2개까지만 동시 장착할 수 있습니다! (하드코어 제한)"); // 최대 장착 2개 제한
+    if(d.equippedPets.length >= 2) return say("드론은 최대 2개까지만 동시 장착할 수 있습니다!");
     d.equippedPets.push(index);
     say("드론이 장착되었습니다.");
   }
@@ -2237,6 +2253,13 @@ function startMultiBoxOpeningInteraction(count){
 }
 
 function buyStock(id, amount) {
+  const now = Date.now();
+  const coolEnd = d.stockSellCooldowns[id] || 0;
+  if(now < coolEnd) {
+    let remainSec = Math.ceil((coolEnd - now) / 1000);
+    return say(`⏳ 주식 매도 후 5분 쿨타임 중입니다! (${remainSec}초 남음)`);
+  }
+
   const price = d.stockPrices[id];
   let qty = 0;
   if(amount === 'max') {
@@ -2271,7 +2294,11 @@ function sellStock(id, amount) {
   if(id === 3) d.stock3 -= qty;
   if(id === 4) d.stock4 -= qty;
   d.score += price * qty;
-  say(`주식 ${qty}주 매도 완료! (+${fmt(price * qty)})`);
+
+  // **핵심 변경: 주식 매도 시 5분(300초) 동안 매수 쿨타임 적용!**
+  d.stockSellCooldowns[id] = Date.now() + (5 * 60 * 1000);
+
+  say(`주식 ${qty}주 매도 완료! (+${fmt(price * qty)}) ⚠️ 5분간 매수 잠김`);
   save();
 }
 
@@ -2413,7 +2440,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let cost = 1 + Math.floor((d.permPower || 0) / 4);
       if(d.rp >= cost){ 
         d.rp -= cost; 
-        d.permPower = (d.permPower || 0) + 2; 
+        d.permPower = (d.permPower || 0) + 1; // 너프 (+2 -> +1)
         say("기초 채굴 효율 강화 성공!"); 
         save(); 
       }
@@ -2428,7 +2455,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let cost = 1 + Math.floor((d.permCps || 0) / 8);
       if(d.rp >= cost){ 
         d.rp -= cost; 
-        d.permCps = (d.permCps || 0) + 4; 
+        d.permCps = (d.permCps || 0) + 2; // 너프 (+4 -> +2)
         say("자동 채굴 강화 성공!"); 
         save(); 
       }
@@ -2526,8 +2553,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
       let coolerBonus = d.cooler ? 1.2 : 1.0;
-      let gemClickBonus = d.gemClick ? 1.25 : 1.0;
-      let gemRingBonus = d.gemRing ? 1.20 : 1.0;
+      let gemClickBonus = d.gemClick ? 1.10 : 1.0; // 너프 반영
+      let gemRingBonus = d.gemRing ? 1.08 : 1.0;     // 너프 반영
       let blacksmithBonus = (d.blacksmithLevel || 0) * 35;
       let currentPower = ((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) + blacksmithBonus;
       
@@ -2537,7 +2564,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * randomGainCount;
       
-      const totalLuckProb = (d.luck ? 0.02 : 0.0) + ((d.permLuck || 0) / 100) + (d.gemLuck ? 0.015 : 0.0);
+      // 행운 확률 너프 반영 (기본 1% + 영구행운 + 캐시상점행운 + 펫행운)
+      let gemLuckBonus = d.gemLuck ? 0.003 : 0.0; // 너프 (0.015 -> 0.003)
+      const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.2) / 100) + gemLuckBonus + petBonus.luckProb;
       if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
       d.score += gain;
 
@@ -2653,7 +2682,7 @@ document.addEventListener("DOMContentLoaded", () => {
       d.equippedWeapon = 0;
       d.ownedWeapons = [0];
       d.mineDepth = 1;
-      say(`시스템 승급 완료! (+${rpGained} RP, 영구스탯 상점 해제)`); 
+      say(`시스템 승급 완료! (+${rpGained} RP)`); 
       save();
     };
   }
@@ -2770,9 +2799,9 @@ setInterval(() => {
   if(autoMiningTimer >= 5) {
     autoMiningTimer = 0;
     let filterBonus = d.filter ? 1.25 : 1.0;
-    let gemAutoBonus = d.gemAuto ? 1.30 : 1.0;
-    let gemRingBonus = d.gemRing ? 1.20 : 1.0;
-    let gemChronosBonus = d.gemChronos ? 1.40 : 1.0;
+    let gemAutoBonus = d.gemAuto ? 1.12 : 1.0; // 너프 반영
+    let gemRingBonus = d.gemRing ? 1.08 : 1.0;   // 너프 반영
+    let gemChronosBonus = d.gemChronos ? 1.15 : 1.0; // 너프 반영
     const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
     if(autoCps > 0 && d.autoEnabled && d.autoPurchased){
       d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
