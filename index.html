@@ -426,6 +426,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화 센터</span></button>
     <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
     <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석</span></button>
+    <button class="tab" data-tab="autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소</span></button>
     <button class="tab" data-tab="minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span></button>
     <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
     <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
@@ -486,7 +487,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="upgrade" class="panel">
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);">클릭당 에너지 생산량 대폭 하향된 비용으로 증가</small></div>
+          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);">클릭당 에너지 생산량 증가</small></div>
           <button id="powerBtn">100 에너지</button>
         </div>
       </div>
@@ -573,19 +574,33 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
+    <div id="autoclickPanel" class="panel hidden">
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🖱️ 오토클릭 자율 구동 연구소</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">지나친 비정상 연타 제한을 대체하는 정식 오토클릭 모듈입니다. 에너지를 소모해 오토클릭 시스템을 구매하고 속도를 업그레이드하세요!</p>
+      
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center; margin-bottom:14px;">
+        <h4 style="color:var(--accent); margin:0 0 4px; font-size:14px;">오토클릭 상태: <b id="autoclickStatusDisplay" style="color:#ef4444;">미구동 (비활성)</b></h4>
+        <p style="font-size:11px; color:var(--text-sub); margin:0 0 10px;">현재 클릭 속도: <b id="autoclickSpeedDisplay">0회 / 초</b></p>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn-game" id="buyAutoclickModuleBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🤖 오토클릭 모듈 구매 (50,000 에너지)</button>
+          <button class="btn-game" id="upgradeAutoclickBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706) !important;">⚡ 오토클릭 속도 업그레이드 (<span id="autoclickUpgradeCost">15,000</span> 에너지)</button>
+        </div>
+      </div>
+    </div>
+
     <div id="converterPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚛️ 퀀텀 에너지 변환 연구소 (새로운 에너지 사용처)</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚛️ 퀀텀 에너지 변환 연구소</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">남는 에너지를 소모하여 보석이나 퀀텀 부스터를 획득하세요!</p>
       <div class="shop-grid">
         <div class="game-card">
           <h3>💎 에너지-보석 제련</h3>
-          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">비용: <b style="color:var(--accent);">500,000</b> 에너지</p>
+          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">비용: <b style="color:var(--accent);">350,000</b> 에너지</p>
           <p style="font-size:10px; color:#10b981; margin:0 0 8px;">획득: 보석 💎 +3 개</p>
           <button class="btn-game" id="convertGemsBtn">보석으로 제련</button>
         </div>
         <div class="game-card">
           <h3>⚡ 1시간 자동채굴 가속</h3>
-          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">비용: <b style="color:var(--accent);">1,200,000</b> 에너지</p>
+          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">비용: <b style="color:var(--accent);">650,000</b> 에너지</p>
           <p style="font-size:10px; color:#10b981; margin:0 0 8px;">효과: 즉시 1시간치 자동채굴 획득</p>
           <button class="btn-game" id="convertBoostBtn">채굴량 즉시 수령</button>
         </div>
@@ -593,14 +608,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="minePanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⛏️ 퀀텀 지하 광산 (보석 채굴 시스템)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">깊은 층으로 탐사하여 보석(💎)을 발굴하세요.</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⛏️ 퀀텀 지하 광산 (보석 채굴 시스템 - 너프 적용)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">깊은 층으로 탐사하여 보석(💎)을 발굴하세요. (성공 확률 및 밸런스 조정됨)</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 광산 탐사 깊이: <b id="mineDepthDisplay" style="font-size:18px;">1층 (지표면)</b></h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">탐사 비용: <span id="mineCostDisplay">500</span> 에너지 | 보석 획득 확률: <span id="mineProbDisplay">45%</span></p>
+        <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">탐사 비용: <span id="mineCostDisplay">750</span> 에너지 | 보석 획득 확률: <span id="mineProbDisplay">35%</span></p>
         <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
           <button class="btn-game" id="exploreMineBtn" style="padding:10px 24px; font-size:13px;">⛏️ 광산 깊숙이 탐사하기</button>
-          <button class="btn-game" id="upgradeMineBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; padding:10px 24px; font-size:13px;">⬆️ 광산 시설 확장 (<span id="mineUpgradeCost">2,500</span> 에너지)</button>
+          <button class="btn-game" id="upgradeMineBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; padding:10px 24px; font-size:13px;">⬆️ 광산 시설 확장 (<span id="mineUpgradeCost">4,000</span> 에너지)</button>
         </div>
       </div>
     </div>
@@ -748,7 +763,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <button class="btn-game" id="resetCustomImg" style="margin-top:6px; padding:5px 12px; background:#4b5563 !important; box-shadow:none;">기본 심볼로 초기화</button>
       </div>
 
-      <h3 style="color:var(--text-main); font-size:14px; margin-top:14px;">🌌 배경 화면 이미지 / GIF 변경 (오류 수정 완료)</h3>
+      <h3 style="color:var(--text-main); font-size:14px; margin-top:14px;">🌌 배경 화면 이미지 / GIF 변경</h3>
       <div style="margin-bottom: 14px;">
         <input type="file" id="bgImageUpload" accept="image/*,image/gif" style="font-size:12px; color:var(--text-sub);">
         <button class="btn-game" id="resetBgImg" style="margin-top:6px; padding:5px 12px; background:#4b5563 !important; box-shadow:none;">기본 배경으로 복원</button>
@@ -1102,9 +1117,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.0 사용자 맞춤 최적화 패치",
-    title: "채굴 효율 비용 인하, S급 이상 드론 확률 하향, 주식 잠금 시 알람 차단 및 새 에너지 사용처 추가",
-    desc: "1) ⚡ 채굴 효율 업그레이드 비용이 대폭 인하되었습니다.\n2) 🎁 드론 뽑기에서 S급 이상 고등급 드론 등장 확률이 낮아졌습니다.\n3) 📉 주식 채널 10분 잠금(휴식) 상태일 때는 주가 변동 알람이 울리지 않습니다.\n4) 🌌 배경 화면 변경 오류가 수정되었습니다.\n5) ⚛️ 에너지를 소모해 보석이나 채굴 가속을 얻는 '에너지 변환 연구소'가 추가되었습니다."
+    version: "v13.1 사용자 맞춤 밸런스 패치",
+    title: "변환 연구소 가속 가격 인하, 광산 너프 적용, 오토클릭 구매/업그레이드 센터 신설",
+    desc: "1) ⚛️ 에너지 변환 연구소의 '1시간 자동채굴 가속' 비용이 하향 조정되었습니다.\n2) ⛏️ 퀀텀 광산 탐사 확률 및 밸런스가 소폭 너프(조정)되었습니다.\n3) 🖱️ 지나친 비정상 클릭 제한을 대체할 '오토클릭 자율 구동 모듈' 구매 및 업그레이드 시스템이 추가되었습니다.\n4) ☁️ 데이터 저장 및 동기화 안정성이 강화되었습니다."
   }
 ];
 
@@ -1139,8 +1154,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v130";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v129") || localStorage.getItem("energyRush_PermanentSaveData_v128");
+const saveKey = "energyRush_PermanentSaveData_v131";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v130") || localStorage.getItem("energyRush_PermanentSaveData_v129");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1156,7 +1171,9 @@ let d = JSON.parse(savedRawData || "null") || {
  latestNews: "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.",
  newsType: 'good',
  stockChannelActiveUntil: 0,
- stockChannelLockedUntil: 0
+ stockChannelLockedUntil: 0,
+ autoclickPurchased: false,
+ autoclickLevel: 0
 };
 
 const nowInit = Date.now();
@@ -1187,6 +1204,8 @@ if (d.mineDepth === undefined) d.mineDepth = 1;
 if (!d.stockSellCooldowns) d.stockSellCooldowns = {};
 if (!d.latestNews) d.latestNews = "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.";
 if (!d.newsType) d.newsType = 'good';
+if (d.autoclickPurchased === undefined) d.autoclickPurchased = false;
+if (d.autoclickLevel === undefined) d.autoclickLevel = 0;
 
 if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
 if (!d.stockHistories) d.stockHistories = {
@@ -1298,10 +1317,7 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-let clickTimestamps = [];
-let idPenaltyActive = false;
-let penaltyTimerCountdown = 0;
-let penaltyInterval = null;
+let autoclickInterval = null;
 
 function showStockAlertToast(msg, isUp = true) {
   playAlertDingSound();
@@ -1772,13 +1788,42 @@ function render(){
  if($("costPermGem")) $("costPermGem").textContent = gemCost;
 
  const mineDepth = d.mineDepth || 1;
- const mineCost = Math.floor(500 * Math.pow(1.5, mineDepth - 1));
- const mineUpgradeCost = Math.floor(2500 * Math.pow(1.8, mineDepth - 1));
- const mineProb = Math.min(85, 40 + (mineDepth * 3));
+ const mineCost = Math.floor(750 * Math.pow(1.6, mineDepth - 1));
+ const mineUpgradeCost = Math.floor(4000 * Math.pow(1.9, mineDepth - 1));
+ const mineProb = Math.min(75, Math.max(15, 35 - (mineDepth * 2))); // 광산 너프 반영
  if($("mineDepthDisplay")) $("mineDepthDisplay").textContent = `${mineDepth}층 광산`;
  if($("mineCostDisplay")) $("mineCostDisplay").textContent = fmt(mineCost);
  if($("mineProbDisplay")) $("mineProbDisplay").textContent = `${mineProb}%`;
  if($("mineUpgradeCost")) $("mineUpgradeCost").textContent = fmt(mineUpgradeCost);
+
+ const autoclickPurchased = d.autoclickPurchased || false;
+ const autoclickLevel = d.autoclickLevel || 0;
+ const autoclickSpeed = autoclickLevel * 2; // 초당 클릭 횟수
+ const autoclickUpgradeCost = Math.round(15000 * Math.pow(1.5, autoclickLevel));
+
+ const autoclickStatusDisplay = $("autoclickStatusDisplay");
+ const autoclickSpeedDisplay = $("autoclickSpeedDisplay");
+ const buyAutoclickModuleBtn = $("buyAutoclickModuleBtn");
+ const upgradeAutoclickBtn = $("upgradeAutoclickBtn");
+
+ if(autoclickStatusDisplay) {
+   if(autoclickPurchased) {
+     autoclickStatusDisplay.textContent = `구동 중 (Lv.${autoclickLevel})`;
+     autoclickStatusDisplay.style.color = "#10b981";
+   } else {
+     autoclickStatusDisplay.textContent = "미구동 (비활성)";
+     autoclickStatusDisplay.style.color = "#ef4444";
+   }
+ }
+ if(autoclickSpeedDisplay) autoclickSpeedDisplay.textContent = `${autoclickSpeed}회 / 초`;
+ if(buyAutoclickModuleBtn) {
+   buyAutoclickModuleBtn.textContent = autoclickPurchased ? "보유 완료" : "🤖 오토클릭 모듈 구매 (50,000 에너지)";
+   buyAutoclickModuleBtn.disabled = autoclickPurchased;
+ }
+ if(upgradeAutoclickBtn) {
+   upgradeAutoclickBtn.textContent = `⚡ 오토클릭 속도 업그레이드 (${fmt(autoclickUpgradeCost)} 에너지)`;
+   upgradeAutoclickBtn.disabled = !autoclickPurchased;
+ }
 
  const weapon = WEAPONS_DB[d.equippedWeapon || 0];
  const extraProb = (weapon ? weapon.bonusProb : 0);
@@ -1796,13 +1841,8 @@ function render(){
 
  const coinBtn = $("coin");
  if(coinBtn) {
-   if(idPenaltyActive) {
-     coinBtn.style.filter = "grayscale(100%)";
-     coinBtn.style.cursor = "not-allowed";
-   } else {
-     coinBtn.style.filter = "none";
-     coinBtn.style.cursor = "pointer";
-   }
+   coinBtn.style.filter = "none";
+   coinBtn.style.cursor = "pointer";
 
    if(d.customImg) {
      coinBtn.innerHTML = `<img src="${d.customImg}" alt="Custom Core">`;
@@ -1834,7 +1874,6 @@ function render(){
  const rebirthBtnEl = $("rebirthBtn");
  if(rebirthBtnEl) rebirthBtnEl.disabled = d.score < req;
  
- // 채굴 효율 업그레이드 비용을 대폭 인하하여 반영 (기존보다 훨씬 저렴하게 상승)
  if($("powerBtn")) $("powerBtn").textContent = fmt(Math.round(80 * Math.floor(Math.pow(d.power, 1.35)))) + " 에너지";
 
  const autoUpgradeBtn = $("autoBtn");
@@ -1904,6 +1943,7 @@ function render(){
  renderPetList();
  renderEncyclopedia();
  updateCustomUI();
+ setupAutoclickLoop();
 }
 
 function renderWeaponShop() {
@@ -1952,15 +1992,15 @@ function equipWeapon(id) {
 
 function exploreMine() {
   const mineDepth = d.mineDepth || 1;
-  const cost = Math.floor(500 * Math.pow(1.5, mineDepth - 1));
-  const prob = Math.min(85, 40 + (mineDepth * 3));
+  const cost = Math.floor(750 * Math.pow(1.6, mineDepth - 1));
+  const prob = Math.min(75, Math.max(15, 35 - (mineDepth * 2))); // 광산 너프 반영
 
   if(d.score < cost) return say("광산 탐사 비용 에너지가 부족합니다.");
   d.score -= cost;
 
   let success = Math.random() < (prob / 100);
   if(success) {
-    let baseGems = Math.floor(Math.random() * (mineDepth * 2)) + 1;
+    let baseGems = Math.max(1, Math.floor(Math.random() * mineDepth));
     let gemMultiplier = 1 + ((d.permGem || 0) * 0.05);
     let earnedGems = Math.round(baseGems * gemMultiplier);
     d.gems += earnedGems;
@@ -1975,7 +2015,7 @@ function exploreMine() {
 
 function upgradeMine() {
   const mineDepth = d.mineDepth || 1;
-  const upgradeCost = Math.floor(2500 * Math.pow(1.8, mineDepth - 1));
+  const upgradeCost = Math.floor(4000 * Math.pow(1.9, mineDepth - 1));
   if(d.score < upgradeCost) return say("광산 시설 확장에 필요한 에너지가 부족합니다.");
   d.score -= upgradeCost;
   d.mineDepth = mineDepth + 1;
@@ -2289,18 +2329,17 @@ function sellPet(index){
 }
 
 function getRandomPetByProbability() {
-  // S급 이상 고등급 드론들의 등장 확률을 전체적으로 하향 조정 (요청 반영)
   const r = Math.random() * 100;
   let grade = 'C';
   if (r < 80.0) grade = 'C';
   else if (r < 93.0) grade = 'B';
   else if (r < 98.2) grade = 'A';
-  else if (r < 99.50) grade = 'S';     // S급 확률 하향
-  else if (r < 99.85) grade = 'L';     // L급 확률 하향
-  else if (r < 99.95) grade = 'M';     // M급 확률 하향
-  else if (r < 99.985) grade = 'T';    // T급 확률 하향
-  else if (r < 99.997) grade = 'X';    // X급 확률 하향
-  else grade = 'Z';                    // Z급 극희귀
+  else if (r < 99.50) grade = 'S';
+  else if (r < 99.85) grade = 'L';
+  else if (r < 99.95) grade = 'M';
+  else if (r < 99.985) grade = 'T';
+  else if (r < 99.997) grade = 'X';
+  else grade = 'Z';
 
   const candidates = PETS_BY_GRADE[grade];
   return candidates[Math.floor(Math.random() * candidates.length)];
@@ -2523,6 +2562,55 @@ function sellStock(id, amount) {
   save();
 }
 
+function performClickAction() {
+  const petBonus = getPetBonus();
+  const baseMult = getBaseMult();
+  let coolerBonus = d.cooler ? 1.2 : 1.0;
+  let gemClickBonus = d.gemClick ? 1.10 : 1.0;
+  let gemRingBonus = d.gemRing ? 1.08 : 1.0;
+  let currentPower = (((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus;
+  
+  let randomGainCount = 1;
+  const clickGainBadge = $("clickGainBadge");
+  if(clickGainBadge) clickGainBadge.textContent = `클릭 보상: ${randomGainCount}개 지급`;
+
+  let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * randomGainCount;
+  
+  let gemLuckBonus = d.gemLuck ? 0.015 : 0.0;
+  const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.5) / 100) + gemLuckBonus + petBonus.luckProb;
+  if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
+  
+  d.score = Number(d.score) + Number(gain);
+
+  const coinBtnMain = $("coin");
+  if(coinBtnMain) {
+    const coinContainer = coinBtnMain.parentElement;
+    if(coinContainer) {
+      const floatText = document.createElement("div");
+      floatText.className = "click-float-left";
+      floatText.textContent = `+${fmt(gain)}`;
+      coinContainer.appendChild(floatText);
+      setTimeout(() => floatText.remove(), 800);
+    }
+  }
+
+  save();
+}
+
+function setupAutoclickLoop() {
+  if(autoclickInterval) clearInterval(autoclickInterval);
+  if(!d.autoclickPurchased || (d.autoclickLevel || 0) <= 0) return;
+
+  let speedPerSec = d.autoclickLevel * 2; // 초당 2회씩 증가
+  let intervalMs = Math.max(100, Math.floor(1000 / speedPerSec));
+
+  autoclickInterval = setInterval(() => {
+    if(d.autoclickPurchased && (d.autoclickLevel || 0) > 0) {
+      performClickAction();
+    }
+  }, intervalMs);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderPatchNotes();
   const lastChecked = localStorage.getItem("lastCheckedPatch");
@@ -2575,11 +2663,39 @@ document.addEventListener("DOMContentLoaded", () => {
   if(exploreMineBtn) exploreMineBtn.onclick = exploreMine;
   if(upgradeMineBtn) upgradeMineBtn.onclick = upgradeMine;
 
+  const buyAutoclickModuleBtn = $("buyAutoclickModuleBtn");
+  if(buyAutoclickModuleBtn) {
+    buyAutoclickModuleBtn.onclick = () => {
+      let cost = 50000;
+      if(d.score < cost) return say("오토클릭 모듈 구매에 에너지가 부족합니다! (필요: 5만)");
+      d.score -= cost;
+      d.autoclickPurchased = true;
+      d.autoclickLevel = 1;
+      playSuccessSound();
+      say("🤖 오토클릭 자율 구동 모듈 장착 완료!");
+      save();
+    };
+  }
+
+  const upgradeAutoclickBtn = $("upgradeAutoclickBtn");
+  if(upgradeAutoclickBtn) {
+    upgradeAutoclickBtn.onclick = () => {
+      if(!d.autoclickPurchased) return say("오토클릭 모듈을 먼저 구매해주세요!");
+      let cost = Math.round(15000 * Math.pow(1.5, d.autoclickLevel));
+      if(d.score < cost) return say("업그레이드에 에너지가 부족합니다!");
+      d.score -= cost;
+      d.autoclickLevel++;
+      playSuccessSound();
+      say(`⚡ 오토클릭 속도 업그레이드 완료! (Lv.${d.autoclickLevel})`);
+      save();
+    };
+  }
+
   const convertGemsBtn = $("convertGemsBtn");
   if(convertGemsBtn) {
     convertGemsBtn.onclick = () => {
-      let cost = 500000;
-      if(d.score < cost) return say("보석 제련에 필요한 에너지가 부족합니다! (필요: 50만)");
+      let cost = 350000; // 가격 인하 반영
+      if(d.score < cost) return say("보석 제련에 필요한 에너지가 부족합니다! (필요: 35만)");
       d.score -= cost;
       d.gems += 3;
       playSuccessSound();
@@ -2591,15 +2707,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertBoostBtn = $("convertBoostBtn");
   if(convertBoostBtn) {
     convertBoostBtn.onclick = () => {
-      let cost = 1200000;
-      if(d.score < cost) return say("채굴 가속에 필요한 에너지가 부족합니다! (필요: 120만)");
+      let cost = 650000; // 가격 인하 반영
+      if(d.score < cost) return say("채굴 가속에 필요한 에너지가 부족합니다! (필요: 65만)");
       d.score -= cost;
       let filterBonus = d.filter ? 1.25 : 1.0;
       let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
       let gemRingBonus = d.gemRing ? 1.08 : 1.0;
       let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
       const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
-      let bonusGain = (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 720; // 1시간치 (5초 * 720)
+      let bonusGain = (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 720;
       if(bonusGain <= 0) bonusGain = 10000;
       d.score += bonusGain;
       playSuccessSound();
@@ -2776,63 +2892,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const coinBtnMain = $("coin");
   if(coinBtnMain) {
     coinBtnMain.onclick = (e) => {
-      if(idPenaltyActive) {
-        say(`🚨 매크로/비정상 클릭 감지! ${penaltyTimerCountdown}초 동안 클릭이 제한됩니다.`);
-        return;
-      }
-
-      const nowTime = Date.now();
-      clickTimestamps.push(nowTime);
-      clickTimestamps = clickTimestamps.filter(t => nowTime - t < 1000);
-      if(clickTimestamps.length > 25) {
-        idPenaltyActive = true;
-        penaltyTimerCountdown = 10;
-        say("🚨 비정상적 초고속 연타 감지! 10초간 클릭이 제한됩니다.");
-        if(penaltyInterval) clearInterval(penaltyInterval);
-        penaltyInterval = setInterval(() => {
-          penaltyTimerCountdown--;
-          if(penaltyTimerCountdown <= 0) {
-            idPenaltyActive = false;
-            clearInterval(penaltyInterval);
-            say("✅ 클릭 제한이 해제되었습니다.");
-            render();
-          } else {
-            say(`🚨 비정상 클릭 제한 중... (${penaltyTimerCountdown}초 남음)`);
-          }
-        }, 1000);
-        render();
-        return;
-      }
-
-      const petBonus = getPetBonus();
-      const baseMult = getBaseMult();
-      let coolerBonus = d.cooler ? 1.2 : 1.0;
-      let gemClickBonus = d.gemClick ? 1.10 : 1.0;
-      let gemRingBonus = d.gemRing ? 1.08 : 1.0;
-      let currentPower = (((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus;
-      
-      let randomGainCount = 1;
-      const clickGainBadge = $("clickGainBadge");
-      if(clickGainBadge) clickGainBadge.textContent = `클릭 보상: ${randomGainCount}개 지급`;
-
-      let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * randomGainCount;
-      
-      let gemLuckBonus = d.gemLuck ? 0.015 : 0.0;
-      const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.5) / 100) + gemLuckBonus + petBonus.luckProb;
-      if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
-      
-      d.score = Number(d.score) + Number(gain);
-
-      const coinContainer = coinBtnMain.parentElement;
-      if(coinContainer) {
-        const floatText = document.createElement("div");
-        floatText.className = "click-float-left";
-        floatText.textContent = `+${fmt(gain)}`;
-        coinContainer.appendChild(floatText);
-        setTimeout(() => floatText.remove(), 800);
-      }
-
-      save();
+      performClickAction();
     };
   }
 
@@ -3149,7 +3209,6 @@ setInterval(() => {
     d.stockHistories[i].push(newP); 
     if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
 
-    // 주식 채널이 열려 있을 때만 보유 주식 변동 알람을 발생시킴 (잠금 시 알람 차단)
     let ownedQty = i === 1 ? d.stock1 : i === 2 ? d.stock2 : i === 3 ? d.stock3 : d.stock4;
     if(isChannelOpen && ownedQty > 0) {
       if(diff >= 150) {
