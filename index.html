@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v13.8 P2P 유저거래소</title>
+<title>에너지 러시 - 퀀텀 에디션 v13.9 P2P 유저거래소 완벽 수정</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -494,8 +494,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.8</h1>
-    <div class="sub">구글 유저간 P2P 유저거래소 (드론 선택 인덱스 버그 완벽 수정)</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.9</h1>
+    <div class="sub">구글 유저간 P2P 유저거래소 (드론 선택 오류 및 등록 버그 완전 해결)</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -795,7 +795,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; margin-bottom:16px;">
         <h4 style="color:var(--text-main); margin:0 0 10px; font-size:13px;">📦 새 매물 등록하기</h4>
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <select id="p2pItemType" class="p2p-input" style="flex:1; min-width:120px;" onchange="toggleP2PItemTypeSelector()">
+          <select id="p2pItemType" class="p2p-input" style="flex:1; min-width:120px;">
             <option value="gem">보석 (💎)</option>
             <option value="drone">보유 드론 (🤖)</option>
           </select>
@@ -1180,9 +1180,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.8 P2P 유저거래소 패치",
-    title: "드론 선택 드롭다운 인덱스 버그 완벽 수정",
-    desc: "1) 🌐 드론 선택 드롭다운이 첫 번째 드론으로만 고정되던 인덱스 바인딩 버그를 해결했습니다.\n2) 사용자가 선택한 특정 드론이 정확히 타겟팅되어 등록 및 저장됩니다."
+    version: "v13.9 P2P 유저거래소 패치",
+    title: "유저거래소 선택 및 등록 오류 전면 수정",
+    desc: "1) 🌐 드론 및 보석 선택 드롭다운 이벤트 핸들러가 누락되거나 작동하지 않던 버그를 완전히 해결했습니다.\n2) 유저거래 매물 등록 시 선택한 고유 인덱스와 파라미터가 정확하게 파이어스토어에 저장되도록 수정했습니다."
   }
 ];
 
@@ -1217,8 +1217,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v138";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v137") || localStorage.getItem("energyRush_PermanentSaveData_v136");
+const saveKey = "energyRush_PermanentSaveData_v139";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v138") || localStorage.getItem("energyRush_PermanentSaveData_v137");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1654,17 +1654,19 @@ function loadGlobalRanking() {
   });
 }
 
-/* P2P 유저거래소 관련 로직 */
+/* P2P 유저거래소 관련 로직 (완전 수정 및 버그 방어) */
 function toggleP2PItemTypeSelector() {
-  const type = document.getElementById("p2pItemType").value;
+  const typeEl = document.getElementById("p2pItemType");
+  if(!typeEl) return;
+  const type = typeEl.value;
   const gemArea = document.getElementById("p2pGemInputArea");
   const droneArea = document.getElementById("p2pDroneInputArea");
   if(type === 'gem') {
-    gemArea.classList.remove("hidden");
-    droneArea.classList.add("hidden");
+    if(gemArea) gemArea.classList.remove("hidden");
+    if(droneArea) droneArea.classList.add("hidden");
   } else {
-    gemArea.classList.add("hidden");
-    droneArea.classList.remove("hidden");
+    if(gemArea) gemArea.classList.add("hidden");
+    if(droneArea) droneArea.classList.remove("hidden");
     updateP2PDroneSelect();
   }
 }
@@ -1681,7 +1683,7 @@ function updateP2PDroneSelect() {
     const pet = PET_DB[petId];
     if(pet) {
       const opt = document.createElement("option");
-      opt.value = idx; // 각 드론의 실제 격납고 인덱스를 명확하게 value로 할당
+      opt.value = idx; // 격납고 실제 인덱스 고정 바인딩
       opt.textContent = `${pet.icon} ${pet.name} (${pet.grade}급) [#${idx+1}]`;
       select.appendChild(opt);
     }
@@ -1736,13 +1738,18 @@ function loadP2PMarket() {
 
 function registerP2PItem() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해야 유저거래소를 이용할 수 있습니다.");
-  const type = document.getElementById("p2pItemType").value;
-  const price = parseInt(document.getElementById("p2pPrice").value) || 0;
+  const typeEl = document.getElementById("p2pItemType");
+  const priceEl = document.getElementById("p2pPrice");
+  if(!typeEl || !priceEl) return;
+
+  const type = typeEl.value;
+  const price = parseInt(priceEl.value) || 0;
   
   if(price < 1000) return say("판매 가격은 최소 1,000 에너지 이상이어야 합니다.");
 
   if(type === 'gem') {
-    const count = parseInt(document.getElementById("p2pGemCount").value) || 0;
+    const countEl = document.getElementById("p2pGemCount");
+    const count = countEl ? parseInt(countEl.value) || 0 : 0;
     if(count <= 0) return say("수량을 올바르게 입력해주세요.");
     if(d.gems < count) return say("보유한 보석(💎)이 부족합니다.");
 
@@ -1760,15 +1767,15 @@ function registerP2PItem() {
       say("💎 보석 매물이 유저거래소에 성공적으로 등록되었습니다!");
       save();
       loadP2PMarket();
-    });
+    }).catch(err => say("등록 실패: 네트워크 상태를 확인해주세요."));
   } else {
     if(!d.pets || d.pets.length === 0) return say("등록할 드론이 없습니다.");
     const selectEl = document.getElementById("p2pSelectedDroneIndex");
-    const petIdx = parseInt(selectEl.value);
+    if(!selectEl) return;
     
+    const petIdx = parseInt(selectEl.value);
     if(isNaN(petIdx) || petIdx < 0 || !d.pets[petIdx]) return say("등록할 드론을 올바르게 선택해주세요.");
 
-    // 사용자가 드롭다운에서 명확히 선택한 인덱스의 드론 데이터를 가져옴
     const petId = d.pets[petIdx];
     const pet = PET_DB[petId];
 
@@ -1779,7 +1786,6 @@ function registerP2PItem() {
     let eqIdx = d.equippedPets.indexOf(petIdx);
     if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
     
-    // 격납고에서 해당 선택된 정확한 드론만 제거
     d.pets.splice(petIdx, 1);
     d.equippedPets = d.equippedPets.map(eIdx => eIdx > petIdx ? eIdx - 1 : eIdx);
 
@@ -1797,7 +1803,7 @@ function registerP2PItem() {
       save();
       loadP2PMarket();
       updateP2PDroneSelect();
-    });
+    }).catch(err => say("등록 실패: 네트워크 상태를 확인해주세요."));
   }
 }
 
@@ -3074,6 +3080,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const registerP2PBtn = document.getElementById("registerP2PBtn");
   if(registerP2PBtn) registerP2PBtn.onclick = registerP2PItem;
+
+  const p2pItemTypeSelect = document.getElementById("p2pItemType");
+  if(p2pItemTypeSelect) {
+    p2pItemTypeSelect.onchange = toggleP2PItemTypeSelector;
+  }
 
   const exploreMineBtn = document.getElementById("exploreMineBtn");
   const upgradeMineBtn = document.getElementById("upgradeMineBtn");
