@@ -166,7 +166,6 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 }
 .tool-btn:hover{background: rgba(245, 158, 11, 0.1); border-color: var(--accent); color: var(--accent);}
 
-/* 화면 옆에서 슬라이드 되어 나타났다 들어가는 알람 토스트 애니메이션 */
 .stock-alert-toast {
   position: fixed;
   top: 30px;
@@ -181,17 +180,9 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
   z-index: 9999;
   transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.stock-alert-toast.show {
-  right: 30px;
-}
-.stock-alert-toast.up {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  box-shadow: 0 10px 30px rgba(239,68,68,0.4);
-}
-.stock-alert-toast.down {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  box-shadow: 0 10px 30px rgba(59,130,246,0.4);
-}
+.stock-alert-toast.show { right: 30px; }
+.stock-alert-toast.up { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 10px 30px rgba(239,68,68,0.4); }
+.stock-alert-toast.down { background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 10px 30px rgba(59,130,246,0.4); }
 
 .alarm-btn {
   position: relative;
@@ -625,7 +616,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널</h3>
       
-      <!-- 주식 채널 이용/잠김 상태 표시 박스 (수동 닫기 버튼 삭제됨) -->
       <div id="stockChannelStatusBox" style="background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.3); border-radius:12px; padding:12px; margin-bottom:14px; text-align:center;">
         <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 채널 이용 가능 (남은 시간: 5분 0초)</h4>
         <p style="font-size:11px; color:var(--text-sub); margin:0;" id="channelStateDesc">5분 이용 후 자동으로 10분간 잠깁니다.</p>
@@ -637,7 +627,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">5초마다 갱신되며, 나쁜 소식은 빨간색, 좋은 소식은 하늘색으로 표시됩니다. 보유 주식 150 이상 변동 시 '띵' 소리와 함께 슬라이드 알람이 나타납니다!</p>
       
-      <!-- 주식 거래 컨테이너 (채널 잠길 시 숨김) -->
       <div id="stockTradingContainer">
         <div class="stock-grid">
           <div class="stock-card">
@@ -1093,9 +1082,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v12.8 주식 채널 수동 닫기 버튼 삭제 및 자동 순환 시스템",
-    title: "수동 닫기 버튼 제거, 5분 이용 / 10분 잠김 자동 순환 및 슬라이드 알람 유지",
-    desc: "1) 🔔 주식 알람 슬라이드 애니메이션 및 5초 주기가 유지됩니다.\n2) ⏳ 주식 채널 수동 제어 버튼이 삭제되고 5분 이용 / 10분 잠금이 완전 자동으로 작동합니다.\n3) 📢 안좋은 속보는 빨간색, 좋은 속보는 하늘색으로 표시됩니다."
+    version: "v12.9 주식 채널 5분/10분 타이머 버그 완벽 수정",
+    title: "5분 만료 후 카운트 무한 리셋 버그 해결 및 10분 잠금 정상 진입",
+    desc: "1) ⏳ 주식 채널 5분 이용 만료 시 정확히 10분 잠금 모드로 전환되도록 타임스탬프 로직이 수정되었습니다.\n2) 📈 주식 슬라이드 알람 및 5초 주기, 뉴스 속보 색상 시스템이 완벽하게 유지됩니다."
   }
 ];
 
@@ -1130,8 +1119,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v128";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v127") || localStorage.getItem("energyRush_PermanentSaveData_v126");
+const saveKey = "energyRush_PermanentSaveData_v129";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v128") || localStorage.getItem("energyRush_PermanentSaveData_v127");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1149,6 +1138,11 @@ let d = JSON.parse(savedRawData || "null") || {
  stockChannelActiveUntil: 0,
  stockChannelLockedUntil: 0
 };
+
+const nowInit = Date.now();
+if (d.stockChannelActiveUntil === 0 && d.stockChannelLockedUntil === 0) {
+  d.stockChannelActiveUntil = nowInit + (5 * 60 * 1000);
+}
 
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
@@ -1173,8 +1167,6 @@ if (d.mineDepth === undefined) d.mineDepth = 1;
 if (!d.stockSellCooldowns) d.stockSellCooldowns = {};
 if (!d.latestNews) d.latestNews = "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.";
 if (!d.newsType) d.newsType = 'good';
-if (d.stockChannelActiveUntil === undefined) d.stockChannelActiveUntil = 0;
-if (d.stockChannelLockedUntil === undefined) d.stockChannelLockedUntil = 0;
 
 if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
 if (!d.stockHistories) d.stockHistories = {
@@ -1414,9 +1406,6 @@ function updateStockUI() {
       channelTitle.textContent = `🟢 주식 채널 이용 가능 (남은 시간: ${rMin}분 ${rSec}초)`;
       channelDesc.textContent = "5분 이용 후 자동으로 10분간 잠깁니다.";
       tradingContainer.classList.remove("hidden");
-    } else {
-      d.stockChannelActiveUntil = now + (5 * 60 * 1000);
-      save();
     }
   }
 
@@ -3038,7 +3027,8 @@ setInterval(() => {
 
   const now = Date.now();
 
-  if(d.stockChannelActiveUntil > 0 && now >= d.stockChannelActiveUntil && d.stockChannelLockedUntil === 0) {
+  // 완벽하게 수정된 5분 이용 / 10분 잠금 교대 순환 로직
+  if(d.stockChannelActiveUntil > 0 && now >= d.stockChannelActiveUntil) {
     d.stockChannelActiveUntil = 0;
     d.stockChannelLockedUntil = now + (10 * 60 * 1000);
     say("⏳ 주식 채널 5분 이용 시간이 만료되어 10분간 잠깁니다.");
