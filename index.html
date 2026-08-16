@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v13.4 P2P 암시장</title>
+<title>에너지 러시 - 퀀텀 에디션 v13.5 P2P 유저거래소</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -459,7 +459,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
     <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
     <button class="tab" data-tab="stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span></button>
-    <button class="tab" data-tab="p2pPanel"><span class="tab-icon">🌐</span><span class="tab-text">P2P 암시장</span></button>
+    <button class="tab" data-tab="p2pPanel"><span class="tab-icon">🌐</span><span class="tab-text">P2P 유저거래소</span></button>
     <button class="tab" data-tab="converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소</span></button>
     <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">코어 커스텀</span></button>
     <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
@@ -494,8 +494,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.4</h1>
-    <div class="sub">구글 유저간 실시간 P2P 암시장 (거래소) 에디션</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.5</h1>
+    <div class="sub">구글 유저간 P2P 유저거래소 & 소수점 연타 감지 보안 에디션</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -604,7 +604,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="autoclickPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🖱️ 오토클릭 자율 구동 연구소 (최대 3레벨 제한)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">비정상적인 연타 시 5초간 클릭이 정지되는 방지 시스템이 가동됩니다. 에너지를 소모해 오토클릭 모듈을 구매하고 보통 속도(최대 3레벨)로 업그레이드하세요!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">비정상적인 소수점 연타 및 매크로가 감지되면 5초간 클릭이 정지되는 방지 시스템이 가동됩니다.</p>
       
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center; margin-bottom:14px;">
         <h4 style="color:var(--accent); margin:0 0 4px; font-size:14px;">오토클릭 상태: <b id="autoclickStatusDisplay" style="color:#ef4444;">미구동 (비활성)</b></h4>
@@ -784,13 +784,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- P2P 암시장 패널 -->
+    <!-- P2P 유저거래소 패널 -->
     <div id="p2pPanel" class="panel hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="color:var(--accent); margin:0; font-size:15px;">🌐 구글 유저 P2P 암시장 (거래소)</h3>
+        <h3 style="color:var(--accent); margin:0; font-size:15px;">🌐 구글 유저 실시간 P2P 유저거래소</h3>
         <button class="tool-btn" id="refreshP2PBtn">🔄 매물 새로고침</button>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">구글 로그인한 연구원들끼리 보석(💎)이나 드론(🤖)을 에너지(⚡)로 거래할 수 있는 실시간 마켓입니다!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">구글 로그인한 연구원들끼리 보석(💎)이나 드론(🤖)을 에너지(⚡)로 안전하게 등록하고 거래하세요!</p>
       
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; margin-bottom:16px;">
         <h4 style="color:var(--text-main); margin:0 0 10px; font-size:13px;">📦 새 매물 등록하기</h4>
@@ -805,7 +805,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         </div>
       </div>
 
-      <h4 style="color:var(--text-main); margin:0 0 10px; font-size:13px;">📋 실시간 등록된 암시장 매물 목록</h4>
+      <h4 style="color:var(--text-main); margin:0 0 10px; font-size:13px;">📋 실시간 등록된 유저거래 매물 목록</h4>
       <div id="p2pMarketList" style="max-height:350px; overflow-y:auto; padding-right:4px;">
         <p style="text-align:center; color:var(--text-sub); font-size:12px;">등록된 매물을 불러오는 중...</p>
       </div>
@@ -1172,9 +1172,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.4 P2P 암시장 (거래소) 패치",
-    title: "구글 유저 간 실시간 자원 및 드론 거래 시스템 도입",
-    desc: "1) 🌐 P2P 암시장 탭이 추가되어 구글 로그인 유저들끼리 보석과 드론을 안전하게 거래할 수 있습니다.\n2) 판매자가 원하는 에너지를 설정해 매물을 등록하고, 다른 유저가 즉시 구매할 수 있습니다."
+    version: "v13.5 P2P 유저거래소 패치",
+    title: "구글 유저 간 실시간 유저거래 및 보안 강화",
+    desc: "1) 🌐 P2P 유저거래소 탭을 통해 유저간 보석 및 드론의 등록, 실시간 조회, 즉시 구매, 본인 매물 회수가 완벽히 연동됩니다.\n2) 소수점 단위 또는 비정상적인 초고속 연타가 감지되면 클릭 버튼이 5초간 자동 잠기는 보안 시스템이 추가되었습니다.\n3) 파이어스토어 및 로컬 데이터 저장 시스템이 고도화되었습니다."
   }
 ];
 
@@ -1209,8 +1209,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v134";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v133") || localStorage.getItem("energyRush_PermanentSaveData_v132");
+const saveKey = "energyRush_PermanentSaveData_v135";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v134") || localStorage.getItem("energyRush_PermanentSaveData_v133");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1646,13 +1646,13 @@ function loadGlobalRanking() {
   });
 }
 
-/* P2P 암시장 관련 로직 */
+/* P2P 유저거래소 관련 로직 */
 function loadP2PMarket() {
   const container = document.getElementById("p2pMarketList");
   if(!container) return;
   db.collection('quantum_p2p_market').orderBy('createdAt', 'desc').limit(20).get().then(snapshot => {
     if(snapshot.empty) {
-      container.innerHTML = "<p style='text-align:center; color:var(--text-sub); font-size:12px;'>현재 등록된 암시장 매물이 없습니다.</p>";
+      container.innerHTML = "<p style='text-align:center; color:var(--text-sub); font-size:12px;'>현재 등록된 유저거래 매물이 없습니다.</p>";
       return;
     }
     let html = "";
@@ -1689,12 +1689,12 @@ function loadP2PMarket() {
     });
     container.innerHTML = html;
   }).catch(err => {
-    container.innerHTML = "<p style='text-align:center; color:#ef4444; font-size:12px;'>암시장 매물을 불러오지 못했습니다.</p>";
+    container.innerHTML = "<p style='text-align:center; color:#ef4444; font-size:12px;'>유저거래 매물을 불러오지 못했습니다.</p>";
   });
 }
 
 function registerP2PItem() {
-  if(!currentUser) return say("구글 로그인을 먼저 진행해야 암시장을 이용할 수 있습니다.");
+  if(!currentUser) return say("구글 로그인을 먼저 진행해야 유저거래소를 이용할 수 있습니다.");
   const type = document.getElementById("p2pItemType").value;
   const price = parseInt(document.getElementById("p2pPrice").value) || 0;
   if(price <= 0) return say("올바른 가격을 입력해주세요.");
@@ -1715,22 +1715,20 @@ function registerP2PItem() {
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
       playSuccessSound();
-      say("💎 보석 매물이 암시장에 성공적으로 등록되었습니다!");
+      say("💎 보석 매물이 유저거래소에 성공적으로 등록되었습니다!");
       save();
       loadP2PMarket();
     });
   } else {
     if(!d.pets || d.pets.length === 0) return say("등록할 드론이 없습니다.");
-    // 첫 번째 드론을 등록한다고 가정
     const petIdx = 0;
     const petId = d.pets[petIdx];
     const pet = PET_DB[petId];
 
     if(['S', 'L', 'M', 'T', 'X', 'Z'].includes(pet.grade)) {
-      if(!confirm(`⚠️ 경고: [${pet.grade}등급] ${pet.name}은(는) 초고등급 드론입니다! 정말 암시장에 등록하시겠습니까?`)) return;
+      if(!confirm(`⚠️ 경고: [${pet.grade}등급] ${pet.name}은(는) 초고등급 드론입니다! 정말 유저거래소에 등록하시겠습니까?`)) return;
     }
 
-    // 장착 중이면 해제
     let eqIdx = d.equippedPets.indexOf(petIdx);
     if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
     d.pets.splice(petIdx, 1);
@@ -1746,7 +1744,7 @@ function registerP2PItem() {
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
       playSuccessSound();
-      say(`🤖 [${pet.name}] 드론이 암시장에 성공적으로 등록되었습니다!`);
+      say(`🤖 [${pet.name}] 드론이 유저거래소에 성공적으로 등록되었습니다!`);
       save();
       loadP2PMarket();
     });
@@ -1769,7 +1767,6 @@ function buyP2PItem(docId, sellerId, price, type, count, petId) {
       d.pets.push(petId);
     }
 
-    // 판매자에게 에너지 지급 (판매자 문서가 존재할 경우 점수 업데이트)
     db.collection('quantum_users').doc(sellerId).get().then(sellerDoc => {
       if(sellerDoc.exists) {
         let sellerData = sellerDoc.data();
@@ -1784,10 +1781,9 @@ function buyP2PItem(docId, sellerId, price, type, count, petId) {
       }
     });
 
-    // 매물 삭제
     db.collection('quantum_p2p_market').doc(docId).delete().then(() => {
       playSuccessSound();
-      say("✨ 암시장 거래가 성공적으로 완료되었습니다!");
+      say("✨ 유저거래소 거래가 성공적으로 완료되었습니다!");
       save();
       loadP2PMarket();
     });
@@ -1809,7 +1805,7 @@ function cancelP2PItem(docId) {
 
     db.collection('quantum_p2p_market').doc(docId).delete().then(() => {
       playSuccessSound();
-      say("매물이 회수되었습니다.");
+      say("매물이 성공적으로 회수되었습니다.");
       save();
       loadP2PMarket();
     });
@@ -2142,7 +2138,7 @@ function render(){
 
  if(autoclickStatusDisplay) {
    if(isClickBlocked) {
-     autoclickStatusDisplay.textContent = "⚠️ 비정상 연타 감지 (5초 정지 중)";
+     autoclickStatusDisplay.textContent = "⚠️ 소수점/초고속 연타 감지 (5초 정지 중)";
      autoclickStatusDisplay.style.color = "#ef4444";
    } else if(autoclickPurchased) {
      autoclickStatusDisplay.textContent = `구동 중 (Lv.${autoclickLevel} / 최대 3Lv)`;
@@ -2890,9 +2886,22 @@ function sellStock(id, amount) {
   save();
 }
 
-function performClickAction() {
+function performClickAction(e) {
   if(isClickBlocked) {
-    say("⚠️ 비정상적인 초고속 연타 감지! 5초간 클릭이 정지됩니다.");
+    say("⚠️ 비정상적인 소수점/초고속 연타 감지! 5초간 클릭이 정지됩니다.");
+    return;
+  }
+
+  // 소수점 단위 클릭 감지 (예: 마우스 이벤트가 정수가 아니거나 가상 조작인 경우 / 또는 1초 내 과도한 연타)
+  if (e && (e.detail % 1 !== 0 || (e.clientX && e.clientX % 1 !== 0))) {
+    isClickBlocked = true;
+    playFailureSound();
+    say("⚠️ 소수점 좌표 또는 비정상 입력 감지! 5초간 클릭이 잠깁니다.");
+    if(clickBlockTimer) clearTimeout(clickBlockTimer);
+    clickBlockTimer = setTimeout(() => {
+      isClickBlocked = false;
+      say("🛡️ 클릭 잠금이 해제되었습니다.");
+    }, 5000);
     return;
   }
 
@@ -2902,7 +2911,7 @@ function performClickAction() {
   if(clickTimestamps.length > 18) {
     isClickBlocked = true;
     playFailureSound();
-    say("⚠️ 비정상 클릭 속도 감지! 오토클릭 방지 시스템에 의해 5초간 클릭이 차단됩니다.");
+    say("⚠️ 비정상 클릭 속도 감지! 5초간 클릭이 차단됩니다.");
     if(clickBlockTimer) clearTimeout(clickBlockTimer);
     clickBlockTimer = setTimeout(() => {
       isClickBlocked = false;
@@ -2955,7 +2964,7 @@ function setupAutoclickLoop() {
 
   autoclickInterval = setInterval(() => {
     if(d.autoclickPurchased && (d.autoclickLevel || 0) > 0) {
-      performClickAction();
+      performClickAction(null);
     }
   }, intervalMs);
 }
@@ -3251,7 +3260,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const coinBtnMain = document.getElementById("coin");
   if(coinBtnMain) {
     coinBtnMain.onclick = (e) => {
-      performClickAction();
+      performClickAction(e);
     };
   }
 
