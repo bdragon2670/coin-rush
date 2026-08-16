@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v13.2</title>
+<title>에너지 러시 - 퀀텀 에디션 v13.3</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -474,7 +474,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   <div class="game">
     <div class="top-tools">
       <div class="user-profile" id="userProfileArea">
-        <img src="https://via.placeholder.com/32/7f8c8d/ffffff?text=?" id="userAvatar" class="user-avatar">
         <span class="user-name" id="userName">연구원 (미로그인)</span>
       </div>
       <div class="top-right-btns" style="position:relative;">
@@ -494,7 +493,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.2</h1>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.3</h1>
     <div class="sub">초고품격 퀀텀 자원 채굴 & 30일 출석체크 에디션</div>
 
     <div class="stats">
@@ -1001,7 +1000,7 @@ let bgmInterval = null;
 let isBgmPlaying = false;
 
 function toggleBGM() {
-  const btn = $("bgmToggleBtn");
+  const btn = document.getElementById("bgmToggleBtn");
   if(!isBgmPlaying) {
     startBGM();
     isBgmPlaying = true;
@@ -1145,14 +1144,14 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.2 사용자 맞춤 대보완 패치",
-    title: "비정상 클릭 5초 정지, 광산 레벨업 확률 증가, 3일/30일 출석 개편",
-    desc: "1) 🖱️ 비정상적인 초고속 연타 감지 시 5초간 클릭이 정지되는 방지 시스템이 도입되었습니다.\n2) ⛏️ 광산 시설 레벨이 오를수록 발굴 확률이 증가하도록 밸런스가 역전되고 비용이 인하되었습니다.\n3) 🤖 오토클릭 모듈 업그레이드가 최대 3레벨로 제한되고 보통 속도로 조정되었습니다.\n4) 📅 일일 지원금이 삭제되고 30일 연속 출석체크(날마다 보상 상향)가 신설되었습니다."
+    version: "v13.3 오류 수정 및 안정화 패치",
+    title: "구문 오류 수정 및 모든 상호작용 정상화",
+    desc: "1) 🖱️ 버튼 및 탭 클릭 등 전체 상호작용을 막던 구문 오류(SyntaxError)가 완전히 해결되었습니다.\n2) 🤖 오토클릭 모듈 업그레이드가 최대 3레벨로 제한되고 보통 속도로 정상 작동합니다.\n3) ⛏️ 광산 레벨업 시 발굴 확률 상승 밸런스가 완벽하게 반영되었습니다."
   }
 ];
 
 function renderPatchNotes() {
-  const container = $("patchNoteContent");
+  const container = document.getElementById("patchNoteContent");
   if(!container) return;
   container.innerHTML = "";
   patchNotes.forEach(note => {
@@ -1182,8 +1181,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v132";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v131") || localStorage.getItem("energyRush_PermanentSaveData_v130");
+const saveKey = "energyRush_PermanentSaveData_v133";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v132") || localStorage.getItem("energyRush_PermanentSaveData_v131");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1345,20 +1344,17 @@ const COLOR_GRADIENTS = {
  black: 'linear-gradient(135deg, #374151, #111827)'
 };
 
-const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
-
 let autoclickInterval = null;
 
-// 비정상 클릭 감지용 변수
 let clickTimestamps = [];
 let isClickBlocked = false;
 let clickBlockTimer = null;
 
 function showStockAlertToast(msg, isUp = true) {
   playAlertDingSound();
-  const container = $("stockAlertContainer");
+  const container = document.getElementById("stockAlertContainer");
   if(!container) return;
 
   const toast = document.createElement("div");
@@ -1377,7 +1373,7 @@ function showStockAlertToast(msg, isUp = true) {
 }
 
 function drawStockChart(canvasId, historyData) {
-  const canvas = $(canvasId);
+  const canvas = document.getElementById(canvasId);
   if(!canvas) return;
   const ctx = canvas.getContext("2d");
   const parentWidth = canvas.parentElement ? canvas.parentElement.clientWidth - 28 : 200;
@@ -1409,21 +1405,21 @@ function drawStockChart(canvasId, historyData) {
 }
 
 function updateStockUI() {
-  if($("stockPrice1")) $("stockPrice1").textContent = fmt(d.stockPrices[1]);
-  if($("stockPrice2")) $("stockPrice2").textContent = fmt(d.stockPrices[2]);
-  if($("stockPrice3")) $("stockPrice3").textContent = fmt(d.stockPrices[3]);
-  if($("stockPrice4")) $("stockPrice4").textContent = fmt(d.stockPrices[4]);
+  if(document.getElementById("stockPrice1")) document.getElementById("stockPrice1").textContent = fmt(d.stockPrices[1]);
+  if(document.getElementById("stockPrice2")) document.getElementById("stockPrice2").textContent = fmt(d.stockPrices[2]);
+  if(document.getElementById("stockPrice3")) document.getElementById("stockPrice3").textContent = fmt(d.stockPrices[3]);
+  if(document.getElementById("stockPrice4")) document.getElementById("stockPrice4").textContent = fmt(d.stockPrices[4]);
 
-  if($("unlockCost2")) $("unlockCost2").textContent = fmt(75000);
-  if($("unlockCost3")) $("unlockCost3").textContent = fmt(375000);
-  if($("unlockCost4")) $("unlockCost4").textContent = fmt(1500000);
+  if(document.getElementById("unlockCost2")) document.getElementById("unlockCost2").textContent = fmt(75000);
+  if(document.getElementById("unlockCost3")) document.getElementById("unlockCost3").textContent = fmt(375000);
+  if(document.getElementById("unlockCost4")) document.getElementById("unlockCost4").textContent = fmt(1500000);
 
-  if($("stockOwned1")) $("stockOwned1").textContent = d.stock1;
-  if($("stockOwned2")) $("stockOwned2").textContent = d.stock2;
-  if($("stockOwned3")) $("stockOwned3").textContent = d.stock3;
-  if($("stockOwned4")) $("stockOwned4").textContent = d.stock4;
+  if(document.getElementById("stockOwned1")) document.getElementById("stockOwned1").textContent = d.stock1;
+  if(document.getElementById("stockOwned2")) document.getElementById("stockOwned2").textContent = d.stock2;
+  if(document.getElementById("stockOwned3")) document.getElementById("stockOwned3").textContent = d.stock3;
+  if(document.getElementById("stockOwned4")) document.getElementById("stockOwned4").textContent = d.stock4;
 
-  const newsEl = $("newsTickerText");
+  const newsEl = document.getElementById("newsTickerText");
   if(newsEl) {
     newsEl.textContent = d.latestNews;
     newsEl.className = "news-ticker-content " + (d.newsType === 'bad' ? 'news-bad' : 'news-good');
@@ -1431,7 +1427,7 @@ function updateStockUI() {
 
   const now = Date.now();
   for(let i = 1; i <= 4; i++) {
-    const timerEl = $(`stockTimer${i}`);
+    const timerEl = document.getElementById(`stockTimer${i}`);
     const sellTime = d.stockSellCooldowns[i] || 0;
     const diff = sellTime - now;
     if(diff > 0) {
@@ -1443,9 +1439,9 @@ function updateStockUI() {
     }
   }
 
-  const lock2 = $("stockLock2"), content2 = $("stockContent2");
-  const lock3 = $("stockLock3"), content3 = $("stockContent3");
-  const lock4 = $("stockLock4"), content4 = $("stockContent4");
+  const lock2 = document.getElementById("stockLock2"), content2 = document.getElementById("stockContent2");
+  const lock3 = document.getElementById("stockLock3"), content3 = document.getElementById("stockContent3");
+  const lock4 = document.getElementById("stockLock4"), content4 = document.getElementById("stockContent4");
 
   if(lock2 && content2) {
     lock2.classList.toggle("hidden", d.stockUnlocked2);
@@ -1460,9 +1456,9 @@ function updateStockUI() {
     content4.classList.toggle("hidden", !d.stockUnlocked4);
   }
 
-  const tradingContainer = $("stockTradingContainer");
-  const channelTitle = $("channelStateTitle");
-  const channelDesc = $("channelStateDesc");
+  const tradingContainer = document.getElementById("stockTradingContainer");
+  const channelTitle = document.getElementById("channelStateTitle");
+  const channelDesc = document.getElementById("channelStateDesc");
 
   if(tradingContainer && channelTitle && channelDesc) {
     if(d.stockChannelLockedUntil > now) {
@@ -1587,7 +1583,7 @@ function loadFromCloud() {
 }
 
 function loadGlobalRanking() {
-  const container = $("rankingListContainer");
+  const container = document.getElementById("rankingListContainer");
   if(!container) return;
   db.collection('quantum_users').orderBy('score', 'desc').limit(10).get().then(snapshot => {
     if(snapshot.empty) {
@@ -1650,8 +1646,8 @@ function handleCredentialResponse(response) {
 }
 
 function updateUserUI() {
-  const userAvatar = $("userAvatar");
-  const userName = $("userName");
+  const userAvatar = document.getElementById("userAvatar");
+  const userName = document.getElementById("userName");
   if (currentUser) {
     if(userAvatar) userAvatar.src = currentUser.picture;
     if(userName) userName.textContent = currentUser.name;
@@ -1737,7 +1733,7 @@ function save(){
 
 function fmt(n){return Math.floor(n).toLocaleString()}
 function say(t){
-  const msg = $("message");
+  const msg = document.getElementById("message");
   if(!msg) return;
   msg.textContent=t;
   clearTimeout(msgTimer);
@@ -1745,8 +1741,8 @@ function say(t){
 }
 
 function triggerLuckEffect(amount) {
-  const coinBtn = $("coin");
-  const mainArea = $("mainArea");
+  const coinBtn = document.getElementById("coin");
+  const mainArea = document.getElementById("mainArea");
   if(!coinBtn || !mainArea) return;
   coinBtn.classList.remove("luck-anim");
   void coinBtn.offsetWidth;
@@ -1827,9 +1823,9 @@ const ATTEND_REWARDS = [
 ];
 
 function renderAttendanceUI() {
-  const container = $("attendanceGridContainer");
-  const daysDisplay = $("attendDaysDisplay");
-  const todayBtn = $("todayAttendBtn");
+  const container = document.getElementById("attendanceGridContainer");
+  const daysDisplay = document.getElementById("attendDaysDisplay");
+  const todayBtn = document.getElementById("todayAttendBtn");
   if(!container) return;
 
   container.innerHTML = "";
@@ -1844,7 +1840,7 @@ function renderAttendanceUI() {
       todayBtn.textContent = "✅ 오늘 출석 완료 (내일 다시 방문)";
       todayBtn.disabled = true;
     } else {
-      todayBtn.textContent = `🎁 ${currentDays + 1일차 출석체크 보상 받기}`;
+      todayBtn.textContent = `🎁 ${currentDays + 1}일차 출석체크 보상 받기`;
       todayBtn.disabled = currentDays >= 30;
     }
   }
@@ -1903,49 +1899,48 @@ function render(){
  let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
  let totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
- if($("score")) $("score").textContent=fmt(d.score); 
- if($("power")) $("power").textContent=fmt(totalPower);
- if($("cps")) $("cps").textContent=fmt(totalCps); 
- if($("gemCount")) $("gemCount").textContent=fmt(d.gems);
- if($("powerLv")) $("powerLv").textContent="Lv."+d.power; 
- if($("autoLv")) $("autoLv").textContent="Lv."+d.cps;
- if($("rp")) $("rp").textContent=fmt(d.rp);
- if($("permRpDisplay")) $("permRpDisplay").textContent=fmt(d.rp);
+ if(document.getElementById("score")) document.getElementById("score").textContent=fmt(d.score); 
+ if(document.getElementById("power")) document.getElementById("power").textContent=fmt(totalPower);
+ if(document.getElementById("cps")) document.getElementById("cps").textContent=fmt(totalCps); 
+ if(document.getElementById("gemCount")) document.getElementById("gemCount").textContent=fmt(d.gems);
+ if(document.getElementById("powerLv")) document.getElementById("powerLv").textContent="Lv."+d.power; 
+ if(document.getElementById("autoLv")) document.getElementById("autoLv").textContent="Lv."+d.cps;
+ if(document.getElementById("rp")) document.getElementById("rp").textContent=fmt(d.rp);
+ if(document.getElementById("permRpDisplay")) document.getElementById("permRpDisplay").textContent=fmt(d.rp);
 
- if($("permPowerLv")) $("permPowerLv").textContent = `+${d.permPower || 0}`;
- if($("permCpsLv")) $("permCpsLv").textContent = `+${d.permCps || 0}`;
- if($("permLuckLv")) $("permLuckLv").textContent = `+${(d.permLuck || 0) * 0.5}%`;
- if($("permGemLv")) $("permGemLv").textContent = `+${(d.permGem || 0) * 5}%`;
+ if(document.getElementById("permPowerLv")) document.getElementById("permPowerLv").textContent = `+${d.permPower || 0}`;
+ if(document.getElementById("permCpsLv")) document.getElementById("permCpsLv").textContent = `+${d.permCps || 0}`;
+ if(document.getElementById("permLuckLv")) document.getElementById("permLuckLv").textContent = `+${(d.permLuck || 0) * 0.5}%`;
+ if(document.getElementById("permGemLv")) document.getElementById("permGemLv").textContent = `+${(d.permGem || 0) * 5}%`;
 
  const powerCost = 1 + Math.floor((d.permPower || 0) / 4);
  const cpsCost = 1 + Math.floor((d.permCps || 0) / 8);
  const luckCost = 1 + Math.floor((d.permLuck || 0) / 2);
  const gemCost = 2 + Math.floor((d.permGem || 0) / 2);
- if($("costPermPower")) $("costPermPower").textContent = powerCost;
- if($("costPermCps")) $("costPermCps").textContent = cpsCost;
- if($("costPermLuck")) $("costPermLuck").textContent = luckCost;
- if($("costPermGem")) $("costPermGem").textContent = gemCost;
+ if(document.getElementById("costPermPower")) document.getElementById("costPermPower").textContent = powerCost;
+ if(document.getElementById("costPermCps")) document.getElementById("costPermCps").textContent = cpsCost;
+ if(document.getElementById("costPermLuck")) document.getElementById("costPermLuck").textContent = luckCost;
+ if(document.getElementById("costPermGem")) document.getElementById("costPermGem").textContent = gemCost;
 
  const mineDepth = d.mineDepth || 1;
  const mineCost = Math.max(100, Math.round(300 * Math.pow(1.3, mineDepth - 1)));
  const mineUpgradeCost = Math.max(500, Math.round(1500 * Math.pow(1.4, mineDepth - 1)));
- // 광산 레벨을 올릴수록 확률 업 (1레벨 25% -> 레벨당 +2% 증가, 최대 85%)
  const mineProb = Math.min(85, Math.round(23 + (mineDepth * 2))); 
 
- if($("mineDepthDisplay")) $("mineDepthDisplay").textContent = `${mineDepth}층 광산`;
- if($("mineCostDisplay")) $("mineCostDisplay").textContent = fmt(mineCost);
- if($("mineProbDisplay")) $("mineProbDisplay").textContent = `${mineProb}%`;
- if($("mineUpgradeCost")) $("mineUpgradeCost").textContent = fmt(mineUpgradeCost);
+ if(document.getElementById("mineDepthDisplay")) document.getElementById("mineDepthDisplay").textContent = `${mineDepth}층 광산`;
+ if(document.getElementById("mineCostDisplay")) document.getElementById("mineCostDisplay").textContent = fmt(mineCost);
+ if(document.getElementById("mineProbDisplay")) document.getElementById("mineProbDisplay").textContent = `${mineProb}%`;
+ if(document.getElementById("mineUpgradeCost")) document.getElementById("mineUpgradeCost").textContent = fmt(mineUpgradeCost);
 
  const autoclickPurchased = d.autoclickPurchased || false;
  const autoclickLevel = d.autoclickLevel || 0;
- const autoclickSpeed = autoclickLevel * 3; // 보통 속도 조정
+ const autoclickSpeed = autoclickLevel * 3; 
  const autoclickUpgradeCost = Math.round(10000 * Math.pow(1.5, autoclickLevel));
 
- const autoclickStatusDisplay = $("autoclickStatusDisplay");
- const autoclickSpeedDisplay = $("autoclickSpeedDisplay");
- const buyAutoclickModuleBtn = $("buyAutoclickModuleBtn");
- const upgradeAutoclickBtn = $("upgradeAutoclickBtn");
+ const autoclickStatusDisplay = document.getElementById("autoclickStatusDisplay");
+ const autoclickSpeedDisplay = document.getElementById("autoclickSpeedDisplay");
+ const buyAutoclickModuleBtn = document.getElementById("buyAutoclickModuleBtn");
+ const upgradeAutoclickBtn = document.getElementById("upgradeAutoclickBtn");
 
  if(autoclickStatusDisplay) {
    if(isClickBlocked) {
@@ -1978,17 +1973,17 @@ function render(){
  const extraProb = (weapon ? weapon.bonusProb : 0);
  const extraRew = (weapon ? weapon.bonusReward : 1.0);
 
- if($("huntProb1")) $("huntProb1").textContent = `(적용 확률: ${Math.min(90, Math.round((0.30 + extraProb)*100))}%)`;
- if($("huntProb2")) $("huntProb2").textContent = `(적용 확률: ${Math.min(85, Math.round((0.15 + extraProb)*100))}%)`;
- if($("huntProb3")) $("huntProb3").textContent = `(적용 확률: ${Math.min(80, Math.round((0.05 + extraProb)*100))}%)`;
+ if(document.getElementById("huntProb1")) document.getElementById("huntProb1").textContent = `(적용 확률: ${Math.min(90, Math.round((0.30 + extraProb)*100))}%)`;
+ if(document.getElementById("huntProb2")) document.getElementById("huntProb2").textContent = `(적용 확률: ${Math.min(85, Math.round((0.15 + extraProb)*100))}%)`;
+ if(document.getElementById("huntProb3")) document.getElementById("huntProb3").textContent = `(적용 확률: ${Math.min(80, Math.round((0.05 + extraProb)*100))}%)`;
 
- if($("huntReward1")) $("huntReward1").textContent = fmt(Math.round(4500 * extraRew));
- if($("huntReward2")) $("huntReward2").textContent = fmt(Math.round(25000 * extraRew));
- if($("huntReward3")) $("huntReward3").textContent = fmt(Math.round(150000 * extraRew));
+ if(document.getElementById("huntReward1")) document.getElementById("huntReward1").textContent = fmt(Math.round(4500 * extraRew));
+ if(document.getElementById("huntReward2")) document.getElementById("huntReward2").textContent = fmt(Math.round(25000 * extraRew));
+ if(document.getElementById("huntReward3")) document.getElementById("huntReward3").textContent = fmt(Math.round(150000 * extraRew));
 
  renderWeaponShop();
 
- const coinBtn = $("coin");
+ const coinBtn = document.getElementById("coin");
  if(coinBtn) {
    coinBtn.style.filter = "none";
    coinBtn.style.cursor = "pointer";
@@ -2011,7 +2006,7 @@ function render(){
    document.body.style.backgroundImage = "none";
  }
 
- const autoBtn = $("autoToggleBtn");
+ const autoBtn = document.getElementById("autoToggleBtn");
  if(autoBtn) {
    autoBtn.textContent = d.autoEnabled ? "ON" : "OFF";
    autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
@@ -2019,13 +2014,13 @@ function render(){
  }
  
  let req = Math.max(500000, 1000000 * Math.pow(2.0, d.rebirth)); 
- if($("req")) $("req").textContent = fmt(req);
- const rebirthBtnEl = $("rebirthBtn");
+ if(document.getElementById("req")) document.getElementById("req").textContent = fmt(req);
+ const rebirthBtnEl = document.getElementById("rebirthBtn");
  if(rebirthBtnEl) rebirthBtnEl.disabled = d.score < req;
  
- if($("powerBtn")) $("powerBtn").textContent = fmt(Math.round(80 * Math.floor(Math.pow(d.power, 1.35)))) + " 에너지";
+ if(document.getElementById("powerBtn")) document.getElementById("powerBtn").textContent = fmt(Math.round(80 * Math.floor(Math.pow(d.power, 1.35)))) + " 에너지";
 
- const autoUpgradeBtn = $("autoBtn");
+ const autoUpgradeBtn = document.getElementById("autoBtn");
  if(autoUpgradeBtn) {
    if(d.autoPurchased) {
      autoUpgradeBtn.textContent = "보유 완료";
@@ -2040,9 +2035,9 @@ function render(){
  const box1Cost = 2500 + (box1Count * 300);
  const box5Cost = box1Cost * 5;
  const box10Cost = box1Cost * 10;
- if($("costBox1")) $("costBox1").textContent = fmt(box1Cost);
- if($("costBox5")) $("costBox5").textContent = fmt(box5Cost);
- if($("costBox10")) $("costBox10").textContent = fmt(box10Cost);
+ if(document.getElementById("costBox1")) document.getElementById("costBox1").textContent = fmt(box1Cost);
+ if(document.getElementById("costBox5")) document.getElementById("costBox5").textContent = fmt(box5Cost);
+ if(document.getElementById("costBox10")) document.getElementById("costBox10").textContent = fmt(box10Cost);
 
  const luckBtn = document.querySelector('[data-item="luck"]');
  const coreBtn = document.querySelector('[data-item="core"]');
@@ -2082,7 +2077,7 @@ function render(){
 }
 
 function renderWeaponShop() {
-  const container = $("weaponShopGrid");
+  const container = document.getElementById("weaponShopGrid");
   if(!container) return;
   container.innerHTML = "";
   WEAPONS_DB.forEach(w => {
@@ -2128,7 +2123,7 @@ function equipWeapon(id) {
 function exploreMine() {
   const mineDepth = d.mineDepth || 1;
   const cost = Math.max(100, Math.round(300 * Math.pow(1.3, mineDepth - 1)));
-  const prob = Math.min(85, Math.round(23 + (mineDepth * 2))); // 레벨업 할수록 확률 업
+  const prob = Math.min(85, Math.round(23 + (mineDepth * 2)));
 
   if(d.score < cost) return say("광산 탐사 비용 에너지가 부족합니다.");
   d.score -= cost;
@@ -2169,8 +2164,8 @@ function updateCustomUI(){
 }
 
 function renderEncyclopedia() {
-  const container = $("encyclopediaList");
-  const progressBar = $("encyclopediaProgressBar");
+  const container = document.getElementById("encyclopediaList");
+  const progressBar = document.getElementById("encyclopediaProgressBar");
   if(!container) return;
   container.innerHTML = "";
   if(!d.discoveredPets) d.discoveredPets = [];
@@ -2311,7 +2306,7 @@ function performMergeAll() {
 }
 
 function renderPetList(){
-  const container = $("petList");
+  const container = document.getElementById("petList");
   if(!container) return;
   container.innerHTML = "";
   if(!d.pets || d.pets.length === 0){
@@ -2501,8 +2496,8 @@ function startBoxOpeningInteraction(count = 1){
   `;
   document.body.appendChild(overlay);
 
-  const boxEl = $("interactiveBox");
-  const countDisplay = $("clickCountDisplay");
+  const boxEl = document.getElementById("interactiveBox");
+  const countDisplay = document.getElementById("clickCountDisplay");
 
   boxEl.onclick = () => {
     clicksLeft--;
@@ -2572,7 +2567,7 @@ function startMultiBoxOpeningInteraction(count){
   window.multiObtainedPets = obtainedPets;
 
   window.openSingleMultiBox = (idx, petId) => {
-    const card = $(`boxCard_${idx}`);
+    const card = document.getElementById(`boxCard_${idx}`);
     if(!card || card.classList.contains("opened")) return;
     card.classList.add("opened");
     playSuccessSound();
@@ -2590,18 +2585,18 @@ function startMultiBoxOpeningInteraction(count){
 
     window.openedBoxesCount++;
     if(window.openedBoxesCount >= window.totalBoxesCount) {
-      const closeBtn = $("closeBoxesModalBtn");
+      const closeBtn = document.getElementById("closeBoxesModalBtn");
       if(closeBtn) closeBtn.disabled = false;
-      const openAllBtn = $("openAllBoxesBtn");
+      const openAllBtn = document.getElementById("openAllBoxesBtn");
       if(openAllBtn) openAllBtn.disabled = true;
     }
   };
 
-  const openAllBtn = $("openAllBoxesBtn");
+  const openAllBtn = document.getElementById("openAllBoxesBtn");
   if(openAllBtn) {
     openAllBtn.onclick = () => {
       window.multiObtainedPets.forEach((pId, idx) => {
-        const card = $(`boxCard_${idx}`);
+        const card = document.getElementById(`boxCard_${idx}`);
         if(card && !card.classList.contains("opened")) {
           card.classList.add("opened");
           const pet = PET_DB[pId];
@@ -2618,12 +2613,12 @@ function startMultiBoxOpeningInteraction(count){
       window.openedBoxesCount = window.totalBoxesCount;
       playSuccessSound();
       if(openAllBtn) openAllBtn.disabled = true;
-      const closeBtn = $("closeBoxesModalBtn");
+      const closeBtn = document.getElementById("closeBoxesModalBtn");
       if(closeBtn) closeBtn.disabled = false;
     };
   }
 
-  const closeBoxesBtn = $("closeBoxesModalBtn");
+  const closeBoxesBtn = document.getElementById("closeBoxesModalBtn");
   if(closeBoxesBtn) {
     closeBoxesBtn.onclick = () => {
       window.multiObtainedPets.forEach(pId => d.pets.push(pId));
@@ -2653,7 +2648,7 @@ function buyStock(id, amount) {
     qty = Math.floor(d.score / price);
     if(qty <= 0) return say("에너지가 부족합니다.");
   } else {
-    const inputEl = $(`stockInput${id}`);
+    const inputEl = document.getElementById(`stockInput${id}`);
     qty = amount === 'custom' ? (inputEl ? parseInt(inputEl.value) || 1 : 1) : amount;
     if(qty <= 0) return say("올바른 수량을 입력해주세요.");
     if(d.score < price * qty) return say("에너지가 부족합니다.");
@@ -2680,7 +2675,7 @@ function sellStock(id, amount) {
     qty = owned;
     if(qty <= 0) return say("보유한 주식이 없습니다.");
   } else {
-    const inputEl = $(`stockInput${id}`);
+    const inputEl = document.getElementById(`stockInput${id}`);
     qty = amount === 'custom' ? (inputEl ? parseInt(inputEl.value) || 1 : 1) : amount;
     if(qty <= 0) return say("올바른 수량을 입력해주세요.");
     if(owned < qty) return say("보유 주식이 부족합니다.");
@@ -2703,7 +2698,6 @@ function performClickAction() {
     return;
   }
 
-  // 비정상 클릭 감지 로직 (최근 1초 내 18회 이상 클릭 시 5초 차단)
   const now = Date.now();
   clickTimestamps.push(now);
   clickTimestamps = clickTimestamps.filter(t => now - t < 1000);
@@ -2728,7 +2722,7 @@ function performClickAction() {
   let currentPower = (((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus;
   
   let randomGainCount = 1;
-  const clickGainBadge = $("clickGainBadge");
+  const clickGainBadge = document.getElementById("clickGainBadge");
   if(clickGainBadge) clickGainBadge.textContent = `클릭 보상: ${randomGainCount}개 지급`;
 
   let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * randomGainCount;
@@ -2739,7 +2733,7 @@ function performClickAction() {
   
   d.score = Number(d.score) + Number(gain);
 
-  const coinBtnMain = $("coin");
+  const coinBtnMain = document.getElementById("coin");
   if(coinBtnMain) {
     const coinContainer = coinBtnMain.parentElement;
     if(coinContainer) {
@@ -2758,7 +2752,7 @@ function setupAutoclickLoop() {
   if(autoclickInterval) clearInterval(autoclickInterval);
   if(!d.autoclickPurchased || (d.autoclickLevel || 0) <= 0) return;
 
-  let speedPerSec = d.autoclickLevel * 3; // 보통 속도 조정 (레벨당 3회, 최대 9회/초)
+  let speedPerSec = d.autoclickLevel * 3; 
   let intervalMs = Math.max(100, Math.floor(1000 / speedPerSec));
 
   autoclickInterval = setInterval(() => {
@@ -2771,18 +2765,18 @@ function setupAutoclickLoop() {
 document.addEventListener("DOMContentLoaded", () => {
   renderPatchNotes();
   const lastChecked = localStorage.getItem("lastCheckedPatch");
-  const alarmBadge = $("alarmBadge");
+  const alarmBadge = document.getElementById("alarmBadge");
   if(alarmBadge && lastChecked === patchNotes[0].version) alarmBadge.classList.remove("active");
   checkAndDiscoverPets();
   updateUserUI();
   render();
 
-  const bgmToggle = $("bgmToggleBtn");
+  const bgmToggle = document.getElementById("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
 
-  const openBtn = $("openPatchNoteBtn");
-  const closeBtn = $("closePatchNoteBtn");
-  const patchModal = $("patchModal");
+  const openBtn = document.getElementById("openPatchNoteBtn");
+  const closeBtn = document.getElementById("closePatchNoteBtn");
+  const patchModal = document.getElementById("patchModal");
   if(openBtn) {
     openBtn.onclick = () => {
       if(patchModal) patchModal.classList.remove("hidden");
@@ -2794,7 +2788,7 @@ document.addEventListener("DOMContentLoaded", () => {
     closeBtn.onclick = () => { if(patchModal) patchModal.classList.add("hidden"); };
   }
 
-  const downloadBtn = $("downloadGameBtn");
+  const downloadBtn = document.getElementById("downloadGameBtn");
   if(downloadBtn) {
     downloadBtn.onclick = () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
@@ -2806,24 +2800,24 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const cloudSaveBtn = $("cloudSaveBtn");
+  const cloudSaveBtn = document.getElementById("cloudSaveBtn");
   if(cloudSaveBtn) cloudSaveBtn.onclick = saveToCloud;
 
-  const cloudLoadBtn = $("cloudLoadBtn");
+  const cloudLoadBtn = document.getElementById("cloudLoadBtn");
   if(cloudLoadBtn) cloudLoadBtn.onclick = loadFromCloud;
 
-  const refreshRankingBtn = $("refreshRankingBtn");
+  const refreshRankingBtn = document.getElementById("refreshRankingBtn");
   if(refreshRankingBtn) refreshRankingBtn.onclick = loadGlobalRanking;
 
-  const exploreMineBtn = $("exploreMineBtn");
-  const upgradeMineBtn = $("upgradeMineBtn");
+  const exploreMineBtn = document.getElementById("exploreMineBtn");
+  const upgradeMineBtn = document.getElementById("upgradeMineBtn");
   if(exploreMineBtn) exploreMineBtn.onclick = exploreMine;
   if(upgradeMineBtn) upgradeMineBtn.onclick = upgradeMine;
 
-  const todayAttendBtn = $("todayAttendBtn");
+  const todayAttendBtn = document.getElementById("todayAttendBtn");
   if(todayAttendBtn) todayAttendBtn.onclick = claimTodayAttendance;
 
-  const buyAutoclickModuleBtn = $("buyAutoclickModuleBtn");
+  const buyAutoclickModuleBtn = document.getElementById("buyAutoclickModuleBtn");
   if(buyAutoclickModuleBtn) {
     buyAutoclickModuleBtn.onclick = () => {
       let cost = 50000;
@@ -2837,7 +2831,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const upgradeAutoclickBtn = $("upgradeAutoclickBtn");
+  const upgradeAutoclickBtn = document.getElementById("upgradeAutoclickBtn");
   if(upgradeAutoclickBtn) {
     upgradeAutoclickBtn.onclick = () => {
       if(!d.autoclickPurchased) return say("오토클릭 모듈을 먼저 구매해주세요!");
@@ -2852,7 +2846,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const convertGemsBtn = $("convertGemsBtn");
+  const convertGemsBtn = document.getElementById("convertGemsBtn");
   if(convertGemsBtn) {
     convertGemsBtn.onclick = () => {
       let cost = 350000;
@@ -2865,7 +2859,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const convertBoostBtn = $("convertBoostBtn");
+  const convertBoostBtn = document.getElementById("convertBoostBtn");
   if(convertBoostBtn) {
     convertBoostBtn.onclick = () => {
       let cost = 650000;
@@ -2885,35 +2879,35 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const unlockStock2Btn = $("unlockStock2Btn");
-  const unlockStock3Btn = $("unlockStock3Btn");
-  const unlockStock4Btn = $("unlockStock4Btn");
+  const unlockStock2Btn = document.getElementById("unlockStock2Btn");
+  const unlockStock3Btn = document.getElementById("unlockStock3Btn");
+  const unlockStock4Btn = document.getElementById("unlockStock4Btn");
   if(unlockStock2Btn) unlockStock2Btn.onclick = () => unlockStock(2);
   if(unlockStock3Btn) unlockStock3Btn.onclick = () => unlockStock(3);
   if(unlockStock4Btn) unlockStock4Btn.onclick = () => unlockStock(4);
 
-  const claimAllEncyclopediaBtn = $("claimAllEncyclopediaBtn");
+  const claimAllEncyclopediaBtn = document.getElementById("claimAllEncyclopediaBtn");
   if(claimAllEncyclopediaBtn) claimAllEncyclopediaBtn.onclick = claimAllEncyclopediaRewards;
 
-  const huntBtn1 = $("huntBtn1");
-  const huntBtn2 = $("huntBtn2");
-  const huntBtn3 = $("huntBtn3");
+  const huntBtn1 = document.getElementById("huntBtn1");
+  const huntBtn2 = document.getElementById("huntBtn2");
+  const huntBtn3 = document.getElementById("huntBtn3");
   if(huntBtn1) huntBtn1.onclick = () => huntMonster(1);
   if(huntBtn2) huntBtn2.onclick = () => huntMonster(2);
   if(huntBtn3) huntBtn3.onclick = () => huntMonster(3);
 
   for(let i = 1; i <= 4; i++) {
-    const bCustom = $(`buyStock${i}_custom`);
-    const bMax = $(`buyStock${i}_max`);
-    const sCustom = $(`sellStock${i}_custom`);
-    const sMax = $(`sellStock${i}_max`);
+    const bCustom = document.getElementById(`buyStock${i}_custom`);
+    const bMax = document.getElementById(`buyStock${i}_max`);
+    const sCustom = document.getElementById(`sellStock${i}_custom`);
+    const sMax = document.getElementById(`sellStock${i}_max`);
     if(bCustom) bCustom.onclick = () => buyStock(i, 'custom');
     if(bMax) bMax.onclick = () => buyStock(i, 'max');
     if(sCustom) sCustom.onclick = () => sellStock(i, 'custom');
     if(sMax) sMax.onclick = () => sellStock(i, 'max');
   }
 
-  const customImgUpload = $("customImageUpload");
+  const customImgUpload = document.getElementById("customImageUpload");
   if(customImgUpload) {
     customImgUpload.onchange = (e) => {
       const file = e.target.files[0];
@@ -2928,7 +2922,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const resetCustomImg = $("resetCustomImg");
+  const resetCustomImg = document.getElementById("resetCustomImg");
   if(resetCustomImg) {
     resetCustomImg.onclick = () => {
       d.customImg = null;
@@ -2937,7 +2931,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const bgImageUpload = $("bgImageUpload");
+  const bgImageUpload = document.getElementById("bgImageUpload");
   if(bgImageUpload) {
     bgImageUpload.onchange = (e) => {
       const file = e.target.files[0];
@@ -2952,7 +2946,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const resetBgImg = $("resetBgImg");
+  const resetBgImg = document.getElementById("resetBgImg");
   if(resetBgImg) {
     resetBgImg.onclick = () => {
       d.bgImg = null;
@@ -2961,10 +2955,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const mergeAllBtn = $("mergeAllBtn");
+  const mergeAllBtn = document.getElementById("mergeAllBtn");
   if(mergeAllBtn) mergeAllBtn.onclick = performMergeAll;
 
-  const buyPermPower = $("buyPermPowerBtn");
+  const buyPermPower = document.getElementById("buyPermPowerBtn");
   if(buyPermPower) {
     buyPermPower.onclick = () => {
       if(d.rebirth <= 0) return say("영구 스탯은 첫 번째 승급(환생) 이후부터 해제됩니다!");
@@ -2979,7 +2973,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const buyPermCps = $("buyPermCpsBtn");
+  const buyPermCps = document.getElementById("buyPermCpsBtn");
   if(buyPermCps) {
     buyPermCps.onclick = () => {
       if(d.rebirth <= 0) return say("영구 스탯은 첫 번째 승급(환생) 이후부터 해제됩니다!");
@@ -2994,7 +2988,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const buyPermLuck = $("buyPermLuckBtn");
+  const buyPermLuck = document.getElementById("buyPermLuckBtn");
   if(buyPermLuck) {
     buyPermLuck.onclick = () => {
       if(d.rebirth <= 0) return say("영구 스탯은 첫 번째 승급(환생) 이후부터 해제됩니다!");
@@ -3010,7 +3004,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const buyPermGem = $("buyPermGemBtn");
+  const buyPermGem = document.getElementById("buyPermGemBtn");
   if(buyPermGem) {
     buyPermGem.onclick = () => {
       if(d.rebirth <= 0) return say("영구 스탯은 첫 번째 승급(환생) 이후부터 해제됩니다!");
@@ -3041,7 +3035,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  const autoToggle = $("autoToggleBtn");
+  const autoToggle = document.getElementById("autoToggleBtn");
   if(autoToggle) {
     autoToggle.onclick = () => {
       if(!d.autoPurchased) return say("자동 채굴 장치를 먼저 구매해야 합니다!");
@@ -3050,14 +3044,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const coinBtnMain = $("coin");
+  const coinBtnMain = document.getElementById("coin");
   if(coinBtnMain) {
     coinBtnMain.onclick = (e) => {
       performClickAction();
     };
   }
 
-  const powerBtn = $("powerBtn");
+  const powerBtn = document.getElementById("powerBtn");
   if(powerBtn) {
     powerBtn.onclick = () => {
       let cost = Math.round(80 * Math.floor(Math.pow(d.power, 1.35)));
@@ -3071,7 +3065,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const autoBtn = $("autoBtn");
+  const autoBtn = document.getElementById("autoBtn");
   if(autoBtn) {
     autoBtn.onclick = () => {
       if(d.autoPurchased) return say("이미 자동 채굴 장치를 보유하고 있습니다.");
@@ -3120,14 +3114,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  const box1 = $("buyPetBox1");
-  const box5 = $("buyPetBox5");
-  const box10 = $("buyPetBox10");
+  const box1 = document.getElementById("buyPetBox1");
+  const box5 = document.getElementById("buyPetBox5");
+  const box10 = document.getElementById("buyPetBox10");
   if(box1) box1.onclick = () => startBoxOpeningInteraction(1);
   if(box5) box5.onclick = () => startMultiBoxOpeningInteraction(5);
   if(box10) box10.onclick = () => startMultiBoxOpeningInteraction(10);
 
-  const rebirthBtn = $("rebirthBtn");
+  const rebirthBtn = document.getElementById("rebirthBtn");
   if(rebirthBtn) {
     rebirthBtn.onclick = () => {
       let req = Math.max(500000, 1000000 * Math.pow(2.0, d.rebirth));
@@ -3153,7 +3147,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
       t.classList.add("active");
       document.querySelectorAll(".panel").forEach(x => x.classList.add("hidden"));
-      const targetPanel = $(t.dataset.tab);
+      const targetPanel = document.getElementById(t.dataset.tab);
       if(targetPanel) targetPanel.classList.remove("hidden");
       if(t.dataset.tab === 'stockPanel') updateStockUI();
       if(t.dataset.tab === 'rankingPanel') loadGlobalRanking();
@@ -3161,14 +3155,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  const game1Btn = $("game1Btn");
+  const game1Btn = document.getElementById("game1Btn");
   if(game1Btn) {
     game1Btn.onclick = () => {
-      let bet = parseInt($("game1Bet").value) || 0;
+      let bet = parseInt(document.getElementById("game1Bet").value) || 0;
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
       let success = Math.random() < 0.35;
-      if($("game1Display")) $("game1Display").textContent = success ? "⚡ 터널 탈출 성공!" : "💥 차원 붕괴 (실패)";
+      if(document.getElementById("game1Display")) document.getElementById("game1Display").textContent = success ? "⚡ 터널 탈출 성공!" : "💥 차원 붕괴 (실패)";
       if (success) { 
         let reward = Math.floor(bet * 2);
         d.score += reward; 
@@ -3182,14 +3176,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const game2Btn = $("game2Btn");
+  const game2Btn = document.getElementById("game2Btn");
   if(game2Btn) {
     game2Btn.onclick = () => {
-      let bet = parseInt($("game2Bet").value) || 0;
+      let bet = parseInt(document.getElementById("game2Bet").value) || 0;
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
       let success = Math.random() < 0.20;
-      if($("game2Display")) $("game2Display").textContent = success ? "🎯 방아쇠 격발 성공!" : "💀 실격 (실패)";
+      if(document.getElementById("game2Display")) document.getElementById("game2Display").textContent = success ? "🎯 방아쇠 격발 성공!" : "💀 실격 (실패)";
       if (success) { 
         let reward = Math.floor(bet * 4);
         d.score += reward; 
@@ -3203,10 +3197,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const game3Btn = $("game3Btn");
+  const game3Btn = document.getElementById("game3Btn");
   if(game3Btn) {
     game3Btn.onclick = () => {
-      let bet = parseInt($("game3Bet").value) || 0;
+      let bet = parseInt(document.getElementById("game3Bet").value) || 0;
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
       const icons = ["🌌", "💎", "⚡", "🚀", "⚛️", "💀"];
@@ -3217,7 +3211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let jackpot = Math.random() < 0.05;
       if(jackpot) { r1 = "🌌"; r2 = "🌌"; r3 = "🌌"; }
 
-      if($("game3Display")) $("game3Display").textContent = `${r1} ${r2} ${r3}`;
+      if(document.getElementById("game3Display")) document.getElementById("game3Display").textContent = `${r1} ${r2} ${r3}`;
       
       if (jackpot) { 
         let reward = Math.floor(bet * 10);
@@ -3232,14 +3226,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const game4Btn = $("game4Btn");
+  const game4Btn = document.getElementById("game4Btn");
   if(game4Btn) {
     game4Btn.onclick = () => {
-      let bet = parseInt($("game4Bet").value) || 0;
+      let bet = parseInt(document.getElementById("game4Bet").value) || 0;
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
       let success = Math.random() < 0.50;
-      if($("game4Display")) $("game4Display").textContent = success ? "⏳ 오라클 예측 적중!" : "🌀 시공간 왜곡 (실패)";
+      if(document.getElementById("game4Display")) document.getElementById("game4Display").textContent = success ? "⏳ 오라클 예측 적중!" : "🌀 시공간 왜곡 (실패)";
       if (success) { 
         let reward = Math.floor(bet * 1.8);
         d.score += reward; 
@@ -3370,7 +3364,7 @@ setInterval(() => {
     updated = true;
   }
 
-  const stockPanel = $("stockPanel");
+  const stockPanel = document.getElementById("stockPanel");
   if(stockPanel && !stockPanel.classList.contains("hidden")) {
     updateStockUI();
   }
