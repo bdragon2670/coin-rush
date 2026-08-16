@@ -543,21 +543,21 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="huntingPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (에너지 약탈 레이드)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보상이 대폭 상향되어 손해를 보지 않도록 개편되었습니다.</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (확률 너프 반영 레이드)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">사냥터 성공 확률이 하향 조정되었습니다. 강력한 무기와 드론을 장착하여 도전하세요!</p>
       <div class="shop-grid">
         <div class="game-card">
-          <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#10b981;" id="huntProb1">(기본 45%)</span></h3>
+          <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#ef4444;" id="huntProb1">(기본 30%)</span></h3>
           <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward1" style="color:var(--accent);">4,500</b> 에너지</p>
           <button class="btn-game" id="huntBtn1">소탕 작전 (비용 2,000)</button>
         </div>
         <div class="game-card">
-          <h3>👾 글리치 워머 <span style="font-size:10px; color:#10b981;" id="huntProb2">(기본 25%)</span></h3>
+          <h3>👾 글리치 워머 <span style="font-size:10px; color:#ef4444;" id="huntProb2">(기본 15%)</span></h3>
           <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward2" style="color:var(--accent);">25,000</b> 에너지</p>
           <button class="btn-game" id="huntBtn2">소탕 작전 (비용 10,000)</button>
         </div>
         <div class="game-card">
-          <h3>🐉 타이탄 랜섬웨어 <span style="font-size:10px; color:#10b981;" id="huntProb3">(기본 10%)</span></h3>
+          <h3>🐉 타이탄 랜섬웨어 <span style="font-size:10px; color:#ef4444;" id="huntProb3">(기본 5%)</span></h3>
           <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward3" style="color:var(--accent);">150,000</b> 에너지</p>
           <button class="btn-game" id="huntBtn3">소탕 작전 (비용 50,000)</button>
         </div>
@@ -693,8 +693,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="petPanel" class="panel hidden">
       <div class="pet-box-grid">
         <div class="game-card">
-          <h3>🎁 드론뽑기상자</h3>
-          <p style="color:var(--text-sub); font-size:11px;">상위 등급 드론을 획득하세요!</p>
+          <h3>🎁 드론뽑기상자 (총 50종 수집 가능)</h3>
+          <p style="color:var(--text-sub); font-size:11px;">상위 등급 드론을 획득하고 동일 드론 중복 장착을 지원합니다!</p>
           <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
             <button class="btn-game" style="flex:1;" id="buyPetBox1">1회 뽑기 (<span id="costBox1">2,500</span>)</button>
             <button class="btn-game" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyPetBox5">5회 뽑기 (<span id="costBox5">12,500</span>)</button>
@@ -710,7 +710,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-bottom:1px solid var(--border-color);padding-bottom:8px;">
-        <h3 style="color:var(--text-main); margin:0; font-size:14px;">🤖 나의 드론 격납고 <span style="font-size:11px; color:#10b981;">(최대 장착 2개 제한)</span></h3>
+        <h3 style="color:var(--text-main); margin:0; font-size:14px;">🤖 나의 드론 격납고 <span style="font-size:11px; color:#10b981;">(동일 드론 중복 장착 허용, 최대 2개)</span></h3>
         <span style="font-size:11px; color:var(--accent);">💡 드래그하여 업그레이드 (S급 이상부터만 파괴 위험!)</span>
       </div>
       <div id="petList" class="pet-list"></div>
@@ -718,8 +718,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="encyclopediaPanel" class="panel hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감 & 수집 보상</h3>
-        <span style="font-size:12px; color:var(--accent); font-weight:700;" id="encyclopediaCount">수집률: 0 / 40</span>
+        <h3 style="color:var(--text-main); margin:0; font-size:14px;">📖 통합 드론 도감 (총 50종) & 수집 보상</h3>
+        <span style="font-size:12px; color:var(--accent); font-weight:700;" id="encyclopediaCount">수집률: 0 / 50</span>
       </div>
       <p style="font-size:11px; color:var(--text-sub); margin-top:0; margin-bottom:10px;">새로운 드론을 등록하고 수령 버튼을 눌러 보석(💎)을 획득하세요!</p>
       
@@ -999,9 +999,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v9.9 최신 업데이트",
-    title: "대장간 완화, 사냥터 개편, 도감 보석 수동 수령, 미니게임 오리지널 복원",
-    desc: "1) ⚒️ 대장간 강화 가격 상승 배수가 **1.5배**로 완화되었습니다.\n2) 🎯 사냥터 보상이 대폭 상향되어 이제 손해를 보지 않습니다.\n3) 📖 통합 도감 보석 보상이 **직접 수령 버튼**을 눌러 받는 방식으로 변경되었습니다.\n4) 🔬 연구실 미니게임이 예전 오리지널 버전 확률과 배율로 복원되었습니다.\n5) 🎁 드론 5회/10회 뽑기 가격이 1회 뽑기 가격 기준에 맞게 정밀 조정되었습니다."
+    version: "v10.0 드론 50종 확장 & 사냥터 너프 패치",
+    title: "드론 50종 대폭 추가, 동일 드론 중복 장착 허용, 사냥터 확률 하향",
+    desc: "1) 🤖 드론 종류가 총 **50종**으로 대폭 확장되었습니다!\n2) 🤖 동일한 드론을 여러 개 보유하고 **동시에 중복 장착**할 수 있습니다.\n3) 🎯 사냥터 성공 확률이 하향 조정되어 도전 난이도가 높아졌습니다.\n4) 📖 도감 보상 수동 수령 및 5회/10회 뽑기 가격 정비가 유지됩니다.\n5) 💾 데이터 영구 저장 및 클라우드 연동 완벽 반영."
   }
 ];
 
@@ -1036,8 +1036,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v99";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v98") || localStorage.getItem("energyRush_PermanentSaveData_v97");
+const saveKey = "energyRush_PermanentSaveData_v100";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v99") || localStorage.getItem("energyRush_PermanentSaveData_v98");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1097,7 +1097,9 @@ const WEAPONS_DB = [
   { id: 8, name: "전설의 검", icon: "👑🔥⚔️", price: 180000000, bonusProb: 0.16, bonusReward: 2.10, desc: "궁극의 전설 검." }
 ];
 
+// 총 50종 드론 DB 구축
 const PET_DB = {
+ // C등급 (1~10)
  cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.05%', sellPrice: 150, gemReward: 1 },
  chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.08%', sellPrice: 150, gemReward: 1 },
  sparrow: { id:'sparrow', name:'초소형 정찰기', icon:'🦅', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.06%', sellPrice: 150, gemReward: 1 },
@@ -1106,7 +1108,10 @@ const PET_DB = {
  bee: { id:'bee', name:'사이버 헌터비', icon:'🐝', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.10%', sellPrice: 150, gemReward: 1 },
  bug1: { id:'bug1', name:'글리치 파이터', icon:'🐞', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.06%', sellPrice: 150, gemReward: 1 },
  bug2: { id:'bug2', name:'로보 파이어', icon:'🦗', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.07%', sellPrice: 150, gemReward: 1 },
- 
+ c9: { id:'c9', name:'델타 스카우트', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.07%', sellPrice: 150, gemReward: 1 },
+ c10: { id:'c10', name:'프로토 센서', icon:'📡', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.08%', sellPrice: 150, gemReward: 1 },
+
+ // B등급 (11~20)
  dog: { id:'dog', name:'자동 채굴 로봇', icon:'🤖', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.10%', sellPrice: 600, gemReward: 1 },
  rabbit: { id:'rabbit', name:'고속 에너지 수집기', icon:'🔋', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.12%', sellPrice: 600, gemReward: 1 },
  hamster: { id:'hamster', name:'회전축 제너레이터', icon:'🐹', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.11%', sellPrice: 600, gemReward: 1 },
@@ -1115,7 +1120,10 @@ const PET_DB = {
  mouse: { id:'mouse', name:'와이어리스 랫', icon:'🐭', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.15%', sellPrice: 600, gemReward: 1 },
  beast1: { id:'beast1', name:'아이언 바이크', icon:'🏍️', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.12%', sellPrice: 600, gemReward: 1 },
  beast2: { id:'beast2', name:'스틸 호버', icon:'🛸', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.13%', sellPrice: 600, gemReward: 1 },
+ b9: { id:'b9', name:'제트 오토마톤', icon:'🦾', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.14%', sellPrice: 600, gemReward: 1 },
+ b10: { id:'b10', name:'플라즈마 몰', icon:'⛏️', grade:'B', nextGrade:'A', desc:'자동 채굴 +0.15%', sellPrice: 600, gemReward: 1 },
 
+ // A등급 (21~30)
  fox: { id:'fox', name:'오버클럭 유닛', icon:'⚙️', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +0.1%', sellPrice: 3000, gemReward: 2 },
  panda: { id:'panda', name:'플라즈마 제너레이터', icon:'⚛️', grade:'A', nextGrade:'S', desc:'클릭 & 자동 채굴 +0.15%', sellPrice: 3000, gemReward: 2 },
  wolf: { id:'wolf', name:'텍틱스 프로세서', icon:'🐺', grade:'A', nextGrade:'S', desc:'행운 대성공 확률 +0.12%', sellPrice: 3000, gemReward: 2 },
@@ -1124,35 +1132,47 @@ const PET_DB = {
  bear: { id:'bear', name:'헤비 코어 유닛', icon:'🐻', grade:'A', nextGrade:'S', desc:'자동 채굴 +0.20%', sellPrice: 3000, gemReward: 2 },
  mecha1: { id:'mecha1', name:'배틀 액소슈트', icon:'🦾', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.17%', sellPrice: 3000, gemReward: 2 },
  mecha2: { id:'mecha2', name:'사이버 레이븐', icon:'🦅', grade:'A', nextGrade:'S', desc:'행운 확률 +0.20%', sellPrice: 3000, gemReward: 2 },
+ a9: { id:'a9', name:'네온 발키리', icon:'⚡', grade:'A', nextGrade:'S', desc:'클릭 효율 +0.22%', sellPrice: 3000, gemReward: 2 },
+ a10: { id:'a10', name:'타키온 가드', icon:'🛡️', grade:'A', nextGrade:'S', desc:'자동 채굴 +0.22%', sellPrice: 3000, gemReward: 2 },
 
+ // S등급 (31~38)
  dragon: { id:'dragon', name:'앤서니 코어 드론', icon:'🚀', grade:'S', nextGrade:'L', desc:'모든 에너지 1.004배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  unicorn: { id:'unicorn', name:'퀀텀 싱귤래리티', icon:'🌌', grade:'S', nextGrade:'L', desc:'모든 에너지 1.005배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  phoenix: { id:'phoenix', name:'솔라 플레어 드론', icon:'🔥', grade:'S', nextGrade:'L', desc:'클릭 효율 +0.25% (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  titan: { id:'titan', name:'티탄 중력 코어', icon:'🪐', grade:'S', nextGrade:'L', desc:'모든 에너지 1.006배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  hydra: { id:'hydra', name:'멀티 코어 히드라', icon:'🐉', grade:'S', nextGrade:'L', desc:'모든 에너지 1.007배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
  griffin: { id:'griffin', name:'에테르 그리핀', icon:'🦅', grade:'S', nextGrade:'L', desc:'클릭 효율 +0.30% (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
- 
+ s7: { id:'s7', name:'네뷸라 스트라이커', icon:'🌠', grade:'S', nextGrade:'L', desc:'모든 에너지 1.008배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
+ s8: { id:'s8', name:'코스믹 레이레이', icon:'☄️', grade:'S', nextGrade:'L', desc:'모든 에너지 1.009배 (S급 파괴위험)', sellPrice: 15000, gemReward: 3 },
+
+ // L등급 (39~43)
  legend: { id:'legend', name:'옴니버스 싱귤래리티', icon:'👑', grade:'L', nextGrade:'M', desc:'모든 에너지 1.015배 (파괴위험)', sellPrice: 20000, gemReward: 5 },
  leviathan: { id:'leviathan', name:'심해 레비아탄', icon:'🐉', grade:'L', nextGrade:'M', desc:'모든 에너지 1.018배 (파괴위험)', sellPrice: 22000, gemReward: 5 },
  wraith: { id:'wraith', name:'퀀텀 레이스', icon:'👻', grade:'L', nextGrade:'M', desc:'모든 에너지 1.020배 (파괴위험)', sellPrice: 25000, gemReward: 5 },
+ l4: { id:'l4', name:'스타 버스터', icon:'⭐', grade:'L', nextGrade:'M', desc:'모든 에너지 1.022배 (파괴위험)', sellPrice: 27000, gemReward: 5 },
+ l5: { id:'l5', name:'이클립스 코어', icon:'🌑', grade:'L', nextGrade:'M', desc:'모든 에너지 1.025배 (파괴위험)', sellPrice: 30000, gemReward: 5 },
 
+ // M등급 (44~46)
  mythic: { id:'mythic', name:'초신성 제네시스', icon:'🌌💎', grade:'M', nextGrade:'T', desc:'모든 에너지 1.045배 (파괴위험)', sellPrice: 50000, gemReward: 8 },
  chronos: { id:'chronos', name:'크로노스 웨이브', icon:'⏳', grade:'M', nextGrade:'T', desc:'모든 에너지 1.035배 (파괴위험)', sellPrice: 55000, gemReward: 8 },
+ m3: { id:'m3', name:'싱귤래리티 하트', icon:'💓', grade:'M', nextGrade:'T', desc:'모든 에너지 1.050배 (파괴위험)', sellPrice: 60000, gemReward: 8 },
 
+ // T등급 (47~48)
  trans: { id:'trans', name:'에테르 오브 파라다이스', icon:'💎✨', grade:'T', nextGrade:'X', desc:'모든 에너지 1.10배 (파괴위험)', sellPrice: 150000, gemReward: 12 },
  infinity: { id:'infinity', name:'인피니티 게이트', icon:'🌀', grade:'T', nextGrade:'X', desc:'모든 에너지 1.12배 (파괴위험)', sellPrice: 160000, gemReward: 12 },
 
+ // X등급 (49~50)
  chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:null, desc:'모든 에너지 1.35배 (파괴위험)', sellPrice: 400000, gemReward: 20 },
  voidmaster: { id:'voidmaster', name:'오블리비언 싱귤래리티', icon:'🖤⚛️', grade:'X', nextGrade:null, desc:'모든 에너지 1.45배 (파괴위험)', sellPrice: 500000, gemReward: 25 }
 };
 
 const PETS_BY_GRADE = {
- 'C': ['cat', 'chick', 'sparrow', 'beetle', 'ant', 'bee', 'bug1', 'bug2'],
- 'B': ['dog', 'rabbit', 'hamster', 'frog', 'turtle', 'mouse', 'beast1', 'beast2'],
- 'A': ['fox', 'panda', 'wolf', 'owl', 'tiger', 'bear', 'mecha1', 'mecha2'],
- 'S': ['dragon', 'unicorn', 'phoenix', 'titan', 'hydra', 'griffin'],
- 'L': ['legend', 'leviathan', 'wraith'],
- 'M': ['mythic', 'chronos'],
+ 'C': ['cat', 'chick', 'sparrow', 'beetle', 'ant', 'bee', 'bug1', 'bug2', 'c9', 'c10'],
+ 'B': ['dog', 'rabbit', 'hamster', 'frog', 'turtle', 'mouse', 'beast1', 'beast2', 'b9', 'b10'],
+ 'A': ['fox', 'panda', 'wolf', 'owl', 'tiger', 'bear', 'mecha1', 'mecha2', 'a9', 'a10'],
+ 'S': ['dragon', 'unicorn', 'phoenix', 'titan', 'hydra', 'griffin', 's7', 's8'],
+ 'L': ['legend', 'leviathan', 'wraith', 'l4', 'l5'],
+ 'M': ['mythic', 'chronos', 'm3'],
  'T': ['trans', 'infinity'],
  'X': ['chaos', 'voidmaster']
 };
@@ -1407,8 +1427,8 @@ function getPetBonus(){
   d.equippedPets.forEach(index => {
     const petId = d.pets[index];
     if(!petId) return;
-    if(petId === 'cat') clickMult += 0.0005;
-    if(petId === 'chick') clickMult += 0.0008;
+    if(petId === 'cat' || petId === 'c9') clickMult += 0.0005;
+    if(petId === 'chick' || petId === 'c10') clickMult += 0.0008;
     if(petId === 'sparrow') clickMult += 0.0006;
     if(petId === 'beetle') clickMult += 0.0007;
     if(petId === 'ant') clickMult += 0.0009;
@@ -1416,8 +1436,8 @@ function getPetBonus(){
     if(petId === 'bug1') clickMult += 0.0006;
     if(petId === 'bug2') clickMult += 0.0007;
 
-    if(petId === 'dog') cpsMult += 0.0010;
-    if(petId === 'rabbit') cpsMult += 0.0012;
+    if(petId === 'dog' || petId === 'b9') cpsMult += 0.0010;
+    if(petId === 'rabbit' || petId === 'b10') cpsMult += 0.0012;
     if(petId === 'hamster') cpsMult += 0.0011;
     if(petId === 'frog') cpsMult += 0.0013;
     if(petId === 'turtle') cpsMult += 0.0014;
@@ -1425,8 +1445,8 @@ function getPetBonus(){
     if(petId === 'beast1') cpsMult += 0.0012;
     if(petId === 'beast2') cpsMult += 0.0013;
 
-    if(petId === 'fox') luckProb += 0.001;
-    if(petId === 'panda') { clickMult += 0.0015; cpsMult += 0.0015; }
+    if(petId === 'fox' || petId === 'a9') luckProb += 0.001;
+    if(petId === 'panda' || petId === 'a10') { clickMult += 0.0015; cpsMult += 0.0015; }
     if(petId === 'wolf') luckProb += 0.0012;
     if(petId === 'owl') clickMult += 0.0018;
     if(petId === 'tiger') clickMult += 0.0020;
@@ -1434,18 +1454,18 @@ function getPetBonus(){
     if(petId === 'mecha1') clickMult += 0.0017;
     if(petId === 'mecha2') luckProb += 0.0020;
 
-    if(petId === 'dragon') coinMult *= 1.004;
-    if(petId === 'unicorn') coinMult *= 1.005;
+    if(petId === 'dragon' || petId === 's7') coinMult *= 1.004;
+    if(petId === 'unicorn' || petId === 's8') coinMult *= 1.005;
     if(petId === 'phoenix') { clickMult += 0.0025; cpsMult += 0.0015; }
     if(petId === 'titan') coinMult *= 1.006;
     if(petId === 'hydra') coinMult *= 1.007;
     if(petId === 'griffin') clickMult += 0.0030;
 
-    if(petId === 'legend') { coinMult *= 1.015; luckProb += 0.002; }
-    if(petId === 'leviathan') coinMult *= 1.018;
+    if(petId === 'legend' || petId === 'l4') { coinMult *= 1.015; luckProb += 0.002; }
+    if(petId === 'leviathan' || petId === 'l5') coinMult *= 1.018;
     if(petId === 'wraith') coinMult *= 1.020;
 
-    if(petId === 'mythic') { coinMult *= 1.045; luckProb += 0.005; }
+    if(petId === 'mythic' || petId === 'm3') { coinMult *= 1.045; luckProb += 0.005; }
     if(petId === 'chronos') coinMult *= 1.035;
 
     if(petId === 'trans') { coinMult *= 1.10; luckProb += 0.01; }
@@ -1572,7 +1592,7 @@ function render(){
  if($("mineUpgradeCost")) $("mineUpgradeCost").textContent = fmt(mineUpgradeCost);
 
  const bsLevel = d.blacksmithLevel || 0;
- const bsCost = Math.floor(30000 * Math.pow(1.5, bsLevel)); // 배수 1.5배 적용
+ const bsCost = Math.floor(30000 * Math.pow(1.5, bsLevel));
  if($("blacksmithLvDisplay")) $("blacksmithLvDisplay").textContent = `+${bsLevel}`;
  if($("blacksmithCostDisplay")) $("blacksmithCostDisplay").textContent = bsLevel >= 20 ? "최고 강화 달성" : fmt(bsCost);
  const bsBtn = $("upgradeBlacksmithRPGBtn");
@@ -1590,9 +1610,10 @@ function render(){
  const extraProb = (weapon ? weapon.bonusProb : 0) + (bsLevel * 0.005);
  const extraRew = (weapon ? weapon.bonusReward : 1.0) * (1 + bsLevel * 0.03);
 
- if($("huntProb1")) $("huntProb1").textContent = `(적용 확률: ${Math.min(90, Math.round((0.45 + extraProb)*100))}%)`;
- if($("huntProb2")) $("huntProb2").textContent = `(적용 확률: ${Math.min(85, Math.round((0.25 + extraProb)*100))}%)`;
- if($("huntProb3")) $("huntProb3").textContent = `(적용 확률: ${Math.min(80, Math.round((0.10 + extraProb)*100))}%)`;
+ // 사냥터 확률 너프 반영 (기본 확률 하향)
+ if($("huntProb1")) $("huntProb1").textContent = `(적용 확률: ${Math.min(90, Math.round((0.30 + extraProb)*100))}%)`;
+ if($("huntProb2")) $("huntProb2").textContent = `(적용 확률: ${Math.min(85, Math.round((0.15 + extraProb)*100))}%)`;
+ if($("huntProb3")) $("huntProb3").textContent = `(적용 확률: ${Math.min(80, Math.round((0.05 + extraProb)*100))}%)`;
 
  if($("huntReward1")) $("huntReward1").textContent = fmt(Math.round(4500 * extraRew));
  if($("huntReward2")) $("huntReward2").textContent = fmt(Math.round(25000 * extraRew));
@@ -1652,8 +1673,8 @@ function render(){
  }
 
  const box1Cost = 2500 + (d.box1Count * 300);
- const box5Cost = box1Cost * 5;  // 1회 뽑기 5번 가격
- const box10Cost = box1Cost * 10; // 1회 뽑기 10번 가격
+ const box5Cost = box1Cost * 5;
+ const box10Cost = box1Cost * 10;
  if($("costBox1")) $("costBox1").textContent = fmt(box1Cost);
  if($("costBox5")) $("costBox5").textContent = fmt(box5Cost);
  if($("costBox10")) $("costBox10").textContent = fmt(box10Cost);
@@ -1848,7 +1869,7 @@ function renderEncyclopedia() {
 function upgradeBlacksmithRPG() {
   let bsLevel = d.blacksmithLevel || 0;
   if(bsLevel >= 20) return say("최고 강화 레벨(20강)에 도달했습니다!");
-  let cost = Math.floor(30000 * Math.pow(1.5, bsLevel)); // 배수 1.5배 적용
+  let cost = Math.floor(30000 * Math.pow(1.5, bsLevel));
   if(d.score < cost) return say("무기 강화에 필요한 에너지가 부족합니다.");
   d.score -= cost;
   d.blacksmithLevel = bsLevel + 1;
@@ -1859,8 +1880,8 @@ function upgradeBlacksmithRPG() {
 
 function huntMonster(tier) {
   let costs = { 1: 2000, 2: 10000, 3: 50000 };
-  let baseRewards = { 1: 4500, 2: 25000, 3: 150000 }; // 보상 상향 (손해 없도록 변경)
-  let baseProbs = { 1: 0.45, 2: 0.25, 3: 0.10 };
+  let baseRewards = { 1: 4500, 2: 25000, 3: 150000 };
+  let baseProbs = { 1: 0.30, 2: 0.15, 3: 0.05 }; // 사냥터 확률 너프 반영
   
   let cost = costs[tier];
   let bsLevel = d.blacksmithLevel || 0;
@@ -2168,10 +2189,10 @@ function startBoxOpeningInteraction(count = 1){
 
 function startMultiBoxOpeningInteraction(count){
   const singleCost = 2500 + (d.box1Count * 300);
-  const totalCost = singleCost * count; // 5회면 singleCost * 5, 10회면 singleCost * 10
+  const totalCost = singleCost * count;
   if(d.score < totalCost) return say("에너지가 부족합니다.");
   d.score -= totalCost;
-  d.box1Count += count; // 뽑기 횟수 누적 증가
+  d.box1Count += count;
 
   let obtainedPets = [];
   for(let i = 0; i < count; i++) {
@@ -2718,17 +2739,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  // 연구실 미니게임 (오리지널 확률 및 배율 복원)
   const game1Btn = $("game1Btn");
   if(game1Btn) {
     game1Btn.onclick = () => {
       let bet = parseInt($("game1Bet").value) || 0;
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
-      let success = Math.random() < 0.35; // 오리지널 확률 35%
+      let success = Math.random() < 0.35;
       if($("game1Display")) $("game1Display").textContent = success ? "⚡ 터널 탈출 성공!" : "💥 차원 붕괴 (실패)";
       if (success) { 
-        let reward = Math.floor(bet * 2); // 오리지널 배율 ×2
+        let reward = Math.floor(bet * 2);
         d.score += reward; 
         playSuccessSound();
         say(`터널 탈출 대성공! (+${fmt(reward)})`); 
@@ -2746,10 +2766,10 @@ document.addEventListener("DOMContentLoaded", () => {
       let bet = parseInt($("game2Bet").value) || 0;
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
-      let success = Math.random() < 0.20; // 오리지널 확률 20%
+      let success = Math.random() < 0.20;
       if($("game2Display")) $("game2Display").textContent = success ? "🎯 방아쇠 격발 성공!" : "💀 실격 (실패)";
       if (success) { 
-        let reward = Math.floor(bet * 4); // 오리지널 배율 ×4
+        let reward = Math.floor(bet * 4);
         d.score += reward; 
         playSuccessSound();
         say(`러시안룰렛 적중! (+${fmt(reward)})`); 
@@ -2772,13 +2792,13 @@ document.addEventListener("DOMContentLoaded", () => {
       let r2 = icons[Math.floor(Math.random() * icons.length)];
       let r3 = icons[Math.floor(Math.random() * icons.length)];
       
-      let jackpot = Math.random() < 0.05; // 오리지널 잭팟 확률 5%
+      let jackpot = Math.random() < 0.05;
       if(jackpot) { r1 = "🌌"; r2 = "🌌"; r3 = "🌌"; }
 
       if($("game3Display")) $("game3Display").textContent = `${r1} ${r2} ${r3}`;
       
       if (jackpot) { 
-        let reward = Math.floor(bet * 10); // 오리지널 배율 ×10
+        let reward = Math.floor(bet * 10);
         d.score += reward; 
         playLegendaryEpicSound();
         say(`🌌 초신성 잭팟 대폭발!! (+${fmt(reward)})`); 
@@ -2796,10 +2816,10 @@ document.addEventListener("DOMContentLoaded", () => {
       let bet = parseInt($("game4Bet").value) || 0;
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
-      let success = Math.random() < 0.50; // 오리지널 확률 50%
+      let success = Math.random() < 0.50;
       if($("game4Display")) $("game4Display").textContent = success ? "⏳ 오라클 예측 적중!" : "🌀 시공간 왜곡 (실패)";
       if (success) { 
-        let reward = Math.floor(bet * 1.8); // 오리지널 배율 ×1.8
+        let reward = Math.floor(bet * 1.8);
         d.score += reward; 
         playSuccessSound();
         say(`오라클 예측 적중! (+${fmt(reward)})`); 
