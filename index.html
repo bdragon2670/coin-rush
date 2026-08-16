@@ -529,7 +529,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="blacksmithPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚒️ 퀀텀 대장간 (무기 강화 시스템 - 최대 20강)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">エ너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다.</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 무기 강화 레벨: <b id="blacksmithLvDisplay" style="font-size:18px;">+0</b> / 20강</h4>
         <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">다음 강화 시 클릭 파워 추가 상승 & 사냥터 성공률/보상 소폭 증가</p>
@@ -566,8 +566,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (마이너스 하락세 도입)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식 시장에 **하락세(마이너스 변동성)**가 반영되었습니다! 매도 후 **5분간 매수 제한**이 적용됩니다.</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (강력한 하락세 도입)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식 시장에 **강력한 하락세와 폭락 확률**이 도입되었습니다! 매도 후 **5분간 매수 제한**이 적용됩니다.</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES) [기본 개방]</h4>
@@ -1000,9 +1000,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v10.1 경제 안정화 패치",
-    title: "상점 20% 인하, 도감 모두받기 추가, 주식 하락세(마이너스) 도입",
-    desc: "1) 🛒 테크 상점, 캐시 상점, 무기 상점의 모든 품목 가격이 **20% 인하**되었습니다!\n2) 📖 통합 도감에 미수령 보석을 한 번에 수령하는 **'모두 받기' 버튼**이 추가되었습니다.\n3) 📈 주식 거래소 변동성에 **마이너스(하락세) 확률**이 정밀 도입되어 더욱 현실적인 투자가 가능합니다.\n4) 🤖 드론 50종 및 중복 장착/데이터 영구 저장 시스템이 완벽히 유지됩니다."
+    version: "v10.2 주식 하락세 대폭 강화 패치",
+    title: "주식 하락 확률 증가 및 우하향(마이너스) 가속화 적용",
+    desc: "1) 📈 주식 거래소 시장에 **강력한 하락세와 폭락 확률(약 65% 확률로 하락/폭락)**이 적용되어 주식이 쉽게 오르지 않고 우하향하도록 조정되었습니다!\n2) 🛒 테크 상점, 캐시 상점, 무기 상점 20% 가격 인하 및 도감 '모두 받기' 기능이 완벽 유지됩니다.\n3) ☁️ 구글 클라우드 및 로컬 데이터 영구 저장 시스템이 정상 작동합니다."
   }
 ];
 
@@ -1037,8 +1037,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v101";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v100") || localStorage.getItem("energyRush_PermanentSaveData_v99");
+const saveKey = "energyRush_PermanentSaveData_v102";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v101") || localStorage.getItem("energyRush_PermanentSaveData_v100");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1086,7 +1086,6 @@ if (!d.stockHistories) d.stockHistories = {
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
-// 무기 가격 20% 인하 적용
 const WEAPONS_DB = [
   { id: 0, name: "나무검", icon: "🪵⚔️", price: 0, bonusProb: 0.00, bonusReward: 1.00, desc: "기본적인 나무 검." },
   { id: 1, name: "돌검", icon: "🪨⚔️", price: Math.round(8000 * 0.8), bonusProb: 0.01, bonusReward: 1.05, desc: "단단한 돌로 만든 검." },
@@ -1204,7 +1203,7 @@ function drawStockChart(canvasId, historyData) {
   const range = max - min || 1;
 
   ctx.beginPath();
-  ctx.strokeStyle = "#f59e0b";
+  ctx.strokeStyle = "#ef4444"; // 하락 기조를 보여주는 붉은빛 차트 라인
   ctx.lineWidth = 2.5;
 
   historyData.forEach((val, idx) => {
@@ -1678,7 +1677,6 @@ function render(){
  const rebirthBtnEl = $("rebirthBtn");
  if(rebirthBtnEl) rebirthBtnEl.disabled = d.score < req;
  
- // 테크 상점 가격 20% 인하 반영
  if($("powerBtn")) $("powerBtn").textContent = fmt(Math.round(300 * Math.floor(Math.pow(d.power, 2.1)) * 0.8)) + " 에너지";
 
  const autoUpgradeBtn = $("autoBtn");
@@ -1713,7 +1711,6 @@ function render(){
  if(filterBtn) filterBtn.textContent = d.filter ? "완료" : `구매 ${fmt(Math.round(11000000 * 0.8))}`;
  if(quantumBtn) quantumBtn.textContent = d.quantum ? "완료" : `구매 ${fmt(Math.round(30000000 * 0.8))}`;
 
- // 캐시 상점 가격 20% 인하 반영
  const gemItems = ['gemClick', 'gemAuto', 'gemLuck', 'gemHyper', 'gemRing', 'gemDivine', 'gemChronos', 'gemProtector'];
  const gemCosts = { gemClick: 120, gemAuto: 240, gemLuck: 360, gemHyper: 480, gemRing: 960, gemDivine: 2400, gemChronos: 1680, gemProtector: 720 };
  gemItems.forEach(item => {
@@ -2692,7 +2689,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".gem-buy").forEach(btn => {
     btn.onclick = () => {
       const item = btn.dataset.gemitem;
-      // 캐시 상점 가격 20% 인하 적용
       const costs = { gemClick: 120, gemAuto: 240, gemLuck: 360, gemHyper: 480, gemRing: 960, gemDivine: 2400, gemChronos: 1680, gemProtector: 720 };
       const cost = costs[item];
       if(d.gems < cost) return say("보석(💎)이 부족합니다!");
@@ -2874,14 +2870,14 @@ setInterval(() => {
     }
   }
 
-  if(Math.random() < 0.35) {
+  if(Math.random() < 0.4) {
     let updated = false;
     for(let i = 1; i <= 4; i++) {
-      // 주식 변동성에 마이너스(하락세) 포함한 비율 적용 (상승 55%, 하락 45%)
-      let isDrop = Math.random() < 0.45;
-      let multiplier = isDrop ? (0.85 + Math.random() * 0.12) : (1.02 + Math.random() * 0.18);
+      // 주식 하락 확률을 대폭 강화 (약 65% 확률로 하락, 35% 확률로 상승하되 하락 폭을 키워 쉽게 오르지 않도록 조정)
+      let isDrop = Math.random() < 0.65;
+      let multiplier = isDrop ? (0.78 + Math.random() * 0.18) : (1.01 + Math.random() * 0.08);
       
-      d.stockPrices[i] = Math.max(1000, Math.floor(d.stockPrices[i] * multiplier));
+      d.stockPrices[i] = Math.max(500, Math.floor(d.stockPrices[i] * multiplier));
       
       d.stockHistories[i].push(d.stockPrices[i]); 
       if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
