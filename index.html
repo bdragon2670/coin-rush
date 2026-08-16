@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.1 최적화 & 패치노트 확장판</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.2 디스코드 커뮤니티 추가 버전</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -117,6 +117,39 @@ body::before {
 .sidebar.collapsed .tab span.tab-text { display: none; }
 .tab:hover { background: rgba(245, 158, 11, 0.08); color: var(--text-main); border-color: rgba(245, 158, 11, 0.2); }
 .tab.active { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(180, 83, 9, 0.25)); color: var(--accent); border-color: var(--accent); font-weight: 700; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2); }
+
+.discord-sidebar-box {
+  margin-top: auto;
+  background: rgba(88, 101, 242, 0.08);
+  border: 1px solid rgba(88, 101, 242, 0.3);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  transition: all 0.2s;
+}
+.discord-sidebar-box:hover {
+  border-color: rgba(88, 101, 242, 0.8);
+  background: rgba(88, 101, 242, 0.15);
+  box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+}
+.discord-sidebar-box h4 { margin: 0 0 4px; font-size: 12px; color: #5865F2; font-weight: 700; display:flex; align-items:center; justify-content:center; gap:6px; }
+.sidebar.collapsed .discord-sidebar-box h4 span.d-text { display: none; }
+.discord-sidebar-box p { font-size: 10px; color: var(--text-sub); margin: 0 0 8px; }
+.sidebar.collapsed .discord-sidebar-box p { display: none; }
+.discord-link-btn {
+  display: inline-block;
+  background: #5865F2;
+  color: #fff;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  width: 100%;
+}
+.discord-link-btn:hover { background: #4752C4; }
+.sidebar.collapsed .discord-link-btn { padding: 6px 4px; font-size: 9px; }
 
 .game{
   flex: 1;
@@ -463,6 +496,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   .layout-container { flex-direction: column; height: auto; }
   .sidebar { width: 100% !important; flex-direction: row; flex-wrap: wrap; justify-content: center; }
   .sidebar-header, .sidebar.collapsed .sidebar-header { display: none; }
+  .discord-sidebar-box { width: 100%; order: 99; margin-top: 10px; }
   .stats{grid-template-columns: repeat(2, 1fr);}
   .shop-grid, .minigame-grid, .pet-box-grid, .stock-grid{grid-template-columns: 1fr;}
   .coin{width: 120px; height: 120px; font-size: 40px;}
@@ -499,6 +533,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구 스탯</span></button>
     <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">시스템 승급</span></button>
     <button class="tab" data-tab="cloudPanel"><span class="tab-icon">☁️</span><span class="tab-text">구글 클라우드</span></button>
+
+    <div class="discord-sidebar-box" id="discordBox">
+      <h4>💬 <span class="d-text">디스코드 커뮤니티</span></h4>
+      <p><span class="d-text">서버에 참여하여 소통하세요!</span></p>
+      <a href="https://discord.gg/UducVkpzkt" target="_blank" class="discord-link-btn">디스코드 입장</a>
+    </div>
   </div>
 
   <div class="game">
@@ -523,8 +563,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.1</h1>
-    <div class="sub">데이터 저장 최적화, 자동 세이브 및 누적 패치노트 아카이브 완벽 적용</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.2</h1>
+    <div class="sub">사이드바 디스코드 커뮤니티 링크 추가, 데이터 저장 최적화 및 누적 패치노트 아카이브 완벽 적용</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -1212,8 +1252,12 @@ function playFailureSound() {
   } catch(e){}
 }
 
-/* 지금까지의 모든 업데이트 내용이 포함된 누적 패치노트 아카이브 */
 const patchNotes = [
+  {
+    version: "v14.2 디스코드 커뮤니티 추가 버전",
+    title: "사이드바 디스코드 서버 링크 추가",
+    desc: "1) 사이드바 하단 빈 공간에 공식 디스코드 커뮤니티 서버(https://discord.gg/UducVkpzkt) 바로가기 위젯을 추가했습니다.\n2) 데이터 저장 최적화 및 누적 패치노트 아카이브 시스템 유지."
+  },
   {
     version: "v14.1 최적화 & 패치노트 확장 패치",
     title: "데이터 저장 최적화 및 전체 패치노트 아카이브",
@@ -1228,11 +1272,6 @@ const patchNotes = [
     version: "v13.0 드론 격납고 & P2P 유저거래소 패치",
     title: "실시간 P2P 유저 간 드론/보석 거래 시스템 도입",
     desc: "1) 구글 클라우드 기반 실시간 P2P 유저거래소를 오픈하여 드론 및 보석 거래가 가능해졌습니다.\n2) 동일 등급 드론 연쇄 합성 및 S급 이상 과부하 파괴 방지 메커니즘이 도입되었습니다."
-  },
-  {
-    version: "v12.0 주식 거래소 & 퀀텀 광산 패치",
-    title: "주식 시장 및 지하 광산 탐사 시스템 업데이트",
-    desc: "1) 실시간 주가 변동 및 뉴스 티커 시스템을 갖춘 주식 거래소가 추가되었습니다.\n2) 광산 시설 확장 및 탐사 확률 점진적 상승 시스템이 구현되었습니다."
   }
 ];
 
@@ -1267,8 +1306,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v141";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v140") || localStorage.getItem("energyRush_PermanentSaveData_v139");
+const saveKey = "energyRush_PermanentSaveData_v142";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v141") || localStorage.getItem("energyRush_PermanentSaveData_v140");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -2108,7 +2147,6 @@ function getBaseMult(){
   return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * titleBonus.energyMult * (1 + d.rp * 0.04);
 }
 
-/* 최적화된 데이터 저장 함수 (디바운스 적용 및 로컬스토리지 부하 최소화) */
 let saveTimeout = null;
 function save(){
   checkAndDiscoverPets();
