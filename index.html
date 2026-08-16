@@ -345,6 +345,41 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .stock-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
 .stock-chart-canvas { width: 100%; height: 75px; background: rgba(7, 9, 14, 0.7); border: 1px solid var(--border-color); border-radius: 10px; margin: 8px 0; }
 
+.news-ticker-box {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+}
+.news-ticker-title {
+  background: #ef4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  animation: pulseNews 1.5s infinite;
+}
+@keyframes pulseNews {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+.news-ticker-content {
+  font-size: 12px;
+  color: #fca5a5;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .ranking-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 
 @media(max-width: 780px){
@@ -556,8 +591,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (초극단 변동폭 적용)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식 가격이 최저 -5,000원부터 최대 +10,000원 사이로 매우 심하게 요동칩니다!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널</h3>
+      <div class="news-ticker-box" id="newsTickerBox">
+        <span class="news-ticker-title">📢 BREAKING NEWS</span>
+        <span class="news-ticker-content" id="newsTickerText">현재 시장은 안정세를 유지하고 있습니다. 주기적으로 기업별 돌발 악재/호재가 발생합니다!</span>
+      </div>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">평균 -500 ~ +1,000의 등락을 거듭하다가, 가끔 강력한 상승/하락 추세 또는 긴급 뉴스로 인한 대폭락(떡락)이 발생합니다!</p>
+      
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES) [기본 개방]</h4>
@@ -990,9 +1030,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v11.0 대장간 삭제 및 최상위 Z등급 초월 드론 추가 패치",
-    title: "대장간 메뉴 삭제, 사냥터 무기 보정 및 극단적 주식 변동/최고 Z등급 드론 적용",
-    desc: "1) ⚒️ 대장간(무기 강화) 시스템이 완전히 삭제되었습니다. 무기 상점과 사냥터 확률 보정은 그대로 유지됩니다.\n2) 📈 주식 가격 변동폭이 최저 -5,000원 ~ 최대 +10,000원으로 대폭 확대되어 스릴 넘치는 투자가 가능합니다.\n3) 🌟 최고 등급(X급)을 뛰어넘는 궁극의 초월 [Z등급] 드론들이 새롭게 추가되었습니다!"
+    version: "v12.0 주식 실시간 뉴스 및 대폭락(떡락) 시스템 패치",
+    title: "주식 평균 등락(-500~+1000), 트렌드 파동 및 긴급 뉴스 떡락 시스템 적용",
+    desc: "1) 📈 주식 가격 변동이 평균 -500 ~ +1000 사이에서 움직이며, 가끔 연속 상승/하락 트렌드 파동을 그리도록 개선되었습니다.\n2) 📢 뉴스 채널바가 추가되어 4개 회사(테슬라, 엠비디아, 스페이스코어, 양자 바이오)에 관련된 실시간 호재 및 치명적 악재(떡락) 뉴스가 송출됩니다.\n3) 🚨 악재 뉴스가 뜨면 해당 회사의 주식이 치명적인 폭락(떡락)을 맞이하여 스릴 넘치는 주식 거래를 즐기실 수 있습니다!"
   }
 ];
 
@@ -1027,8 +1067,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v110";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v105") || localStorage.getItem("energyRush_PermanentSaveData_v104");
+const saveKey = "energyRush_PermanentSaveData_v120";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v110") || localStorage.getItem("energyRush_PermanentSaveData_v105");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1040,7 +1080,8 @@ let d = JSON.parse(savedRawData || "null") || {
  box1Count: 0,
  equippedWeapon: 0, ownedWeapons: [0],
  mineDepth: 1,
- stockSellCooldowns: {}
+ stockSellCooldowns: {},
+ latestNews: "현재 시장은 평온한 상태입니다. 기업별 실시간 뉴스를 주시하세요!"
 };
 
 if (!d.equippedPets) d.equippedPets = [];
@@ -1064,6 +1105,7 @@ if (d.equippedWeapon === undefined) d.equippedWeapon = 0;
 if (d.ownedWeapons === undefined) d.ownedWeapons = [0];
 if (d.mineDepth === undefined) d.mineDepth = 1;
 if (!d.stockSellCooldowns) d.stockSellCooldowns = {};
+if (!d.latestNews) d.latestNews = "현재 시장은 평온한 상태입니다.";
 
 if (!d.stockPrices) d.stockPrices = { 1: 1000, 2: 1000, 3: 1000, 4: 1000 };
 if (!d.stockHistories) d.stockHistories = {
@@ -1146,7 +1188,6 @@ const PET_DB = {
  chaos: { id:'chaos', name:'공허의 디바우러', icon:'🕳️🌀', grade:'X', nextGrade:'Z', desc:'모든 에너지 1.35배 (파괴위험)', sellPrice: 400000, gemReward: 20 },
  voidmaster: { id:'voidmaster', name:'오블리비언 싱귤래리티', icon:'🖤⚛️', grade:'X', nextGrade:'Z', desc:'모든 에너지 1.45배 (파괴위험)', sellPrice: 500000, gemReward: 25 },
 
- // 신규 추가된 최고 등급 Z등급 초월 드론
  omniz: { id:'omniz', name:'옴니포턴스 제네시스', icon:'🌌👑✨', grade:'Z', nextGrade:null, desc:'모든 에너지 2.00배 & 행운 대성공 +3% (궁극의 초월 드론)', sellPrice: 1500000, gemReward: 50 },
  eternity: { id:'eternity', name:'이터니티 싱귤래리티', icon:'⚛️🌀💫', grade:'Z', nextGrade:null, desc:'모든 에너지 2.30배 & 행운 대성공 +4% (궁극의 초월 드론)', sellPrice: 2000000, gemReward: 65 }
 };
@@ -1223,6 +1264,8 @@ function updateStockUI() {
   if($("stockOwned2")) $("stockOwned2").textContent = d.stock2;
   if($("stockOwned3")) $("stockOwned3").textContent = d.stock3;
   if($("stockOwned4")) $("stockOwned4").textContent = d.stock4;
+
+  if($("newsTickerText")) $("newsTickerText").textContent = d.latestNews;
 
   const now = Date.now();
   for(let i = 1; i <= 4; i++) {
@@ -2820,6 +2863,29 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 let autoMiningTimer = 0;
+let stockTrendCounter = { 1: 0, 2: 0, 3: 0, 4: 0 };
+let stockTrendDir = { 1: 1, 2: 1, 3: 1, 4: 1 };
+let newsTickerTimer = 0;
+
+const companyNames = {
+  1: "테슬라 에너지 (TES)",
+  2: "엠비디아 (NVDA)",
+  3: "스페이스코어 (SPC)",
+  4: "양자 바이오 (QBIO)"
+};
+
+const badNewsList = [
+  "회계 부정 의혹 및 핵심 기술 유출 파문으로 주가가 폭락합니다!",
+  "공장 가동 전면 중단 사태 및 대규모 적자 충격보도가 발표되었습니다!",
+  "최고경영자(CEO) 사임 루머와 함께 투자 심리가 얼어붙었습니다!",
+  "정부의 강력한 반독점 규제 철퇴를 맞아 주식이 치명타를 입었습니다!"
+];
+
+const goodNewsList = [
+  "차세대 양자 코어 상용화 성공 소식에 매수세가 폭발합니다!",
+  "역대급 실적 어닝 서프라이즈 달성으로 폭등세가 연출됩니다!",
+  "글로벌 대기업과 조단위 독점 공급 계약 체결 뉴스가 보도되었습니다!"
+];
 
 setInterval(() => {
   autoMiningTimer++;
@@ -2836,24 +2902,55 @@ setInterval(() => {
     }
   }
 
-  if(Math.random() < 0.4) {
-    let updated = false;
-    for(let i = 1; i <= 4; i++) {
-      let delta = (Math.random() - 0.48) * 2200;
-      d.stockPrices[i] = Math.max(-5000, Math.min(10000, Math.floor(d.stockPrices[i] + delta)));
-      
-      d.stockHistories[i].push(d.stockPrices[i]); 
-      if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
-      updated = true;
+  // 주식 가격 변동 로직 (-500 ~ +1000 평균 및 트렌드/뉴스 떡락 시스템)
+  newsTickerTimer++;
+  if(newsTickerTimer >= 15) { // 약 9초마다 뉴스 및 주식 변동 이벤트
+    newsTickerTimer = 0;
+    let targetStockId = Math.floor(Math.random() * 4) + 1;
+    let isBad = Math.random() < 0.65; // 65% 확률로 악재(떡락) 뉴스 발생
+    let compName = companyNames[targetStockId];
+
+    if(isBad) {
+      let randomMsg = badNewsList[Math.floor(Math.random() * badNewsList.length)];
+      d.latestNews = `🚨 [긴급악재] ${compName}: ${randomMsg}`;
+      // 주식 대폭락 (현재 주가의 40% ~ 70%가 한 번에 증발 또는 -3000~-8000 폭락)
+      let dropAmount = Math.floor(d.stockPrices[targetStockId] * 0.5) + Math.floor(Math.random() * 3000) + 2000;
+      d.stockPrices[targetStockId] = Math.max(100, d.stockPrices[targetStockId] - dropAmount);
+    } else {
+      let randomMsg = goodNewsList[Math.floor(Math.random() * goodNewsList.length)];
+      d.latestNews = `🚀 [호재급등] ${compName}: ${randomMsg}`;
+      let riseAmount = Math.floor(Math.random() * 5000) + 3000;
+      d.stockPrices[targetStockId] += riseAmount;
+    }
+  }
+
+  let updated = false;
+  for(let i = 1; i <= 4; i++) {
+    // 트렌드 파동 관리 (한 방향으로 연속해서 상승하거나 하락하는 추세 부여)
+    stockTrendCounter[i]--;
+    if(stockTrendCounter[i] <= 0) {
+      stockTrendCounter[i] = Math.floor(Math.random() * 6) + 4; // 4~9회 반복
+      stockTrendDir[i] = Math.random() < 0.55 ? 1 : -1; // 55% 확률로 상승 추세
     }
 
-    const stockPanel = $("stockPanel");
-    if(stockPanel && !stockPanel.classList.contains("hidden")) {
-      updateStockUI();
-    }
+    // 기본 등락: 평균 -500 ~ +1000 (기본 편차 부여)
+    let baseDelta = (Math.random() * 1500) - 500; // 결과적으로 -500 ~ +1000 범위
+    let trendBonus = stockTrendDir[i] * (Math.random() * 600 + 200);
+    let totalDelta = Math.floor(baseDelta + trendBonus);
+
+    d.stockPrices[i] = Math.max(100, d.stockPrices[i] + totalDelta);
     
-    if(updated) save();
+    d.stockHistories[i].push(d.stockPrices[i]); 
+    if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
+    updated = true;
   }
+
+  const stockPanel = $("stockPanel");
+  if(stockPanel && !stockPanel.classList.contains("hidden")) {
+    updateStockUI();
+  }
+  
+  if(updated) save();
 }, 600);
 </script>
 </body>
