@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.0 (맞춤형 확장 버전)</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.1 (확장 맞춤 버전)</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2310b981%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>⚡</text></svg>">
 
@@ -178,7 +178,6 @@ h1{ font-size: 26px; text-align: center; margin: 0 0 4px; color: var(--text-main
   gap: 12px;
 }
 
-/* 구글 프로필 영역 수정 (내부에 경험치 바 포함) */
 .user-profile-area {
   display: flex;
   flex-direction: column;
@@ -197,7 +196,6 @@ h1{ font-size: 26px; text-align: center; margin: 0 0 4px; color: var(--text-main
 .user-avatar{width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent);}
 .user-name{font-weight: 600; color: var(--accent); font-size: 12px;}
 
-/* 이름 밑 경험치 바 스타일 */
 .user-exp-container {
   display: flex;
   flex-direction: column;
@@ -457,15 +455,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .stock-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; position: relative; }
 .stock-chart-canvas { width: 100%; height: 75px; background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-color); border-radius: 10px; margin: 8px 0; }
 
-/* 주식 잠금 카드 스타일 */
-.stock-lock-overlay {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(4px);
-  border-radius: 14px; display: flex; flex-direction: column;
-  justify-content: center; align-items: center; padding: 16px; z-index: 10;
-}
-.stock-lock-overlay.hidden { display: none; }
-
 .news-ticker-box {
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.3);
@@ -584,7 +573,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
   <div class="game">
     <div class="top-tools">
-      <!-- 구글 계정 이름 및 바로 밑 경험치 바 통합 영역 -->
       <div class="user-profile-area" id="userProfileArea">
         <div class="user-profile-top">
           <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%237f8c8d'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23ffffff' font-size='14' font-family='sans-serif'%3E?%3C/text%3E%3C/svg%3E" class="user-avatar" id="userAvatar">
@@ -593,7 +581,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <div class="user-exp-container">
           <div class="user-exp-info">
             <span style="color:var(--accent);" id="userLevelDisplay">⭐ Lv.1</span>
-            <span style="color:var(--text-sub);" id="userExpDisplay">EXP: 0 / 1,000</span>
+            <span style="color:var(--text-sub);" id="userExpDisplay">EXP: 0 / 100</span>
           </div>
           <div class="user-exp-bar-bg">
             <div class="user-exp-bar-fill" id="levelBarFill"></div>
@@ -618,8 +606,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.0</h1>
-    <div class="sub">매도 후 3분 쿨타임 및 오토클릭 ON/OFF, 주식 잠금해제 시스템 적용 버전</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.1</h1>
+    <div class="sub">주식 전면 개방, 10분 매도 쿨타임, 100 기준 점진적 EXP 상승 버전</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -732,7 +720,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 오토클릭 연구소 -->
     <div id="autoclickPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🖱️ 오토클릭 자율 구동 연구소</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">오토클릭 기능을 상시 켜거나 끌 수 있으며, 연구 레벨에 따라 자동 클릭 속도가 빨라집니다.</p>
@@ -808,24 +795,24 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 주식 거래소 (4가지 중 3가지 잠금 및 잠금해제 기능 적용) -->
+    <!-- 주식 거래소 (모두 열려있으며 매도 시 10분 대기시간 적용) -->
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널</h3>
       
       <div id="stockChannelStatusBox" style="background:rgba(16, 185, 129, 0.08); border:1px solid rgba(16, 185, 129, 0.3); border-radius:12px; padding:12px; margin-bottom:14px; text-align:center;">
-        <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 채널 이용 가능</h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0;" id="channelStateDesc">주식 매도 시 3분간 재매수가 제한됩니다.</p>
+        <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 채널 이용 가능 (상시 개방)</h4>
+        <p style="font-size:11px; color:var(--text-sub); margin:0;" id="channelStateDesc">주식 매도 시 10분간 재매수가 제한됩니다.</p>
       </div>
 
       <div class="news-ticker-box" id="newsTickerBox">
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
         <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세를 유지하고 있습니다.</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식을 매도하면 **3분(180초) 동안 해당 주식의 재매수가 엄격히 제한**됩니다. 2~4번 주식은 에너지 혹은 조건으로 잠금을 해제할 수 있습니다!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식을 매도하면 **10분(600초) 동안 해당 주식의 재매수가 엄격히 제한**됩니다. 모든 주식 채널이 기본 개방되어 있습니다!</p>
       
       <div id="stockTradingContainer">
         <div class="stock-grid">
-          <!-- 1번 주식 (기본 개방) -->
+          <!-- 1번 주식 -->
           <div class="stock-card">
             <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
             <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">500</b> 에너지</p>
@@ -843,78 +830,57 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             </div>
           </div>
 
-          <!-- 2번 주식 (잠금 기능 포함) -->
+          <!-- 2번 주식 -->
           <div class="stock-card">
-            <div id="stockLock2" class="stock-lock-overlay">
-              <h4 style="color:#f59e0b; margin:0 0 4px; font-size:13px;">🔒 엠비디아 (NVDA) 잠김</h4>
-              <p style="font-size:10px; color:var(--text-sub); margin:0 0 10px;">해제 비용: 100,000 에너지</p>
-              <button class="btn-game" style="font-size:11px; padding:6px 12px;" onclick="unlockStock(2)">잠금 해제하기</button>
+            <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지</p>
+            <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
+            <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
+            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
+            <input type="number" id="stockInput2" class="stock-qty-input" value="1" min="1">
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1;" id="buyStock2_custom">지정 매수</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #3b82f6, #1d4ed8) !important;" id="buyStock2_max">전부 매수</button>
             </div>
-            <div id="stockContent2">
-              <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
-              <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지</p>
-              <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
-              <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
-              <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
-              <input type="number" id="stockInput2" class="stock-qty-input" value="1" min="1">
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <button class="btn-stock" style="flex:1;" id="buyStock2_custom">지정 매수</button>
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #3b82f6, #1d4ed8) !important;" id="buyStock2_max">전부 매수</button>
-              </div>
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock2_custom">지정 매도</button>
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock2_max">전부 매도</button>
-              </div>
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock2_custom">지정 매도</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock2_max">전부 매도</button>
             </div>
           </div>
 
-          <!-- 3번 주식 (잠금 기능 포함) -->
+          <!-- 3번 주식 -->
           <div class="stock-card" style="margin-top:4px;">
-            <div id="stockLock3" class="stock-lock-overlay">
-              <h4 style="color:#f59e0b; margin:0 0 4px; font-size:13px;">🔒 스페이스코어 (SPC) 잠김</h4>
-              <p style="font-size:10px; color:var(--text-sub); margin:0 0 10px;">해제 비용: 500,000 에너지</p>
-              <button class="btn-game" style="font-size:11px; padding:6px 12px;" onclick="unlockStock(3)">잠금 해제하기</button>
+            <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지</p>
+            <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
+            <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
+            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
+            <input type="number" id="stockInput3" class="stock-qty-input" value="1" min="1">
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1;" id="buyStock3_custom">지정 매수</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #3b82f6, #1d4ed8) !important;" id="buyStock3_max">전부 매수</button>
             </div>
-            <div id="stockContent3">
-              <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
-              <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지</p>
-              <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
-              <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
-              <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
-              <input type="number" id="stockInput3" class="stock-qty-input" value="1" min="1">
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <button class="btn-stock" style="flex:1;" id="buyStock3_custom">지정 매수</button>
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #3b82f6, #1d4ed8) !important;" id="buyStock3_max">전부 매수</button>
-              </div>
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock3_custom">지정 매도</button>
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock3_max">전부 매도</button>
-              </div>
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock3_custom">지정 매도</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock3_max">전부 매도</button>
             </div>
           </div>
 
-          <!-- 4번 주식 (잠금 기능 포함) -->
+          <!-- 4번 주식 -->
           <div class="stock-card" style="margin-top:4px;">
-            <div id="stockLock4" class="stock-lock-overlay">
-              <h4 style="color:#f59e0b; margin:0 0 4px; font-size:13px;">🔒 양자 바이오 (QBIO) 잠김</h4>
-              <p style="font-size:10px; color:var(--text-sub); margin:0 0 10px;">해제 비용: 2,000,000 에너지</p>
-              <button class="btn-game" style="font-size:11px; padding:6px 12px;" onclick="unlockStock(4)">잠금 해제하기</button>
+            <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지</p>
+            <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
+            <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
+            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
+            <input type="number" id="stockInput4" class="stock-qty-input" value="1" min="1">
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1;" id="buyStock4_custom">지정 매수</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #3b82f6, #1d4ed8) !important;" id="buyStock4_max">전부 매수</button>
             </div>
-            <div id="stockContent4">
-              <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
-              <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지</p>
-              <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
-              <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
-              <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
-              <input type="number" id="stockInput4" class="stock-qty-input" value="1" min="1">
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <button class="btn-stock" style="flex:1;" id="buyStock4_custom">지정 매수</button>
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #3b82f6, #1d4ed8) !important;" id="buyStock4_max">전부 매수</button>
-              </div>
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock4_custom">지정 매도</button>
-                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock4_max">전부 매도</button>
-              </div>
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock4_custom">지정 매도</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock4_max">전부 매도</button>
             </div>
           </div>
         </div>
@@ -1322,9 +1288,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v14.0 맞춤형 확장 버전",
-    title: "주식 잠금해제 기능, 이름 밑 경험치 바, 오토클릭 ON/OFF 적용",
-    desc: "1) 주식 4가지 중 2, 3, 4번 주식에 잠금 및 에너지 소모 잠금해제 기능이 추가되었습니다.\n2) 구글 계정 이름 바로 밑에 연구원 레벨 및 경험치 진행 바가 배치되었습니다.\n3) 매도 후 3분 매수 쿨타임 및 오토클릭 토글 기능이 안전하게 저장됩니다."
+    version: "v14.1 맞춤형 확장 버전",
+    title: "주식 전면 개방, 10분 쿨타임 적용 및 레벨 100 기준 EXP 공식 수정",
+    desc: "1) 주식 4가지 채널이 모두 기본 개방(잠금 해제)되었습니다.\n2) 주식 매도 후 재매수 대기 시간이 10분(600초)으로 연장되었습니다.\n3) 주식 시스템 개방으로 인해 자동 해제되었던 주식 관련 칭호('퀀텀 주식왕') 조건이 초기화되었습니다.\n4) 레벨 1에서의 필요 경험치가 100으로 설정되고, 레벨이 오를수록 점진적으로 상승하도록 변경되었습니다."
   }
 ];
 
@@ -1359,7 +1325,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v140";
+const saveKey = "energyRush_PermanentSaveData_v141";
 let savedRawData = localStorage.getItem(saveKey);
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
@@ -1370,7 +1336,6 @@ let d = JSON.parse(savedRawData || "null") || {
   permPower: 0, permCps: 0, permLuck: 0, permGem: 0, gems: 0,
   coinColor: 'emerald', coinIcon: '⚡', customImg: null, bgImg: null,
   stock1: 0, stock2: 0, stock3: 0, stock4: 0,
-  stockUnlocked2: false, stockUnlocked3: false, stockUnlocked4: false, // 3가지 주식 잠금 상태 초기화
   box1Count: 0,
   equippedWeapon: 0, ownedWeapons: [0],
   mineDepth: 1,
@@ -1386,10 +1351,6 @@ let d = JSON.parse(savedRawData || "null") || {
   level: 1,
   exp: 0
 };
-
-if (d.stockUnlocked2 === undefined) d.stockUnlocked2 = false;
-if (d.stockUnlocked3 === undefined) d.stockUnlocked3 = false;
-if (d.stockUnlocked4 === undefined) d.stockUnlocked4 = false;
 
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
@@ -1432,12 +1393,13 @@ if (!d.stockHistories) d.stockHistories = {
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
+// 주식 관련 칭호 조건을 변경하여 주식 채널 개방과 연동되지 않도록 수정 (예: 자산 또는 다른 조건 혹은 주식 거래 횟수 등, 여기서는 주식 칭호 조건을 누적 에너지 50,000,000 또는 다른 고유 조건으로 분리하거나 제거하여 자동 해제 방지)
 const TITLES_DB = {
   novice: { id: 'novice', name: '초보 연구원', desc: '기본 지급 칭호', effectDesc: '효과 없음', check: () => true },
   energy_apprentice: { id: 'energy_apprentice', name: '에너지 수집가', desc: '누적 에너지 100,000 달성', effectDesc: '모든 에너지 획득량 +3%', check: () => d.totalEnergyEarned >= 100000 },
   energy_master: { id: 'energy_master', name: '에너지 연출가', desc: '누적 에너지 10,000,000 달성', effectDesc: '모든 에너지 획득량 +10%', check: () => d.totalEnergyEarned >= 10000000 },
   drone_collector: { id: 'drone_collector', name: '드론 마스터', desc: '드론 15종 이상 발견', effectDesc: '클릭 효율 +15%', check: () => (d.discoveredPets || []).length >= 15 },
-  stock_tycoon: { id: 'stock_tycoon', name: '퀀텀 주식왕', desc: '주식 4개 모두 해제 완료', effectDesc: '자동 채굴량 +20%', check: () => d.stockUnlocked2 && d.stockUnlocked3 && d.stockUnlocked4 },
+  stock_tycoon: { id: 'stock_tycoon', name: '퀀텀 주식왕', desc: '누적 에너지 50,000,000 달성', effectDesc: '자동 채굴량 +20%', check: () => d.totalEnergyEarned >= 50000000 },
   rebirth_lord: { id: 'rebirth_lord', name: '시공간 초월자', desc: '시스템 승급 3회 이상 완료', effectDesc: '모든 에너지 획득량 +25%', check: () => d.rebirth >= 3 }
 };
 
@@ -1604,13 +1566,6 @@ function updateStockUI() {
   if(document.getElementById("stockOwned3")) document.getElementById("stockOwned3").textContent = d.stock3;
   if(document.getElementById("stockOwned4")) document.getElementById("stockOwned4").textContent = d.stock4;
 
-  const lock2 = document.getElementById("stockLock2");
-  const lock3 = document.getElementById("stockLock3");
-  const lock4 = document.getElementById("stockLock4");
-  if(lock2) lock2.classList.toggle("hidden", d.stockUnlocked2);
-  if(lock3) lock3.classList.toggle("hidden", d.stockUnlocked3);
-  if(lock4) lock4.classList.toggle("hidden", d.stockUnlocked4);
-
   const newsEl = document.getElementById("newsTickerText");
   if(newsEl) {
     newsEl.textContent = d.latestNews;
@@ -1632,34 +1587,25 @@ function updateStockUI() {
   }
 
   drawStockChart("stockCanvas1", d.stockHistories[1]);
-  if(d.stockUnlocked2) drawStockChart("stockCanvas2", d.stockHistories[2]);
-  if(d.stockUnlocked3) drawStockChart("stockCanvas3", d.stockHistories[3]);
-  if(d.stockUnlocked4) drawStockChart("stockCanvas4", d.stockHistories[4]);
+  drawStockChart("stockCanvas2", d.stockHistories[2]);
+  drawStockChart("stockCanvas3", d.stockHistories[3]);
+  drawStockChart("stockCanvas4", d.stockHistories[4]);
 }
 
-function unlockStock(id) {
-  let costs = { 2: 100000, 3: 500000, 4: 2000000 };
-  let cost = costs[id];
-  if(d.score < cost) return say(`주식 잠금 해제에 필요한 에너지가 부족합니다! (필요: ${fmt(cost)})`);
-  d.score -= cost;
-  if(id === 2) d.stockUnlocked2 = true;
-  if(id === 3) d.stockUnlocked3 = true;
-  if(id === 4) d.stockUnlocked4 = true;
-  playSuccessSound();
-  say(`📈 주식 #${id}번 채널 잠금 해제 완료!`);
-  checkTitles();
-  save();
+// 레벨별 필요 경험치 계산 함수 (레벨 1 기준 100, 점진적 증가)
+function getRequiredExp(level) {
+  return Math.round(100 * Math.pow(1.35, level - 1));
 }
-window.unlockStock = unlockStock;
 
 function addExp(amount) {
   d.exp = (d.exp || 0) + amount;
-  let nextExp = d.level * 1000;
-  if(d.exp >= nextExp) {
+  let nextExp = getRequiredExp(d.level || 1);
+  while(d.exp >= nextExp) {
     d.exp -= nextExp;
     d.level++;
     playSuccessSound();
     showStockAlertToast(`⭐ 연구원 레벨 업! [Lv.${d.level}] 달성!`, true);
+    nextExp = getRequiredExp(d.level);
   }
 }
 
@@ -2172,8 +2118,7 @@ function getBaseMult(){
   let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
   let titleBonus = getTitleBonus();
   let levelBonus = 1 + ((d.level || 1) * 0.02);
-  let stockTycoonBonus = (d.stockUnlocked2 && d.stockUnlocked3 && d.stockUnlocked4) ? 1.20 : 1.0; // 주식 모두 해제 시 자동 채굴량/전체 버프
-  return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * titleBonus.energyMult * levelBonus * stockTycoonBonus * (1 + d.rp * 0.04);
+  return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * titleBonus.energyMult * levelBonus * (1 + d.rp * 0.04);
 }
 
 let saveTimeout = null;
@@ -2366,10 +2311,9 @@ function render(){
  if(document.getElementById("rp")) document.getElementById("rp").textContent=fmt(d.rp);
  if(document.getElementById("permRpDisplay")) document.getElementById("permRpDisplay").textContent=fmt(d.rp);
 
- // 이름 바로 밑에 위치한 레벨 및 경험치 바 렌더링
  const currentLevel = d.level || 1;
  const currentExp = d.exp || 0;
- const reqExp = currentLevel * 1000;
+ const reqExp = getRequiredExp(currentLevel);
  if(document.getElementById("userLevelDisplay")) document.getElementById("userLevelDisplay").textContent = `⭐ Lv.${currentLevel}`;
  if(document.getElementById("userExpDisplay")) document.getElementById("userExpDisplay").textContent = `EXP: ${fmt(currentExp)} / ${fmt(reqExp)}`;
  const levelFill = document.getElementById("levelBarFill");
@@ -3116,17 +3060,13 @@ function startMultiBoxOpeningInteraction(count){
 }
 
 function buyStock(id, amount) {
-  if(id === 2 && !d.stockUnlocked2) return say("엠비디아 주식 채널이 잠겨 있습니다!");
-  if(id === 3 && !d.stockUnlocked3) return say("스페이스코어 주식 채널이 잠겨 있습니다!");
-  if(id === 4 && !d.stockUnlocked4) return say("양자 바이오 주식 채널이 잠겨 있습니다!");
-
   const now = Date.now();
   const sellTime = d.stockSellCooldowns[id] || 0;
   if(now < sellTime) {
     let diff = sellTime - now;
     let minRem = Math.floor(diff / 60000);
     let secRem = Math.floor((diff % 60000) / 1000);
-    return say(`⏳ 매도 후 3분 쿨타임 적용 중! (${minRem}분 ${secRem}초 후 재매수 가능)`);
+    return say(`⏳ 매도 후 10분 쿨타임 적용 중! (${minRem}분 ${secRem}초 후 재매수 가능)`);
   }
 
   const price = d.stockPrices[id];
@@ -3170,9 +3110,10 @@ function sellStock(id, amount) {
   d.score += price * qty;
   d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + (price * qty);
 
-  d.stockSellCooldowns[id] = Date.now() + (3 * 60 * 1000);
+  // 매도 후 10분 (600초) 쿨타임 적용
+  d.stockSellCooldowns[id] = Date.now() + (10 * 60 * 1000);
 
-  say(`주식 ${qty}주 매도 완료! (3분간 재매수 쿨타임 적용)`);
+  say(`주식 ${qty}주 매도 완료! (10분간 재매수 쿨타임 적용)`);
   save();
 }
 
@@ -3275,7 +3216,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "energy_rush_ultimate_v14.html";
+      a.download = "energy_rush_ultimate_v14_1.html";
       a.click();
       say("시스템 파일이 다운로드되었습니다!");
     };
