@@ -166,9 +166,13 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 .tool-btn:hover{background: rgba(245, 158, 11, 0.1); border-color: var(--accent); color: var(--accent);}
 
 .stock-alert-toast {
-  position: absolute; top: -42px; right: 0; background: linear-gradient(135deg, #10b981, #059669);
+  position: absolute; top: -45px; right: 0; background: linear-gradient(135deg, #10b981, #059669);
   color: #fff; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700;
-  white-space: nowrap; box-shadow: 0 4px 15px rgba(16,185,129,0.4); animation: fadeInOut 3s forwards; z-index: 99;
+  white-space: nowrap; box-shadow: 0 4px 15px rgba(16,185,129,0.4); animation: fadeInOut 3.5s forwards; z-index: 99;
+}
+.stock-alert-toast.down {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 4px 15px rgba(239,68,68,0.4);
 }
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translateY(6px); }
@@ -318,9 +322,9 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   display: flex; align-items: center; justify-content: center; color: var(--accent); font-weight: 700;
   box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
 }
-.bet-input{
+.bet-input, .stock-qty-input{
   width: 100%; padding: 8px; border-radius: 10px; border: 1px solid var(--border-color);
-  background: rgba(7, 9, 14, 0.9); color: var(--text-main); text-align: center; margin-bottom: 10px; font-size: 13px; font-weight: 600;
+  background: rgba(7, 9, 14, 0.9); color: var(--text-main); text-align: center; margin-bottom: 6px; font-size: 13px; font-weight: 600;
 }
 
 .pet-box-grid{display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px;}
@@ -610,7 +614,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
         <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다. 속보에 따라 급등락이 발생합니다!</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">평상시 300~600원에 머물며, 뉴스 속보에 따라 떡상하거나 떡락합니다! 보유 주식이 급등하면 우측 상단에 알람이 표시됩니다.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">평상시 300~600원에 머물며, 뉴스 속보에 따라 정확히 떡상/떡락합니다! 보유 주식이 300 이상 변동 시 상단 알람이 뜹니다.</p>
       
       <div class="stock-grid">
         <div class="stock-card">
@@ -619,12 +623,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
           <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer1"></p>
-          <div style="display:flex; gap:6px; margin-top:8px;">
-            <button class="btn-stock" style="flex:1;" id="buyStock1_1">1주 매수</button>
+          <input type="number" id="stockInput1" class="stock-qty-input" value="1" min="1">
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <button class="btn-stock" style="flex:1;" id="buyStock1_custom">지정 매수</button>
             <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock1_max">전부 매수</button>
           </div>
           <div style="display:flex; gap:6px; margin-top:4px;">
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock1_1">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock1_custom">지정 매도</button>
             <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock1_max">전부 매도</button>
           </div>
         </div>
@@ -641,12 +646,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
-            <div style="display:flex; gap:6px; margin-top:8px;">
-              <button class="btn-stock" style="flex:1;" id="buyStock2_1">1주 매수</button>
+            <input type="number" id="stockInput2" class="stock-qty-input" value="1" min="1">
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1;" id="buyStock2_custom">지정 매수</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock2_max">전부 매수</button>
             </div>
             <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock2_1">1주 매도</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock2_custom">지정 매도</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock2_max">전부 매도</button>
             </div>
           </div>
@@ -664,12 +670,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
-            <div style="display:flex; gap:6px; margin-top:8px;">
-              <button class="btn-stock" style="flex:1;" id="buyStock3_1">1주 매수</button>
+            <input type="number" id="stockInput3" class="stock-qty-input" value="1" min="1">
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1;" id="buyStock3_custom">지정 매수</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock3_max">전부 매수</button>
             </div>
             <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock3_1">1주 매도</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock3_custom">지정 매도</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock3_max">전부 매도</button>
             </div>
           </div>
@@ -687,12 +694,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
-            <div style="display:flex; gap:6px; margin-top:8px;">
-              <button class="btn-stock" style="flex:1;" id="buyStock4_1">1주 매수</button>
+            <input type="number" id="stockInput4" class="stock-qty-input" value="1" min="1">
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1;" id="buyStock4_custom">지정 매수</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock4_max">전부 매수</button>
             </div>
             <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock4_1">1주 매도</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock4_custom">지정 매도</button>
               <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock4_max">전부 매도</button>
             </div>
           </div>
@@ -1044,9 +1052,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v12.3 주식 3~6백 원대 횡보 및 급등 알람 패치",
-    title: "평상시 3~6백 원대 횡보, 뉴스 속보 급등락 및 보유 주식 알람 기능 추가",
-    desc: "1) 📈 변동 없을 때는 주식이 300~600원 사이에서 움직이며, 뉴스 속보에 따라 떡상/떡락합니다.\n2) 🔔 보유 중인 주식이 급등하면 우측 상단에 '보유하고 계신 주식이 오르고 있습니다' 알람이 표시됩니다."
+    version: "v12.4 주식 뉴스 급등락 완벽 연동 및 300 이상 변동 알람 패치",
+    title: "뉴스 속보에 따른 실시간 주가 반영 및 300 이상 변동 시 보유 주식 알람",
+    desc: "1) 📈 뉴스 속보(호재/악재)에 따라 해당 주식이 정확히 떡상 및 폭락하도록 연동되었습니다.\n2) 🔔 5초마다 주가가 갱신되며, 보유 주식이 300 이상 상승/하락 시 상단에 알람이 표시됩니다.\n3) 🔢 원하는 수량을 입력하여 지정 매수/매도가 가능합니다."
   }
 ];
 
@@ -1081,8 +1089,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v123";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v122") || localStorage.getItem("energyRush_PermanentSaveData_v121");
+const saveKey = "energyRush_PermanentSaveData_v124";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v123") || localStorage.getItem("energyRush_PermanentSaveData_v122");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1232,17 +1240,17 @@ let msgTimer = null;
 let draggedPetIdx = null;
 
 let clickTimestamps = [];
-let isPenaltyActive = false;
+let idPenaltyActive = false;
 let penaltyTimerCountdown = 0;
 let penaltyInterval = null;
 
-function showStockAlertToast(msg) {
+function showStockAlertToast(msg, isDown = false) {
   const container = $("stockAlertContainer");
   if(!container) return;
-  container.innerHTML = `<div class="stock-alert-toast">🔔 ${msg}</div>`;
+  container.innerHTML = `<div class="stock-alert-toast ${isDown ? 'down' : ''}">🔔 ${msg}</div>`;
   setTimeout(() => {
     container.innerHTML = "";
-  }, 3000);
+  }, 3500);
 }
 
 function drawStockChart(canvasId, historyData) {
@@ -1688,7 +1696,7 @@ function render(){
 
  const coinBtn = $("coin");
  if(coinBtn) {
-   if(isPenaltyActive) {
+   if(idPenaltyActive) {
      coinBtn.style.filter = "grayscale(100%)";
      coinBtn.style.cursor = "not-allowed";
    } else {
@@ -2363,7 +2371,9 @@ function buyStock(id, amount) {
     qty = Math.floor(d.score / price);
     if(qty <= 0) return say("에너지가 부족합니다.");
   } else {
-    qty = amount;
+    const inputEl = $(`stockInput${id}`);
+    qty = amount === 'custom' ? (inputEl ? parseInt(inputEl.value) || 1 : 1) : amount;
+    if(qty <= 0) return say("올바른 수량을 입력해주세요.");
     if(d.score < price * qty) return say("에너지가 부족합니다.");
   }
   d.score -= price * qty;
@@ -2383,7 +2393,9 @@ function sellStock(id, amount) {
     qty = owned;
     if(qty <= 0) return say("보유한 주식이 없습니다.");
   } else {
-    qty = amount;
+    const inputEl = $(`stockInput${id}`);
+    qty = amount === 'custom' ? (inputEl ? parseInt(inputEl.value) || 1 : 1) : amount;
+    if(qty <= 0) return say("올바른 수량을 입력해주세요.");
     if(owned < qty) return say("보유 주식이 부족합니다.");
   }
   if(id === 1) d.stock1 -= qty;
@@ -2468,13 +2480,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if(huntBtn3) huntBtn3.onclick = () => huntMonster(3);
 
   for(let i = 1; i <= 4; i++) {
-    const b1 = $(`buyStock${i}_1`);
+    const bCustom = $(`buyStock${i}_custom`);
     const bMax = $(`buyStock${i}_max`);
-    const s1 = $(`sellStock${i}_1`);
+    const sCustom = $(`sellStock${i}_custom`);
     const sMax = $(`sellStock${i}_max`);
-    if(b1) b1.onclick = () => buyStock(i, 1);
+    if(bCustom) bCustom.onclick = () => buyStock(i, 'custom');
     if(bMax) bMax.onclick = () => buyStock(i, 'max');
-    if(s1) s1.onclick = () => sellStock(i, 1);
+    if(sCustom) sCustom.onclick = () => sellStock(i, 'custom');
     if(sMax) sMax.onclick = () => sellStock(i, 'max');
   }
 
@@ -2618,7 +2630,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const coinBtnMain = $("coin");
   if(coinBtnMain) {
     coinBtnMain.onclick = (e) => {
-      if(isPenaltyActive) {
+      if(idPenaltyActive) {
         say(`🚨 매크로/비정상 클릭 감지! ${penaltyTimerCountdown}초 동안 클릭이 제한됩니다.`);
         return;
       }
@@ -2627,14 +2639,14 @@ document.addEventListener("DOMContentLoaded", () => {
       clickTimestamps.push(nowTime);
       clickTimestamps = clickTimestamps.filter(t => nowTime - t < 1000);
       if(clickTimestamps.length > 25) {
-        isPenaltyActive = true;
+        idPenaltyActive = true;
         penaltyTimerCountdown = 10;
         say("🚨 비정상적 초고속 연타 감지! 10초간 클릭이 제한됩니다.");
         if(penaltyInterval) clearInterval(penaltyInterval);
         penaltyInterval = setInterval(() => {
           penaltyTimerCountdown--;
           if(penaltyTimerCountdown <= 0) {
-            isPenaltyActive = false;
+            idPenaltyActive = false;
             clearInterval(penaltyInterval);
             say("✅ 클릭 제한이 해제되었습니다.");
             render();
@@ -2924,45 +2936,63 @@ setInterval(() => {
     }
   }
 
+  // 5초마다 주가 갱신 및 뉴스 속보 연동
   newsTickerTimer++;
-  if(newsTickerTimer >= 14) { 
+  let targetStockId = 0;
+  let isNewsTriggered = false;
+
+  if(newsTickerTimer >= 5) { 
     newsTickerTimer = 0;
-    let targetStockId = Math.floor(Math.random() * 4) + 1;
+    targetStockId = Math.floor(Math.random() * 4) + 1;
     let isBad = Math.random() < 0.55; 
     let compName = companyNames[targetStockId];
-    let oldPrice = d.stockPrices[targetStockId];
 
     if(isBad) {
       let randomMsg = badNewsList[Math.floor(Math.random() * badNewsList.length)];
       d.latestNews = `🚨 [속보] ${compName}: ${randomMsg}`;
-      let dropAmount = Math.floor(Math.random() * 300) + 150;
-      d.stockPrices[targetStockId] = Math.max(100, d.stockPrices[targetStockId] - dropAmount);
     } else {
       let randomMsg = goodNewsList[Math.floor(Math.random() * goodNewsList.length)];
       d.latestNews = `🚀 [속보] ${compName}: ${randomMsg}`;
-      let riseAmount = Math.floor(Math.random() * 400) + 200;
-      d.stockPrices[targetStockId] = Math.min(2000, d.stockPrices[targetStockId] + riseAmount);
-      
-      let ownedQty = targetStockId === 1 ? d.stock1 : targetStockId === 2 ? d.stock2 : targetStockId === 3 ? d.stock3 : d.stock4;
-      if(ownedQty > 0) {
-        showStockAlertToast(`보유하신 [${compName}] 주식이 오르고 있습니다!`);
-      }
     }
+    isNewsTriggered = true;
   }
 
   let updated = false;
   for(let i = 1; i <= 4; i++) {
     let oldP = d.stockPrices[i];
-    let delta = Math.floor(Math.random() * 51) - 25; 
-    let newP = oldP + delta;
-    
-    if(newP < 300) newP = 300 + Math.floor(Math.random() * 30);
-    if(newP > 600 && Math.random() > 0.1) newP = 600 - Math.floor(Math.random() * 30);
+    let newP = oldP;
 
-    d.stockPrices[i] = Math.max(100, Math.min(2000, newP));
-    
-    d.stockHistories[i].push(d.stockPrices[i]); 
+    if(isNewsTriggered && i === targetStockId) {
+      if(d.latestNews.includes("[속보]")) {
+        if(d.latestNews.includes("폭락") || d.latestNews.includes("중단") || d.latestNews.includes("사임") || d.latestNews.includes("철퇴")) {
+          newP -= (Math.floor(Math.random() * 250) + 300); // 떡락
+        } else {
+          newP += (Math.floor(Math.random() * 250) + 300); // 떡상
+        }
+      }
+    } else {
+      let delta = Math.floor(Math.random() * 31) - 15; 
+      newP = oldP + delta;
+      if(newP < 300) newP = 300 + Math.floor(Math.random() * 20);
+      if(newP > 600) newP = 600 - Math.floor(Math.random() * 20);
+    }
+
+    newP = Math.max(100, Math.min(2000, newP));
+    let diff = newP - oldP;
+
+    d.stockPrices[i] = newP;
+    d.stockHistories[i].push(newP); 
     if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
+
+    // 보유 주식이 300 이상 변동 시 알람
+    let ownedQty = i === 1 ? d.stock1 : i === 2 ? d.stock2 : i === 3 ? d.stock3 : d.stock4;
+    if(ownedQty > 0) {
+      if(diff >= 300) {
+        showStockAlertToast(`🔔 [${companyNames[i]}] 주가 +${diff} 급등! (보유 중)`);
+      } else if(diff <= -300) {
+        showStockAlertToast(`🔻 [${companyNames[i]}] 주가 ${diff} 폭락! (보유 중)`, true);
+      }
+    }
     updated = true;
   }
 
@@ -2972,7 +3002,7 @@ setInterval(() => {
   }
   
   if(updated) save();
-}, 600);
+}, 1000);
 </script>
 </body>
 </html>
