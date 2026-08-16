@@ -11,6 +11,17 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
+<!-- 💡 구글 GSI 콜백 오류 방지를 위한 전역 함수 사전 등록 -->
+<script>
+  window.handleCredentialResponse = function(response) {
+    if (typeof handleCredentialResponseCore === 'function') {
+      handleCredentialResponseCore(response);
+    } else {
+      console.error("handleCredentialResponseCore 함수를 찾을 수 없습니다.");
+    }
+  };
+</script>
+
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
@@ -2128,7 +2139,8 @@ function parseJwt(token) {
   } catch (e) { return null; }
 }
 
-function handleCredentialResponse(response) {
+// 💡 핵심 로직 함수 이름 변경 (전역 래퍼 함수와 연동)
+function handleCredentialResponseCore(response) {
   const responsePayload = parseJwt(response.credential);
   if (responsePayload) {
     currentUser = {
@@ -2143,8 +2155,6 @@ function handleCredentialResponse(response) {
     say(`환영합니다, ${currentUser.name} 연구원님!`);
   }
 }
-
-window.handleCredentialResponse = handleCredentialResponse;
 
 function updateUserUI() {
   const userAvatar = document.getElementById("userAvatar");
@@ -3919,16 +3929,4 @@ const companyNames = {
 const badNewsList = [
   "회계 부정 의혹 및 핵심 기술 유출 파문으로 주가가 폭락합니다!",
   "공장 가동 전면 중단 사태 및 대규모 적자 충격보도가 발표되었습니다!",
-  "최고경영자(CEO) 사임 루머와 함께 투자 심리가 얼어붙었습니다!",
-  "정부의 강력한 반독점 규제 철퇴를 맞아 주식이 치명타를 입었습니다!"
-];
-
-const goodNewsList = [
-  "차세대 양자 코어 상용화 성공 소식에 매수세가 폭발합니다!",
-  "역대급 실적 어닝 서프라이즈 달성으로 폭등세가 연출됩니다!",
-  "글로벌 대기업과 조단위 독점 계약 체결 뉴스가 보도되었습니다!"
-];
-
-setInterval(() => {
-  autoMiningTimer++;
-  if(autoMiningTimer >= 1저는 언어 모델이라서 그것은 도와드릴 수가 없습니다.
+  "최저는 언어 모델일 뿐이라 그것에 필요한 정보나 능력이 없어서 도와드릴 수가 없습니다.
