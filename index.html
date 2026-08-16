@@ -122,6 +122,7 @@ body::before {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.06);
   position: relative;
   min-width: 0;
+  overflow: hidden;
 }
 
 h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main); font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -165,24 +166,31 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 }
 .tool-btn:hover{background: rgba(245, 158, 11, 0.1); border-color: var(--accent); color: var(--accent);}
 
+/* 화면 옆에서 나왔다가 다시 들어가며 사라지는 슬라이드 알람 애니메이션 */
 .stock-alert-toast {
-  position: absolute; top: -45px; right: 0; background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: #fff; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700;
-  white-space: nowrap; box-shadow: 0 4px 15px rgba(239,68,68,0.4); animation: fadeInOut 3.5s forwards; z-index: 99;
+  position: fixed;
+  top: 30px;
+  right: -350px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  z-index: 9999;
+  transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.stock-alert-toast.show {
+  right: 30px;
 }
 .stock-alert-toast.up {
   background: linear-gradient(135deg, #ef4444, #dc2626);
-  box-shadow: 0 4px 15px rgba(239,68,68,0.4);
+  box-shadow: 0 10px 30px rgba(239,68,68,0.4);
 }
 .stock-alert-toast.down {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  box-shadow: 0 4px 15px rgba(59,130,246,0.4);
-}
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translateY(6px); }
-  15% { opacity: 1; transform: translateY(0); }
-  85% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+  box-shadow: 0 10px 30px rgba(59,130,246,0.4);
 }
 
 .alarm-btn {
@@ -394,12 +402,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 }
 .news-ticker-content {
   font-size: 12px;
-  color: #fca5a5;
   font-weight: 600;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+/* 안좋은 뉴스 빨간색, 좋은 뉴스 하늘색 */
+.news-bad { color: #fca5a5 !important; }
+.news-good { color: #38bdf8 !important; }
 
 .ranking-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 
@@ -414,6 +424,9 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 </style>
 </head>
 <body>
+
+<!-- 화면 옆에서 슬라이드 되어 나타났다 들어가는 알람 토스트 컨테이너 -->
+<div id="stockAlertContainer"></div>
 
 <div class="layout-container">
   <div class="sidebar" id="sidebar">
@@ -446,7 +459,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <span class="user-name" id="userName">연구원 (미로그인)</span>
       </div>
       <div class="top-right-btns" style="position:relative;">
-        <div id="stockAlertContainer"></div>
         <button class="tool-btn" id="bgmToggleBtn" style="background:rgba(16, 185, 129, 0.08); border-color:rgba(16, 185, 129, 0.3); color:#10b981;">🎵 BGM 끄기</button>
         <button class="tool-btn alarm-btn" id="openPatchNoteBtn">📢 패치노트 <span class="alarm-badge active" id="alarmBadge"></span></button>
         <button class="tool-btn" id="downloadGameBtn">📥 파일저장</button>
@@ -614,98 +626,109 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널</h3>
+      
+      <!-- 주식 채널 이용/잠김 상태 표시 박스 -->
+      <div id="stockChannelStatusBox" style="background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.3); border-radius:12px; padding:12px; margin-bottom:14px; text-align:center;">
+        <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 채널 이용 가능 (남은 시간: 5분 0초)</h4>
+        <p style="font-size:11px; color:var(--text-sub); margin:0 0 8px;" id="channelStateDesc">채널을 열고 닫을 수 있습니다. 5분 이용 후 10분간 잠깁니다.</p>
+        <button class="btn-game" id="toggleChannelOpenBtn" style="padding:6px 16px; font-size:11px; background:linear-gradient(135deg, #ef4444, #dc2626) !important;">🔒 주식 채널 강제 닫기 (잠금)</button>
+      </div>
+
       <div class="news-ticker-box" id="newsTickerBox">
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
-        <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다. 속보에 따라 급등락이 발생합니다!</span>
+        <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">6초마다 갱신되며, 보유 주식 **150 이상 변동 시 '띵' 소리와 함께** 우측 상단 실시간 알람이 뜹니다! (매도 후 쿨타임 1분)</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">5초마다 갱신되며, 나쁜 소식은 빨간색, 좋은 소식은 하늘색으로 표시됩니다. 보유 주식 150 이상 변동 시 '띵' 소리와 함께 슬라이드 알람이 나타납니다!</p>
       
-      <div class="stock-grid">
-        <div class="stock-card">
-          <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES) [기본 개방]</h4>
-          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">500</b> 에너지</p>
-          <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
-          <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
-          <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer1"></p>
-          <input type="number" id="stockInput1" class="stock-qty-input" value="1" min="1">
-          <div style="display:flex; gap:6px; margin-top:4px;">
-            <button class="btn-stock" style="flex:1;" id="buyStock1_custom">지정 매수</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock1_max">전부 매수</button>
+      <!-- 주식 거래 컨테이너 (채널 닫힐 시 숨김) -->
+      <div id="stockTradingContainer">
+        <div class="stock-grid">
+          <div class="stock-card">
+            <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES) [기본 개방]</h4>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">500</b> 에너지</p>
+            <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
+            <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
+            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer1"></p>
+            <input type="number" id="stockInput1" class="stock-qty-input" value="1" min="1">
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1;" id="buyStock1_custom">지정 매수</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock1_max">전부 매수</button>
+            </div>
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock1_custom">지정 매도</button>
+              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock1_max">전부 매도</button>
+            </div>
           </div>
-          <div style="display:flex; gap:6px; margin-top:4px;">
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock1_custom">지정 매도</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock1_max">전부 매도</button>
-          </div>
-        </div>
 
-        <div class="stock-card" id="stockCard2Container">
-          <div id="stockLock2" style="padding: 20px 0; text-align: center;">
-            <h4 style="color:var(--accent); margin:0 0 6px;">🔒 엠비디아 (NVDA) 잠김</h4>
-            <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost2">75,000</b> 에너지</p>
-            <button class="btn-game" id="unlockStock2Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
-          </div>
-          <div id="stockContent2" class="hidden">
-            <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지</p>
-            <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
-            <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
-            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
-            <input type="number" id="stockInput2" class="stock-qty-input" value="1" min="1">
-            <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1;" id="buyStock2_custom">지정 매수</button>
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock2_max">전부 매수</button>
+          <div class="stock-card" id="stockCard2Container">
+            <div id="stockLock2" style="padding: 20px 0; text-align: center;">
+              <h4 style="color:var(--accent); margin:0 0 6px;">🔒 엠비디아 (NVDA) 잠김</h4>
+              <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost2">75,000</b> 에너지</p>
+              <button class="btn-game" id="unlockStock2Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
             </div>
-            <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock2_custom">지정 매도</button>
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock2_max">전부 매도</button>
+            <div id="stockContent2" class="hidden">
+              <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
+              <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지</p>
+              <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
+              <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
+              <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
+              <input type="number" id="stockInput2" class="stock-qty-input" value="1" min="1">
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <button class="btn-stock" style="flex:1;" id="buyStock2_custom">지정 매수</button>
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock2_max">전부 매수</button>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock2_custom">지정 매도</button>
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock2_max">전부 매도</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="stock-card" style="margin-top:4px;" id="stockCard3Container">
-          <div id="stockLock3" style="padding: 20px 0; text-align: center;">
-            <h4 style="color:var(--accent); margin:0 0 6px;">🔒 스페이스코어 (SPC) 잠김</h4>
-            <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost3">375,000</b> 에너지</p>
-            <button class="btn-game" id="unlockStock3Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
-          </div>
-          <div id="stockContent3" class="hidden">
-            <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지</p>
-            <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
-            <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
-            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
-            <input type="number" id="stockInput3" class="stock-qty-input" value="1" min="1">
-            <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1;" id="buyStock3_custom">지정 매수</button>
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock3_max">전부 매수</button>
+          <div class="stock-card" style="margin-top:4px;" id="stockCard3Container">
+            <div id="stockLock3" style="padding: 20px 0; text-align: center;">
+              <h4 style="color:var(--accent); margin:0 0 6px;">🔒 스페이스코어 (SPC) 잠김</h4>
+              <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost3">375,000</b> 에너지</p>
+              <button class="btn-game" id="unlockStock3Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
             </div>
-            <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock3_custom">지정 매도</button>
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock3_max">전부 매도</button>
+            <div id="stockContent3" class="hidden">
+              <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
+              <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지</p>
+              <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
+              <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
+              <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
+              <input type="number" id="stockInput3" class="stock-qty-input" value="1" min="1">
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <button class="btn-stock" style="flex:1;" id="buyStock3_custom">지정 매수</button>
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock3_max">전부 매수</button>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock3_custom">지정 매도</button>
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock3_max">전부 매도</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="stock-card" style="margin-top:4px;" id="stockCard4Container">
-          <div id="stockLock4" style="padding: 20px 0; text-align: center;">
-            <h4 style="color:var(--accent); margin:0 0 6px;">🔒 양자 바이오 (QBIO) 잠김</h4>
-            <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost4">1,500,000</b> 에너지</p>
-            <button class="btn-game" id="unlockStock4Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
-          </div>
-          <div id="stockContent4" class="hidden">
-            <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지</p>
-            <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
-            <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
-            <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
-            <input type="number" id="stockInput4" class="stock-qty-input" value="1" min="1">
-            <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1;" id="buyStock4_custom">지정 매수</button>
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock4_max">전부 매수</button>
+          <div class="stock-card" style="margin-top:4px;" id="stockCard4Container">
+            <div id="stockLock4" style="padding: 20px 0; text-align: center;">
+              <h4 style="color:var(--accent); margin:0 0 6px;">🔒 양자 바이오 (QBIO) 잠김</h4>
+              <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost4">1,500,000</b> 에너지</p>
+              <button class="btn-game" id="unlockStock4Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
             </div>
-            <div style="display:flex; gap:6px; margin-top:4px;">
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock4_custom">지정 매도</button>
-              <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock4_max">전부 매도</button>
+            <div id="stockContent4" class="hidden">
+              <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
+              <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지</p>
+              <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
+              <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
+              <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
+              <input type="number" id="stockInput4" class="stock-qty-input" value="1" min="1">
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <button class="btn-stock" style="flex:1;" id="buyStock4_custom">지정 매수</button>
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock4_max">전부 매수</button>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock4_custom">지정 매도</button>
+                <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock4_max">전부 매도</button>
+              </div>
             </div>
           </div>
         </div>
@@ -980,7 +1003,6 @@ function stopBGM() {
   if(bgmInterval) { clearInterval(bgmInterval); bgmInterval = null; }
 }
 
-// '띵' 알람 소리 효과음 함수
 function playAlertDingSound() {
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -988,7 +1010,7 @@ function playAlertDingSound() {
     const osc = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime); // 고음 '띵' (C6)
+    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime);
     gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
     osc.connect(gainNode);
@@ -1074,9 +1096,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v12.6 주식 알람 150 이상 변경 & '띵' 효과음 & 매도 1분 쿨타임 패치",
-    title: "보유 주식 150 이상 변동 시 '띵' 사운드 알람, 매도 후 쿨타임 1분 단축",
-    desc: "1) 🔔 보유 주식이 150 이상 상승/하락 시 '띵' 소리와 함께 우측 상단 알람이 뜹니다.\n2) ⏳ 주식 매도 후 쿨타임이 1분으로 단축되었습니다.\n3) 📈 6초 주기 갱신 및 상승(빨강)/하락(파랑) 그래프가 유지됩니다."
+    version: "v12.7 주식 슬라이드 알람, 5초 그래프, 채널 5분용/10분잠금 패치",
+    title: "알람 슬라이드 애니메이션, 5초 주식 갱신, 주식 채널 5분 이용/10분 잠김 시스템 적용",
+    desc: "1) 🔔 주식 알람이 화면 옆에서 슬라이드 되어 나타났다가 다시 들어가며 사라집니다.\n2) 📈 주식 그래프 변동 주기가 5초로 변경되었습니다.\n3) ⏳ 주식 채널은 5분 동안 이용할 수 있으며, 닫히거나 만료되면 10분간 잠깁니다.\n4) 📢 안좋은 속보는 빨간색, 좋은 속보는 하늘색으로 표시됩니다."
   }
 ];
 
@@ -1111,8 +1133,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v126";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v125") || localStorage.getItem("energyRush_PermanentSaveData_v124");
+const saveKey = "energyRush_PermanentSaveData_v127";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v126") || localStorage.getItem("energyRush_PermanentSaveData_v125");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1125,7 +1147,10 @@ let d = JSON.parse(savedRawData || "null") || {
  equippedWeapon: 0, ownedWeapons: [0],
  mineDepth: 1,
  stockSellCooldowns: {},
- latestNews: "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다."
+ latestNews: "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.",
+ newsType: 'good',
+ stockChannelActiveUntil: 0, // 5분 이용 만료 타임스탬프
+ stockChannelLockedUntil: 0 // 10분 잠금 만료 타임스탬프
 };
 
 if (!d.equippedPets) d.equippedPets = [];
@@ -1150,6 +1175,9 @@ if (d.ownedWeapons === undefined) d.ownedWeapons = [0];
 if (d.mineDepth === undefined) d.mineDepth = 1;
 if (!d.stockSellCooldowns) d.stockSellCooldowns = {};
 if (!d.latestNews) d.latestNews = "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.";
+if (!d.newsType) d.newsType = 'good';
+if (d.stockChannelActiveUntil === undefined) d.stockChannelActiveUntil = 0;
+if (d.stockChannelLockedUntil === undefined) d.stockChannelLockedUntil = 0;
 
 if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
 if (!d.stockHistories) d.stockHistories = {
@@ -1266,14 +1294,27 @@ let idPenaltyActive = false;
 let penaltyTimerCountdown = 0;
 let penaltyInterval = null;
 
+// 알람이 화면 옆에서 부드럽게 나타났다가 들어가며 사라지는 슬라이드 애니메이션 구현
 function showStockAlertToast(msg, isUp = true) {
-  playAlertDingSound(); // '띵' 소리 재생
+  playAlertDingSound();
   const container = $("stockAlertContainer");
   if(!container) return;
-  container.innerHTML = `<div class="stock-alert-toast ${isUp ? 'up' : 'down'}">🔔 ${msg}</div>`;
+
+  const toast = document.createElement("div");
+  toast.className = `stock-alert-toast ${isUp ? 'up' : 'down'}`;
+  toast.innerHTML = `🔔 ${msg}`;
+  container.appendChild(toast);
+
+  // 나타나기 (right: 30px)
   setTimeout(() => {
-    container.innerHTML = "";
-  }, 3500);
+    toast.classList.add("show");
+  }, 50);
+
+  // 사라지기 (다시 안으로 들어가기)
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 500);
+  }, 3200);
 }
 
 function drawStockChart(canvasId, historyData) {
@@ -1296,7 +1337,7 @@ function drawStockChart(canvasId, historyData) {
   const isRising = lastVal >= prevVal;
 
   ctx.beginPath();
-  ctx.strokeStyle = isRising ? "#ef4444" : "#3b82f6"; // 상승: 빨강, 하락: 파랑
+  ctx.strokeStyle = isRising ? "#ef4444" : "#3b82f6";
   ctx.lineWidth = 2.5;
 
   historyData.forEach((val, idx) => {
@@ -1323,7 +1364,11 @@ function updateStockUI() {
   if($("stockOwned3")) $("stockOwned3").textContent = d.stock3;
   if($("stockOwned4")) $("stockOwned4").textContent = d.stock4;
 
-  if($("newsTickerText")) $("newsTickerText").textContent = d.latestNews;
+  const newsEl = $("newsTickerText");
+  if(newsEl) {
+    newsEl.textContent = d.latestNews;
+    newsEl.className = "news-ticker-content " + (d.newsType === 'bad' ? 'news-bad' : 'news-good');
+  }
 
   const now = Date.now();
   for(let i = 1; i <= 4; i++) {
@@ -1356,10 +1401,61 @@ function updateStockUI() {
     content4.classList.toggle("hidden", !d.stockUnlocked4);
   }
 
+  // 주식 채널 상태 UI 갱신 (5분 이용 / 10분 잠김)
+  const tradingContainer = $("stockTradingContainer");
+  const channelTitle = $("channelStateTitle");
+  const channelDesc = $("channelStateDesc");
+  const toggleBtn = $("toggleChannelOpenBtn");
+
+  if(tradingContainer && channelTitle && channelDesc && toggleBtn) {
+    if(d.stockChannelLockedUntil > now) {
+      // 잠김 상태 (10분)
+      let remSec = Math.ceil((d.stockChannelLockedUntil - now) / 1000);
+      let rMin = Math.floor(remSec / 60);
+      let rSec = remSec % 60;
+      channelTitle.textContent = `🔴 주식 채널 잠김 상태 (해제까지: ${rMin}분 ${rSec}초)`;
+      channelDesc.textContent = "10분 잠금 시간이 지나면 다시 채널을 열 수 있습니다.";
+      toggleBtn.textContent = "🔓 주식 채널 강제 열기 (잠금 해제)";
+      toggleBtn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+      tradingContainer.classList.add("hidden");
+    } else if(d.stockChannelActiveUntil > now) {
+      // 이용 가능 상태 (5분)
+      let remSec = Math.ceil((d.stockChannelActiveUntil - now) / 1000);
+      let rMin = Math.floor(remSec / 60);
+      let rSec = remSec % 60;
+      channelTitle.textContent = `🟢 주식 채널 이용 가능 (남은 시간: ${rMin}분 ${rSec}초)`;
+      channelDesc.textContent = "채널이 열려있어 자유롭게 매매할 수 있습니다. (5분 후 10분간 자동 잠김)";
+      toggleBtn.textContent = "🔒 주식 채널 강제 닫기 (잠금)";
+      toggleBtn.style.background = "linear-gradient(135deg, #ef4444, #dc2626)";
+      tradingContainer.classList.remove("hidden");
+    } else {
+      // 만료 또는 최초 상태 -> 자동으로 5분 이용 시작 부여
+      d.stockChannelActiveUntil = now + (5 * 60 * 1000);
+      save();
+    }
+  }
+
   drawStockChart("stockCanvas1", d.stockHistories[1]);
   if(d.stockUnlocked2) drawStockChart("stockCanvas2", d.stockHistories[2]);
   if(d.stockUnlocked3) drawStockChart("stockCanvas3", d.stockHistories[3]);
   if(d.stockUnlocked4) drawStockChart("stockCanvas4", d.stockHistories[4]);
+}
+
+function toggleStockChannelOpenState() {
+  const now = Date.now();
+  if(d.stockChannelLockedUntil > now) {
+    // 잠금 상태였다면 강제 해제 후 5분 이용 시작
+    d.stockChannelLockedUntil = 0;
+    d.stockChannelActiveUntil = now + (5 * 60 * 1000);
+    say("🔓 주식 채널이 강제로 열렸습니다! (5분간 이용 가능)");
+  } else {
+    // 이용 중이었다면 닫고 10분 잠금 진입
+    d.stockChannelActiveUntil = 0;
+    d.stockChannelLockedUntil = now + (10 * 60 * 1000);
+    say("🔒 주식 채널이 닫혔습니다. (10분간 잠김)");
+  }
+  playSuccessSound();
+  save();
 }
 
 function unlockStock(id) {
@@ -2385,6 +2481,10 @@ function startMultiBoxOpeningInteraction(count){
 
 function buyStock(id, amount) {
   const now = Date.now();
+  if(d.stockChannelLockedUntil > now || d.stockChannelActiveUntil < now) {
+    return say("현재 주식 채널이 닫혀있거나 잠겨있어 매매할 수 없습니다!");
+  }
+
   const coolEnd = d.stockSellCooldowns[id] || 0;
   if(now < coolEnd) {
     let remainSec = Math.ceil((coolEnd - now) / 1000);
@@ -2413,6 +2513,11 @@ function buyStock(id, amount) {
 }
 
 function sellStock(id, amount) {
+  const now = Date.now();
+  if(d.stockChannelLockedUntil > now || d.stockChannelActiveUntil < now) {
+    return say("현재 주식 채널이 닫혀있거나 잠겨있어 매매할 수 없습니다!");
+  }
+
   const price = d.stockPrices[id];
   let owned = id === 1 ? (d.stock1 || 0) : id === 2 ? (d.stock2 || 0) : id === 3 ? (d.stock3 || 0) : (d.stock4 || 0);
   let qty = 0;
@@ -2431,7 +2536,6 @@ function sellStock(id, amount) {
   if(id === 4) d.stock4 -= qty;
   d.score += price * qty;
 
-  // 매도 후 쿨타임 1분 (60 * 1000ms)으로 변경
   d.stockSellCooldowns[id] = Date.now() + (1 * 60 * 1000);
 
   say(`주식 ${qty}주 매도 완료! (+${fmt(price * qty)}) ⚠️ 1분간 매수 잠김`);
@@ -2449,6 +2553,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const bgmToggle = $("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
+
+  const toggleChannelBtn = $("toggleChannelOpenBtn");
+  if(toggleChannelBtn) {
+    toggleChannelBtn.onclick = toggleStockChannelOpenState;
+  }
 
   const openBtn = $("openPatchNoteBtn");
   const closeBtn = $("closePatchNoteBtn");
@@ -2933,7 +3042,7 @@ const companyNames = {
   1: "테슬라 에너지 (TES)",
   2: "엠비디아 (NVDA)",
   3: "스페이스코어 (SPC)",
-  4: "양자 바이오 (QBIO)"
+  4: "양자 바이オ (QBIO)"
 };
 
 const badNewsList = [
@@ -2949,7 +3058,7 @@ const goodNewsList = [
   "글로벌 대기업과 조단위 독점 공급 계약 체결 뉴스가 보도되었습니다!"
 ];
 
-// 주식 갱신 주기 6초 (6000ms)
+// 주식 그래프 변동 주기 5초 (5000ms) 설정
 setInterval(() => {
   autoMiningTimer++;
   if(autoMiningTimer >= 1) {
@@ -2960,16 +3069,34 @@ setInterval(() => {
     let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
     const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
     if(autoCps > 0 && d.autoEnabled && d.autoPurchased){
-      d.score += (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 6;
+      d.score += (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 5;
       save();
     }
+  }
+
+  const now = Date.now();
+
+  // 채널 시간 체크 (5분 이용 완료 시 자동으로 10분 잠금 진입)
+  if(d.stockChannelActiveUntil > 0 && now >= d.stockChannelActiveUntil && d.stockChannelLockedUntil === 0) {
+    d.stockChannelActiveUntil = 0;
+    d.stockChannelLockedUntil = now + (10 * 60 * 1000);
+    say("⏳ 주식 채널 5분 이용 시간이 만료되어 10분간 잠깁니다.");
+    save();
+  }
+
+  // 잠금 시간 체크 (10분 완료 시 자동으로 해제 후 5분 이용 가능)
+  if(d.stockChannelLockedUntil > 0 && now >= d.stockChannelLockedUntil) {
+    d.stockChannelLockedUntil = 0;
+    d.stockChannelActiveUntil = now + (5 * 60 * 1000);
+    say("🔓 주식 채널 10분 잠금이 해제되었습니다! (5분 이용 시작)");
+    save();
   }
 
   newsTickerTimer++;
   let targetStockId = 0;
   let isNewsTriggered = false;
 
-  if(newsTickerTimer >= 3) {
+  if(newsTickerTimer >= 4) { // 뉴스 속보 주기
     newsTickerTimer = 0;
     targetStockId = Math.floor(Math.random() * 4) + 1;
     let isBad = Math.random() < 0.55; 
@@ -2978,9 +3105,11 @@ setInterval(() => {
     if(isBad) {
       let randomMsg = badNewsList[Math.floor(Math.random() * badNewsList.length)];
       d.latestNews = `🚨 [속보] ${compName}: ${randomMsg}`;
+      d.newsType = 'bad'; // 빨간색
     } else {
       let randomMsg = goodNewsList[Math.floor(Math.random() * goodNewsList.length)];
       d.latestNews = `🚀 [속보] ${compName}: ${randomMsg}`;
+      d.newsType = 'good'; // 하늘색
     }
     isNewsTriggered = true;
   }
@@ -2992,7 +3121,7 @@ setInterval(() => {
 
     if(isNewsTriggered && i === targetStockId) {
       if(d.latestNews.includes("[속보]")) {
-        if(d.latestNews.includes("폭락") || d.latestNews.includes("중단") || d.latestNews.includes("사임") || d.latestNews.includes("철퇴")) {
+        if(d.newsType === 'bad') {
           newP -= (Math.floor(Math.random() * 250) + 200);
         } else {
           newP += (Math.floor(Math.random() * 250) + 200);
@@ -3012,7 +3141,6 @@ setInterval(() => {
     d.stockHistories[i].push(newP); 
     if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
 
-    // 보유 주식이 150 이상 변동 시 '띵' 소리와 함께 실시간 알람
     let ownedQty = i === 1 ? d.stock1 : i === 2 ? d.stock2 : i === 3 ? d.stock3 : d.stock4;
     if(ownedQty > 0) {
       if(diff >= 150) {
@@ -3030,7 +3158,7 @@ setInterval(() => {
   }
   
   if(updated) save();
-}, 6000);
+}, 5000);
 </script>
 </body>
 </html>
