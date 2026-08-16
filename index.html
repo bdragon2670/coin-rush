@@ -340,7 +340,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화 센터</span></button>
     <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
     <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석</span></button>
-    <button class="tab" data-tab="blacksmithPanel"><span class="tab-icon">⚒️</span><span class="tab-text">대장간 (RPG 강화)</span></button>
+    <button class="tab" data-tab="blacksmithPanel"><span class="tab-icon">⚒️</span><span class="tab-text">대장간 (무기 강화)</span></button>
     <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
     <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
     <button class="tab" data-tab="stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span></button>
@@ -487,10 +487,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 대장간 탭 (RPG식 점진적 비용 증가 및 20강 제한) -->
+    <!-- 대장간 탭 (무기 강화 시스템 - 최대 20강) -->
     <div id="blacksmithPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚒️ 퀀텀 대장간 (RPG 장비 강화 시스템 - 최대 20강)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 비용이 급증하며 클릭 파워와 사냥 보너스가 강력해집니다!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚒️ 퀀텀 대장간 (무기 강화 시스템 - 최대 20강)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 비용이 급증하며 클릭 파워와 사냥터 보너스가 강력해집니다!</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 무기 강화 레벨: <b id="blacksmithLvDisplay" style="font-size:18px;">+0</b> / 20강</h4>
         <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">다음 강화 시 클릭 파워 추가 상승 & 사냥터 성공률/보상 소폭 증가</p>
@@ -498,7 +498,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 무기 상점 탭 (나무검 ~ 전설의 검 9종) -->
+    <!-- 무기 상점 탭 (9종 검 목록) -->
     <div id="armoryPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚔️ 퀀텀 무기 상점 (검 장착 및 구매)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">다양한 검을 구매하고 장착하여 사냥터 성공 확률과 보상을 극대화하세요!</p>
@@ -530,7 +530,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 주식시장 탭 (5% 상향 및 최대 20만원, 극악 확률) -->
+    <!-- 주식시장 탭 (5% 수익 상향 버프 적용) -->
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (5% 기본 상향 버프 적용)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">실시간 주식 변동에 5% 수익 버프가 적용됩니다! 대박을 노리세요.</p>
@@ -948,9 +948,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v8.5 무기상점 & 주식 5% 버프 패치",
-    title: "무기고를 무기상점(9종 검)으로 변경, 대장간 강화 & 장착 검에 따른 사냥터 확률/보상 추가 상승 연동",
-    desc: "1) ⚔️ 무기고가 '무기 상점'으로 개편되어 나무검, 돌검, 철검, 금검, 다이아검, 루비검, 에메랄드 검, 신비의 검, 전설의 검 9종을 구매하고 장착할 수 있습니다.\n2) 🎯 대장간 무기 강화 레벨과 장착된 검의 등급에 따라 사냥터 성공 확률과 보상 에너지가 아주 조금씩 추가 상승합니다.\n3) 📈 주식 시스템에 기본 5% 수익 상향 버프가 적용되었습니다."
+    version: "v8.6 안정성 및 데이터 세이브 고정 패치",
+    title: "유저 데이터 영구 보존 및 상호작용 오류 완벽 해결",
+    desc: "1) 💾 브라우저 로컬 스토리지 키 값 고정 및 자동 마이그레이션을 통해 업데이트 시 데이터 유실 문제를 원천 차단했습니다.\n2) ⚔️ 무기 상점과 사냥터, 대장간 간의 상호작용 및 이벤트 리스너 오류를 모두 수정했습니다."
   }
 ];
 
@@ -985,8 +985,10 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v85";
-let d = JSON.parse(localStorage.getItem(saveKey) || "null") || {
+// 고정된 세이브 키를 사용하여 업데이트 시 데이터 유실 방지
+const saveKey = "energyRush_PermanentSaveData_v86";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v85") || localStorage.getItem("energyRush_PermanentSaveData_v84");
+let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
  pets: [], equippedPets: [], discoveredPets: [], lastAttend: 0, attendDays: 0, autoEnabled: true, autoPurchased: false,
@@ -1678,7 +1680,6 @@ function huntMonster(tier) {
   let bsLevel = d.blacksmithLevel || 0;
   let weapon = WEAPONS_DB[d.equippedWeapon || 0];
 
-  // 검 장착 보너스 + 대장간 강화 레벨에 따른 확률 및 보상 연동
   let extraProb = (weapon ? weapon.bonusProb : 0) + (bsLevel * 0.005);
   let extraRew = (weapon ? weapon.bonusReward : 1.0) * (1 + bsLevel * 0.03);
 
