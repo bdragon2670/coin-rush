@@ -596,7 +596,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
         <span class="news-ticker-content" id="newsTickerText">현재 시장은 안정세를 유지하고 있습니다. 주기적으로 기업별 돌발 악재/호재가 발생합니다!</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">평균 -500 ~ +1,000의 등락을 거듭하다가, 가끔 강력한 상승/하락 추세 또는 긴급 뉴스로 인한 대폭락(떡락)이 발생합니다!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식 상한선은 최대 2,000원으로 제한되며, 가끔 긴급 뉴스로 인한 떡락이 발생합니다!</p>
       
       <div class="stock-grid">
         <div class="stock-card">
@@ -1030,9 +1030,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v12.0 주식 실시간 뉴스 및 대폭락(떡락) 시스템 패치",
-    title: "주식 평균 등락(-500~+1000), 트렌드 파동 및 긴급 뉴스 떡락 시스템 적용",
-    desc: "1) 📈 주식 가격 변동이 평균 -500 ~ +1000 사이에서 움직이며, 가끔 연속 상승/하락 트렌드 파동을 그리도록 개선되었습니다.\n2) 📢 뉴스 채널바가 추가되어 4개 회사(테슬라, 엠비디아, 스페이스코어, 양자 바이오)에 관련된 실시간 호재 및 치명적 악재(떡락) 뉴스가 송출됩니다.\n3) 🚨 악재 뉴스가 뜨면 해당 회사의 주식이 치명적인 폭락(떡락)을 맞이하여 스릴 넘치는 주식 거래를 즐기실 수 있습니다!"
+    version: "v12.1 주식 상한선 2,000원 제한 및 클릭 버그 수정 패치",
+    title: "주식 최대 상한선 2,000원 제한 및 클릭 에너지 반영 버그 완벽 수정",
+    desc: "1) 📈 주식 가격의 상한선이 최대 2,000원으로 엄격히 제한되며, 긴급 악재 뉴스 발생 시 떡락하는 시스템이 유지됩니다.\n2) ⚡ 버튼 클릭 시 에너지 잔고가 정상적으로 반영되지 않던 변수 참조 오류 및 연산 로직 버그를 완벽하게 수정했습니다."
   }
 ];
 
@@ -1067,8 +1067,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v120";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v110") || localStorage.getItem("energyRush_PermanentSaveData_v105");
+const saveKey = "energyRush_PermanentSaveData_v121";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v120") || localStorage.getItem("energyRush_PermanentSaveData_v110");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -2639,7 +2639,9 @@ document.addEventListener("DOMContentLoaded", () => {
       let gemLuckBonus = d.gemLuck ? 0.015 : 0.0;
       const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.5) / 100) + gemLuckBonus + petBonus.luckProb;
       if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
-      d.score += gain;
+      
+      // 버그 수정: 클릭 시 에너지 잔고(d.score)가 정상적으로 누적되도록 수정
+      d.score = Number(d.score) + Number(gain);
 
       const coinContainer = coinBtnMain.parentElement;
       if(coinContainer) {
@@ -2902,43 +2904,40 @@ setInterval(() => {
     }
   }
 
-  // 주식 가격 변동 로직 (-500 ~ +1000 평균 및 트렌드/뉴스 떡락 시스템)
+  // 주식 뉴스 및 변동 이벤트 (상한선 최대 2,000원 제한 적용)
   newsTickerTimer++;
-  if(newsTickerTimer >= 15) { // 약 9초마다 뉴스 및 주식 변동 이벤트
+  if(newsTickerTimer >= 15) { 
     newsTickerTimer = 0;
     let targetStockId = Math.floor(Math.random() * 4) + 1;
-    let isBad = Math.random() < 0.65; // 65% 확률로 악재(떡락) 뉴스 발생
+    let isBad = Math.random() < 0.65; 
     let compName = companyNames[targetStockId];
 
     if(isBad) {
       let randomMsg = badNewsList[Math.floor(Math.random() * badNewsList.length)];
       d.latestNews = `🚨 [긴급악재] ${compName}: ${randomMsg}`;
-      // 주식 대폭락 (현재 주가의 40% ~ 70%가 한 번에 증발 또는 -3000~-8000 폭락)
-      let dropAmount = Math.floor(d.stockPrices[targetStockId] * 0.5) + Math.floor(Math.random() * 3000) + 2000;
+      let dropAmount = Math.floor(Math.random() * 800) + 400;
       d.stockPrices[targetStockId] = Math.max(100, d.stockPrices[targetStockId] - dropAmount);
     } else {
       let randomMsg = goodNewsList[Math.floor(Math.random() * goodNewsList.length)];
       d.latestNews = `🚀 [호재급등] ${compName}: ${randomMsg}`;
-      let riseAmount = Math.floor(Math.random() * 5000) + 3000;
-      d.stockPrices[targetStockId] += riseAmount;
+      let riseAmount = Math.floor(Math.random() * 400) + 200;
+      d.stockPrices[targetStockId] = Math.min(2000, d.stockPrices[targetStockId] + riseAmount);
     }
   }
 
   let updated = false;
   for(let i = 1; i <= 4; i++) {
-    // 트렌드 파동 관리 (한 방향으로 연속해서 상승하거나 하락하는 추세 부여)
     stockTrendCounter[i]--;
     if(stockTrendCounter[i] <= 0) {
-      stockTrendCounter[i] = Math.floor(Math.random() * 6) + 4; // 4~9회 반복
-      stockTrendDir[i] = Math.random() < 0.55 ? 1 : -1; // 55% 확률로 상승 추세
+      stockTrendCounter[i] = Math.floor(Math.random() * 6) + 4; 
+      stockTrendDir[i] = Math.random() < 0.55 ? 1 : -1; 
     }
 
-    // 기본 등락: 평균 -500 ~ +1000 (기본 편차 부여)
-    let baseDelta = (Math.random() * 1500) - 500; // 결과적으로 -500 ~ +1000 범위
-    let trendBonus = stockTrendDir[i] * (Math.random() * 600 + 200);
+    let baseDelta = (Math.random() * 500) - 250; 
+    let trendBonus = stockTrendDir[i] * (Math.random() * 200 + 50);
     let totalDelta = Math.floor(baseDelta + trendBonus);
 
-    d.stockPrices[i] = Math.max(100, d.stockPrices[i] + totalDelta);
+    d.stockPrices[i] = Math.max(100, Math.min(2000, d.stockPrices[i] + totalDelta));
     
     d.stockHistories[i].push(d.stockPrices[i]); 
     if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
