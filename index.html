@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.2 (레벨 잠금 & 주식 사이클 버전)</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.3 (레벨 3배 확장 & 잠금해제 버전)</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2310b981%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>⚡</text></svg>">
 
@@ -546,15 +546,15 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
     <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화 센터</span></button>
     <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
-    <button class="tab locked" data-tab="gemShop" id="tab_gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석 (Lv.3)</span></button>
-    <button class="tab locked" data-tab="titlePanel" id="tab_titlePanel"><span class="tab-icon">🏅</span><span class="tab-text">칭호 시스템 (Lv.4)</span></button>
-    <button class="tab locked" data-tab="autoclickPanel" id="tab_autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소 (Lv.5)</span></button>
+    <button class="tab locked" data-tab="gemShop" id="tab_gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석 (Lv.9)</span></button>
+    <button class="tab locked" data-tab="titlePanel" id="tab_titlePanel"><span class="tab-icon">🏅</span><span class="tab-text">칭호 시스템 (Lv.12)</span></button>
+    <button class="tab locked" data-tab="autoclickPanel" id="tab_autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소 (Lv.15)</span></button>
     <button class="tab" data-tab="minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span></button>
     <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
     <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
-    <button class="tab locked" data-tab="stockPanel" id="tab_stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소 (Lv.7)</span></button>
+    <button class="tab locked" data-tab="stockPanel" id="tab_stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소 (Lv.21)</span></button>
     <button class="tab" data-tab="p2pPanel"><span class="tab-icon">🌐</span><span class="tab-text">P2P 유저거래소</span></button>
-    <button class="tab locked" data-tab="converterPanel" id="tab_converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소 (Lv.6)</span></button>
+    <button class="tab locked" data-tab="converterPanel" id="tab_converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소 (Lv.18)</span></button>
     <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">코어 커스텀</span></button>
     <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
     <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">통합 도감</span></button>
@@ -607,8 +607,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.2</h1>
-    <div class="sub">주식 거래소 5분 열림/10분 닫힘 주기, 3분 재매수 대기시간, 레벨별 콘텐츠 잠금 해제 버전</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.3</h1>
+    <div class="sub">레벨 잠금 해제 3배 확장 및 주식 사이클(5분 열림/10분 휴장, 3분 매도 쿨타임) 버전</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -635,7 +635,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <div class="upgrades" id="autoUpgradeCardBox">
         <div class="upgrade-row">
           <div>
-            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b> <span id="autoLockTag" style="font-size:10px; color:#ef4444;">(🔒 Lv.2 달성 시 잠금해제)</span></h3>
+            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b> <span id="autoLockTag" style="font-size:10px; color:#ef4444;">(🔒 Lv.6 달성 시 잠금해제)</span></h3>
             <small style="color:var(--text-sub);">5초마다 자동 채굴 및 경험치 연동</small>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;" id="autoControlArea">
@@ -1289,9 +1289,23 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v14.2 맞춤형 확장 버전",
-    title: "주식 5분 개장 / 10분 휴장 주기, 3분 매도 쿨타임 및 레벨별 콘텐츠 잠금 해제",
-    desc: "1) 주식 거래소가 5분 열림 / 10분 닫힘(휴장) 주기로 작동하며 카운트다운 타이머가 표시됩니다.\n2) 주식 매도 후 재매수 대기 시간이 3분(180초)으로 단축되었습니다.\n3) 4개 주식 및 관련 뉴스 이름이 테슬라 에너지(TES), 엠비디아(NVDA), 스페이스코어(SPC), 양자 바이오(QBIO)로 변경되었습니다.\n4) 자동 채굴(Lv.2), 프리미엄 보석 상점(Lv.3), 칭호(Lv.4), 오토클릭(Lv.5), 에너지 변환(Lv.6), 주식 거래소(Lv.7)가 레벨별로 순차 잠금해제됩니다."
+    version: "v14.3 공식 업데이트 공지 (패치 아카이브)",
+    title: "✨ 퀀텀 에디션 주요 업데이트 내역 안내",
+    desc: "안녕하세요 연구원 여러분! 최신 패치 내역 및 시스템 변경 사항을 안내해 드립니다.\n\n" +
+          "1. **레벨별 콘텐츠 잠금 해제 3배 확장 적용**\n" +
+          "   - 콘텐츠 해제 요구 레벨이 기존 대비 3배로 상향 조정되어 더욱 몰입감 있는 성장을 즐기실 수 있습니다.\n" +
+          "   - 🤖 자동 채굴 장치: **Lv.6 달성 시 잠금해제**\n" +
+          "   - 💎 프리미엄 보석 상점: **Lv.9 달성 시 잠금해제**\n" +
+          "   - 🏅 칭호 시스템: **Lv.12 달성 시 잠금해제**\n" +
+          "   - 🖱️ 오토클릭 연구소: **Lv.15 달성 시 잠금해제**\n" +
+          "   - ⚛️ 에너지 변환 연구소: **Lv.18 달성 시 잠금해제**\n" +
+          "   - 📈 주식 거래소: **Lv.21 달성 시 잠금해제**\n\n" +
+          "2. **주식 거래소 시스템 규칙**\n" +
+          "   - 주식 거래소는 **5분 개장 / 10분 휴장** 주기로 운영되며 실시간 카운터가 제공됩니다.\n" +
+          "   - 주식 매도 후 **3분(180초) 쿨타임** 동안 재매수가 제한됩니다.\n" +
+          "   - 테슬라 에너지(TES), 엠비디아(NVDA), 스페이스코어(SPC), 양자 바이오(QBIO) 4개 종목이 연동됩니다.\n\n" +
+          "3. **안전한 데이터 세이브 연동**\n" +
+          "   - 모든 레벨 해제 조건, 자산, 주식 상태가 로컬 및 구글 클라우드에 완벽하게 저장됩니다."
   }
 ];
 
@@ -1326,7 +1340,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v142";
+const saveKey = "energyRush_PermanentSaveData_v143";
 let savedRawData = localStorage.getItem(saveKey);
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
@@ -1555,7 +1569,6 @@ function drawStockChart(canvasId, historyData) {
   ctx.stroke();
 }
 
-// 주식 거래소 오픈/휴장 주기 계산 함수 (5분 열림 / 10분 닫힘 = 총 15분 주기)
 function getStockMarketStatus() {
   const totalCycleSec = 15 * 60; // 15분
   const openSec = 5 * 60; // 5분
@@ -2350,48 +2363,48 @@ function render(){
    levelFill.style.width = fillPct + "%";
  }
 
- // 레벨별 콘텐츠 잠금 해제 처리 (자동채굴: Lv.2, 프리미엄 보석: Lv.3, 칭호: Lv.4, 오토클릭: Lv.5, 에너지 변환: Lv.6, 주식거래소: Lv.7)
+ // 레벨별 콘텐츠 잠금 해제 3배 확장 처리 (자동채굴: Lv.6, 프리미엄 보석: Lv.9, 칭호: Lv.12, 오토클릭: Lv.15, 에너지 변환: Lv.18, 주식거래소: Lv.21)
  const autoLockTag = document.getElementById("autoLockTag");
  const autoBtnEl = document.getElementById("autoBtn");
  const autoToggleBtnEl = document.getElementById("autoToggleBtn");
- if(currentLevel >= 2) {
+ if(currentLevel >= 6) {
    if(autoLockTag) autoLockTag.textContent = "";
    if(autoBtnEl) autoBtnEl.disabled = false;
    if(autoToggleBtnEl) autoToggleBtnEl.disabled = false;
  } else {
-   if(autoLockTag) autoLockTag.textContent = "(🔒 Lv.2 달성 시 잠금해제)";
+   if(autoLockTag) autoLockTag.textContent = "(🔒 Lv.6 달성 시 잠금해제)";
    if(autoBtnEl) autoBtnEl.disabled = true;
    if(autoToggleBtnEl) autoToggleBtnEl.disabled = true;
  }
 
  const tabGemShop = document.getElementById("tab_gemShop");
  if(tabGemShop) {
-   if(currentLevel >= 3) { tabGemShop.classList.remove("locked"); tabGemShop.querySelector(".tab-text").textContent = "프리미엄 보석"; }
-   else { tabGemShop.classList.add("locked"); tabGemShop.querySelector(".tab-text").textContent = "프리미엄 보석 (Lv.3)"; }
+   if(currentLevel >= 9) { tabGemShop.classList.remove("locked"); tabGemShop.querySelector(".tab-text").textContent = "프리미엄 보석"; }
+   else { tabGemShop.classList.add("locked"); tabGemShop.querySelector(".tab-text").textContent = "프리미엄 보석 (Lv.9)"; }
  }
 
  const tabTitlePanel = document.getElementById("tab_titlePanel");
  if(tabTitlePanel) {
-   if(currentLevel >= 4) { tabTitlePanel.classList.remove("locked"); tabTitlePanel.querySelector(".tab-text").textContent = "칭호 시스템"; }
-   else { tabTitlePanel.classList.add("locked"); tabTitlePanel.querySelector(".tab-text").textContent = "칭호 시스템 (Lv.4)"; }
+   if(currentLevel >= 12) { tabTitlePanel.classList.remove("locked"); tabTitlePanel.querySelector(".tab-text").textContent = "칭호 시스템"; }
+   else { tabTitlePanel.classList.add("locked"); tabTitlePanel.querySelector(".tab-text").textContent = "칭호 시스템 (Lv.12)"; }
  }
 
  const tabAutoclickPanel = document.getElementById("tab_autoclickPanel");
  if(tabAutoclickPanel) {
-   if(currentLevel >= 5) { tabAutoclickPanel.classList.remove("locked"); tabAutoclickPanel.querySelector(".tab-text").textContent = "오토클릭 연구소"; }
-   else { tabAutoclickPanel.classList.add("locked"); tabAutoclickPanel.querySelector(".tab-text").textContent = "오토클릭 연구소 (Lv.5)"; }
+   if(currentLevel >= 15) { tabAutoclickPanel.classList.remove("locked"); tabAutoclickPanel.querySelector(".tab-text").textContent = "오토클릭 연구소"; }
+   else { tabAutoclickPanel.classList.add("locked"); tabAutoclickPanel.querySelector(".tab-text").textContent = "오토클릭 연구소 (Lv.15)"; }
  }
 
  const tabConverterPanel = document.getElementById("tab_converterPanel");
  if(tabConverterPanel) {
-   if(currentLevel >= 6) { tabConverterPanel.classList.remove("locked"); tabConverterPanel.querySelector(".tab-text").textContent = "에너지 변환 연구소"; }
-   else { tabConverterPanel.classList.add("locked"); tabConverterPanel.querySelector(".tab-text").textContent = "에너지 변환 연구소 (Lv.6)"; }
+   if(currentLevel >= 18) { tabConverterPanel.classList.remove("locked"); tabConverterPanel.querySelector(".tab-text").textContent = "에너지 변환 연구소"; }
+   else { tabConverterPanel.classList.add("locked"); tabConverterPanel.querySelector(".tab-text").textContent = "에너지 변환 연구소 (Lv.18)"; }
  }
 
  const tabStockPanel = document.getElementById("tab_stockPanel");
  if(tabStockPanel) {
-   if(currentLevel >= 7) { tabStockPanel.classList.remove("locked"); tabStockPanel.querySelector(".tab-text").textContent = "주식 거래소"; }
-   else { tabStockPanel.classList.add("locked"); tabStockPanel.querySelector(".tab-text").textContent = "주식 거래소 (Lv.7)"; }
+   if(currentLevel >= 21) { tabStockPanel.classList.remove("locked"); tabStockPanel.querySelector(".tab-text").textContent = "주식 거래소"; }
+   else { tabStockPanel.classList.add("locked"); tabStockPanel.querySelector(".tab-text").textContent = "주식 거래소 (Lv.21)"; }
  }
 
  if(document.getElementById("permPowerLv")) document.getElementById("permPowerLv").textContent = `+${d.permPower || 0}`;
@@ -2500,7 +2513,7 @@ function render(){
  }
 
  const autoBtn = document.getElementById("autoToggleBtn");
- if(autoBtn && currentLevel >= 2) {
+ if(autoBtn && currentLevel >= 6) {
    autoBtn.textContent = d.autoEnabled ? "ON" : "OFF";
    autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
    autoBtn.disabled = !d.autoPurchased;
@@ -2514,7 +2527,7 @@ function render(){
  if(document.getElementById("powerBtn")) document.getElementById("powerBtn").textContent = fmt(Math.round(80 * Math.floor(Math.pow(d.power, 1.35)))) + " 에너지";
 
  const autoUpgradeBtn = document.getElementById("autoBtn");
- if(autoUpgradeBtn && currentLevel >= 2) {
+ if(autoUpgradeBtn && currentLevel >= 6) {
    if(d.autoPurchased) {
      autoUpgradeBtn.textContent = "보유 완료";
      autoUpgradeBtn.disabled = true;
@@ -2553,10 +2566,10 @@ function render(){
    if(btn) {
      if(item === 'gemProtector') {
        btn.textContent = `구매 💎 ${gemCosts[item]} (보유: ${d.gemProtectorCount || 0})`;
-       btn.disabled = currentLevel < 3;
+       btn.disabled = currentLevel < 9;
      } else {
        btn.textContent = d[item] ? "보유 완료" : `구매 💎 ${gemCosts[item]}`;
-       btn.disabled = d[item] || (currentLevel < 3);
+       btn.disabled = d[item] || (currentLevel < 9);
      }
    }
  });
@@ -3298,7 +3311,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "energy_rush_ultimate_v14_2.html";
+      a.download = "energy_rush_ultimate_v14_3.html";
       a.click();
       say("시스템 파일이 다운로드되었습니다!");
     };
@@ -3376,7 +3389,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertGemsBtn = document.getElementById("convertGemsBtn");
   if(convertGemsBtn) {
     convertGemsBtn.onclick = () => {
-      if((d.level || 1) < 6) return say("에너지 변환 연구소는 6레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 18) return say("에너지 변환 연구소는 18레벨 이상부터 이용 가능합니다!");
       let cost = 350000;
       if(d.score < cost) return say("보석 제련에 필요한 에너지가 부족합니다! (필요: 35만)");
       d.score -= cost;
@@ -3390,7 +3403,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertBoostBtn = document.getElementById("convertBoostBtn");
   if(convertBoostBtn) {
     convertBoostBtn.onclick = () => {
-      if((d.level || 1) < 6) return say("에너지 변환 연구소는 6레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 18) return say("에너지 변환 연구소는 18레벨 이상부터 이용 가능합니다!");
       let cost = 650000;
       if(d.score < cost) return say("채굴 가속에 필요한 에너지가 부족합니다! (필요: 65만)");
       d.score -= cost;
@@ -3562,7 +3575,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoToggle = document.getElementById("autoToggleBtn");
   if(autoToggle) {
     autoToggle.onclick = () => {
-      if((d.level || 1) < 2) return say("자동 채굴 장치는 2레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 6) return say("자동 채굴 장치는 6레벨 이상부터 이용 가능합니다!");
       if(!d.autoPurchased) return say("자동 채굴 장치를 먼저 구매해야 합니다!");
       d.autoEnabled = !d.autoEnabled;
       save();
@@ -3594,7 +3607,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoBtn = document.getElementById("autoBtn");
   if(autoBtn) {
     autoBtn.onclick = () => {
-      if((d.level || 1) < 2) return say("자동 채굴 장치는 2레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 6) return say("자동 채굴 장치는 6레벨 이상부터 이용 가능합니다!");
       if(d.autoPurchased) return say("이미 자동 채굴 장치를 보유하고 있습니다.");
       let cost = 1200;
       if(d.score >= cost) {
@@ -3623,7 +3636,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".gem-buy").forEach(btn => {
     btn.onclick = () => {
-      if((d.level || 1) < 3) return say("프리미엄 보석 상점은 3레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 9) return say("프리미엄 보석 상점은 9레벨 이상부터 이용 가능합니다!");
       const item = btn.dataset.gemitem;
       const costs = { gemClick: 120, gemAuto: 240, gemLuck: 360, gemHyper: 480, gemRing: 960, gemDivine: 2400, gemChronos: 1680, gemProtector: 720 };
       const cost = costs[item];
@@ -3676,13 +3689,13 @@ document.addEventListener("DOMContentLoaded", () => {
     t.onclick = () => {
       const targetTabId = t.dataset.tab;
       
-      // 레벨 잠금 체크
+      // 레벨 3배 확장 잠금 체크
       const currentLv = d.level || 1;
-      if(targetTabId === 'gemShop' && currentLv < 3) return say("🔒 프리미엄 보석 상점은 레벨 3 이상부터 잠금해제됩니다!");
-      if(targetTabId === 'titlePanel' && currentLv < 4) return say("🔒 칭호 시스템은 레벨 4 이상부터 잠금해제됩니다!");
-      if(targetTabId === 'autoclickPanel' && currentLv < 5) return say("🔒 오토클릭 연구소는 레벨 5 이상부터 잠금해제됩니다!");
-      if(targetTabId === 'converterPanel' && currentLv < 6) return say("🔒 에너지 변환 연구소는 레벨 6 이상부터 잠금해제됩니다!");
-      if(targetTabId === 'stockPanel' && currentLv < 7) return say("🔒 주식 거래소는 레벨 7 이상부터 잠금해제됩니다!");
+      if(targetTabId === 'gemShop' && currentLv < 9) return say("🔒 프리미엄 보석 상점은 레벨 9 이상부터 잠금해제됩니다!");
+      if(targetTabId === 'titlePanel' && currentLv < 12) return say("🔒 칭호 시스템은 레벨 12 이상부터 잠금해제됩니다!");
+      if(targetTabId === 'autoclickPanel' && currentLv < 15) return say("🔒 오토클릭 연구소는 레벨 15 이상부터 잠금해제됩니다!");
+      if(targetTabId === 'converterPanel' && currentLv < 18) return say("🔒 에너지 변환 연구소는 레벨 18 이상부터 잠금해제됩니다!");
+      if(targetTabId === 'stockPanel' && currentLv < 21) return say("🔒 주식 거래소는 레벨 21 이상부터 잠금해제됩니다!");
 
       document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
       t.classList.add("active");
@@ -3798,7 +3811,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   setInterval(() => {
-    if (d.autoEnabled && d.autoPurchased && d.cps > 0 && (d.level || 1) >= 2) {
+    if (d.autoEnabled && d.autoPurchased && d.cps > 0 && (d.level || 1) >= 6) {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
       const titleBonus = getTitleBonus();
