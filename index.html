@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.3 (레벨 3배 확장 & 잠금해제 버전)</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.4 (레벨업 알림 & 랭킹 레벨 연동)</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2310b981%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>⚡</text></svg>">
 
@@ -607,8 +607,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.3</h1>
-    <div class="sub">레벨 잠금 해제 3배 확장 및 주식 사이클(5분 열림/10분 휴장, 3분 매도 쿨타임) 버전</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.4</h1>
+    <div class="sub">레벨업 알림 개선 및 랭크 레벨 연동 버전</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -796,7 +796,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 주식 거래소 (5분 열림 / 10분 닫힘 주기, 4개 주식 및 뉴스 이름 연동) -->
+    <!-- 주식 거래소 -->
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널</h3>
       
@@ -813,7 +813,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       
       <div id="stockTradingContainer">
         <div class="stock-grid">
-          <!-- 1번 주식: 테슬라 에너지 (TES) -->
+          <!-- 1번 주식 -->
           <div class="stock-card">
             <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
             <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">500</b> 에너지</p>
@@ -831,7 +831,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             </div>
           </div>
 
-          <!-- 2번 주식: 엠비디아 (NVDA) -->
+          <!-- 2번 주식 -->
           <div class="stock-card">
             <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
             <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지</p>
@@ -849,7 +849,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             </div>
           </div>
 
-          <!-- 3번 주식: 스페이스코어 (SPC) -->
+          <!-- 3번 주식 -->
           <div class="stock-card" style="margin-top:4px;">
             <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
             <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지</p>
@@ -867,7 +867,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
             </div>
           </div>
 
-          <!-- 4번 주식: 양자 바이오 (QBIO) -->
+          <!-- 4번 주식 -->
           <div class="stock-card" style="margin-top:4px;">
             <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
             <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지</p>
@@ -1289,23 +1289,13 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v14.3 공식 업데이트 공지 (패치 아카이브)",
-    title: "✨ 퀀텀 에디션 주요 업데이트 내역 안내",
+    version: "v14.4 공식 업데이트 공지 (패치 아카이브)",
+    title: "✨ 레벨업 알림 및 랭크 레벨 연동 업데이트",
     desc: "안녕하세요 연구원 여러분! 최신 패치 내역 및 시스템 변경 사항을 안내해 드립니다.\n\n" +
-          "1. **레벨별 콘텐츠 잠금 해제 3배 확장 적용**\n" +
-          "   - 콘텐츠 해제 요구 레벨이 기존 대비 3배로 상향 조정되어 더욱 몰입감 있는 성장을 즐기실 수 있습니다.\n" +
-          "   - 🤖 자동 채굴 장치: **Lv.6 달성 시 잠금해제**\n" +
-          "   - 💎 프리미엄 보석 상점: **Lv.9 달성 시 잠금해제**\n" +
-          "   - 🏅 칭호 시스템: **Lv.12 달성 시 잠금해제**\n" +
-          "   - 🖱️ 오토클릭 연구소: **Lv.15 달성 시 잠금해제**\n" +
-          "   - ⚛️ 에너지 변환 연구소: **Lv.18 달성 시 잠금해제**\n" +
-          "   - 📈 주식 거래소: **Lv.21 달성 시 잠금해제**\n\n" +
-          "2. **주식 거래소 시스템 규칙**\n" +
-          "   - 주식 거래소는 **5분 개장 / 10분 휴장** 주기로 운영되며 실시간 카운터가 제공됩니다.\n" +
-          "   - 주식 매도 후 **3분(180초) 쿨타임** 동안 재매수가 제한됩니다.\n" +
-          "   - 테슬라 에너지(TES), 엠비디아(NVDA), 스페이스코어(SPC), 양자 바이오(QBIO) 4개 종목이 연동됩니다.\n\n" +
-          "3. **안전한 데이터 세이브 연동**\n" +
-          "   - 모든 레벨 해제 조건, 자산, 주식 상태가 로컬 및 구글 클라우드에 완벽하게 저장됩니다."
+          "1. **레벨업 알림 기능 개선**\n" +
+          "   - 레벨 업 시 깔끔한 알림 문구와 함께 해당 레벨에서 새롭게 잠금 해제된 콘텐츠를 함께 안내합니다.\n\n" +
+          "2. **글로벌 랭킹 레벨 연동**\n" +
+          "   - 글로벌 명예의 전당 랭킹 목록에서 연구원의 현재 레벨(Lv.X)이 함께 노출되도록 연동되었습니다."
   }
 ];
 
@@ -1340,7 +1330,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v143";
+const saveKey = "energyRush_PermanentSaveData_v144";
 let savedRawData = localStorage.getItem(saveKey);
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
@@ -1645,7 +1635,17 @@ function addExp(amount) {
     d.exp -= nextExp;
     d.level++;
     playSuccessSound();
-    showStockAlertToast(`⭐ 연구원 레벨 업! [Lv.${d.level}] 달성! 콘텐츠 잠금이 해제되었습니다!`, true);
+    
+    // 레벨업 시 잠금해제 콘텐츠 매핑
+    let unlockMsg = "";
+    if(d.level === 6) unlockMsg = " (🤖 자동 채굴 장치 잠금해제!)";
+    else if(d.level === 9) unlockMsg = " (💎 프리미엄 보석 상점 잠금해제!)";
+    else if(d.level === 12) unlockMsg = " (🏅 칭호 시스템 잠금해제!)";
+    else if(d.level === 15) unlockMsg = " (🖱️ 오토클릭 연구소 잠금해제!)";
+    else if(d.level === 18) unlockMsg = " (⚛️ 에너지 변환 연구소 잠금해제!)";
+    else if(d.level === 21) unlockMsg = " (📈 주식 거래소 잠금해제!)";
+
+    showStockAlertToast(`⭐ 연구원 레벨 업! [Lv.${d.level}] 달성!${unlockMsg}`, true);
     nextExp = getRequiredExp(d.level);
   }
 }
@@ -1771,6 +1771,7 @@ function saveToCloud() {
     name: currentUser.name,
     picture: currentUser.picture,
     score: d.score,
+    level: d.level || 1, // 랭킹에 레벨 함께 저장 연동
     saveData: d,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
@@ -1812,13 +1813,17 @@ function loadGlobalRanking() {
       const data = doc.data();
       const name = data.name || "익명 연구원";
       const score = data.score || 0;
+      const userLv = data.level || (data.saveData && data.saveData.level) || 1; // 랭킹 레벨 표시 연동
       const pic = data.picture || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='14' fill='%237f8c8d'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23ffffff' font-size='12' font-family='sans-serif'%3E?%3C/text%3E%3C/svg%3E";
       html += `
         <div class="ranking-card">
           <div style="display:flex; align-items:center; gap:10px;">
             <b style="color:var(--accent); font-size:14px; min-width:24px;">#${rank}</b>
             <img src="${pic}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1px solid var(--accent);">
-            <span style="font-weight:600; color:var(--text-main); font-size:13px;">${name}</span>
+            <div>
+              <span style="font-weight:600; color:var(--text-main); font-size:13px;">${name}</span>
+              <span style="font-size:10px; color:var(--accent); background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:6px; margin-left:6px;">Lv.${userLv}</span>
+            </div>
           </div>
           <div style="text-align:right;">
             <span style="font-size:11px; color:var(--text-sub);">에너지 잔고</span>
@@ -2363,7 +2368,6 @@ function render(){
    levelFill.style.width = fillPct + "%";
  }
 
- // 레벨별 콘텐츠 잠금 해제 3배 확장 처리 (자동채굴: Lv.6, 프리미엄 보석: Lv.9, 칭호: Lv.12, 오토클릭: Lv.15, 에너지 변환: Lv.18, 주식거래소: Lv.21)
  const autoLockTag = document.getElementById("autoLockTag");
  const autoBtnEl = document.getElementById("autoBtn");
  const autoToggleBtnEl = document.getElementById("autoToggleBtn");
@@ -3205,7 +3209,6 @@ function sellStock(id, amount) {
   d.score += price * qty;
   d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + (price * qty);
 
-  // 매도 후 3분 (180초) 쿨타임 적용
   d.stockSellCooldowns[id] = Date.now() + (3 * 60 * 1000);
 
   say(`주식 ${qty}주 매도 완료! (3분간 재매수 쿨타임 적용)`);
@@ -3311,7 +3314,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "energy_rush_ultimate_v14_3.html";
+      a.download = "energy_rush_ultimate_v14_4.html";
       a.click();
       say("시스템 파일이 다운로드되었습니다!");
     };
@@ -3689,7 +3692,6 @@ document.addEventListener("DOMContentLoaded", () => {
     t.onclick = () => {
       const targetTabId = t.dataset.tab;
       
-      // 레벨 3배 확장 잠금 체크
       const currentLv = d.level || 1;
       if(targetTabId === 'gemShop' && currentLv < 9) return say("🔒 프리미엄 보석 상점은 레벨 9 이상부터 잠금해제됩니다!");
       if(targetTabId === 'titlePanel' && currentLv < 12) return say("🔒 칭호 시스템은 레벨 12 이상부터 잠금해제됩니다!");
