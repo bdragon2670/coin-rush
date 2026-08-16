@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.6 (커스텀 레벨 데이터 저장)</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.7 (클라우드 동기화 및 신규 초기화 버전)</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2310b981%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>⚡</text></svg>">
 
@@ -255,7 +255,7 @@ h1{ font-size: 26px; text-align: center; margin: 0 0 4px; color: var(--text-main
 }
 .stock-alert-toast.show { right: 30px; }
 .stock-alert-toast.up { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 30px rgba(16,185,129,0.4); }
-.stock-alert-toast.down { background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 10px 30px rgba(59,130,246,0.4); }
+.stock-alert-toast.down { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 10px 30px rgba(239,68,68,0.4); }
 
 .alarm-btn {
   position: relative;
@@ -581,7 +581,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         </div>
         <div class="user-exp-container">
           <div class="user-exp-info">
-            <span style="color:var(--accent);" id="userLevelDisplay">⭐ Lv.35</span>
+            <span style="color:var(--accent);" id="userLevelDisplay">⭐ Lv.1</span>
             <span style="color:var(--text-sub);" id="userExpDisplay">EXP: 0 / 100</span>
           </div>
           <div class="user-exp-bar-bg">
@@ -607,8 +607,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.6</h1>
-    <div class="sub">지정된 채널 잠금해제 레벨 및 전체 데이터 동기화 버전</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.7</h1>
+    <div class="sub">클라우드 동기화 및 신규 유저 기본 초기화 적용 버전</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -635,19 +635,19 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <div class="upgrades" id="autoUpgradeCardBox">
         <div class="upgrade-row">
           <div>
-            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.10</b> <span id="autoLockTag" style="font-size:10px; color:#10b981;">(Lv.10 달성 완료)</span></h3>
+            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b> <span id="autoLockTag" style="font-size:10px; color:#f43f5e;">(🔒 Lv.10 달성 시 잠금해제)</span></h3>
             <small style="color:var(--text-sub);">5초마다 자동 채굴 및 경험치 연동</small>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;" id="autoControlArea">
-            <button id="autoToggleBtn" class="toggle-btn on">ON</button>
-            <button id="autoBtn" disabled>보유 완료 (Lv.10)</button>
+            <button id="autoToggleBtn" class="toggle-btn off">OFF</button>
+            <button id="autoBtn">자동채굴 장치 구매 (1,200)</button>
           </div>
         </div>
       </div>
     </div>
 
     <div id="titlePanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">🏅 퀀텀 연구원 칭호 시스템 (Lv.20 해제 완료)</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">🏅 퀀텀 연구원 칭호 시스템 (Lv.20 해제)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">특정 조건을 달성하여 강력한 버프를 주는 칭호들을 해제하고 장착하세요!</p>
       <div class="title-grid" id="titleGridContainer"></div>
     </div>
@@ -683,7 +683,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="gemShop" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 프리미엄 퀀텀 캐시 상점 (Lv.15 해제 완료)</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">💎 프리미엄 퀀텀 캐시 상점 (Lv.15 해제)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보석(💎)으로 구매하는 프리미엄 스탯 상점입니다.</p>
       <div class="shop-grid">
         <div class="shop-item">
@@ -722,7 +722,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="autoclickPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🖱️ 오토클릭 자율 구동 연구소 (Lv.25 해제 완료)</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🖱️ 오토클릭 자율 구동 연구소 (Lv.25 해제)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">오토클릭 기능을 상시 켜거나 끌 수 있으며, 연구 레벨에 따라 자동 클릭 속도가 빨라집니다.</p>
       
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center; margin-bottom:14px;">
@@ -737,7 +737,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="converterPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚛️ 퀀텀 에너지 변환 연구소 (Lv.30 해제 완료)</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚛️ 퀀텀 에너지 변환 연구소 (Lv.30 해제)</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">남는 에너지를 소모하여 보석이나 퀀텀 부스터를 획득하세요!</p>
       <div class="shop-grid">
         <div class="game-card">
@@ -798,7 +798,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <!-- 주식 거래소 -->
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널 (Lv.35 해제 완료)</h3>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널 (Lv.35 해제)</h3>
       
       <div id="stockChannelStatusBox" style="background:rgba(16, 185, 129, 0.08); border:1px solid rgba(16, 185, 129, 0.3); border-radius:12px; padding:12px; margin-bottom:14px; text-align:center;">
         <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 거래소 개장 중</h4>
@@ -816,7 +816,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <!-- 1번 주식 -->
           <div class="stock-card">
             <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">500</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">500</b> 에너지 <span id="stockDiff1" style="font-size:11px; font-weight:700;"></span></p>
             <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer1"></p>
@@ -834,7 +834,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <!-- 2번 주식 -->
           <div class="stock-card">
             <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지 <span id="stockDiff2" style="font-size:11px; font-weight:700;"></span></p>
             <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
@@ -852,7 +852,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <!-- 3번 주식 -->
           <div class="stock-card" style="margin-top:4px;">
             <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지 <span id="stockDiff3" style="font-size:11px; font-weight:700;"></span></p>
             <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
@@ -870,7 +870,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <!-- 4번 주식 -->
           <div class="stock-card" style="margin-top:4px;">
             <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지 <span id="stockDiff4" style="font-size:11px; font-weight:700;"></span></p>
             <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
@@ -1124,7 +1124,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <button id="cloudLoadBtn" class="btn-game" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8) !important; box-shadow:none;">🔄 클라우드에서 불러오기</button>
         </div>
       </div>
-      <p style="text-align:center; font-size:11px; color:var(--text-sub);">* 로그인이 완료되면 지정하신 레벨 조건 및 전체 플레이 데이터가 서버에 안전하게 백업되며 랭킹 채널에 반영됩니다.</p>
+      <p style="text-align:center; font-size:11px; color:var(--text-sub);">* 로그인이 완료되면 클라우드 서버에서 레벨 및 플레이 데이터를 불러오거나 즉시 저장할 수 있습니다.</p>
     </div>
 
   </div>
@@ -1242,7 +1242,7 @@ function playLegendaryEpicSound() {
       gain.gain.setValueAtTime(0.3, audioCtx.currentTime + idx * 0.15);
       gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.15 + 1.5);
       osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      gain.connect(bgmAudioCtx.destination);
       osc.start(audioCtx.currentTime + idx * 0.15);
       osc.stop(audioCtx.currentTime + idx * 0.15 + 1.5);
     });
@@ -1289,10 +1289,13 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v14.6 공식 업데이트 공지 (패치 아카이브)",
-    title: "✨ 채널 잠금해제 레벨 커스텀 반영",
-    desc: "안녕하세요 연구원 여러분! 요청하신 잠금해제 기준 레벨이 적용되었습니다.\n\n" +
-          "1. **콘텐츠별 잠금해제 레벨 커스텀**\n" +
+    version: "v14.7 공식 업데이트 공지 (패치 아카이브)",
+    title: "✨ 신규 유저 초기화 및 주식 변동 색상 적용",
+    desc: "1. **신규 유저 기본 초기화**\n" +
+          "   - 처음 접속하는 유저는 모든 스탯, 연구, 레벨(Lv.1) 및 아이템이 기본 초기 상태로 시작합니다.\n\n" +
+          "2. **주식 상승/하락 컬러 실시간 연동**\n" +
+          "   - 주가가 상승할 때는 초록색(#10b981), 하락할 때는 빨간색(#ef4444)으로 시각화됩니다.\n\n" +
+          "3. **콘텐츠별 잠금해제 레벨**\n" +
           "   - 자동채굴 장치: Lv.10\n" +
           "   - 프리미엄 보석: Lv.15\n" +
           "   - 칭호 시스템: Lv.20\n" +
@@ -1333,14 +1336,16 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v146";
+const saveKey = "energyRush_PermanentSaveData_v147";
 let savedRawData = localStorage.getItem(saveKey);
+
+// 신규 유저는 모든 스탯과 아이템이 완전히 처음(Lv.1)부터 시작하도록 기본값 설정
 let d = JSON.parse(savedRawData || "null") || {
-  score: 0, best: 0, power: 1, cps: 10, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
+  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
   pets: [], equippedPets: [], discoveredPets: [], claimedEncyclopedia: [], 
   attendDays: 0, lastAttendDayStr: "", 
-  autoEnabled: true, autoPurchased: true,
+  autoEnabled: false, autoPurchased: false,
   permPower: 0, permCps: 0, permLuck: 0, permGem: 0, gems: 0,
   coinColor: 'emerald', coinIcon: '⚡', customImg: null, bgImg: null,
   stock1: 0, stock2: 0, stock3: 0, stock4: 0,
@@ -1350,13 +1355,13 @@ let d = JSON.parse(savedRawData || "null") || {
   stockSellCooldowns: {},
   latestNews: "테슬라 에너지(TES) 및 관련 주식 장세가 안정세를 보이고 있습니다.",
   newsType: 'good',
-  autoclickPurchased: true,
+  autoclickPurchased: false,
   autoclickLevel: 1,
-  autoclickActive: true,
+  autoclickActive: false,
   unlockedTitles: ['novice'],
   equippedTitle: 'novice',
   totalEnergyEarned: 0,
-  level: 35,
+  level: 1,
   exp: 0
 };
 
@@ -1376,28 +1381,28 @@ if (d.permCps === undefined) d.permCps = 0;
 if (d.permLuck === undefined) d.permLuck = 0;
 if (d.permGem === undefined) d.permGem = 0;
 if (d.box1Count === undefined) d.box1Count = 0;
-if (d.autoPurchased === undefined) d.autoPurchased = true;
+if (d.autoPurchased === undefined) d.autoPurchased = false;
 if (d.equippedWeapon === undefined) d.equippedWeapon = 0;
 if (d.ownedWeapons === undefined) d.ownedWeapons = [0];
 if (d.mineDepth === undefined) d.mineDepth = 1;
 if (!d.stockSellCooldowns) d.stockSellCooldowns = {};
 if (!d.latestNews) d.latestNews = "테슬라 에너지(TES) 및 관련 주식 장세가 안정세를 보이고 있습니다.";
 if (!d.newsType) d.newsType = 'good';
-if (d.autoclickPurchased === undefined) d.autoclickPurchased = true;
+if (d.autoclickPurchased === undefined) d.autoclickPurchased = false;
 if (d.autoclickLevel === undefined) d.autoclickLevel = 1;
-if (d.autoclickActive === undefined) d.autoclickActive = true;
-if (d.level === undefined) d.level = 35;
+if (d.autoclickActive === undefined) d.autoclickActive = false;
+if (d.level === undefined) d.level = 1;
 if (d.exp === undefined) d.exp = 0;
 if (d.attendDays === undefined) d.attendDays = 0;
 if (!d.lastAttendDayStr) d.lastAttendDayStr = "";
-if (d.cps === undefined || d.cps < 10) d.cps = 10;
+if (d.cps === undefined) d.cps = 0;
 
 if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
 if (!d.stockHistories) d.stockHistories = {
-  1: [500, 480, 520, 500],
-  2: [500, 490, 510, 500],
-  3: [500, 470, 530, 500],
-  4: [500, 500, 480, 500]
+  1: [500, 500],
+  2: [500, 500],
+  3: [500, 500],
+  4: [500, 500]
 };
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
@@ -1551,7 +1556,7 @@ function drawStockChart(canvasId, historyData) {
   const isRising = lastVal >= prevVal;
 
   ctx.beginPath();
-  ctx.strokeStyle = isRising ? "#10b981" : "#3b82f6";
+  ctx.strokeStyle = isRising ? "#10b981" : "#ef4444";
   ctx.lineWidth = 2.5;
 
   historyData.forEach((val, idx) => {
@@ -1574,10 +1579,22 @@ function getStockMarketStatus() {
 }
 
 function updateStockUI() {
-  if(document.getElementById("stockPrice1")) document.getElementById("stockPrice1").textContent = fmt(d.stockPrices[1]);
-  if(document.getElementById("stockPrice2")) document.getElementById("stockPrice2").textContent = fmt(d.stockPrices[2]);
-  if(document.getElementById("stockPrice3")) document.getElementById("stockPrice3").textContent = fmt(d.stockPrices[3]);
-  if(document.getElementById("stockPrice4")) document.getElementById("stockPrice4").textContent = fmt(d.stockPrices[4]);
+  for(let i = 1; i <= 4; i++) {
+    const priceEl = document.getElementById(`stockPrice${i}`);
+    const diffEl = document.getElementById(`stockDiff${i}`);
+    const history = d.stockHistories[i] || [500, 500];
+    const currentPrice = d.stockPrices[i] || 500;
+    const prevPrice = history.length >= 2 ? history[history.length - 2] : currentPrice;
+    const isUp = currentPrice >= prevPrice;
+
+    if(priceEl) priceEl.textContent = fmt(currentPrice);
+    if(diffEl) {
+      let diffVal = currentPrice - prevPrice;
+      let diffPct = prevPrice > 0 ? ((diffVal / prevPrice) * 100).toFixed(1) : 0;
+      diffEl.textContent = `${diffVal >= 0 ? '+' : ''}${diffVal} (${diffPct}%)`;
+      diffEl.style.color = isUp ? "#10b981" : "#ef4444";
+    }
+  }
 
   if(document.getElementById("stockOwned1")) document.getElementById("stockOwned1").textContent = d.stock1;
   if(document.getElementById("stockOwned2")) document.getElementById("stockOwned2").textContent = d.stock2;
@@ -1774,12 +1791,12 @@ function saveToCloud() {
     name: currentUser.name,
     picture: currentUser.picture,
     score: d.score,
-    level: d.level || 35,
+    level: d.level || 1,
     saveData: d,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
     playSuccessSound();
-    say("☁️ 구글 클라우드에 전체 게임 데이터 저장 및 랭킹 인증 완료!");
+    say("☁️ 현재 레벨 및 전체 게임 데이터가 클라우드에 즉시 저장되었습니다!");
     loadGlobalRanking();
   }).catch(err => {
     say("클라우드 저장 실패: 할당량 또는 권한을 확인해주세요.");
@@ -1801,7 +1818,7 @@ function loadFromCloud() {
       
       save();
       playSuccessSound();
-      say("🔄 구글 클라우드에서 레벨, 드론, 주식 등 모든 데이터를 성공적으로 불러왔습니다!");
+      say("🔄 클라우드에서 저장된 레벨 및 모든 데이터를 성공적으로 불러왔습니다!");
     } else {
       say("서버에 저장된 클라우드 데이터가 없습니다.");
     }
@@ -1824,7 +1841,7 @@ function loadGlobalRanking() {
       const data = doc.data();
       const name = data.name || "익명 연구원";
       const score = data.score || 0;
-      const userLv = data.level || (data.saveData && data.saveData.level) || 35;
+      const userLv = data.level || (data.saveData && data.saveData.level) || 1;
       const pic = data.picture || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='14' fill='%237f8c8d'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23ffffff' font-size='12' font-family='sans-serif'%3E?%3C/text%3E%3C/svg%3E";
       html += `
         <div class="ranking-card">
@@ -2174,7 +2191,7 @@ function getBaseMult(){
   let gemDivineBonus = d.gemDivine ? 1.15 : 1.0;
   let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
   let titleBonus = getTitleBonus();
-  let levelBonus = 1 + ((d.level || 35) * 0.02);
+  let levelBonus = 1 + ((d.level || 1) * 0.02);
   return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * titleBonus.energyMult * levelBonus * (1 + d.rp * 0.04);
 }
 
@@ -2368,7 +2385,7 @@ function render(){
  if(document.getElementById("rp")) document.getElementById("rp").textContent=fmt(d.rp);
  if(document.getElementById("permRpDisplay")) document.getElementById("permRpDisplay").textContent=fmt(d.rp);
 
- const currentLevel = d.level || 35;
+ const currentLevel = d.level || 1;
  const currentExp = d.exp || 0;
  const reqExp = getRequiredExp(currentLevel);
  if(document.getElementById("userLevelDisplay")) document.getElementById("userLevelDisplay").textContent = `⭐ Lv.${currentLevel}`;
@@ -2383,12 +2400,18 @@ function render(){
  const autoBtnEl = document.getElementById("autoBtn");
  const autoToggleBtnEl = document.getElementById("autoToggleBtn");
  if(currentLevel >= 10) {
-   if(autoLockTag) autoLockTag.textContent = "(Lv.10 달성 완료)";
-   if(autoBtnEl) { autoBtnEl.disabled = true; autoBtnEl.textContent = "보유 완료 (Lv.10)"; }
-   if(autoToggleBtnEl) autoToggleBtnEl.disabled = false;
+   if(autoLockTag) { autoLockTag.textContent = "(Lv.10 달성 완료)"; autoLockTag.style.color = "#10b981"; }
+   if(autoBtnEl) {
+     if(d.autoPurchased) {
+       autoBtnEl.disabled = true; autoBtnEl.textContent = "보유 완료 (Lv.10)";
+     } else {
+       autoBtnEl.disabled = false; autoBtnEl.textContent = "자동채굴 장치 구매 (1,200)";
+     }
+   }
+   if(autoToggleBtnEl) autoToggleBtnEl.disabled = !d.autoPurchased;
  } else {
-   if(autoLockTag) autoLockTag.textContent = "(🔒 Lv.10 달성 시 잠금해제)";
-   if(autoBtnEl) autoBtnEl.disabled = false;
+   if(autoLockTag) { autoLockTag.textContent = "(🔒 Lv.10 달성 시 잠금해제)"; autoLockTag.style.color = "#f43f5e"; }
+   if(autoBtnEl) { autoBtnEl.disabled = true; autoBtnEl.textContent = "🔒 Lv.10 잠금됨"; }
    if(autoToggleBtnEl) autoToggleBtnEl.disabled = true;
  }
 
@@ -2446,9 +2469,9 @@ function render(){
  if(document.getElementById("mineProbDisplay")) document.getElementById("mineProbDisplay").textContent = `${mineProb}%`;
  if(document.getElementById("mineUpgradeCost")) document.getElementById("mineUpgradeCost").textContent = fmt(mineUpgradeCost);
 
- const autoclickPurchased = d.autoclickPurchased !== false;
+ const autoclickPurchased = d.autoclickPurchased === true;
  const autoclickLevel = d.autoclickLevel || 1;
- const autoclickActive = d.autoclickActive !== false;
+ const autoclickActive = d.autoclickActive === true;
  const autoclickSpeed = autoclickLevel * 3; 
  const autoclickUpgradeCost = Math.round(10000 * Math.pow(1.5, autoclickLevel));
 
@@ -2528,10 +2551,10 @@ function render(){
  }
 
  const autoBtn = document.getElementById("autoToggleBtn");
- if(autoBtn && currentLevel >= 10) {
+ if(autoBtn) {
    autoBtn.textContent = d.autoEnabled ? "ON" : "OFF";
    autoBtn.className = "toggle-btn " + (d.autoEnabled ? "on" : "off");
-   autoBtn.disabled = !d.autoPurchased;
+   autoBtn.disabled = !d.autoPurchased || currentLevel < 10;
  }
  
  let req = Math.max(500000, 1000000 * Math.pow(2.0, d.rebirth)); 
@@ -3314,7 +3337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "energy_rush_ultimate_v14_6.html";
+      a.download = "energy_rush_ultimate_v14_7.html";
       a.click();
       say("시스템 파일이 다운로드되었습니다!");
     };
@@ -3392,7 +3415,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertGemsBtn = document.getElementById("convertGemsBtn");
   if(convertGemsBtn) {
     convertGemsBtn.onclick = () => {
-      if((d.level || 35) < 30) return say("에너지 변환 연구소는 30레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 30) return say("에너지 변환 연구소는 30레벨 이상부터 이용 가능합니다!");
       let cost = 350000;
       if(d.score < cost) return say("보석 제련에 필요한 에너지가 부족합니다! (필요: 35만)");
       d.score -= cost;
@@ -3406,7 +3429,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertBoostBtn = document.getElementById("convertBoostBtn");
   if(convertBoostBtn) {
     convertBoostBtn.onclick = () => {
-      if((d.level || 35) < 30) return say("에너지 변환 연구소는 30레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 30) return say("에너지 변환 연구소는 30레벨 이상부터 이용 가능합니다!");
       let cost = 650000;
       if(d.score < cost) return say("채굴 가속에 필요한 에너지가 부족합니다! (필요: 65만)");
       d.score -= cost;
@@ -3578,7 +3601,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoToggle = document.getElementById("autoToggleBtn");
   if(autoToggle) {
     autoToggle.onclick = () => {
-      if((d.level || 35) < 10) return say("자동 채굴 장치는 10레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 10) return say("자동 채굴 장치는 10레벨 이상부터 이용 가능합니다!");
       if(!d.autoPurchased) return say("자동 채굴 장치를 먼저 구매해야 합니다!");
       d.autoEnabled = !d.autoEnabled;
       save();
@@ -3610,7 +3633,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoBtn = document.getElementById("autoBtn");
   if(autoBtn) {
     autoBtn.onclick = () => {
-      if((d.level || 35) < 10) return say("자동 채굴 장치는 10레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 10) return say("자동 채굴 장치는 10레벨 이상부터 이용 가능합니다!");
       if(d.autoPurchased) return say("이미 자동 채굴 장치를 보유하고 있습니다.");
       let cost = 1200;
       if(d.score >= cost) {
@@ -3639,7 +3662,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".gem-buy").forEach(btn => {
     btn.onclick = () => {
-      if((d.level || 35) < 15) return say("프리미엄 보석 상점은 15레벨 이상부터 이용 가능합니다!");
+      if((d.level || 1) < 15) return say("프리미엄 보석 상점은 15레벨 이상부터 이용 가능합니다!");
       const item = btn.dataset.gemitem;
       const costs = { gemClick: 120, gemAuto: 240, gemLuck: 360, gemHyper: 480, gemRing: 960, gemDivine: 2400, gemChronos: 1680, gemProtector: 720 };
       const cost = costs[item];
@@ -3676,9 +3699,9 @@ document.addEventListener("DOMContentLoaded", () => {
       d.rp += rpGained; 
       d.score = 0;
       d.power = 1; 
-      d.cps = 10; 
-      d.autoPurchased = true; 
-      d.autoEnabled = true;
+      d.cps = 0; 
+      d.autoPurchased = false; 
+      d.autoEnabled = false;
       d.equippedWeapon = 0;
       d.ownedWeapons = [0];
       d.mineDepth = 1;
@@ -3692,7 +3715,7 @@ document.addEventListener("DOMContentLoaded", () => {
     t.onclick = () => {
       const targetTabId = t.dataset.tab;
       
-      const currentLv = d.level || 35;
+      const currentLv = d.level || 1;
       if(targetTabId === 'gemShop' && currentLv < 15) return say("🔒 프리미엄 보석 상점은 레벨 15 이상부터 잠금해제됩니다!");
       if(targetTabId === 'titlePanel' && currentLv < 20) return say("🔒 칭호 시스템은 레벨 20 이상부터 잠금해제됩니다!");
       if(targetTabId === 'autoclickPanel' && currentLv < 25) return say("🔒 오토클릭 연구소는 레벨 25 이상부터 잠금해제됩니다!");
@@ -3813,7 +3836,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   setInterval(() => {
-    if (d.autoEnabled && d.autoPurchased && d.cps > 0 && (d.level || 35) >= 10) {
+    if (d.autoEnabled && d.autoPurchased && d.cps > 0 && (d.level || 1) >= 10) {
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
       const titleBonus = getTitleBonus();
