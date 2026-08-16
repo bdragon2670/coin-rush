@@ -204,6 +204,23 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 .stat b{display: block; font-size: 16px; margin-top: 5px; color: var(--accent); font-weight: 700;}
 
 .main{text-align: center; position: relative; margin-bottom: 24px;}
+.coin-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+.click-gain-badge {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);
+  white-space: nowrap;
+}
 .coin{
   width: 150px; height: 150px; border: none; border-radius: 50%;
   background: var(--gold-grad);
@@ -391,7 +408,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div class="main" id="mainArea">
-      <button class="coin" id="coin">⚡</button>
+      <div class="coin-container">
+        <div class="click-gain-badge" id="clickGainBadge">클릭 보상: 1~3개</div>
+        <button class="coin" id="coin">⚡</button>
+      </div>
       <div id="message"></div>
     </div>
 
@@ -532,8 +552,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <!-- 주식시장 탭 (5% 수익 상향 버프 적용) -->
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (5% 기본 상향 버프 적용)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">실시간 주식 변동에 5% 수익 버프가 적용됩니다! 대박을 노리세요.</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (최소 1,000 ~ 최대 50,000 에너지)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">실시간 주식 변동 데이터가 서버(저장소)에 반영되어 나갔다 들어와도 유지됩니다!</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES)</h4>
@@ -948,9 +968,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v8.8 사냥터 보상 및 장착 연동 패치",
-    title: "무기 상점 검 장착 시 사냥터 실시간 확률·보상 연동",
-    desc: "1) ⚔️ 무기 상점에서 검을 장착하거나 대장간에서 강화할 때, 사냥터의 적용 확률 및 보상 에너지가 버튼 왼쪽에 실시간으로 반영됩니다.\n2) 💾 모든 데이터가 로컬 스토리지에 완벽히 유지되도록 동기화 수정되었습니다."
+    version: "v9.0 클릭 보상 무작위 개수 및 매크로 제한 패치",
+    title: "클릭 당 에너지 1~3개 지급 및 비정상 클릭 10초 제한 적용",
+    desc: "1) ⚡ 에너지 생성 버튼 클릭 시 1~3개의 무작위 보상이 버튼 왼쪽에 실시간 반영됩니다.\n2) 🚨 비정상적인 초고속 연타(매크로 감지) 시 10초 동안 클릭이 제한됩니다."
   }
 ];
 
@@ -987,7 +1007,7 @@ const db = firebase.firestore();
 
 // 고정된 세이브 키를 사용하여 업데이트 시 데이터 유실 방지
 const saveKey = "energyRush_PermanentSaveData_v86";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v85") || localStorage.getItem("energyRush_PermanentSaveData_v84");
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v85");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1016,9 +1036,16 @@ if (d.blacksmithLevel === undefined) d.blacksmithLevel = 0;
 if (d.equippedWeapon === undefined) d.equippedWeapon = 0;
 if (d.ownedWeapons === undefined) d.ownedWeapons = [0];
 
+if (!d.stockPrices) d.stockPrices = { 1: 50000, 2: 50000, 3: 50000, 4: 50000 };
+if (!d.stockHistories) d.stockHistories = {
+  1: [50000, 48000, 45000, 42000, 50000],
+  2: [50000, 49000, 46000, 43000, 50000],
+  3: [50000, 47000, 44000, 41000, 50000],
+  4: [50000, 48500, 45500, 42500, 50000]
+};
+
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
-// 무기 9종 데이터 정의
 const WEAPONS_DB = [
   { id: 0, name: "나무검", icon: "🪵⚔️", price: 0, bonusProb: 0.00, bonusReward: 1.00, desc: "기본적인 나무 검. (추가 보정 없음)" },
   { id: 1, name: "돌검", icon: "🪨⚔️", price: 5000, bonusProb: 0.01, bonusReward: 1.05, desc: "단단한 돌로 만든 검. (확률 +1%, 보상 +5%)" },
@@ -1031,7 +1058,6 @@ const WEAPONS_DB = [
   { id: 8, name: "전설의 검", icon: "👑🔥⚔️", price: 120000000, bonusProb: 0.16, bonusReward: 2.10, desc: "궁극의 전설 검. (확률 +16%, 보상 +110%)" }
 ];
 
-// 총 40종 드론 DB
 const PET_DB = {
  cat: { id:'cat', name:'미니 탐사 드론', icon:'🛸', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.1%', sellPrice: 150, gemReward: 1 },
  chick: { id:'chick', name:'정찰용 스캐너', icon:'🛰️', grade:'C', nextGrade:'B', desc:'클릭 효율 +0.16%', sellPrice: 150, gemReward: 1 },
@@ -1105,11 +1131,11 @@ const $ = id => document.getElementById(id);
 let msgTimer = null;
 let draggedPetIdx = null;
 
-let stockPrices = { 1: 50000, 2: 50000, 3: 50000, 4: 50000 };
-let stockHistory1 = [50000, 48000, 45000, 42000, 50000];
-let stockHistory2 = [50000, 49000, 46000, 43000, 50000];
-let stockHistory3 = [50000, 47000, 44000, 41000, 50000];
-let stockHistory4 = [50000, 48500, 45500, 42500, 50000];
+// 비정상 클릭(매크로) 감지 변수
+let clickTimestamps = [];
+let isPenaltyActive = false;
+let penaltyTimerCountdown = 0;
+let penaltyInterval = null;
 
 function drawStockChart(canvasId, historyData) {
   const canvas = $(canvasId);
@@ -1140,20 +1166,20 @@ function drawStockChart(canvasId, historyData) {
 }
 
 function updateStockUI() {
-  if($("stockPrice1")) $("stockPrice1").textContent = fmt(stockPrices[1]);
-  if($("stockPrice2")) $("stockPrice2").textContent = fmt(stockPrices[2]);
-  if($("stockPrice3")) $("stockPrice3").textContent = fmt(stockPrices[3]);
-  if($("stockPrice4")) $("stockPrice4").textContent = fmt(stockPrices[4]);
+  if($("stockPrice1")) $("stockPrice1").textContent = fmt(d.stockPrices[1]);
+  if($("stockPrice2")) $("stockPrice2").textContent = fmt(d.stockPrices[2]);
+  if($("stockPrice3")) $("stockPrice3").textContent = fmt(d.stockPrices[3]);
+  if($("stockPrice4")) $("stockPrice4").textContent = fmt(d.stockPrices[4]);
 
   if($("stockOwned1")) $("stockOwned1").textContent = d.stock1;
   if($("stockOwned2")) $("stockOwned2").textContent = d.stock2;
   if($("stockOwned3")) $("stockOwned3").textContent = d.stock3;
   if($("stockOwned4")) $("stockOwned4").textContent = d.stock4;
 
-  drawStockChart("stockCanvas1", stockHistory1);
-  drawStockChart("stockCanvas2", stockHistory2);
-  drawStockChart("stockCanvas3", stockHistory3);
-  drawStockChart("stockCanvas4", stockHistory4);
+  drawStockChart("stockCanvas1", d.stockHistories[1]);
+  drawStockChart("stockCanvas2", d.stockHistories[2]);
+  drawStockChart("stockCanvas3", d.stockHistories[3]);
+  drawStockChart("stockCanvas4", d.stockHistories[4]);
 }
 
 function checkAndDiscoverPets() {
@@ -1458,7 +1484,6 @@ function render(){
    }
  }
 
- // 사냥터 확률 및 보상 텍스트 갱신 (장착된 검 + 대장간 강화 연동)
  const weapon = WEAPONS_DB[d.equippedWeapon || 0];
  const extraProb = (weapon ? weapon.bonusProb : 0) + (bsLevel * 0.005);
  const extraRew = (weapon ? weapon.bonusReward : 1.0) * (1 + bsLevel * 0.03);
@@ -1475,6 +1500,14 @@ function render(){
 
  const coinBtn = $("coin");
  if(coinBtn) {
+   if(isPenaltyActive) {
+     coinBtn.style.filter = "grayscale(100%)";
+     coinBtn.style.cursor = "not-allowed";
+   } else {
+     coinBtn.style.filter = "none";
+     coinBtn.style.cursor = "pointer";
+   }
+
    if(d.customImg) {
      coinBtn.innerHTML = `<img src="${d.customImg}" alt="Custom Core">`;
      coinBtn.style.background = "none";
@@ -2061,7 +2094,7 @@ function startMultiBoxOpeningInteraction(count){
 }
 
 function buyStock(id, amount) {
-  const price = stockPrices[id];
+  const price = d.stockPrices[id];
   let qty = 0;
   if(amount === 'max') {
     qty = Math.floor(d.score / price);
@@ -2080,7 +2113,7 @@ function buyStock(id, amount) {
 }
 
 function sellStock(id, amount) {
-  const price = stockPrices[id];
+  const price = d.stockPrices[id];
   let owned = id === 1 ? (d.stock1 || 0) : id === 2 ? (d.stock2 || 0) : id === 3 ? (d.stock3 || 0) : (d.stock4 || 0);
   let qty = 0;
   if(amount === 'max') {
@@ -2149,7 +2182,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const upgradeBlacksmithRPGBtn = $("upgradeBlacksmithRPGBtn");
   if(upgradeBlacksmithRPGBtn) upgradeBlacksmithRPGBtn.onclick = upgradeBlacksmithRPG;
 
-  // 사냥터 버튼 이벤트 명시적 바인딩
   const huntBtn1 = $("huntBtn1");
   const huntBtn2 = $("huntBtn2");
   const huntBtn3 = $("huntBtn3");
@@ -2157,7 +2189,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if(huntBtn2) huntBtn2.onclick = () => huntMonster(2);
   if(huntBtn3) huntBtn3.onclick = () => huntMonster(3);
 
-  // 주식 버튼 이벤트 명시적 바인딩
   for(let i = 1; i <= 4; i++) {
     const b1 = $(`buyStock${i}_1`);
     const bMax = $(`buyStock${i}_max`);
@@ -2310,6 +2341,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const coinBtnMain = $("coin");
   if(coinBtnMain) {
     coinBtnMain.onclick = (e) => {
+      if(isPenaltyActive) {
+        say(`🚨 매크로/비정상 클릭 감지! ${penaltyTimerCountdown}초 동안 클릭이 제한됩니다.`);
+        return;
+      }
+
+      // 비정상 연타 감지 (1초 동안 25회 이상 클릭 시 매크로 판정)
+      const nowTime = Date.now();
+      clickTimestamps.push(nowTime);
+      clickTimestamps = clickTimestamps.filter(t => nowTime - t < 1000);
+      if(clickTimestamps.length > 25) {
+        isPenaltyActive = true;
+        penaltyTimerCountdown = 10;
+        say("🚨 비정상적 초고속 연타 감지! 10초간 클릭이 제한됩니다.");
+        if(penaltyInterval) clearInterval(penaltyInterval);
+        penaltyInterval = setInterval(() => {
+          penaltyTimerCountdown--;
+          if(penaltyTimerCountdown <= 0) {
+            isPenaltyActive = false;
+            clearInterval(penaltyInterval);
+            say("✅ 클릭 제한이 해제되었습니다.");
+            render();
+          } else {
+            say(`🚨 비정상 클릭 제한 중... (${penaltyTimerCountdown}초 남음)`);
+          }
+        }, 1000);
+        render();
+        return;
+      }
+
       const petBonus = getPetBonus();
       const baseMult = getBaseMult();
       let coolerBonus = d.cooler ? 1.2 : 1.0;
@@ -2317,7 +2377,13 @@ document.addEventListener("DOMContentLoaded", () => {
       let gemRingBonus = d.gemRing ? 1.50 : 1.0;
       let blacksmithBonus = (d.blacksmithLevel || 0) * 35;
       let currentPower = ((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) + blacksmithBonus;
-      let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult;
+      
+      // 버튼 클릭당 1~3개 무작위 보상 적용
+      let randomGainCount = Math.floor(Math.random() * 3) + 1;
+      const clickGainBadge = $("clickGainBadge");
+      if(clickGainBadge) clickGainBadge.textContent = `클릭 보상: ${randomGainCount}개 지급`;
+
+      let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * randomGainCount;
       
       const totalLuckProb = (d.luck ? 0.02 : 0.0) + ((d.permLuck || 0) / 100) + (d.gemLuck ? 0.035 : 0.0);
       if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
@@ -2568,22 +2634,23 @@ setInterval(() => {
     }
   }
 
-  // 주식 극악 확률 변동 및 5% 수익 버프 적용 (최대 20만 원 상한)
   if(Math.random() < 0.35) {
+    let updated = false;
     for(let i = 1; i <= 4; i++) {
-      let multiplier = (Math.random() < 0.48 ? (0.65 + Math.random() * 0.3) : (0.7 + Math.random() * 0.55)) * 1.05; // 5% 버프 적용
-      stockPrices[i] = Math.min(200000, Math.max(1000, Math.floor(stockPrices[i] * multiplier)));
+      let multiplier = (Math.random() < 0.48 ? (0.65 + Math.random() * 0.3) : (0.7 + Math.random() * 0.55)) * 1.05;
+      d.stockPrices[i] = Math.min(50000, Math.max(1000, Math.floor(d.stockPrices[i] * multiplier)));
+      
+      d.stockHistories[i].push(d.stockPrices[i]); 
+      if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
+      updated = true;
     }
-    
-    stockHistory1.push(stockPrices[1]); if(stockHistory1.length > 20) stockHistory1.shift();
-    stockHistory2.push(stockPrices[2]); if(stockHistory2.length > 20) stockHistory2.shift();
-    stockHistory3.push(stockPrices[3]); if(stockHistory3.length > 20) stockHistory3.shift();
-    stockHistory4.push(stockPrices[4]); if(stockHistory4.length > 20) stockHistory4.shift();
 
     const stockPanel = $("stockPanel");
     if(stockPanel && !stockPanel.classList.contains("hidden")) {
       updateStockUI();
     }
+    
+    if(updated) save();
   }
 }, 600);
 </script>
