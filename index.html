@@ -515,17 +515,17 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <div class="game-card">
           <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#f43f5e;" id="huntProb1">(기본 45%)</span></h3>
           <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward1" style="color:var(--accent);">3,000</b> 에너지</p>
-          <button class="btn-game" onclick="huntMonster(1)">소탕 작전 (비용 1,000)</button>
+          <button class="btn-game" id="huntBtn1">소탕 작전 (비용 1,000)</button>
         </div>
         <div class="game-card">
           <h3>👾 글리치 워머 <span style="font-size:10px; color:#f43f5e;" id="huntProb2">(기본 25%)</span></h3>
           <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward2" style="color:var(--accent);">18,000</b> 에너지</p>
-          <button class="btn-game" onclick="huntMonster(2)">소탕 작전 (비용 5,000)</button>
+          <button class="btn-game" id="huntBtn2">소탕 작전 (비용 5,000)</button>
         </div>
         <div class="game-card">
           <h3>🐉 타이탄 랜섬웨어 <span style="font-size:10px; color:#f43f5e;" id="huntProb3">(기본 10%)</span></h3>
           <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward3" style="color:var(--accent);">100,000</b> 에너지</p>
-          <button class="btn-game" onclick="huntMonster(3)">소탕 작전 (비용 25,000)</button>
+          <button class="btn-game" id="huntBtn3">소탕 작전 (비용 25,000)</button>
         </div>
       </div>
     </div>
@@ -541,12 +541,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
           <div style="display:flex; gap:6px; margin-top:8px;">
-            <button class="btn-stock" style="flex:1;" onclick="buyStock(1, 1)">1주 매수</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" onclick="buyStock(1, 'max')">전부 매수</button>
+            <button class="btn-stock" style="flex:1;" id="buyStock1_1">1주 매수</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock1_max">전부 매수</button>
           </div>
           <div style="display:flex; gap:6px; margin-top:4px;">
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" onclick="sellStock(1, 1)">1주 매도</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" onclick="sellStock(1, 'max')">전부 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock1_1">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock1_max">전부 매도</button>
           </div>
         </div>
         <div class="stock-card">
@@ -555,12 +555,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
           <div style="display:flex; gap:6px; margin-top:8px;">
-            <button class="btn-stock" style="flex:1;" onclick="buyStock(2, 1)">1주 매수</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" onclick="buyStock(2, 'max')">전부 매수</button>
+            <button class="btn-stock" style="flex:1;" id="buyStock2_1">1주 매수</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock2_max">전부 매수</button>
           </div>
           <div style="display:flex; gap:6px; margin-top:4px;">
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" onclick="sellStock(2, 1)">1주 매도</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" onclick="sellStock(2, 'max')">전부 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock2_1">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock2_max">전부 매도</button>
           </div>
         </div>
         <div class="stock-card" style="margin-top:4px;">
@@ -569,12 +569,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
           <div style="display:flex; gap:6px; margin-top:8px;">
-            <button class="btn-stock" style="flex:1;" onclick="buyStock(3, 1)">1주 매수</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" onclick="buyStock(3, 'max')">전부 매수</button>
+            <button class="btn-stock" style="flex:1;" id="buyStock3_1">1주 매수</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock3_max">전부 매수</button>
           </div>
           <div style="display:flex; gap:6px; margin-top:4px;">
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" onclick="sellStock(3, 1)">1주 매도</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" onclick="sellStock(3, 'max')">전부 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock3_1">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock3_max">전부 매도</button>
           </div>
         </div>
         <div class="stock-card" style="margin-top:4px;">
@@ -583,12 +583,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
           <div style="display:flex; gap:6px; margin-top:8px;">
-            <button class="btn-stock" style="flex:1;" onclick="buyStock(4, 1)">1주 매수</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" onclick="buyStock(4, 'max')">전부 매수</button>
+            <button class="btn-stock" style="flex:1;" id="buyStock4_1">1주 매수</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #0284c7, #0369a1) !important;" id="buyStock4_max">전부 매수</button>
           </div>
           <div style="display:flex; gap:6px; margin-top:4px;">
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" onclick="sellStock(4, 1)">1주 매도</button>
-            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" onclick="sellStock(4, 'max')">전부 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #ef4444, #dc2626) !important;" id="sellStock4_1">1주 매도</button>
+            <button class="btn-stock" style="flex:1; background:linear-gradient(135deg, #b91c1c, #991b1b) !important;" id="sellStock4_max">전부 매도</button>
           </div>
         </div>
       </div>
@@ -2147,6 +2147,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const upgradeBlacksmithRPGBtn = $("upgradeBlacksmithRPGBtn");
   if(upgradeBlacksmithRPGBtn) upgradeBlacksmithRPGBtn.onclick = upgradeBlacksmithRPG;
+
+  // 사냥터 버튼 이벤트 명시적 바인딩
+  const huntBtn1 = $("huntBtn1");
+  const huntBtn2 = $("huntBtn2");
+  const huntBtn3 = $("huntBtn3");
+  if(huntBtn1) huntBtn1.onclick = () => huntMonster(1);
+  if(huntBtn2) huntBtn2.onclick = () => huntMonster(2);
+  if(huntBtn3) huntBtn3.onclick = () => huntMonster(3);
+
+  // 주식 버튼 이벤트 명시적 바인딩
+  for(let i = 1; i <= 4; i++) {
+    const b1 = $(`buyStock${i}_1`);
+    const bMax = $(`buyStock${i}_max`);
+    const s1 = $(`sellStock${i}_1`);
+    const sMax = $(`sellStock${i}_max`);
+    if(b1) b1.onclick = () => buyStock(i, 1);
+    if(bMax) bMax.onclick = () => buyStock(i, 'max');
+    if(s1) s1.onclick = () => sellStock(i, 1);
+    if(sMax) sMax.onclick = () => sellStock(i, 'max');
+  }
 
   const customImgUpload = $("customImageUpload");
   if(customImgUpload) {
