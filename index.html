@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v13.9 P2P 유저거래소 완벽 수정</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.0 카테고리별 사이드바 완벽 정리</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -63,7 +63,7 @@ body::before {
 }
 
 .sidebar {
-  width: 240px;
+  width: 250px;
   background: var(--card-bg);
   backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
@@ -71,17 +71,19 @@ body::before {
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 88vh;
+  overflow-y: auto;
 }
 .sidebar.collapsed { width: 72px; }
 .sidebar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  padding-bottom: 10px;
+  margin-bottom: 4px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--border-color);
 }
 .sidebar-header h3 { margin: 0; font-size: 13px; color: var(--accent); white-space: nowrap; overflow: hidden; letter-spacing: 1px; }
@@ -89,9 +91,30 @@ body::before {
 .toggle-sidebar-btn { background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 16px; transition: color 0.2s; }
 .toggle-sidebar-btn:hover { color: var(--accent); }
 
+.nav-category-title {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin: 4px 0 2px 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sidebar.collapsed .nav-category-title { display: none; }
+
+.nav-category-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.nav-category-group:last-child { border-bottom: none; }
+
 .tab {
   width: 100%;
-  padding: 11px 14px;
+  padding: 10px 12px;
   border: 1px solid transparent;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.01);
@@ -99,15 +122,15 @@ body::before {
   font-weight: 500;
   cursor: pointer;
   text-align: left;
-  font-size: 13px;
+  font-size: 12px;
   transition: all 0.25s ease;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   white-space: nowrap;
   overflow: hidden;
 }
-.tab span.tab-icon { font-size: 15px; min-width: 18px; text-align: center; }
+.tab span.tab-icon { font-size: 14px; min-width: 16px; text-align: center; }
 .sidebar.collapsed .tab span.tab-text { display: none; }
 .tab:hover { background: rgba(245, 158, 11, 0.08); color: var(--text-main); border-color: rgba(245, 158, 11, 0.15); }
 .tab.active { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(180, 83, 9, 0.2)); color: var(--accent); border-color: var(--accent); font-weight: 700; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15); }
@@ -434,7 +457,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 @media(max-width: 780px){
   .layout-container { flex-direction: column; }
   .sidebar { width: 100% !important; flex-direction: row; flex-wrap: wrap; justify-content: center; }
-  .sidebar-header, .sidebar.collapsed .sidebar-header { display: none; }
+  .sidebar-header, .sidebar.collapsed .sidebar-header, .nav-category-title { display: none; }
   .stats{grid-template-columns: repeat(2, 1fr);}
   .shop-grid, .minigame-grid, .pet-box-grid, .stock-grid{grid-template-columns: 1fr;}
   .coin{width: 130px; height: 130px; font-size: 45px;}
@@ -451,25 +474,50 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <h3>✨ QUANTUM MENU</h3>
       <button class="toggle-sidebar-btn" id="toggleSidebarBtn">◀</button>
     </div>
-    <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화 센터</span></button>
-    <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
-    <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석</span></button>
-    <button class="tab" data-tab="autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소</span></button>
-    <button class="tab" data-tab="minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span></button>
-    <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
-    <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
-    <button class="tab" data-tab="stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span></button>
-    <button class="tab" data-tab="p2pPanel"><span class="tab-icon">🌐</span><span class="tab-text">P2P 유저거래소</span></button>
-    <button class="tab" data-tab="converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소</span></button>
-    <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">코어 커스텀</span></button>
-    <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
-    <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">통합 도감</span></button>
-    <button class="tab" data-tab="rankingPanel"><span class="tab-icon">🏆</span><span class="tab-text">글로벌 랭킹</span></button>
-    <button class="tab" data-tab="attendPanel"><span class="tab-icon">📅</span><span class="tab-text">30일 출석체크</span></button>
-    <button class="tab" data-tab="minigames"><span class="tab-icon">🔬</span><span class="tab-text">연구실 게임</span></button>
-    <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구 스탯</span></button>
-    <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">시스템 승급</span></button>
-    <button class="tab" data-tab="cloudPanel"><span class="tab-icon">☁️</span><span class="tab-text">구글 클라우드</span></button>
+
+    <!-- 1. 성장 및 육성 그룹 -->
+    <div class="nav-category-title">⚡ 성장 및 육성</div>
+    <div class="nav-category-group">
+      <button class="tab active" data-tab="upgrade"><span class="tab-icon">⚡</span><span class="tab-text">강화 센터</span></button>
+      <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
+      <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석</span></button>
+      <button class="tab" data-tab="autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소</span></button>
+      <button class="tab" data-tab="converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소</span></button>
+    </div>
+
+    <!-- 2. 탐험 및 전투 그룹 -->
+    <div class="nav-category-title">🎯 탐험 및 전투</div>
+    <div class="nav-category-group">
+      <button class="tab" data-tab="minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span></button>
+      <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
+      <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
+      <button class="tab" data-tab="minigames"><span class="tab-icon">🔬</span><span class="tab-text">연구실 게임</span></button>
+    </div>
+
+    <!-- 3. 드론 및 컬렉션 그룹 -->
+    <div class="nav-category-title">🤖 드론 및 컬렉션</div>
+    <div class="nav-category-group">
+      <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
+      <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">통합 도감</span></button>
+      <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">코어 커스텀</span></button>
+    </div>
+
+    <!-- 4. 경제 및 소셜 그룹 -->
+    <div class="nav-category-title">🌐 경제 및 소셜</div>
+    <div class="nav-category-group">
+      <button class="tab" data-tab="stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span></button>
+      <button class="tab" data-tab="p2pPanel"><span class="tab-icon">🌐</span><span class="tab-text">P2P 유저거래소</span></button>
+      <button class="tab" data-tab="rankingPanel"><span class="tab-icon">🏆</span><span class="tab-text">글로벌 랭킹</span></button>
+      <button class="tab" data-tab="attendPanel"><span class="tab-icon">📅</span><span class="tab-text">30일 출석체크</span></button>
+    </div>
+
+    <!-- 5. 시스템 및 환생 그룹 -->
+    <div class="nav-category-title">🔮 시스템 및 클라우드</div>
+    <div class="nav-category-group">
+      <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구 스탯</span></button>
+      <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">시스템 승급</span></button>
+      <button class="tab" data-tab="cloudPanel"><span class="tab-icon">☁️</span><span class="tab-text">구글 클라우드</span></button>
+    </div>
   </div>
 
   <div class="game">
@@ -494,8 +542,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.9</h1>
-    <div class="sub">구글 유저간 P2P 유저거래소 (드론 선택 오류 및 등록 버그 완전 해결)</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.0</h1>
+    <div class="sub">카테고리별 연관 채널 그룹화 완료 (성장, 탐험/전투, 드론, 경제/소셜, 시스템)</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -1180,9 +1228,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.9 P2P 유저거래소 패치",
-    title: "유저거래소 선택 및 등록 오류 전면 수정",
-    desc: "1) 🌐 드론 및 보석 선택 드롭다운 이벤트 핸들러가 누락되거나 작동하지 않던 버그를 완전히 해결했습니다.\n2) 유저거래 매물 등록 시 선택한 고유 인덱스와 파라미터가 정확하게 파이어스토어에 저장되도록 수정했습니다."
+    version: "v14.0 사이드바 카테고리 개편 패치",
+    title: "연관 채널 그룹화 완료",
+    desc: "1) ⚡ [성장 및 육성], 🎯 [탐험 및 전투], 🤖 [드론 및 컬렉션], 🌐 [경제 및 소셜], 🔮 [시스템 및 클라우드] 등 5가지 핵심 테마별로 좌측 채널들을 깔끔하게 그룹화했습니다.\n2) 유저거래소 선택 및 드론 등록 버그가 온전하게 유지되며 가독성과 편의성이 극대화되었습니다."
   }
 ];
 
@@ -1217,8 +1265,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v139";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v138") || localStorage.getItem("energyRush_PermanentSaveData_v137");
+const saveKey = "energyRush_PermanentSaveData_v140";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v139") || localStorage.getItem("energyRush_PermanentSaveData_v138");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1654,7 +1702,7 @@ function loadGlobalRanking() {
   });
 }
 
-/* P2P 유저거래소 관련 로직 (완전 수정 및 버그 방어) */
+/* P2P 유저거래소 관련 로직 */
 function toggleP2PItemTypeSelector() {
   const typeEl = document.getElementById("p2pItemType");
   if(!typeEl) return;
@@ -1683,7 +1731,7 @@ function updateP2PDroneSelect() {
     const pet = PET_DB[petId];
     if(pet) {
       const opt = document.createElement("option");
-      opt.value = idx; // 격납고 실제 인덱스 고정 바인딩
+      opt.value = idx;
       opt.textContent = `${pet.icon} ${pet.name} (${pet.grade}급) [#${idx+1}]`;
       select.appendChild(opt);
     }
