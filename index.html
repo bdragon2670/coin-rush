@@ -161,8 +161,21 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  position: relative;
 }
 .tool-btn:hover{background: rgba(245, 158, 11, 0.1); border-color: var(--accent); color: var(--accent);}
+
+.stock-alert-toast {
+  position: absolute; top: -42px; right: 0; background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700;
+  white-space: nowrap; box-shadow: 0 4px 15px rgba(16,185,129,0.4); animation: fadeInOut 3s forwards; z-index: 99;
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(6px); }
+  15% { opacity: 1; transform: translateY(0); }
+  85% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+}
 
 .alarm-btn {
   position: relative;
@@ -424,7 +437,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <img src="https://via.placeholder.com/32/7f8c8d/ffffff?text=?" id="userAvatar" class="user-avatar">
         <span class="user-name" id="userName">연구원 (미로그인)</span>
       </div>
-      <div class="top-right-btns">
+      <div class="top-right-btns" style="position:relative;">
+        <div id="stockAlertContainer"></div>
         <button class="tool-btn" id="bgmToggleBtn" style="background:rgba(16, 185, 129, 0.08); border-color:rgba(16, 185, 129, 0.3); color:#10b981;">🎵 BGM 끄기</button>
         <button class="tool-btn alarm-btn" id="openPatchNoteBtn">📢 패치노트 <span class="alarm-badge active" id="alarmBadge"></span></button>
         <button class="tool-btn" id="downloadGameBtn">📥 파일저장</button>
@@ -594,14 +608,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널</h3>
       <div class="news-ticker-box" id="newsTickerBox">
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
-        <span class="news-ticker-content" id="newsTickerText">현재 시장은 안정세를 유지하고 있습니다. 주기적으로 기업별 돌발 악재/호재가 발생합니다!</span>
+        <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다. 속보에 따라 급등락이 발생합니다!</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식 상한선은 최대 2,000원으로 제한되며, 가끔 긴급 뉴스로 인한 떡락이 발생합니다!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">평상시 300~600원에 머물며, 뉴스 속보에 따라 떡상하거나 떡락합니다! 보유 주식이 급등하면 우측 상단에 알람이 표시됩니다.</p>
       
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES) [기본 개방]</h4>
-          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">1,000</b> 에너지</p>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">500</b> 에너지</p>
           <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
           <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer1"></p>
@@ -623,7 +637,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
           <div id="stockContent2" class="hidden">
             <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">1,000</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지</p>
             <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
@@ -646,7 +660,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
           <div id="stockContent3" class="hidden">
             <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">1,000</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지</p>
             <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
@@ -669,7 +683,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
           <div id="stockContent4" class="hidden">
             <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">1,000</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지</p>
             <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
@@ -1030,9 +1044,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v12.2 주식 상한선 2,000원 제한 및 에너지 연동 수정 패치",
-    title: "클릭 시 에너지 즉시 반영 버그 완벽 수정 및 주식 2천원 상한 제한",
-    desc: "1) 📈 주식 상한선을 최대 2,000원으로 고정하고 악재 뉴스 발생 시 떡락하는 시스템 반영.\n2) ⚡ 코어 클릭 시 에너지 증가 연산 오류를 전면 수정하여 잔고가 정상적으로 누적되도록 개선."
+    version: "v12.3 주식 3~6백 원대 횡보 및 급등 알람 패치",
+    title: "평상시 3~6백 원대 횡보, 뉴스 속보 급등락 및 보유 주식 알람 기능 추가",
+    desc: "1) 📈 변동 없을 때는 주식이 300~600원 사이에서 움직이며, 뉴스 속보에 따라 떡상/떡락합니다.\n2) 🔔 보유 중인 주식이 급등하면 우측 상단에 '보유하고 계신 주식이 오르고 있습니다' 알람이 표시됩니다."
   }
 ];
 
@@ -1067,8 +1081,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v122";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v121") || localStorage.getItem("energyRush_PermanentSaveData_v120");
+const saveKey = "energyRush_PermanentSaveData_v123";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v122") || localStorage.getItem("energyRush_PermanentSaveData_v121");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1081,7 +1095,7 @@ let d = JSON.parse(savedRawData || "null") || {
  equippedWeapon: 0, ownedWeapons: [0],
  mineDepth: 1,
  stockSellCooldowns: {},
- latestNews: "현재 시장은 평온한 상태입니다. 기업별 실시간 뉴스를 주시하세요!"
+ latestNews: "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다."
 };
 
 if (!d.equippedPets) d.equippedPets = [];
@@ -1105,14 +1119,14 @@ if (d.equippedWeapon === undefined) d.equippedWeapon = 0;
 if (d.ownedWeapons === undefined) d.ownedWeapons = [0];
 if (d.mineDepth === undefined) d.mineDepth = 1;
 if (!d.stockSellCooldowns) d.stockSellCooldowns = {};
-if (!d.latestNews) d.latestNews = "현재 시장은 평온한 상태입니다.";
+if (!d.latestNews) d.latestNews = "현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.";
 
-if (!d.stockPrices) d.stockPrices = { 1: 1000, 2: 1000, 3: 1000, 4: 1000 };
+if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
 if (!d.stockHistories) d.stockHistories = {
-  1: [1000, 900, 800, 500, 1000],
-  2: [1000, 950, 850, 600, 1000],
-  3: [1000, 880, 750, 400, 1000],
-  4: [1000, 920, 820, 550, 1000]
+  1: [500, 480, 520, 500],
+  2: [500, 490, 510, 500],
+  3: [500, 470, 530, 500],
+  4: [500, 500, 480, 500]
 };
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
@@ -1221,6 +1235,15 @@ let clickTimestamps = [];
 let isPenaltyActive = false;
 let penaltyTimerCountdown = 0;
 let penaltyInterval = null;
+
+function showStockAlertToast(msg) {
+  const container = $("stockAlertContainer");
+  if(!container) return;
+  container.innerHTML = `<div class="stock-alert-toast">🔔 ${msg}</div>`;
+  setTimeout(() => {
+    container.innerHTML = "";
+  }, 3000);
+}
 
 function drawStockChart(canvasId, historyData) {
   const canvas = $(canvasId);
@@ -2640,7 +2663,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.5) / 100) + gemLuckBonus + petBonus.luckProb;
       if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
       
-      // 버그 수정: 클릭 시 에너지 잔고(d.score)가 정상적으로 누적되도록 수정
       d.score = Number(d.score) + Number(gain);
 
       const coinContainer = coinBtnMain.parentElement;
@@ -2865,8 +2887,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 let autoMiningTimer = 0;
-let stockTrendCounter = { 1: 0, 2: 0, 3: 0, 4: 0 };
-let stockTrendDir = { 1: 1, 2: 1, 3: 1, 4: 1 };
 let newsTickerTimer = 0;
 
 const companyNames = {
@@ -2904,40 +2924,42 @@ setInterval(() => {
     }
   }
 
-  // 주식 뉴스 및 변동 이벤트 (상한선 최대 2,000원 제한 적용)
   newsTickerTimer++;
-  if(newsTickerTimer >= 15) { 
+  if(newsTickerTimer >= 14) { 
     newsTickerTimer = 0;
     let targetStockId = Math.floor(Math.random() * 4) + 1;
-    let isBad = Math.random() < 0.65; 
+    let isBad = Math.random() < 0.55; 
     let compName = companyNames[targetStockId];
+    let oldPrice = d.stockPrices[targetStockId];
 
     if(isBad) {
       let randomMsg = badNewsList[Math.floor(Math.random() * badNewsList.length)];
-      d.latestNews = `🚨 [긴급악재] ${compName}: ${randomMsg}`;
-      let dropAmount = Math.floor(Math.random() * 800) + 400;
+      d.latestNews = `🚨 [속보] ${compName}: ${randomMsg}`;
+      let dropAmount = Math.floor(Math.random() * 300) + 150;
       d.stockPrices[targetStockId] = Math.max(100, d.stockPrices[targetStockId] - dropAmount);
     } else {
       let randomMsg = goodNewsList[Math.floor(Math.random() * goodNewsList.length)];
-      d.latestNews = `🚀 [호재급등] ${compName}: ${randomMsg}`;
+      d.latestNews = `🚀 [속보] ${compName}: ${randomMsg}`;
       let riseAmount = Math.floor(Math.random() * 400) + 200;
       d.stockPrices[targetStockId] = Math.min(2000, d.stockPrices[targetStockId] + riseAmount);
+      
+      let ownedQty = targetStockId === 1 ? d.stock1 : targetStockId === 2 ? d.stock2 : targetStockId === 3 ? d.stock3 : d.stock4;
+      if(ownedQty > 0) {
+        showStockAlertToast(`보유하신 [${compName}] 주식이 오르고 있습니다!`);
+      }
     }
   }
 
   let updated = false;
   for(let i = 1; i <= 4; i++) {
-    stockTrendCounter[i]--;
-    if(stockTrendCounter[i] <= 0) {
-      stockTrendCounter[i] = Math.floor(Math.random() * 6) + 4; 
-      stockTrendDir[i] = Math.random() < 0.55 ? 1 : -1; 
-    }
+    let oldP = d.stockPrices[i];
+    let delta = Math.floor(Math.random() * 51) - 25; 
+    let newP = oldP + delta;
+    
+    if(newP < 300) newP = 300 + Math.floor(Math.random() * 30);
+    if(newP > 600 && Math.random() > 0.1) newP = 600 - Math.floor(Math.random() * 30);
 
-    let baseDelta = (Math.random() * 500) - 250; 
-    let trendBonus = stockTrendDir[i] * (Math.random() * 200 + 50);
-    let totalDelta = Math.floor(baseDelta + trendBonus);
-
-    d.stockPrices[i] = Math.max(100, Math.min(2000, d.stockPrices[i] + totalDelta));
+    d.stockPrices[i] = Math.max(100, Math.min(2000, newP));
     
     d.stockHistories[i].push(d.stockPrices[i]); 
     if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
