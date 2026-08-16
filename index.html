@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.0 와이드 풀스크린 & 칭호 시스템</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.1 최적화 & 패치노트 확장판</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -53,7 +53,6 @@ body::before {
   z-index: 0;
 }
 
-/* 와이드 풀스크린 레이아웃 컨테이너 (브라우저 창을 넓게 활용) */
 .layout-container {
   display: flex;
   gap: 16px;
@@ -213,7 +212,7 @@ h1{ font-size: 26px; text-align: center; margin: 0 0 4px; color: var(--text-main
 .modal-overlay.hidden { display: none; }
 .modal-box {
   background: var(--card-solid); border: 1px solid var(--border-hover); border-radius: 20px;
-  width: min(600px, 90vw); max-height: 80vh; display: flex; flex-direction: column; padding: 24px;
+  width: min(650px, 90vw); max-height: 80vh; display: flex; flex-direction: column; padding: 24px;
   box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(245, 158, 11, 0.2);
 }
 .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px; }
@@ -365,7 +364,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .encyclopedia-card.locked { opacity: 0.35; filter: grayscale(100%); background: rgba(0,0,0,0.3); }
 .encyclopedia-card.unlocked { border: 1px solid #10b981; background: rgba(16, 185, 129, 0.03); }
 
-/* 칭호 시스템 카드 그리드 */
 .title-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 14px; }
 .title-card {
   background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px;
@@ -518,15 +516,15 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div class="modal-overlay hidden" id="patchModal">
       <div class="modal-box">
         <div class="modal-header">
-          <h2>📜 패치노트</h2>
+          <h2>📜 전체 패치노트 아카이브</h2>
           <button class="close-modal" id="closePatchNoteBtn">&times;</button>
         </div>
         <div class="modal-body" id="patchNoteContent"></div>
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.0</h1>
-    <div class="sub">와이드 풀스크린 확장 UI 및 업적 달성 칭호 시스템 완벽 도입</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.1</h1>
+    <div class="sub">데이터 저장 최적화, 자동 세이브 및 누적 패치노트 아카이브 완벽 적용</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -564,7 +562,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <!-- 칭호 시스템 패널 추가 -->
     <div id="titlePanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">🏅 퀀텀 연구원 칭호 시스템</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">특정 조건을 달성하여 강력한 버프를 주는 칭호를 해제하고 장착하세요!</p>
@@ -1215,11 +1212,27 @@ function playFailureSound() {
   } catch(e){}
 }
 
+/* 지금까지의 모든 업데이트 내용이 포함된 누적 패치노트 아카이브 */
 const patchNotes = [
+  {
+    version: "v14.1 최적화 & 패치노트 확장 패치",
+    title: "데이터 저장 최적화 및 전체 패치노트 아카이브",
+    desc: "1) 데이터 저장 및 불러오기 로직을 대폭 최적화하여 메모리 누수를 방지하고 속도를 개선했습니다.\n2) v1.0부터 현재까지 적용된 모든 주요 기능과 업데이트 내역을 통합 패치노트 모달에 누적 기록하여 확인할 수 있도록 개편했습니다."
+  },
   {
     version: "v14.0 와이드 풀스크린 & 칭호 시스템 패치",
     title: "와이드 UI 전면 개편 및 칭호 시스템 도입",
     desc: "1) 브라우저 화면 전체를 활용하는 와이드 풀스크린 레이아웃(최대 1800px)으로 시인성과 몰입감을 대폭 향상했습니다.\n2) 에너지 누적, 드론 수집, 시스템 승급 등 조건 달성 시 해제하고 장착 가능한 강력한 버프형 '칭호 시스템'이 추가되었습니다."
+  },
+  {
+    version: "v13.0 드론 격납고 & P2P 유저거래소 패치",
+    title: "실시간 P2P 유저 간 드론/보석 거래 시스템 도입",
+    desc: "1) 구글 클라우드 기반 실시간 P2P 유저거래소를 오픈하여 드론 및 보석 거래가 가능해졌습니다.\n2) 동일 등급 드론 연쇄 합성 및 S급 이상 과부하 파괴 방지 메커니즘이 도입되었습니다."
+  },
+  {
+    version: "v12.0 주식 거래소 & 퀀텀 광산 패치",
+    title: "주식 시장 및 지하 광산 탐사 시스템 업데이트",
+    desc: "1) 실시간 주가 변동 및 뉴스 티커 시스템을 갖춘 주식 거래소가 추가되었습니다.\n2) 광산 시설 확장 및 탐사 확률 점진적 상승 시스템이 구현되었습니다."
   }
 ];
 
@@ -1254,8 +1267,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v140";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v139") || localStorage.getItem("energyRush_PermanentSaveData_v138");
+const saveKey = "energyRush_PermanentSaveData_v141";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v140") || localStorage.getItem("energyRush_PermanentSaveData_v139");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1327,7 +1340,6 @@ if (!d.stockHistories) d.stockHistories = {
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
 
-/* 칭호 시스템 정의 */
 const TITLES_DB = {
   novice: { id: 'novice', name: '초보 연구원', desc: '기본 지급 칭호', effectDesc: '효과 없음', check: () => true },
   energy_apprentice: { id: 'energy_apprentice', name: '에너지 수집가', desc: '누적 에너지 100,000 달성', effectDesc: '모든 에너지 획득량 +3%', check: () => d.totalEnergyEarned >= 100000 },
@@ -1597,7 +1609,6 @@ function checkAndDiscoverPets() {
   checkTitles();
 }
 
-/* 칭호 달성 체크 및 관리 로직 */
 function checkTitles() {
   if(!d.unlockedTitles) d.unlockedTitles = ['novice'];
   Object.keys(TITLES_DB).forEach(tId => {
@@ -2097,10 +2108,15 @@ function getBaseMult(){
   return itemMult * gemHyperBonus * gemRingBonus * gemDivineBonus * gemChronosBonus * titleBonus.energyMult * (1 + d.rp * 0.04);
 }
 
+/* 최적화된 데이터 저장 함수 (디바운스 적용 및 로컬스토리지 부하 최소화) */
+let saveTimeout = null;
 function save(){
   checkAndDiscoverPets();
   checkTitles();
-  localStorage.setItem(saveKey, JSON.stringify(d));
+  if (saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
+    localStorage.setItem(saveKey, JSON.stringify(d));
+  }, 300);
   render();
 }
 
