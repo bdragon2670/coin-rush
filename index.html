@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 광산 에디션</title>
+<title>에너지 러시 - 퀀텀 에디션 v13.2</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
 
@@ -355,7 +355,6 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .grade-X{background: linear-gradient(135deg, #f59e0b, #ef4444, #9333ea); color: #fff; font-weight:800;}
 .grade-Z{background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6); color: #fff; font-weight:900; text-shadow: 0 0 6px rgba(236,72,153,0.8);}
 
-.attendance-card{ background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; text-align: center; }
 .google-box{ background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 16px; }
 
 .progress-bar-container { width: 100%; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid var(--border-color); height: 12px; margin-bottom: 14px; overflow: hidden; }
@@ -403,6 +402,35 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
 .ranking-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 
+.attendance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.attend-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.attend-card.checked {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+}
+.attend-card.today {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.06);
+}
+
 @media(max-width: 780px){
   .layout-container { flex-direction: column; }
   .sidebar { width: 100% !important; flex-direction: row; flex-wrap: wrap; justify-content: center; }
@@ -436,7 +464,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
     <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">통합 도감</span></button>
     <button class="tab" data-tab="rankingPanel"><span class="tab-icon">🏆</span><span class="tab-text">글로벌 랭킹</span></button>
-    <button class="tab" data-tab="attendPanel"><span class="tab-icon">📅</span><span class="tab-text">일일 지원금</span></button>
+    <button class="tab" data-tab="attendPanel"><span class="tab-icon">📅</span><span class="tab-text">30일 출석체크</span></button>
     <button class="tab" data-tab="minigames"><span class="tab-icon">🔬</span><span class="tab-text">연구실 게임</span></button>
     <button class="tab" data-tab="permStatPanel"><span class="tab-icon">✨</span><span class="tab-text">영구 스탯</span></button>
     <button class="tab" data-tab="rebirthPanel"><span class="tab-icon">🔮</span><span class="tab-text">시스템 승급</span></button>
@@ -466,8 +494,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 광산 에디션</h1>
-    <div class="sub">초고품격 퀀텀 자원 채굴 & 광산 탐사 센터</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.2</h1>
+    <div class="sub">초고품격 퀀텀 자원 채굴 & 30일 출석체크 에디션</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -575,15 +603,15 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="autoclickPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🖱️ 오토클릭 자율 구동 연구소</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">지나친 비정상 연타 제한을 대체하는 정식 오토클릭 모듈입니다. 에너지를 소모해 오토클릭 시스템을 구매하고 속도를 업그레이드하세요!</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🖱️ 오토클릭 자율 구동 연구소 (최대 3레벨 제한)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">비정상적인 연타 시 5초간 클릭이 정지되는 방지 시스템이 가동됩니다. 에너지를 소모해 오토클릭 모듈을 구매하고 보통 속도(최대 3레벨)로 업그레이드하세요!</p>
       
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center; margin-bottom:14px;">
         <h4 style="color:var(--accent); margin:0 0 4px; font-size:14px;">오토클릭 상태: <b id="autoclickStatusDisplay" style="color:#ef4444;">미구동 (비활성)</b></h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0 0 10px;">현재 클릭 속도: <b id="autoclickSpeedDisplay">0회 / 초</b></p>
+        <p style="font-size:11px; color:var(--text-sub); margin:0 0 10px;">현재 클릭 속도: <b id="autoclickSpeedDisplay">0회 / 초</b> (보통 속도)</p>
         <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
           <button class="btn-game" id="buyAutoclickModuleBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🤖 오토클릭 모듈 구매 (50,000 에너지)</button>
-          <button class="btn-game" id="upgradeAutoclickBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706) !important;">⚡ 오토클릭 속도 업그레이드 (<span id="autoclickUpgradeCost">15,000</span> 에너지)</button>
+          <button class="btn-game" id="upgradeAutoclickBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706) !important;">⚡ 오토클릭 업그레이드 (최대 3Lv)</button>
         </div>
       </div>
     </div>
@@ -608,14 +636,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="minePanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⛏️ 퀀텀 지하 광산 (보석 채굴 시스템 - 너프 적용)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">깊은 층으로 탐사하여 보석(💎)을 발굴하세요. (성공 확률 및 밸런스 조정됨)</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⛏️ 퀀텀 지하 광산 (레벨업 할수록 확률 증가 시스템)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">광산 시설을 확장할수록 탐사 비용이 저렴해지고, 보석(💎) 발굴 성공 확률이 점진적으로 상승합니다!</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
-        <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 광산 탐사 깊이: <b id="mineDepthDisplay" style="font-size:18px;">1층 (지표면)</b></h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">탐사 비용: <span id="mineCostDisplay">750</span> 에너지 | 보석 획득 확률: <span id="mineProbDisplay">35%</span></p>
+        <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 광산 시설 레벨: <b id="mineDepthDisplay" style="font-size:18px;">1층</b></h4>
+        <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">탐사 비용: <span id="mineCostDisplay">300</span> 에너지 | 보석 획득 확률: <span id="mineProbDisplay">25%</span></p>
         <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-          <button class="btn-game" id="exploreMineBtn" style="padding:10px 24px; font-size:13px;">⛏️ 광산 깊숙이 탐사하기</button>
-          <button class="btn-game" id="upgradeMineBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; padding:10px 24px; font-size:13px;">⬆️ 광산 시설 확장 (<span id="mineUpgradeCost">4,000</span> 에너지)</button>
+          <button class="btn-game" id="exploreMineBtn" style="padding:10px 24px; font-size:13px;">⛏️ 광산 탐사하기</button>
+          <button class="btn-game" id="upgradeMineBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; padding:10px 24px; font-size:13px;">⬆️ 광산 시설 확장 (<span id="mineUpgradeCost">1,500</span> 에너지)</button>
         </div>
       </div>
     </div>
@@ -794,7 +822,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="petPanel" class="panel hidden">
       <div class="pet-box-grid">
         <div class="game-card">
-          <h3>🎁 드론뽑기상자 (S급 이상 드론 등장 확률 하향 조정됨)</h3>
+          <h3>🎁 드론뽑기상자</h3>
           <p style="color:var(--text-sub); font-size:11px;">상위 등급 드론 희소성을 높이고 동일 드론 중복 장착을 지원합니다!</p>
           <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
             <button class="btn-game" style="flex:1;" id="buyPetBox1">1회 뽑기 (<span id="costBox1">2,500</span>)</button>
@@ -843,12 +871,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="attendPanel" class="panel hidden">
-      <div class="attendance-card">
-        <h2 style="margin-top:0; font-size:18px; color:var(--accent);">📅 연구소 일일 지원금 수령 (1,000 에너지)</h2>
-        <p style="color:var(--text-sub); font-size:12px; margin-bottom:14px;">24시간마다 접속하여 무상 연구 자원을 지원받으세요!</p>
-        <p style="font-size:14px; margin-bottom:14px;">연속 지원일: <b id="attDays" style="color:var(--accent); font-size:16px;">0</b>일차</p>
-        <button id="attendBtn" class="attend-btn" style="padding:10px 24px; font-size:13px;">🎁 지원금 수령하기</button>
-        <p id="attStatus" style="font-size:11px; color:var(--text-sub); margin-top:10px;"></p>
+      <div style="background:rgba(255,255,255,0.015); border:1px solid var(--border-color); border-radius:18px; padding:20px; text-align:center;">
+        <h2 style="margin-top:0; font-size:18px; color:var(--accent);">📅 30일 연속 출석체크 센터</h2>
+        <p style="color:var(--text-sub); font-size:12px; margin-bottom:10px;">매일 출석 도장을 찍고 점진적으로 풍성해지는 파격적인 보상을 수령하세요!</p>
+        <p style="font-size:13px; color:var(--text-main); margin-bottom:10px;">현재 누적 출석일: <b id="attendDaysDisplay" style="color:var(--accent); font-size:16px;">0</b>일차</p>
+        <button id="todayAttendBtn" class="btn-game" style="padding:10px 24px; font-size:13px; background:linear-gradient(135deg, #10b981, #059669) !important; margin-bottom:14px;">🎁 오늘의 출석체크 보상 받기</button>
+        <div class="attendance-grid" id="attendanceGridContainer"></div>
       </div>
     </div>
 
@@ -924,12 +952,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="rebirthPanel" class="panel hidden">
-      <div class="attendance-card">
+      <div class="attendance-card" style="background:rgba(255,255,255,0.015); border:1px solid var(--border-color); border-radius:18px; padding:24px; text-align:center;">
         <h2 style="margin-top:0; font-size:18px; color:var(--accent);">🔮 퀀텀 시스템 승급 (환생)</h2>
         <p style="color:var(--text-sub); font-size:12px; margin-bottom:14px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
         <p style="font-size:14px;">현재 승급 포인트: <b id="rp" style="color:var(--accent); font-size:16px;">0</b></p>
         <p style="font-size:14px; margin-bottom:16px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,000,000</b> 에너지</p>
-        <button id="rebirthBtn" class="attend-btn" style="padding:10px 24px; font-size:13px;">🔮 시스템 승급 실행</button>
+        <button id="rebirthBtn" class="btn-game" style="padding:10px 24px; font-size:13px;">🔮 시스템 승급 실행</button>
       </div>
     </div>
 
@@ -1117,9 +1145,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v13.1 사용자 맞춤 밸런스 패치",
-    title: "변환 연구소 가속 가격 인하, 광산 너프 적용, 오토클릭 구매/업그레이드 센터 신설",
-    desc: "1) ⚛️ 에너지 변환 연구소의 '1시간 자동채굴 가속' 비용이 하향 조정되었습니다.\n2) ⛏️ 퀀텀 광산 탐사 확률 및 밸런스가 소폭 너프(조정)되었습니다.\n3) 🖱️ 지나친 비정상 클릭 제한을 대체할 '오토클릭 자율 구동 모듈' 구매 및 업그레이드 시스템이 추가되었습니다.\n4) ☁️ 데이터 저장 및 동기화 안정성이 강화되었습니다."
+    version: "v13.2 사용자 맞춤 대보완 패치",
+    title: "비정상 클릭 5초 정지, 광산 레벨업 확률 증가, 3일/30일 출석 개편",
+    desc: "1) 🖱️ 비정상적인 초고속 연타 감지 시 5초간 클릭이 정지되는 방지 시스템이 도입되었습니다.\n2) ⛏️ 광산 시설 레벨이 오를수록 발굴 확률이 증가하도록 밸런스가 역전되고 비용이 인하되었습니다.\n3) 🤖 오토클릭 모듈 업그레이드가 최대 3레벨로 제한되고 보통 속도로 조정되었습니다.\n4) 📅 일일 지원금이 삭제되고 30일 연속 출석체크(날마다 보상 상향)가 신설되었습니다."
   }
 ];
 
@@ -1154,12 +1182,14 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v131";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v130") || localStorage.getItem("energyRush_PermanentSaveData_v129");
+const saveKey = "energyRush_PermanentSaveData_v132";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v131") || localStorage.getItem("energyRush_PermanentSaveData_v130");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
- pets: [], equippedPets: [], discoveredPets: [], claimedEncyclopedia: [], lastAttend: 0, attendDays: 0, autoEnabled: true, autoPurchased: false,
+ pets: [], equippedPets: [], discoveredPets: [], claimedEncyclopedia: [], 
+ attendDays: 0, lastAttendDayStr: "", 
+ autoEnabled: true, autoPurchased: false,
  permPower: 0, permCps: 0, permLuck: 0, permGem: 0, gems: 0,
  coinColor: 'gold', coinIcon: '⚡', customImg: null, bgImg: null,
  stock1: 0, stock2: 0, stock3: 0, stock4: 0,
@@ -1206,6 +1236,8 @@ if (!d.latestNews) d.latestNews = "현재 평온한 장세(3~6백 원대 횡보)
 if (!d.newsType) d.newsType = 'good';
 if (d.autoclickPurchased === undefined) d.autoclickPurchased = false;
 if (d.autoclickLevel === undefined) d.autoclickLevel = 0;
+if (d.attendDays === undefined) d.attendDays = 0;
+if (!d.lastAttendDayStr) d.lastAttendDayStr = "";
 
 if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
 if (!d.stockHistories) d.stockHistories = {
@@ -1318,6 +1350,11 @@ let msgTimer = null;
 let draggedPetIdx = null;
 
 let autoclickInterval = null;
+
+// 비정상 클릭 감지용 변수
+let clickTimestamps = [];
+let isClickBlocked = false;
+let clickBlockTimer = null;
 
 function showStockAlertToast(msg, isUp = true) {
   playAlertDingSound();
@@ -1751,6 +1788,108 @@ function triggerLegendaryEpic(droneName, grade) {
   setTimeout(() => overlay.remove(), 2000);
 }
 
+function getTodayStr() {
+  const now = new Date();
+  return `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+}
+
+const ATTEND_REWARDS = [
+  { day: 1, type: 'energy', amount: 2000, desc: '에너지 2,000' },
+  { day: 2, type: 'energy', amount: 5000, desc: '에너지 5,000' },
+  { day: 3, type: 'gems', amount: 3, desc: '보석 💎 3개' },
+  { day: 4, type: 'energy', amount: 12000, desc: '에너지 12,000' },
+  { day: 5, type: 'gems', amount: 6, desc: '보석 💎 6개' },
+  { day: 6, type: 'energy', amount: 25000, desc: '에너지 25,000' },
+  { day: 7, type: 'gems', amount: 12, desc: '보석 💎 12개' },
+  { day: 8, type: 'energy', amount: 40000, desc: '에너지 40,000' },
+  { day: 9, type: 'energy', amount: 60000, desc: '에너지 60,000' },
+  { day: 10, type: 'gems', amount: 20, desc: '보석 💎 20개' },
+  { day: 11, type: 'energy', amount: 90000, desc: '에너지 90,000' },
+  { day: 12, type: 'energy', amount: 130000, desc: '에너지 130,000' },
+  { day: 13, type: 'gems', amount: 30, desc: '보석 💎 30개' },
+  { day: 14, type: 'energy', amount: 180000, desc: '에너지 180,000' },
+  { day: 15, type: 'gems', amount: 45, desc: '보석 💎 45개' },
+  { day: 16, type: 'energy', amount: 250000, desc: '에너지 250,000' },
+  { day: 17, type: 'energy', amount: 320000, desc: '에너지 320,000' },
+  { day: 18, type: 'gems', amount: 60, desc: '보석 💎 60개' },
+  { day: 19, type: 'energy', amount: 420000, desc: '에너지 420,000' },
+  { day: 20, type: 'gems', amount: 80, desc: '보석 💎 80개' },
+  { day: 21, type: 'energy', amount: 550000, desc: '에너지 550,000' },
+  { day: 22, type: 'energy', amount: 700000, desc: '에너지 700,000' },
+  { day: 23, type: 'gems', amount: 100, desc: '보석 💎 100개' },
+  { day: 24, type: 'energy', amount: 900000, desc: '에너지 900,000' },
+  { day: 25, type: 'gems', amount: 130, desc: '보석 💎 130개' },
+  { day: 26, type: 'energy', amount: 1200000, desc: '에너지 1,200,000' },
+  { day: 27, type: 'gems', amount: 160, desc: '보석 💎 160개' },
+  { day: 28, type: 'energy', amount: 1600000, desc: '에너지 1,600,000' },
+  { day: 29, type: 'gems', amount: 200, desc: '보석 💎 200개' },
+  { day: 30, type: 'gems', amount: 350, desc: '최종 궁극 보석 💎 350개!' }
+];
+
+function renderAttendanceUI() {
+  const container = $("attendanceGridContainer");
+  const daysDisplay = $("attendDaysDisplay");
+  const todayBtn = $("todayAttendBtn");
+  if(!container) return;
+
+  container.innerHTML = "";
+  const currentDays = d.attendDays || 0;
+  if(daysDisplay) daysDisplay.textContent = currentDays;
+
+  const todayStr = getTodayStr();
+  const alreadyCheckedToday = (d.lastAttendDayStr === todayStr);
+
+  if(todayBtn) {
+    if(alreadyCheckedToday) {
+      todayBtn.textContent = "✅ 오늘 출석 완료 (내일 다시 방문)";
+      todayBtn.disabled = true;
+    } else {
+      todayBtn.textContent = `🎁 ${currentDays + 1일차 출석체크 보상 받기}`;
+      todayBtn.disabled = currentDays >= 30;
+    }
+  }
+
+  ATTEND_REWARDS.forEach((rew) => {
+    const isChecked = rew.day <= currentDays;
+    const isToday = (rew.day === currentDays + 1 && !alreadyCheckedToday);
+
+    const card = document.createElement("div");
+    card.className = `attend-card ${isChecked ? 'checked' : ''} ${isToday ? 'today' : ''}`;
+    card.innerHTML = `
+      <div>
+        <b style="font-size:12px; color:${isToday ? 'var(--accent)' : 'var(--text-main)'};">${rew.day}일차</b>
+        <p style="font-size:11px; color:var(--text-sub); margin:6px 0;">${rew.desc}</p>
+      </div>
+      <div>
+        <span style="font-size:10px; font-weight:700; color:${isChecked ? '#10b981' : 'var(--text-sub)'};">
+          ${isChecked ? '수령완료' : isToday ? '오늘 수령가능' : '대기중'}
+        </span>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function claimTodayAttendance() {
+  const todayStr = getTodayStr();
+  if(d.lastAttendDayStr === todayStr) return say("오늘 이미 출석체크를 완료했습니다!");
+  if((d.attendDays || 0) >= 30) return say("30일 출석체크를 모두 완료했습니다!");
+
+  d.attendDays = (d.attendDays || 0) + 1;
+  d.lastAttendDayStr = todayStr;
+
+  const rew = ATTEND_REWARDS[d.attendDays - 1];
+  if(rew.type === 'energy') {
+    d.score += rew.amount;
+  } else if(rew.type === 'gems') {
+    d.gems += rew.amount;
+  }
+
+  playSuccessSound();
+  say(`📅 ${d.attendDays}일차 출석 보상 획득! (${rew.desc})`);
+  save();
+}
+
 function render(){
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
@@ -1758,11 +1897,11 @@ function render(){
  let coolerBonus = d.cooler ? 1.2 : 1.0;
  let gemClickBonus = d.gemClick ? 1.10 : 1.0;
  let gemRingBonus = d.gemRing ? 1.08 : 1.0;
- const totalPower = ((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
+ let totalPower = ((((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus) * baseMult * petBonus.clickMult * petBonus.coinMult;
  
  let filterBonus = d.filter ? 1.25 : 1.0;
  let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
- const totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
+ let totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult;
 
  if($("score")) $("score").textContent=fmt(d.score); 
  if($("power")) $("power").textContent=fmt(totalPower);
@@ -1788,9 +1927,11 @@ function render(){
  if($("costPermGem")) $("costPermGem").textContent = gemCost;
 
  const mineDepth = d.mineDepth || 1;
- const mineCost = Math.floor(750 * Math.pow(1.6, mineDepth - 1));
- const mineUpgradeCost = Math.floor(4000 * Math.pow(1.9, mineDepth - 1));
- const mineProb = Math.min(75, Math.max(15, 35 - (mineDepth * 2))); // 광산 너프 반영
+ const mineCost = Math.max(100, Math.round(300 * Math.pow(1.3, mineDepth - 1)));
+ const mineUpgradeCost = Math.max(500, Math.round(1500 * Math.pow(1.4, mineDepth - 1)));
+ // 광산 레벨을 올릴수록 확률 업 (1레벨 25% -> 레벨당 +2% 증가, 최대 85%)
+ const mineProb = Math.min(85, Math.round(23 + (mineDepth * 2))); 
+
  if($("mineDepthDisplay")) $("mineDepthDisplay").textContent = `${mineDepth}층 광산`;
  if($("mineCostDisplay")) $("mineCostDisplay").textContent = fmt(mineCost);
  if($("mineProbDisplay")) $("mineProbDisplay").textContent = `${mineProb}%`;
@@ -1798,8 +1939,8 @@ function render(){
 
  const autoclickPurchased = d.autoclickPurchased || false;
  const autoclickLevel = d.autoclickLevel || 0;
- const autoclickSpeed = autoclickLevel * 2; // 초당 클릭 횟수
- const autoclickUpgradeCost = Math.round(15000 * Math.pow(1.5, autoclickLevel));
+ const autoclickSpeed = autoclickLevel * 3; // 보통 속도 조정
+ const autoclickUpgradeCost = Math.round(10000 * Math.pow(1.5, autoclickLevel));
 
  const autoclickStatusDisplay = $("autoclickStatusDisplay");
  const autoclickSpeedDisplay = $("autoclickSpeedDisplay");
@@ -1807,8 +1948,11 @@ function render(){
  const upgradeAutoclickBtn = $("upgradeAutoclickBtn");
 
  if(autoclickStatusDisplay) {
-   if(autoclickPurchased) {
-     autoclickStatusDisplay.textContent = `구동 중 (Lv.${autoclickLevel})`;
+   if(isClickBlocked) {
+     autoclickStatusDisplay.textContent = "⚠️ 비정상 연타 감지 (5초 정지 중)";
+     autoclickStatusDisplay.style.color = "#ef4444";
+   } else if(autoclickPurchased) {
+     autoclickStatusDisplay.textContent = `구동 중 (Lv.${autoclickLevel} / 최대 3Lv)`;
      autoclickStatusDisplay.style.color = "#10b981";
    } else {
      autoclickStatusDisplay.textContent = "미구동 (비활성)";
@@ -1821,8 +1965,13 @@ function render(){
    buyAutoclickModuleBtn.disabled = autoclickPurchased;
  }
  if(upgradeAutoclickBtn) {
-   upgradeAutoclickBtn.textContent = `⚡ 오토클릭 속도 업그레이드 (${fmt(autoclickUpgradeCost)} 에너지)`;
-   upgradeAutoclickBtn.disabled = !autoclickPurchased;
+   if(autoclickLevel >= 3) {
+     upgradeAutoclickBtn.textContent = "최대 레벨 (3Lv 도달)";
+     upgradeAutoclickBtn.disabled = true;
+   } else {
+     upgradeAutoclickBtn.textContent = `⚡ 오토클릭 업그레이드 (${fmt(autoclickUpgradeCost)} 에너지)`;
+     upgradeAutoclickBtn.disabled = !autoclickPurchased;
+   }
  }
 
  const weapon = WEAPONS_DB[d.equippedWeapon || 0];
@@ -1925,21 +2074,7 @@ function render(){
  });
 
  updateStockUI();
-
- const now = Date.now();
- const cooldown = 24 * 60 * 60 * 1000;
- if($("attDays")) $("attDays").textContent = d.attendDays;
- if($("attendBtn") && $("attStatus")) {
-   if(now - d.lastAttend >= cooldown){
-     $("attendBtn").disabled = false;
-     $("attStatus").textContent = "지원금을 수령할 수 있습니다!";
-   } else {
-     $("attendBtn").disabled = true;
-     let leftSec = Math.ceil((cooldown - (now - d.lastAttend)) / 1000);
-     $("attStatus").textContent = `다음 지원까지: ${Math.floor(leftSec/3600)}시간 ${Math.floor((leftSec%3600)/60)}분`;
-   }
- }
-
+ renderAttendanceUI();
  renderPetList();
  renderEncyclopedia();
  updateCustomUI();
@@ -1992,8 +2127,8 @@ function equipWeapon(id) {
 
 function exploreMine() {
   const mineDepth = d.mineDepth || 1;
-  const cost = Math.floor(750 * Math.pow(1.6, mineDepth - 1));
-  const prob = Math.min(75, Math.max(15, 35 - (mineDepth * 2))); // 광산 너프 반영
+  const cost = Math.max(100, Math.round(300 * Math.pow(1.3, mineDepth - 1)));
+  const prob = Math.min(85, Math.round(23 + (mineDepth * 2))); // 레벨업 할수록 확률 업
 
   if(d.score < cost) return say("광산 탐사 비용 에너지가 부족합니다.");
   d.score -= cost;
@@ -2015,12 +2150,12 @@ function exploreMine() {
 
 function upgradeMine() {
   const mineDepth = d.mineDepth || 1;
-  const upgradeCost = Math.floor(4000 * Math.pow(1.9, mineDepth - 1));
+  const upgradeCost = Math.max(500, Math.round(1500 * Math.pow(1.4, mineDepth - 1)));
   if(d.score < upgradeCost) return say("광산 시설 확장에 필요한 에너지가 부족합니다.");
   d.score -= upgradeCost;
   d.mineDepth = mineDepth + 1;
   playSuccessSound();
-  say(`⬆️ 퀀텀 광산이 ${d.mineDepth}층으로 확장되었습니다!`);
+  say(`⬆️ 퀀텀 광산 시설이 ${d.mineDepth}층으로 확장되었습니다! (발굴 확률 및 효율 상승)`);
   save();
 }
 
@@ -2563,6 +2698,28 @@ function sellStock(id, amount) {
 }
 
 function performClickAction() {
+  if(isClickBlocked) {
+    say("⚠️ 비정상적인 초고속 연타 감지! 5초간 클릭이 정지됩니다.");
+    return;
+  }
+
+  // 비정상 클릭 감지 로직 (최근 1초 내 18회 이상 클릭 시 5초 차단)
+  const now = Date.now();
+  clickTimestamps.push(now);
+  clickTimestamps = clickTimestamps.filter(t => now - t < 1000);
+  if(clickTimestamps.length > 18) {
+    isClickBlocked = true;
+    playFailureSound();
+    say("⚠️ 비정상 클릭 속도 감지! 오토클릭 방지 시스템에 의해 5초간 클릭이 차단됩니다.");
+    if(clickBlockTimer) clearTimeout(clickBlockTimer);
+    clickBlockTimer = setTimeout(() => {
+      isClickBlocked = false;
+      clickTimestamps = [];
+      say("🛡️ 클릭 차단이 해제되었습니다.");
+    }, 5000);
+    return;
+  }
+
   const petBonus = getPetBonus();
   const baseMult = getBaseMult();
   let coolerBonus = d.cooler ? 1.2 : 1.0;
@@ -2601,7 +2758,7 @@ function setupAutoclickLoop() {
   if(autoclickInterval) clearInterval(autoclickInterval);
   if(!d.autoclickPurchased || (d.autoclickLevel || 0) <= 0) return;
 
-  let speedPerSec = d.autoclickLevel * 2; // 초당 2회씩 증가
+  let speedPerSec = d.autoclickLevel * 3; // 보통 속도 조정 (레벨당 3회, 최대 9회/초)
   let intervalMs = Math.max(100, Math.floor(1000 / speedPerSec));
 
   autoclickInterval = setInterval(() => {
@@ -2663,6 +2820,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if(exploreMineBtn) exploreMineBtn.onclick = exploreMine;
   if(upgradeMineBtn) upgradeMineBtn.onclick = upgradeMine;
 
+  const todayAttendBtn = $("todayAttendBtn");
+  if(todayAttendBtn) todayAttendBtn.onclick = claimTodayAttendance;
+
   const buyAutoclickModuleBtn = $("buyAutoclickModuleBtn");
   if(buyAutoclickModuleBtn) {
     buyAutoclickModuleBtn.onclick = () => {
@@ -2681,12 +2841,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if(upgradeAutoclickBtn) {
     upgradeAutoclickBtn.onclick = () => {
       if(!d.autoclickPurchased) return say("오토클릭 모듈을 먼저 구매해주세요!");
-      let cost = Math.round(15000 * Math.pow(1.5, d.autoclickLevel));
+      if(d.autoclickLevel >= 3) return say("오토클릭 업그레이드는 최대 3레벨까지 가능합니다!");
+      let cost = Math.round(10000 * Math.pow(1.5, d.autoclickLevel));
       if(d.score < cost) return say("업그레이드에 에너지가 부족합니다!");
       d.score -= cost;
       d.autoclickLevel++;
       playSuccessSound();
-      say(`⚡ 오토클릭 속도 업그레이드 완료! (Lv.${d.autoclickLevel})`);
+      say(`⚡ 오토클릭 속도 업그레이드 완료! (Lv.${d.autoclickLevel} / 최대 3Lv)`);
       save();
     };
   }
@@ -2694,7 +2855,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertGemsBtn = $("convertGemsBtn");
   if(convertGemsBtn) {
     convertGemsBtn.onclick = () => {
-      let cost = 350000; // 가격 인하 반영
+      let cost = 350000;
       if(d.score < cost) return say("보석 제련에 필요한 에너지가 부족합니다! (필요: 35만)");
       d.score -= cost;
       d.gems += 3;
@@ -2707,7 +2868,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertBoostBtn = $("convertBoostBtn");
   if(convertBoostBtn) {
     convertBoostBtn.onclick = () => {
-      let cost = 650000; // 가격 인하 반영
+      let cost = 650000;
       if(d.score < cost) return say("채굴 가속에 필요한 에너지가 부족합니다! (필요: 65만)");
       d.score -= cost;
       let filterBonus = d.filter ? 1.25 : 1.0;
@@ -2966,18 +3127,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if(box5) box5.onclick = () => startMultiBoxOpeningInteraction(5);
   if(box10) box10.onclick = () => startMultiBoxOpeningInteraction(10);
 
-  const attendBtn = $("attendBtn");
-  if(attendBtn) {
-    attendBtn.onclick = () => {
-      const now = Date.now();
-      if(now - d.lastAttend < 24*60*60*1000) return say("아직 지원금 수령 시간이 되지 않았습니다.");
-      d.lastAttend = now; d.attendDays += 1;
-      d.score += 1000; 
-      save();
-      say("일일 지원금 수령 완료! (+1,000 에너지)");
-    };
-  }
-
   const rebirthBtn = $("rebirthBtn");
   if(rebirthBtn) {
     rebirthBtn.onclick = () => {
@@ -3008,6 +3157,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(targetPanel) targetPanel.classList.remove("hidden");
       if(t.dataset.tab === 'stockPanel') updateStockUI();
       if(t.dataset.tab === 'rankingPanel') loadGlobalRanking();
+      if(t.dataset.tab === 'attendPanel') renderAttendanceUI();
     };
   });
 
@@ -3124,7 +3274,7 @@ const badNewsList = [
 const goodNewsList = [
   "차세대 양자 코어 상용화 성공 소식에 매수세가 폭발합니다!",
   "역대급 실적 어닝 서프라이즈 달성으로 폭등세가 연출됩니다!",
-  "글로벌 대기업과 조단위 독점 공급 계약 체결 뉴스가 보도되었습니다!"
+  "글로벌 대기업과 조단위 독점 계약 체결 뉴스가 보도되었습니다!"
 ];
 
 setInterval(() => {
