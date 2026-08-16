@@ -166,13 +166,17 @@ h1{ font-size: 28px; text-align: center; margin: 0 0 4px; color: var(--text-main
 .tool-btn:hover{background: rgba(245, 158, 11, 0.1); border-color: var(--accent); color: var(--accent);}
 
 .stock-alert-toast {
-  position: absolute; top: -45px; right: 0; background: linear-gradient(135deg, #10b981, #059669);
+  position: absolute; top: -45px; right: 0; background: linear-gradient(135deg, #ef4444, #dc2626);
   color: #fff; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700;
-  white-space: nowrap; box-shadow: 0 4px 15px rgba(16,185,129,0.4); animation: fadeInOut 3.5s forwards; z-index: 99;
+  white-space: nowrap; box-shadow: 0 4px 15px rgba(239,68,68,0.4); animation: fadeInOut 3.5s forwards; z-index: 99;
 }
-.stock-alert-toast.down {
+.stock-alert-toast.up {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   box-shadow: 0 4px 15px rgba(239,68,68,0.4);
+}
+.stock-alert-toast.down {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  box-shadow: 0 4px 15px rgba(59,130,246,0.4);
 }
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translateY(6px); }
@@ -614,7 +618,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
         <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다. 속보에 따라 급등락이 발생합니다!</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">평상시 300~600원에 머물며, 뉴스 속보에 따라 정확히 떡상/떡락합니다! 보유 주식이 300 이상 변동 시 상단 알람이 뜹니다.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">6초마다 그래프가 갱신되며, 상승 시 빨간색📉, 하락 시 파란색📈으로 표시됩니다. 보유 주식 300 이상 변동 시 실시간 알람이 뜹니다!</p>
       
       <div class="stock-grid">
         <div class="stock-card">
@@ -1052,9 +1056,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v12.4 주식 뉴스 급등락 완벽 연동 및 300 이상 변동 알람 패치",
-    title: "뉴스 속보에 따른 실시간 주가 반영 및 300 이상 변동 시 보유 주식 알람",
-    desc: "1) 📈 뉴스 속보(호재/악재)에 따라 해당 주식이 정확히 떡상 및 폭락하도록 연동되었습니다.\n2) 🔔 5초마다 주가가 갱신되며, 보유 주식이 300 이상 상승/하락 시 상단에 알람이 표시됩니다.\n3) 🔢 원하는 수량을 입력하여 지정 매수/매도가 가능합니다."
+    version: "v12.5 주식 6초 주기로 변경 및 상승(빨강)/하락(파랑) 그래프 패치",
+    title: "주식 갱신 주기 6초로 변경, 상승 시 빨간색 / 하락 시 파란색 그래프 적용",
+    desc: "1) 📈 그래프 갱신 주기가 6초로 변경되었습니다.\n2) 🔴 주가가 상승할 때는 빨간색, 🔵 하락할 때는 파란색으로 그래프가 그려집니다.\n3) 🔔 보유 주식이 300 이상 변동 시 우측 상단 실시간 알람이 정상 작동합니다."
   }
 ];
 
@@ -1089,8 +1093,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v124";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v123") || localStorage.getItem("energyRush_PermanentSaveData_v122");
+const saveKey = "energyRush_PermanentSaveData_v125";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v124") || localStorage.getItem("energyRush_PermanentSaveData_v123");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1244,10 +1248,10 @@ let idPenaltyActive = false;
 let penaltyTimerCountdown = 0;
 let penaltyInterval = null;
 
-function showStockAlertToast(msg, isDown = false) {
+function showStockAlertToast(msg, isUp = true) {
   const container = $("stockAlertContainer");
   if(!container) return;
-  container.innerHTML = `<div class="stock-alert-toast ${isDown ? 'down' : ''}">🔔 ${msg}</div>`;
+  container.innerHTML = `<div class="stock-alert-toast ${isUp ? 'up' : 'down'}">🔔 ${msg}</div>`;
   setTimeout(() => {
     container.innerHTML = "";
   }, 3500);
@@ -1268,8 +1272,13 @@ function drawStockChart(canvasId, historyData) {
   const max = Math.max(...historyData);
   const range = max - min || 1;
 
+  // 최근 가격 변화에 따라 상승(빨강) / 하락(파랑) 결정
+  const lastVal = historyData[historyData.length - 1];
+  const prevVal = historyData[historyData.length - 2];
+  const isRising = lastVal >= prevVal;
+
   ctx.beginPath();
-  ctx.strokeStyle = "#ef4444"; 
+  ctx.strokeStyle = isRising ? "#ef4444" : "#3b82f6"; // 상승: 빨강, 하락: 파랑
   ctx.lineWidth = 2.5;
 
   historyData.forEach((val, idx) => {
@@ -2921,9 +2930,10 @@ const goodNewsList = [
   "글로벌 대기업과 조단위 독점 공급 계약 체결 뉴스가 보도되었습니다!"
 ];
 
+// 주식 갱신 주기 6초 (6000ms) 설정
 setInterval(() => {
   autoMiningTimer++;
-  if(autoMiningTimer >= 5) {
+  if(autoMiningTimer >= 1) { // 6초마다 자동 채굴 반영
     autoMiningTimer = 0;
     let filterBonus = d.filter ? 1.25 : 1.0;
     let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
@@ -2931,17 +2941,16 @@ setInterval(() => {
     let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
     const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
     if(autoCps > 0 && d.autoEnabled && d.autoPurchased){
-      d.score += autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult;
+      d.score += (autoCps * getBaseMult() * getPetBonus().cpsMult * getPetBonus().coinMult) * 6;
       save();
     }
   }
 
-  // 5초마다 주가 갱신 및 뉴스 속보 연동
   newsTickerTimer++;
   let targetStockId = 0;
   let isNewsTriggered = false;
 
-  if(newsTickerTimer >= 5) { 
+  if(newsTickerTimer >= 3) { // 18초마다 뉴스 속보 갱신
     newsTickerTimer = 0;
     targetStockId = Math.floor(Math.random() * 4) + 1;
     let isBad = Math.random() < 0.55; 
@@ -2971,10 +2980,10 @@ setInterval(() => {
         }
       }
     } else {
-      let delta = Math.floor(Math.random() * 31) - 15; 
+      let delta = Math.floor(Math.random() * 51) - 25; 
       newP = oldP + delta;
-      if(newP < 300) newP = 300 + Math.floor(Math.random() * 20);
-      if(newP > 600) newP = 600 - Math.floor(Math.random() * 20);
+      if(newP < 300) newP = 300 + Math.floor(Math.random() * 30);
+      if(newP > 600) newP = 600 - Math.floor(Math.random() * 30);
     }
 
     newP = Math.max(100, Math.min(2000, newP));
@@ -2984,13 +2993,13 @@ setInterval(() => {
     d.stockHistories[i].push(newP); 
     if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
 
-    // 보유 주식이 300 이상 변동 시 알람
+    // 보유 주식이 300 이상 변동 시 실시간 알람
     let ownedQty = i === 1 ? d.stock1 : i === 2 ? d.stock2 : i === 3 ? d.stock3 : d.stock4;
     if(ownedQty > 0) {
       if(diff >= 300) {
-        showStockAlertToast(`🔔 [${companyNames[i]}] 주가 +${diff} 급등! (보유 중)`);
+        showStockAlertToast(`🔔 [${companyNames[i]}] 주가 +${diff} 급등! (보유 중)`, true);
       } else if(diff <= -300) {
-        showStockAlertToast(`🔻 [${companyNames[i]}] 주가 ${diff} 폭락! (보유 중)`, true);
+        showStockAlertToast(`🔻 [${companyNames[i]}] 주가 ${diff} 급락! (보유 중)`, false);
       }
     }
     updated = true;
@@ -3002,7 +3011,7 @@ setInterval(() => {
   }
   
   if(updated) save();
-}, 1000);
+}, 6000);
 </script>
 </body>
 </html>
