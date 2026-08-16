@@ -3,23 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.4 수정 버전</title>
+<title>에너지 러시 - 퀀텀 에디션 v13.0 (레벨 패치 이전 버전)</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23d97706%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>✨</text></svg>">
-
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-<script>
-  window.handleCredentialResponse = function(response) {
-    if (typeof handleCredentialResponseCore === 'function') {
-      handleCredentialResponseCore(response);
-    } else {
-      console.error("handleCredentialResponseCore 함수를 찾을 수 없습니다.");
-    }
-  };
-</script>
 
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -126,21 +112,8 @@ body::before {
 }
 .tab span.tab-icon { font-size: 15px; min-width: 18px; text-align: center; }
 .sidebar.collapsed .tab span.tab-text { display: none; }
-.sidebar.collapsed .tab span.lock-tag { display: none; }
 .tab:hover { background: rgba(245, 158, 11, 0.08); color: var(--text-main); border-color: rgba(245, 158, 11, 0.2); }
 .tab.active { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(180, 83, 9, 0.25)); color: var(--accent); border-color: var(--accent); font-weight: 700; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2); }
-.tab.locked { opacity: 0.5; filter: grayscale(50%); }
-
-.lock-tag {
-  margin-left: auto;
-  font-size: 10px;
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-weight: 700;
-}
 
 .discord-sidebar-box {
   margin-top: auto;
@@ -207,47 +180,15 @@ h1{ font-size: 26px; text-align: center; margin: 0 0 4px; color: var(--text-main
 
 .user-profile-area {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.02);
-  padding: 8px 14px;
-  border-radius: 14px;
-  border: 1px solid var(--border-color);
-  min-width: 240px;
-}
-.user-profile-top {
-  display: flex;
   align-items: center;
   gap: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 6px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
 }
 .user-avatar{width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent);}
 .user-name{font-weight: 600; color: var(--accent); font-size: 13px;}
-
-.user-level-container {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.user-level-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--text-sub);
-}
-.user-level-bar-bg {
-  width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-}
-.user-level-bar-fill {
-  height: 100%;
-  background: var(--gold-grad);
-  width: 0%;
-  transition: width 0.2s ease;
-}
 
 .top-right-btns { display: flex; gap: 8px; align-items: center; }
 .tool-btn{
@@ -388,30 +329,6 @@ h1{ font-size: 26px; text-align: center; margin: 0 0 4px; color: var(--text-main
 .panel::-webkit-scrollbar { width: 6px; }
 .panel::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.25); border-radius: 4px; }
 .hidden{display:none}
-
-.lock-panel-container {
-  background: rgba(239, 68, 68, 0.05);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: 18px;
-  padding: 40px 20px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  height: 100%;
-}
-.lock-panel-container h3 {
-  color: #ef4444;
-  margin: 0;
-  font-size: 18px;
-}
-.lock-panel-container p {
-  color: var(--text-sub);
-  font-size: 13px;
-  margin: 0 0 10px;
-}
 
 .shop-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;}
 .shop-item{
@@ -597,13 +514,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <button class="tab" data-tab="shop"><span class="tab-icon">🛒</span><span class="tab-text">테크 상점</span></button>
     <button class="tab" data-tab="gemShop"><span class="tab-icon">💎</span><span class="tab-text">프리미엄 보석</span></button>
     <button class="tab" data-tab="titlePanel"><span class="tab-icon">🏅</span><span class="tab-text">칭호 시스템</span></button>
-    <button class="tab locked" data-tab="autoclickPanel" id="tab_autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소</span><span class="lock-tag">Lv.30 필요</span></button>
-    <button class="tab locked" data-tab="minePanel" id="tab_minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span><span class="lock-tag">Lv.20 필요</span></button>
+    <button class="tab" data-tab="autoclickPanel"><span class="tab-icon">🖱️</span><span class="tab-text">오토클릭 연구소</span></button>
+    <button class="tab" data-tab="minePanel"><span class="tab-icon">⛏️</span><span class="tab-text">퀀텀 광산</span></button>
     <button class="tab" data-tab="armoryPanel"><span class="tab-icon">⚔️</span><span class="tab-text">무기 상점</span></button>
     <button class="tab" data-tab="huntingPanel"><span class="tab-icon">🎯</span><span class="tab-text">사냥터</span></button>
-    <button class="tab locked" data-tab="stockPanel" id="tab_stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span><span class="lock-tag">Lv.15 필요</span></button>
+    <button class="tab" data-tab="stockPanel"><span class="tab-icon">📈</span><span class="tab-text">주식 거래소</span></button>
     <button class="tab" data-tab="p2pPanel"><span class="tab-icon">🌐</span><span class="tab-text">P2P 유저거래소</span></button>
-    <button class="tab locked" data-tab="converterPanel" id="tab_converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소</span><span class="lock-tag">Lv.25 필요</span></button>
+    <button class="tab" data-tab="converterPanel"><span class="tab-icon">⚛️</span><span class="tab-text">에너지 변환 연구소</span></button>
     <button class="tab" data-tab="customPanel"><span class="tab-icon">🎨</span><span class="tab-text">코어 커스텀</span></button>
     <button class="tab" data-tab="petPanel"><span class="tab-icon">🤖</span><span class="tab-text">드론 격납고</span></button>
     <button class="tab" data-tab="encyclopediaPanel"><span class="tab-icon">📖</span><span class="tab-text">통합 도감</span></button>
@@ -624,19 +541,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   <div class="game">
     <div class="top-tools">
       <div class="user-profile-area" id="userProfileArea">
-        <div class="user-profile-top">
-          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%237f8c8d'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23ffffff' font-size='14' font-family='sans-serif'%3E?%3C/text%3E%3C/svg%3E" class="user-avatar" id="userAvatar">
-          <span class="user-name" id="userName">연구원 (미로그인)</span>
-        </div>
-        <div class="user-level-container">
-          <div class="user-level-info">
-            <span id="userLevelText">Lv.1 연구원</span>
-            <span id="userExpText">EXP 0 / 100</span>
-          </div>
-          <div class="user-level-bar-bg">
-            <div class="user-level-bar-fill" id="userExpBarFill"></div>
-          </div>
-        </div>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%237f8c8d'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23ffffff' font-size='14' font-family='sans-serif'%3E?%3C/text%3E%3C/svg%3E" class="user-avatar" id="userAvatar">
+        <span class="user-name" id="userName">연구원 (미로그인)</span>
       </div>
       <div class="top-right-btns" style="position:relative;">
         <button class="tool-btn" id="bgmToggleBtn" style="background:rgba(16, 185, 129, 0.08); border-color:rgba(16, 185, 129, 0.3); color:#10b981;">🎵 BGM 끄기</button>
@@ -655,8 +561,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.4</h1>
-    <div class="sub">로컬 및 구글 로그인 연동 안정성 패치 적용 버전</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v13.0</h1>
+    <div class="sub">레벨 및 잠금 제한이 전면 해제된 오리지널 쾌적 버전</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -684,7 +590,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <div class="upgrade-row">
           <div>
             <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b></h3>
-            <small style="color:var(--text-sub);">5초마다 자동 채굴 (<span style="color:#ef4444;">레벨 10 미만 자동 채굴 금지</span>)</small>
+            <small style="color:var(--text-sub);">5초마다 자동 채굴 (레벨 제한 없음)</small>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <button id="autoToggleBtn" class="toggle-btn on">ON</button>
@@ -696,7 +602,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="titlePanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">🏅 퀀텀 연구원 칭호 시스템</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">특정 조건을 달성하여 강력한 버프를 주는 칭호를 해제하고 장착하세요!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">특정 조건을 달성하여 강력한 버프를 주는 칭호들을 해제하고 장착하세요!</p>
       <div class="title-grid" id="titleGridContainer"></div>
     </div>
 
@@ -847,15 +753,15 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널</h3>
       
       <div id="stockChannelStatusBox" style="background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.3); border-radius:12px; padding:12px; margin-bottom:14px; text-align:center;">
-        <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 채널 이용 가능 (남은 시간: 5분 0초)</h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0;" id="channelStateDesc">5분 이용 후 자동으로 10분간 잠깁니다.</p>
+        <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 채널 이용 가능 (제한 없음)</h4>
+        <p style="font-size:11px; color:var(--text-sub); margin:0;" id="channelStateDesc">자유롭게 주식 거래를 이용할 수 있습니다.</p>
       </div>
 
       <div class="news-ticker-box" id="newsTickerBox">
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
         <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세(3~6백 원대 횡보)를 유지하고 있습니다.</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">5초마다 갱신되며, 채널 이용 가능 시간에만 보유 주식 150 이상 변동 시 '띵' 알람이 울립니다. (10분 잠금 시 알람 차단)</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">5초마다 갱신되며, 보유 주식 변동 시 '띵' 알람이 울립니다.</p>
       
       <div id="stockTradingContainer">
         <div class="stock-grid">
@@ -877,12 +783,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
 
           <div class="stock-card" id="stockCard2Container">
-            <div id="stockLock2" style="padding: 20px 0; text-align: center;">
-              <h4 style="color:var(--accent); margin:0 0 6px;">🔒 엠비디아 (NVDA) 잠김</h4>
-              <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost2">75,000</b> 에너지</p>
-              <button class="btn-game" id="unlockStock2Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
-            </div>
-            <div id="stockContent2" class="hidden">
+            <div id="stockLock2" class="hidden"></div>
+            <div id="stockContent2">
               <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
               <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">500</b> 에너지</p>
               <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
@@ -901,12 +803,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
 
           <div class="stock-card" style="margin-top:4px;" id="stockCard3Container">
-            <div id="stockLock3" style="padding: 20px 0; text-align: center;">
-              <h4 style="color:var(--accent); margin:0 0 6px;">🔒 스페이스코어 (SPC) 잠김</h4>
-              <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost3">375,000</b> 에너지</p>
-              <button class="btn-game" id="unlockStock3Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
-            </div>
-            <div id="stockContent3" class="hidden">
+            <div id="stockLock3" class="hidden"></div>
+            <div id="stockContent3">
               <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
               <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">500</b> 에너지</p>
               <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
@@ -925,12 +823,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
 
           <div class="stock-card" style="margin-top:4px;" id="stockCard4Container">
-            <div id="stockLock4" style="padding: 20px 0; text-align: center;">
-              <h4 style="color:var(--accent); margin:0 0 6px;">🔒 양자 바이오 (QBIO) 잠김</h4>
-              <p style="font-size:11px; color:var(--text-sub); margin-bottom:12px;">잠금 해제 비용: <b id="unlockCost4">1,500,000</b> 에너지</p>
-              <button class="btn-game" id="unlockStock4Btn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔓 잠금 해제하기</button>
-            </div>
-            <div id="stockContent4" class="hidden">
+            <div id="stockLock4" class="hidden"></div>
+            <div id="stockContent4">
               <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
               <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">500</b> 에너지</p>
               <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
@@ -1155,7 +1049,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="rebirthPanel" class="panel hidden">
       <div class="attendance-card" style="background:rgba(255,255,255,0.015); border:1px solid var(--border-color); border-radius:18px; padding:24px; text-align:center;">
         <h2 style="margin-top:0; font-size:18px; color:var(--accent);">🔮 퀀텀 시스템 승급 (환생)</h2>
-        <p style="color:var(--text-sub); font-size:12px; margin-bottom:14px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다. (환생 시 레벨 요구 경험치가 점진적으로 증가합니다)</p>
+        <p style="color:var(--text-sub); font-size:12px; margin-bottom:14px;">에너지와 채굴 장치가 초기화되지만, 승급 포인트(RP)를 획득합니다.</p>
         <p style="font-size:14px;">현재 승급 포인트: <b id="rp" style="color:var(--accent); font-size:16px;">0</b></p>
         <p style="font-size:14px; margin-bottom:16px;">승급 요구 조건: <b id="req" style="color:var(--accent);">1,000,000</b> 에너지</p>
         <button id="rebirthBtn" class="btn-game" style="padding:10px 24px; font-size:13px;">🔮 시스템 승급 실행</button>
@@ -1167,6 +1061,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <h3 style="color:var(--text-main);margin:0 0 8px;font-size:14px;">☁️ 구글 계정 클라우드 데이터 세이브</h3>
         <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">구글 로그인 후 클라우드 서버에 안전하게 데이터를 동기화하고 언제든 불러오세요!</p>
         
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
         <div id="g_id_onload"
              data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
              data-callback="handleCredentialResponse"
@@ -1348,14 +1246,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v14.4 로컬 및 구글 로그인 안정성 패치",
-    title: "구글 로그인 및 클라우드 연동 보안 오류 완화",
-    desc: "1) 로컬 파일 환경 및 웹 표준 환경에 맞추어 Google Identity Services 초기화 방식을 보완했습니다.\n2) 로그인 직후 데이터 동기화 및 예외 처리 로직을 강화했습니다."
-  },
-  {
-    version: "v14.3 레벨 및 잠금 시스템 버전",
-    title: "클릭 기반 레벨 시스템 및 연구소 잠금 해제 시스템 도입",
-    desc: "1) 프로필 영역 하단에 레벨 바와 레벨 표시 위젯을 추가했습니다.\n2) 클릭을 많이 할수록 경험치를 획득하여 레벨이 상승합니다. 환생 횟수가 늘어날수록 레벨업 필요 경험치 기준이 점진적으로 증가합니다.\n3) 레벨 10 미만일 경우 자동 채굴이 금지됩니다.\n4) 특정 레벨 미달 시 연구소 접근 잠금 시스템 적용 (오토클릭 연구소: Lv.30, 퀀텀 광산: Lv.20, 주식 거래소: Lv.15, 에너지 변환 연구소: Lv.25)."
+    version: "v13.0 오리지널 쾌적 버전",
+    title: "레벨 및 잠금 제한 전면 해제",
+    desc: "1) 모든 연구소 및 기능(오토클릭, 광산, 주식, 변환 연구소 등)의 레벨 제한 조건을 완전히 제거했습니다.\n2) 누구나 자유롭게 모든 컨텐츠를 곧바로 이용할 수 있습니다."
   }
 ];
 
@@ -1390,8 +1283,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v144";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v143") || localStorage.getItem("energyRush_PermanentSaveData_v142");
+const saveKey = "energyRush_PermanentSaveData_v130";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v144") || localStorage.getItem("energyRush_PermanentSaveData_v143");
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1401,7 +1294,7 @@ let d = JSON.parse(savedRawData || "null") || {
   permPower: 0, permCps: 0, permLuck: 0, permGem: 0, gems: 0,
   coinColor: 'gold', coinIcon: '⚡', customImg: null, bgImg: null,
   stock1: 0, stock2: 0, stock3: 0, stock4: 0,
-  stockUnlocked2: false, stockUnlocked3: false, stockUnlocked4: false,
+  stockUnlocked2: true, stockUnlocked3: true, stockUnlocked4: true,
   box1Count: 0,
   equippedWeapon: 0, ownedWeapons: [0],
   mineDepth: 1,
@@ -1414,15 +1307,15 @@ let d = JSON.parse(savedRawData || "null") || {
   autoclickLevel: 0,
   unlockedTitles: ['novice'],
   equippedTitle: 'novice',
-  totalEnergyEarned: 0,
-  level: 1,
-  exp: 0
+  totalEnergyEarned: 0
 };
 
 const nowInit = Date.now();
-if (d.stockChannelActiveUntil === 0 && d.stockChannelLockedUntil === 0) {
-  d.stockChannelActiveUntil = nowInit + (5 * 60 * 1000);
-}
+d.stockChannelActiveUntil = nowInit + (99999 * 60 * 1000);
+d.stockChannelLockedUntil = 0;
+d.stockUnlocked2 = true;
+d.stockUnlocked3 = true;
+d.stockUnlocked4 = true;
 
 if (!d.equippedPets) d.equippedPets = [];
 if (!d.discoveredPets) d.discoveredPets = [];
@@ -1431,15 +1324,10 @@ if (!d.unlockedTitles) d.unlockedTitles = ['novice'];
 if (!d.equippedTitle) d.equippedTitle = 'novice';
 if (d.totalEnergyEarned === undefined) d.totalEnergyEarned = d.score;
 if (d.gems === undefined) d.gems = 0;
-if (d.level === undefined) d.level = 1;
-if (d.exp === undefined) d.exp = 0;
 if (d.stock1 === undefined) d.stock1 = 0;
 if (d.stock2 === undefined) d.stock2 = 0;
 if (d.stock3 === undefined) d.stock3 = 0;
 if (d.stock4 === undefined) d.stock4 = 0;
-if (d.stockUnlocked2 === undefined) d.stockUnlocked2 = false;
-if (d.stockUnlocked3 === undefined) d.stockUnlocked3 = false;
-if (d.stockUnlocked4 === undefined) d.stockUnlocked4 = false;
 if (d.permPower === undefined) d.permPower = 0;
 if (d.permCps === undefined) d.permCps = 0;
 if (d.permLuck === undefined) d.permLuck = 0;
@@ -1638,10 +1526,6 @@ function updateStockUI() {
   if(document.getElementById("stockPrice3")) document.getElementById("stockPrice3").textContent = fmt(d.stockPrices[3]);
   if(document.getElementById("stockPrice4")) document.getElementById("stockPrice4").textContent = fmt(d.stockPrices[4]);
 
-  if(document.getElementById("unlockCost2")) document.getElementById("unlockCost2").textContent = fmt(75000);
-  if(document.getElementById("unlockCost3")) document.getElementById("unlockCost3").textContent = fmt(375000);
-  if(document.getElementById("unlockCost4")) document.getElementById("unlockCost4").textContent = fmt(1500000);
-
   if(document.getElementById("stockOwned1")) document.getElementById("stockOwned1").textContent = d.stock1;
   if(document.getElementById("stockOwned2")) document.getElementById("stockOwned2").textContent = d.stock2;
   if(document.getElementById("stockOwned3")) document.getElementById("stockOwned3").textContent = d.stock3;
@@ -1667,63 +1551,10 @@ function updateStockUI() {
     }
   }
 
-  const lock2 = document.getElementById("stockLock2"), content2 = document.getElementById("stockContent2");
-  const lock3 = document.getElementById("stockLock3"), content3 = document.getElementById("stockContent3");
-  const lock4 = document.getElementById("stockLock4"), content4 = document.getElementById("stockContent4");
-
-  if(lock2 && content2) {
-    lock2.classList.toggle("hidden", d.stockUnlocked2);
-    content2.classList.toggle("hidden", !d.stockUnlocked2);
-  }
-  if(lock3 && content3) {
-    lock3.classList.toggle("hidden", d.stockUnlocked3);
-    content3.classList.toggle("hidden", !d.stockUnlocked3);
-  }
-  if(lock4 && content4) {
-    lock4.classList.toggle("hidden", d.stockUnlocked4);
-    content4.classList.toggle("hidden", !d.stockUnlocked4);
-  }
-
-  const tradingContainer = document.getElementById("stockTradingContainer");
-  const channelTitle = document.getElementById("channelStateTitle");
-  const channelDesc = document.getElementById("channelStateDesc");
-
-  if(tradingContainer && channelTitle && channelDesc) {
-    if(d.stockChannelLockedUntil > now) {
-      let remSec = Math.ceil((d.stockChannelLockedUntil - now) / 1000);
-      let rMin = Math.floor(remSec / 60);
-      let rSec = remSec % 60;
-      channelTitle.textContent = `🔴 주식 채널 잠김 상태 (해제까지: ${rMin}분 ${rSec}초)`;
-      channelDesc.textContent = "10분 잠금 시간이 지나면 자동으로 채널이 열립니다.";
-      tradingContainer.classList.add("hidden");
-    } else if(d.stockChannelActiveUntil > now) {
-      let remSec = Math.ceil((d.stockChannelActiveUntil - now) / 1000);
-      let rMin = Math.floor(remSec / 60);
-      let rSec = remSec % 60;
-      channelTitle.textContent = `🟢 주식 채널 이용 가능 (남은 시간: ${rMin}분 ${rSec}초)`;
-      channelDesc.textContent = "5분 이용 후 자동으로 10분간 잠깁니다.";
-      tradingContainer.classList.remove("hidden");
-    }
-  }
-
   drawStockChart("stockCanvas1", d.stockHistories[1]);
-  if(d.stockUnlocked2) drawStockChart("stockCanvas2", d.stockHistories[2]);
-  if(d.stockUnlocked3) drawStockChart("stockCanvas3", d.stockHistories[3]);
-  if(d.stockUnlocked4) drawStockChart("stockCanvas4", d.stockHistories[4]);
-}
-
-function unlockStock(id) {
-  let costs = { 2: 75000, 3: 375000, 4: 1500000 };
-  let cost = costs[id];
-  if(d.score < cost) return say("잠금 해제에 필요한 에너지가 부족합니다.");
-  d.score -= cost;
-  if(id === 2) d.stockUnlocked2 = true;
-  if(id === 3) d.stockUnlocked3 = true;
-  if(id === 4) d.stockUnlocked4 = true;
-  playSuccessSound();
-  say(`🔓 주식 #${id} 잠금 해제 완료!`);
-  checkTitles();
-  save();
+  drawStockChart("stockCanvas2", d.stockHistories[2]);
+  drawStockChart("stockCanvas3", d.stockHistories[3]);
+  drawStockChart("stockCanvas4", d.stockHistories[4]);
 }
 
 function checkAndDiscoverPets() {
@@ -2140,7 +1971,7 @@ function parseJwt(token) {
   } catch (e) { return null; }
 }
 
-function handleCredentialResponseCore(response) {
+window.handleCredentialResponse = function(response) {
   const responsePayload = parseJwt(response.credential);
   if (responsePayload) {
     currentUser = {
@@ -2154,7 +1985,7 @@ function handleCredentialResponseCore(response) {
     loadFromCloud();
     say(`환영합니다, ${currentUser.name} 연구원님!`);
   }
-}
+};
 
 function updateUserUI() {
   const userAvatar = document.getElementById("userAvatar");
@@ -2404,77 +2235,6 @@ function claimTodayAttendance() {
   save();
 }
 
-function getRequiredExp(level) {
-  let rebirthBonusMultiplier = 1 + (d.rebirth * 0.25);
-  return Math.round(100 * Math.pow(1.25, level - 1) * rebirthBonusMultiplier);
-}
-
-function addExp(amount) {
-  if (d.level === undefined) d.level = 1;
-  if (d.exp === undefined) d.exp = 0;
-
-  d.exp += amount;
-  let req = getRequiredExp(d.level);
-
-  while (d.exp >= req) {
-    d.exp -= req;
-    d.level++;
-    req = getRequiredExp(d.level);
-    playSuccessSound();
-    showStockAlertToast(`🎉 레벨 업! [Lv.${d.level}] 달성!`, true);
-  }
-}
-
-function checkPanelLocks() {
-  const currentLevel = d.level || 1;
-  
-  const locks = [
-    { id: 'autoclickPanel', req: 30, tabId: 'tab_autoclickPanel', name: '오토클릭 연구소' },
-    { id: 'minePanel', req: 20, tabId: 'tab_minePanel', name: '퀀텀 광산' },
-    { id: 'stockPanel', req: 15, tabId: 'tab_stockPanel', name: '주식 거래소' },
-    { id: 'converterPanel', req: 25, tabId: 'tab_converterPanel', name: '에너지 변환 연구소' }
-  ];
-
-  locks.forEach(l => {
-    const tabEl = document.getElementById(l.tabId);
-    const panelEl = document.getElementById(l.id);
-    if (!tabEl || !panelEl) return;
-
-    if (currentLevel < l.req) {
-      tabEl.classList.add("locked");
-      
-      let lockContainer = panelEl.querySelector(".lock-panel-container");
-      if (!lockContainer) {
-        const originalContent = panelEl.innerHTML;
-        panelEl.dataset.originalContent = originalContent;
-        panelEl.innerHTML = `
-          <div class="lock-panel-container">
-            <h3>🔒 ${l.name} 잠김 상태</h3>
-            <p>이 연구소를 이용하려면 <b>레벨 ${l.req}</b> 이상을 달성해야 합니다!<br>(현재 레벨: Lv.${currentLevel})</p>
-            <button class="btn-game" onclick="tryUnlockPanel(${l.req}, '${l.name}')">🔒 잠금 해제 조건 확인</button>
-          </div>
-        `;
-      }
-    } else {
-      tabEl.classList.remove("locked");
-      const lockContainer = panelEl.querySelector(".lock-panel-container");
-      if (lockContainer && panelEl.dataset.originalContent) {
-        panelEl.innerHTML = panelEl.dataset.originalContent;
-      }
-    }
-  });
-}
-
-function tryUnlockPanel(reqLv, name) {
-  if ((d.level || 1) >= reqLv) {
-    say(`✨ [${name}] 잠금이 해제되었습니다!`);
-    save();
-  } else {
-    say(`⚠️ 레벨이 부족합니다! (필요: Lv.${reqLv}, 현재: Lv.${d.level || 1})`);
-  }
-}
-window.tryUnlockPanel = tryUnlockPanel;
-
 function render(){
  const petBonus = getPetBonus();
  const baseMult = getBaseMult();
@@ -2497,19 +2257,6 @@ function render(){
  if(document.getElementById("autoLv")) document.getElementById("autoLv").textContent="Lv."+d.cps;
  if(document.getElementById("rp")) document.getElementById("rp").textContent=fmt(d.rp);
  if(document.getElementById("permRpDisplay")) document.getElementById("permRpDisplay").textContent=fmt(d.rp);
-
- const currentLv = d.level || 1;
- const currentExp = d.exp || 0;
- const reqExp = getRequiredExp(currentLv);
- if(document.getElementById("userLevelText")) document.getElementById("userLevelText").textContent = `Lv.${currentLv} 연구원`;
- if(document.getElementById("userExpText")) document.getElementById("userExpText").textContent = `EXP ${fmt(currentExp)} / ${fmt(reqExp)}`;
- const expFill = document.getElementById("userExpBarFill");
- if(expFill) {
-   let p = Math.min(100, (currentExp / reqExp) * 100);
-   expFill.style.width = p + "%";
- }
-
- checkPanelLocks();
 
  if(document.getElementById("permPowerLv")) document.getElementById("permPowerLv").textContent = `+${d.permPower || 0}`;
  if(document.getElementById("permCpsLv")) document.getElementById("permCpsLv").textContent = `+${d.permCps || 0}`;
@@ -2728,7 +2475,6 @@ function equipWeapon(id) {
 }
 
 function exploreMine() {
-  if((d.level || 1) < 20) return say("퀀텀 광산은 레벨 20 이상부터 이용할 수 있습니다!");
   const mineDepth = d.mineDepth || 1;
   const cost = Math.max(100, Math.round(300 * Math.pow(1.3, mineDepth - 1)));
   const prob = Math.min(85, Math.round(23 + (mineDepth * 2)));
@@ -2752,7 +2498,6 @@ function exploreMine() {
 }
 
 function upgradeMine() {
-  if((d.level || 1) < 20) return say("퀀텀 광산은 레벨 20 이상부터 이용할 수 있습니다!");
   const mineDepth = d.mineDepth || 1;
   const upgradeCost = Math.max(500, Math.round(1500 * Math.pow(1.4, mineDepth - 1)));
   if(d.score < upgradeCost) return say("광산 시설 확장에 필요한 에너지가 부족합니다.");
@@ -3244,18 +2989,6 @@ function startMultiBoxOpeningInteraction(count){
 }
 
 function buyStock(id, amount) {
-  if((d.level || 1) < 15) return say("주식 거래소는 레벨 15 이상부터 이용할 수 있습니다!");
-  const now = Date.now();
-  if(d.stockChannelLockedUntil > now || d.stockChannelActiveUntil < now) {
-    return say("현재 주식 채널이 잠겨있어 매매할 수 없습니다!");
-  }
-
-  const coolEnd = d.stockSellCooldowns[id] || 0;
-  if(now < coolEnd) {
-    let remainSec = Math.ceil((coolEnd - now) / 1000);
-    return say(`⏳ 주식 매도 후 1분 쿨타임 중입니다! (${remainSec}초 남음)`);
-  }
-
   const price = d.stockPrices[id];
   let qty = 0;
   if(amount === 'max') {
@@ -3278,12 +3011,6 @@ function buyStock(id, amount) {
 }
 
 function sellStock(id, amount) {
-  if((d.level || 1) < 15) return say("주식 거래소는 레벨 15 이상부터 이용할 수 있습니다!");
-  const now = Date.now();
-  if(d.stockChannelLockedUntil > now || d.stockChannelActiveUntil < now) {
-    return say("현재 주식 채널이 잠겨있어 매매할 수 없습니다!");
-  }
-
   const price = d.stockPrices[id];
   let owned = id === 1 ? (d.stock1 || 0) : id === 2 ? (d.stock2 || 0) : id === 3 ? (d.stock3 || 0) : (d.stock4 || 0);
   let qty = 0;
@@ -3303,9 +3030,7 @@ function sellStock(id, amount) {
   d.score += price * qty;
   d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + (price * qty);
 
-  d.stockSellCooldowns[id] = Date.now() + (1 * 60 * 1000);
-
-  say(`주식 ${qty}주 매도 완료! (+${fmt(price * qty)}) ⚠️ 1분간 매수 잠김`);
+  say(`주식 ${qty}주 매도 완료! (+${fmt(price * qty)})`);
   save();
 }
 
@@ -3363,8 +3088,6 @@ function performClickAction(e) {
   
   d.score = Number(d.score) + Number(gain);
   d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + Number(gain);
-
-  addExp(1);
 
   const coinBtnMain = document.getElementById("coin");
   if(coinBtnMain) {
@@ -3479,7 +3202,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const buyAutoclickModuleBtn = document.getElementById("buyAutoclickModuleBtn");
   if(buyAutoclickModuleBtn) {
     buyAutoclickModuleBtn.onclick = () => {
-      if((d.level || 1) < 30) return say("오토클릭 연구소는 레벨 30 이상부터 이용할 수 있습니다!");
       let cost = 50000;
       if(d.score < cost) return say("오토클릭 모듈 구매에 에너지가 부족합니다! (필요: 5만)");
       d.score -= cost;
@@ -3494,7 +3216,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const upgradeAutoclickBtn = document.getElementById("upgradeAutoclickBtn");
   if(upgradeAutoclickBtn) {
     upgradeAutoclickBtn.onclick = () => {
-      if((d.level || 1) < 30) return say("오토클릭 연구소는 레벨 30 이상부터 이용할 수 있습니다!");
       if(!d.autoclickPurchased) return say("오토클릭 모듈을 먼저 구매해주세요!");
       if(d.autoclickLevel >= 3) return say("오토클릭 업그레이드는 최대 3레벨까지 가능합니다!");
       let cost = Math.round(10000 * Math.pow(1.5, d.autoclickLevel));
@@ -3510,7 +3231,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertGemsBtn = document.getElementById("convertGemsBtn");
   if(convertGemsBtn) {
     convertGemsBtn.onclick = () => {
-      if((d.level || 1) < 25) return say("에너지 변환 연구소는 레벨 25 이상부터 이용할 수 있습니다!");
       let cost = 350000;
       if(d.score < cost) return say("보석 제련에 필요한 에너지가 부족합니다! (필요: 35만)");
       d.score -= cost;
@@ -3524,7 +3244,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const convertBoostBtn = document.getElementById("convertBoostBtn");
   if(convertBoostBtn) {
     convertBoostBtn.onclick = () => {
-      if((d.level || 1) < 25) return say("에너지 변환 연구소는 레벨 25 이상부터 이용할 수 있습니다!");
       let cost = 650000;
       if(d.score < cost) return say("채굴 가속에 필요한 에너지가 부족합니다! (필요: 65만)");
       d.score -= cost;
@@ -3542,13 +3261,6 @@ document.addEventListener("DOMContentLoaded", () => {
       save();
     };
   }
-
-  const unlockStock2Btn = document.getElementById("unlockStock2Btn");
-  const unlockStock3Btn = document.getElementById("unlockStock3Btn");
-  const unlockStock4Btn = document.getElementById("unlockStock4Btn");
-  if(unlockStock2Btn) unlockStock2Btn.onclick = () => unlockStock(2);
-  if(unlockStock3Btn) unlockStock3Btn.onclick = () => unlockStock(3);
-  if(unlockStock4Btn) unlockStock4Btn.onclick = () => unlockStock(4);
 
   const claimAllEncyclopediaBtn = document.getElementById("claimAllEncyclopediaBtn");
   if(claimAllEncyclopediaBtn) claimAllEncyclopediaBtn.onclick = claimAllEncyclopediaRewards;
@@ -3702,7 +3414,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoToggle = document.getElementById("autoToggleBtn");
   if(autoToggle) {
     autoToggle.onclick = () => {
-      if((d.level || 1) < 10) return say("레벨 10 미만일 경우 자동 채굴을 켤 수 없습니다!");
       if(!d.autoPurchased) return say("자동 채굴 장치를 먼저 구매해야 합니다!");
       d.autoEnabled = !d.autoEnabled;
       save();
@@ -3733,7 +3444,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const autoBtn = document.getElementById("autoBtn");
   if(autoBtn) {
     autoBtn.onclick = () => {
-      if((d.level || 1) < 10) return say("레벨 10 미만일 경우 자동 채굴 장치를 구매할 수 없습니다!");
       if(d.autoPurchased) return say("이미 자동 채굴 장치를 보유하고 있습니다.");
       let cost = 1200;
       if(d.score >= cost) {
@@ -3803,10 +3513,8 @@ document.addEventListener("DOMContentLoaded", () => {
       d.equippedWeapon = 0;
       d.ownedWeapons = [0];
       d.mineDepth = 1;
-      d.level = 1;
-      d.exp = 0;
       checkTitles();
-      say(`시스템 승급 완료! (+${rpGained} RP, 레벨 기준 증가)`); 
+      say(`시스템 승급 완료! (+${rpGained} RP)`); 
       save();
     };
   }
@@ -3814,13 +3522,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".tab").forEach(t => {
     t.onclick = () => {
       const targetTabId = t.dataset.tab;
-      let currentLv = d.level || 1;
-
-      if(targetTabId === 'autoclickPanel' && currentLv < 30) return say("오토클릭 연구소는 레벨 30 이상부터 입장 가능합니다!");
-      if(targetTabId === 'minePanel' && currentLv < 20) return say("퀀텀 광산은 레벨 20 이상부터 입장 가능합니다!");
-      if(targetTabId === 'stockPanel' && currentLv < 15) return say("주식 거래소는 레벨 15 이상부터 입장 가능합니다!");
-      if(targetTabId === 'converterPanel' && currentLv < 25) return say("에너지 변환 연구소는 레벨 25 이상부터 입장 가능합니다!");
-
       document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
       t.classList.add("active");
       document.querySelectorAll(".panel").forEach(x => x.classList.add("hidden"));
@@ -3915,4 +3616,67 @@ document.addEventListener("DOMContentLoaded", () => {
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
       let success = Math.random() < 0.50;
-      if(document.getElementById("game4Display")) document.getElementById("game4Display").textContent저는 언어 모델일 뿐이라 그것을 이해하고 대응할 능력이 없기 때문에 도와드릴 수가 없습니다.
+      if(document.getElementById("game4Display")) document.getElementById("game4Display").textContent = success ? "⏳ 오라클 예측 성공!" : "⌛ 타임라인 어긋남 (실패)";
+      if (success) { 
+        let reward = Math.floor(bet * 1.8);
+        d.score += reward; 
+        d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + reward;
+        playSuccessSound();
+        say(`오라클 적중! (+${fmt(reward)})`); 
+      } else { 
+        playFailureSound(); 
+        say("예측 실패로 에너지를 잃었습니다."); 
+      }
+      save();
+    };
+  }
+
+  setInterval(() => {
+    if (d.autoEnabled && d.autoPurchased && d.cps > 0) {
+      const petBonus = getPetBonus();
+      const baseMult = getBaseMult();
+      const titleBonus = getTitleBonus();
+      let filterBonus = d.filter ? 1.25 : 1.0;
+      let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
+      let gemRingBonus = d.gemRing ? 1.08 : 1.0;
+      let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
+      let curCps = (((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus;
+      let inc = (curCps * baseMult * petBonus.cpsMult * petBonus.coinMult * titleBonus.cpsMult) / 5;
+      d.score = Number(d.score) + Number(inc);
+      d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + Number(inc);
+      if(document.getElementById("score")) document.getElementById("score").textContent = fmt(d.score);
+    }
+  }, 1000);
+
+  setInterval(() => {
+    let stockIds = [1, 2, 3, 4];
+    stockIds.forEach(id => {
+      let currentPrice = d.stockPrices[id] || 500;
+      let changePercent = (Math.random() * 0.16) - 0.078;
+      let newPrice = Math.max(50, Math.round(currentPrice * (1 + changePercent)));
+      d.stockPrices[id] = newPrice;
+
+      if(!d.stockHistories[id]) d.stockHistories[id] = [500, 500];
+      d.stockHistories[id].push(newPrice);
+      if(d.stockHistories[id].length > 15) d.stockHistories[id].shift();
+    });
+
+    let newsList = [
+      { text: "퀀텀 제너레이터 핵심 부품 공급 안정화 소식에 관련주 강세!", type: "good" },
+      { text: "글로벌 에너지 네트워크 일시적 과부하로 소폭 조정을 받는 장세입니다.", type: "bad" },
+      { text: "차세대 양자 코어 상용화 임박 소식에 테크 주식 일제히 급등!", type: "good" },
+      { text: "지하 광산 안전 점검 강화 뉴스로 투자 심리가 관망세를 보이고 있습니다.", type: "good" },
+      { text: "바이러스 레이드 소탕 작전 성공 릴레이로 보안 관련 테마 상승세!", type: "good" }
+    ];
+    if(Math.random() < 0.35) {
+      let chosen = newsList[Math.floor(Math.random() * newsList.length)];
+      d.latestNews = chosen.text;
+      d.newsType = chosen.type;
+    }
+
+    updateStockUI();
+  }, 5000);
+});
+</script>
+</body>
+</html>
