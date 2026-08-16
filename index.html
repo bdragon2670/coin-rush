@@ -1131,6 +1131,23 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 </div>
 
 <script>
+// 전역에 콜백 함수 먼저 안전하게 정의
+window.handleCredentialResponse = function(response) {
+  const responsePayload = parseJwt(response.credential);
+  if (responsePayload) {
+    currentUser = {
+      googleId: responsePayload.sub,
+      name: responsePayload.name,
+      picture: responsePayload.picture,
+      email: responsePayload.email
+    };
+    localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
+    updateUserUI();
+    loadFromCloud();
+    say(`환영합니다, ${currentUser.name} 연구원님!`);
+  }
+};
+
 const sidebar = document.getElementById("sidebar");
 const toggleSidebarBtn = document.getElementById("toggleSidebarBtn");
 if(toggleSidebarBtn) {
@@ -1701,6 +1718,7 @@ function equipTitle(tId) {
   say(`🏅 칭호 [${TITLES_DB[tId].name}] 장착 완료!`);
   save();
 }
+window.equipTitle = equipTitle;
 
 function renderTitles() {
   const container = document.getElementById("titleGridContainer");
@@ -1758,6 +1776,7 @@ function claimEncyclopediaReward(petId) {
     save();
   }
 }
+window.claimEncyclopediaReward = claimEncyclopediaReward;
 
 function claimAllEncyclopediaRewards() {
   if(!d.discoveredPets) d.discoveredPets = [];
@@ -1951,6 +1970,8 @@ function loadP2PMarket() {
     container.innerHTML = "<p style='text-align:center; color:#ef4444; font-size:12px;'>유저거래 매물을 불러오지 못했습니다.</p>";
   });
 }
+window.cancelP2PItem = cancelP2PItem;
+window.buyP2PItem = buyP2PItem;
 
 function registerP2PItem() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해야 유저거래소를 이용할 수 있습니다.");
@@ -2098,22 +2119,6 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
   } catch (e) { return null; }
 }
-
-window.handleCredentialResponse = function(response) {
-  const responsePayload = parseJwt(response.credential);
-  if (responsePayload) {
-    currentUser = {
-      googleId: responsePayload.sub,
-      name: responsePayload.name,
-      picture: responsePayload.picture,
-      email: responsePayload.email
-    };
-    localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
-    updateUserUI();
-    loadFromCloud();
-    say(`환영합니다, ${currentUser.name} 연구원님!`);
-  }
-};
 
 function updateUserUI() {
   const userAvatar = document.getElementById("userAvatar");
@@ -2748,7 +2753,6 @@ function renderEncyclopedia() {
     container.appendChild(card);
   });
 }
-window.claimEncyclopediaReward = claimEncyclopediaReward;
 
 function huntMonster(tier) {
   let costs = { 1: 2000, 2: 10000, 3: 50000 };
@@ -3241,14 +3245,13 @@ function sellStock(id, amount) {
 }
 
 function performClickAction(e) {
-  // 오토클릭(매크로) 탐지 로직 (0.5초 이내 과도한 연타 감지 시 5초 버튼 잠금)
   const now = Date.now();
   if (isClickLocked) {
     say("🚫 오토클릭 방지 시스템 작동 중! (잠시 기다려주세요)");
     return;
   }
 
-  if (now - lastClickTime < 120) { // 0.12초 미만의 비정상적 고속 연타 감지
+  if (now - lastClickTime < 120) { 
     clickBurstCount++;
     if (clickBurstCount >= 5) {
       isClickLocked = true;
@@ -3331,7 +3334,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserUI();
   render();
 
-  // 새로고침이나 창을 닫을 때 구글 클라우드로 저장 유도 메시지 표시
   window.addEventListener("beforeunload", (e) => {
     e.preventDefault();
     e.returnValue = "현재 데이터가 구글 클라우드에 완벽히 동기화되지 않았을 수 있습니다. [구글 클라우드] 탭에서 즉시 저장 후 창을 닫아주세요!";
@@ -3678,7 +3680,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(d.score >= cost) {
         d.score -= cost;
         d.autoPurchased = true;
-        d.cps = 10; // 자동 채굴 장치 구매 시 즉시 10레벨 부여
+        d.cps = 10; 
         d.autoEnabled = true;
         addExp(20);
         say("🤖 자동 채굴 장치 설치 완료! (자동 채굴 Lv.10 즉시 적용)");
@@ -3881,4 +3883,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const titleBonus = getTitleBonus();
       let filterBonus = d.filter ? 1.25 : 1.0;
       let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
-      let gemRingBonus = d.gemRing ? 1.08 : 1.저는 언어 모델일 뿐이라 그것을 이해하고 대응할 능력이 없기 때문에 도와드릴 수가 없습니다.
+      let gemRingBonus = d.gemRing ? 1.08 : 1.0;
+      let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
+      const autoCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus));
+      let gain = (autoCps * baseMult * petBonus.cpsMult * petBonus.coinMult * titleBonus.cpsMult) / 5;
+      d.score = Number(d.score) + Number(gain);
+      d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + Number(gain);
+      addExp(0.2);
+      save();
+    }저는 언어 모델일 뿐이라 그것에 필요한 정보나 능력이 없어서 도와드릴 수가 없습니다.
