@@ -519,17 +519,17 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">깊은 층으로 탐사하여 보석(💎)을 발굴하세요.</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 광산 탐사 깊이: <b id="mineDepthDisplay" style="font-size:18px;">1층 (지표면)</b></h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">탐사 비용: <span id="mineCostDisplay">25,000</span> 에너지 | 보석 획득 확률: <span id="mineProbDisplay">45%</span></p>
+        <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">탐사 비용: <span id="mineCostDisplay">500</span> 에너지 | 보석 획득 확률: <span id="mineProbDisplay">45%</span></p>
         <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
           <button class="btn-game" id="exploreMineBtn" style="padding:10px 24px; font-size:13px;">⛏️ 광산 깊숙이 탐사하기</button>
-          <button class="btn-game" id="upgradeMineBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; padding:10px 24px; font-size:13px;">⬆️ 광산 시설 확장 (<span id="mineUpgradeCost">120,000</span> 에너지)</button>
+          <button class="btn-game" id="upgradeMineBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important; padding:10px 24px; font-size:13px;">⬆️ 광산 시설 확장 (<span id="mineUpgradeCost">2,500</span> 에너지)</button>
         </div>
       </div>
     </div>
 
     <div id="blacksmithPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚒️ 퀀텀 대장간 (무기 강화 시스템 - 최대 20강)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">エ너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">에너지를 소모하여 무기를 강화할수록 클릭 파워와 사냥터 보너스가 증가합니다.</p>
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center;">
         <h4 style="color:var(--accent); margin:0 0 6px; font-size:15px;">현재 무기 강화 레벨: <b id="blacksmithLvDisplay" style="font-size:18px;">+0</b> / 20강</h4>
         <p style="font-size:11px; color:var(--text-sub); margin:0 0 14px;">다음 강화 시 클릭 파워 추가 상승 & 사냥터 성공률/보상 소폭 증가</p>
@@ -566,12 +566,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="stockPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (강력한 하락세 도입)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식 시장에 **강력한 하락세와 폭락 확률**이 도입되었습니다! 매도 후 **5분간 매수 제한**이 적용됩니다.</p>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 (-1,000 ~ 50,000 변동폭 적용)</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식 가격이 -1,000원에서 최대 50,000원 사이로 움직이며 마이너스 가격도 발생할 수 있습니다!</p>
       <div class="stock-grid">
         <div class="stock-card">
           <h4 style="margin:0 0 4px; color:var(--accent);">⚡ 테슬라 에너지 (TES) [기본 개방]</h4>
-          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">50,000</b> 에너지</p>
+          <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice1" style="color:var(--text-main);">10,000</b> 에너지</p>
           <canvas id="stockCanvas1" class="stock-chart-canvas"></canvas>
           <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned1">0</b>주</p>
           <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer1"></p>
@@ -593,7 +593,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
           <div id="stockContent2" class="hidden">
             <h4 style="margin:0 0 4px; color:var(--accent);">🟢 엠비디아 (NVDA)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">50,000</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice2" style="color:var(--text-main);">10,000</b> 에너지</p>
             <canvas id="stockCanvas2" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned2">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer2"></p>
@@ -616,7 +616,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
           <div id="stockContent3" class="hidden">
             <h4 style="margin:0 0 4px; color:var(--accent);">🚀 스페이스코어 (SPC)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">50,000</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice3" style="color:var(--text-main);">10,000</b> 에너지</p>
             <canvas id="stockCanvas3" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned3">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer3"></p>
@@ -639,7 +639,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
           </div>
           <div id="stockContent4" class="hidden">
             <h4 style="margin:0 0 4px; color:var(--accent);">⚛️ 양자 바이오 (QBIO)</h4>
-            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">50,000</b> 에너지</p>
+            <p style="font-size:12px; margin:2px 0;">현재가: <b id="stockPrice4" style="color:var(--text-main);">10,000</b> 에너지</p>
             <canvas id="stockCanvas4" class="stock-chart-canvas"></canvas>
             <p style="font-size:11px; margin:2px 0; color:var(--text-sub);">보유 주식: <b id="stockOwned4">0</b>주</p>
             <p style="font-size:10px; color:#ef4444; margin:2px 0;" id="stockTimer4"></p>
@@ -1000,9 +1000,9 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v10.2 주식 하락세 대폭 강화 패치",
-    title: "주식 하락 확률 증가 및 우하향(마이너스) 가속화 적용",
-    desc: "1) 📈 주식 거래소 시장에 **강력한 하락세와 폭락 확률(약 65% 확률로 하락/폭락)**이 적용되어 주식이 쉽게 오르지 않고 우하향하도록 조정되었습니다!\n2) 🛒 테크 상점, 캐시 상점, 무기 상점 20% 가격 인하 및 도감 '모두 받기' 기능이 완벽 유지됩니다.\n3) ☁️ 구글 클라우드 및 로컬 데이터 영구 저장 시스템이 정상 작동합니다."
+    version: "v10.3 주식 가격 범위 변경 (-1,000 ~ 50,000) 및 광산 비용 인하 패치",
+    title: "주식 가격 범위 조정 및 광산 탐사 부담 완화 적용",
+    desc: "1) 📈 주식 가격이 -1,000원 ~ 50,000원 범위 내에서 마이너스(-1,000 포함) 및 자유로운 변동을 겪도록 조정되었습니다!\n2) ⛏️ 광산 탐사 비용과 시설 확장 비용이 대폭 인하되었습니다.\n3) 🛒 테크 상점, 캐시 상점, 무기 상점 20% 가격 인하 및 구글 클라우드/로컬 데이터 영구 저장 시스템이 완벽 작동합니다."
   }
 ];
 
@@ -1037,8 +1037,8 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v102";
-let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v101") || localStorage.getItem("energyRush_PermanentSaveData_v100");
+const saveKey = "energyRush_PermanentSaveData_v103";
+let savedRawData = localStorage.getItem(saveKey) || localStorage.getItem("energyRush_PermanentSaveData_v102") || localStorage.getItem("energyRush_PermanentSaveData_v101");
 let d = JSON.parse(savedRawData || "null") || {
  score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
  gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1076,12 +1076,12 @@ if (d.ownedWeapons === undefined) d.ownedWeapons = [0];
 if (d.mineDepth === undefined) d.mineDepth = 1;
 if (!d.stockSellCooldowns) d.stockSellCooldowns = {};
 
-if (!d.stockPrices) d.stockPrices = { 1: 50000, 2: 50000, 3: 50000, 4: 50000 };
+if (!d.stockPrices) d.stockPrices = { 1: 10000, 2: 10000, 3: 10000, 4: 10000 };
 if (!d.stockHistories) d.stockHistories = {
-  1: [50000, 48000, 45000, 42000, 50000],
-  2: [50000, 49000, 46000, 43000, 50000],
-  3: [50000, 47000, 44000, 41000, 50000],
-  4: [50000, 48500, 45500, 42500, 50000]
+  1: [10000, 9000, 8000, 5000, 10000],
+  2: [10000, 9500, 8500, 6000, 10000],
+  3: [10000, 8800, 7500, 4000, 10000],
+  4: [10000, 9200, 8200, 5500, 10000]
 };
 
 let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
@@ -1203,7 +1203,7 @@ function drawStockChart(canvasId, historyData) {
   const range = max - min || 1;
 
   ctx.beginPath();
-  ctx.strokeStyle = "#ef4444"; // 하락 기조를 보여주는 붉은빛 차트 라인
+  ctx.strokeStyle = "#ef4444"; 
   ctx.lineWidth = 2.5;
 
   historyData.forEach((val, idx) => {
@@ -1602,8 +1602,8 @@ function render(){
  if($("costPermGem")) $("costPermGem").textContent = gemCost;
 
  const mineDepth = d.mineDepth || 1;
- const mineCost = Math.floor(25000 * Math.pow(1.6, mineDepth - 1));
- const mineUpgradeCost = Math.floor(120000 * Math.pow(2.1, mineDepth - 1));
+ const mineCost = Math.floor(500 * Math.pow(1.5, mineDepth - 1));
+ const mineUpgradeCost = Math.floor(2500 * Math.pow(1.8, mineDepth - 1));
  const mineProb = Math.min(85, 40 + (mineDepth * 3));
  if($("mineDepthDisplay")) $("mineDepthDisplay").textContent = `${mineDepth}층 광산`;
  if($("mineCostDisplay")) $("mineCostDisplay").textContent = fmt(mineCost);
@@ -1793,7 +1793,7 @@ function equipWeapon(id) {
 
 function exploreMine() {
   const mineDepth = d.mineDepth || 1;
-  const cost = Math.floor(25000 * Math.pow(1.6, mineDepth - 1));
+  const cost = Math.floor(500 * Math.pow(1.5, mineDepth - 1));
   const prob = Math.min(85, 40 + (mineDepth * 3));
 
   if(d.score < cost) return say("광산 탐사 비용 에너지가 부족합니다.");
@@ -1816,7 +1816,7 @@ function exploreMine() {
 
 function upgradeMine() {
   const mineDepth = d.mineDepth || 1;
-  const upgradeCost = Math.floor(120000 * Math.pow(2.1, mineDepth - 1));
+  const upgradeCost = Math.floor(2500 * Math.pow(1.8, mineDepth - 1));
   if(d.score < upgradeCost) return say("광산 시설 확장에 필요한 에너지가 부족합니다.");
   d.score -= upgradeCost;
   d.mineDepth = mineDepth + 1;
@@ -2323,6 +2323,7 @@ function buyStock(id, amount) {
   const price = d.stockPrices[id];
   let qty = 0;
   if(amount === 'max') {
+    if(price <= 0) return say("현재 주가가 0 이하이므로 전부 매수할 수 없습니다.");
     qty = Math.floor(d.score / price);
     if(qty <= 0) return say("에너지가 부족합니다.");
   } else {
@@ -2873,11 +2874,9 @@ setInterval(() => {
   if(Math.random() < 0.4) {
     let updated = false;
     for(let i = 1; i <= 4; i++) {
-      // 주식 하락 확률을 대폭 강화 (약 65% 확률로 하락, 35% 확률로 상승하되 하락 폭을 키워 쉽게 오르지 않도록 조정)
-      let isDrop = Math.random() < 0.65;
-      let multiplier = isDrop ? (0.78 + Math.random() * 0.18) : (1.01 + Math.random() * 0.08);
-      
-      d.stockPrices[i] = Math.max(500, Math.floor(d.stockPrices[i] * multiplier));
+      // 주식 가격 범위를 -1,000 ~ 50,000 사이로 변동되도록 제어
+      let delta = (Math.random() - 0.52) * 4500;
+      d.stockPrices[i] = Math.max(-1000, Math.min(50000, Math.floor(d.stockPrices[i] + delta)));
       
       d.stockHistories[i].push(d.stockPrices[i]); 
       if(d.stockHistories[i].length > 20) d.stockHistories[i].shift();
