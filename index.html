@@ -1687,6 +1687,13 @@ function checkAndRunExpEvent() {
   }
 }
 
+let expEventTimer = null;
+function startExpEventCountdown() {
+  checkAndRunExpEvent();
+  if (expEventTimer) clearInterval(expEventTimer);
+  expEventTimer = setInterval(checkAndRunExpEvent, 1000);
+}
+
 function getRequiredExp(level) {
   return Math.round(100 * Math.pow(1.35, level - 1));
 }
@@ -3375,8 +3382,7 @@ document.addEventListener("DOMContentLoaded", () => {
   checkAndDiscoverPets();
   updateUserUI();
   render();
-
-
+  startExpEventCountdown();
   const bgmToggle = document.getElementById("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
 
