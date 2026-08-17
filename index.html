@@ -2038,9 +2038,29 @@ function claimAllEncyclopediaRewards() {
   save();
 }
 
+const RANKING_COLLECTION = 'quantum_rankings';
+
 function getCloudUserDocRef(firebaseUser = firebase.auth && firebase.auth().currentUser) {
   if (!currentUser || !firebaseUser) return null;
   return db.collection('quantum_users').doc(firebaseUser.uid);
+}
+
+// Firebase UID를 문서 ID로 고정해 Google 계정당 랭킹 기록을 하나만 유지합니다.
+function getRankingDocRef(firebaseUser = firebase.auth && firebase.auth().currentUser) {
+  if (!currentUser || !firebaseUser) return null;
+  return db.collection(RANKING_COLLECTION).doc(firebaseUser.uid);
+}
+
+function buildRankingData(firebaseUser) {
+  return {
+    authUid: firebaseUser.uid,
+    googleId: currentUser.googleId,
+    name: currentUser.name || '익명 연구원',
+    picture: currentUser.picture || '',
+    score: Math.max(0, Math.floor(d.score || 0)),
+    level: Math.max(1, Math.floor(d.level || 1)),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
 }
 
 function normalizeCloudSaveData(saveData) {
@@ -2064,8 +2084,11 @@ async function saveToCloud() {
     return say("Firebase 인증에 연결하지 못했습니다. Firebase Authentication의 Google 로그인을 사용 설정해주세요.");
   }
   const cloudRef = getCloudUserDocRef(firebaseUser);
+  const rankingRef = getRankingDocRef(firebaseUser);
   try {
-    await cloudRef.set({
+    // 한 번의 배치 저장으로 클라우드 데이터와 계정별 단일 랭킹 문서를 함께 갱신합니다.
+    const batch = db.batch();
+    batch.set(cloudRef, {
       googleId: currentUser.googleId,
       authUid: firebaseUser.uid,
       name: currentUser.name,
@@ -2075,6 +2098,8 @@ async function saveToCloud() {
       saveData: d,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge: true });
+    batch.set(rankingRef, buildRankingData(firebaseUser), { merge: true });
+    await batch.commit();
     markCloudSaveComplete();
     playSuccessSound();
     say("☁️ 현재 레벨 및 전체 게임 데이터가 클라우드에 즉시 저장되었습니다!");
@@ -2123,7 +2148,7 @@ async function loadFromCloud() {
 function loadGlobalRanking() {
   const container = document.getElementById("rankingListContainer");
   if(!container) return;
-  db.collection('quantum_users').orderBy('score', 'desc').limit(10).get().then(snapshot => {
+  db.collection(RANKING_COLLECTION).orderBy('score', 'desc').limit(10).get().then(snapshot => {
     if(snapshot.empty) {
       container.innerHTML = "<p style='text-align:center; color:var(--text-sub); font-size:12px;'>등록된 랭킹 데이터가 없습니다.</p>";
       return;
