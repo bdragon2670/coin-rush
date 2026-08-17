@@ -1352,7 +1352,33 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 
 const saveKey = "energyRush_PermanentSaveData_v148";
+const cloudSaveStatusKey = `${saveKey}_CloudSaveStatus`;
+const cloudExitWarningMessage = "구글 클라우드에 저장되지 않은 진행 데이터가 있습니다. 지금 종료하면 다른 기기에서 해당 데이터가 사라질 수 있습니다.";
 let savedRawData = localStorage.getItem(saveKey);
+let hasUnsavedCloudChanges = localStorage.getItem(cloudSaveStatusKey) === "pending";
+
+// 이전 버전에서 이미 로컬 진행 데이터가 있었으면 안전을 위해 클라우드 미저장으로 간주한다.
+if (savedRawData && localStorage.getItem(cloudSaveStatusKey) === null) {
+  hasUnsavedCloudChanges = true;
+  localStorage.setItem(cloudSaveStatusKey, "pending");
+}
+
+function markCloudSavePending() {
+  hasUnsavedCloudChanges = true;
+  localStorage.setItem(cloudSaveStatusKey, "pending");
+}
+
+function markCloudSaveComplete() {
+  hasUnsavedCloudChanges = false;
+  localStorage.setItem(cloudSaveStatusKey, "synced");
+}
+
+window.addEventListener("beforeunload", (event) => {
+  if (!hasUnsavedCloudChanges) return;
+  event.preventDefault();
+  event.returnValue = cloudExitWarningMessage;
+  return cloudExitWarningMessage;
+});
 
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
@@ -1852,6 +1878,7 @@ function saveToCloud() {
     saveData: d,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true }).then(() => {
+    markCloudSaveComplete();
     playSuccessSound();
     say("☁️ 현재 레벨 및 전체 게임 데이터가 클라우드에 즉시 저장되었습니다!");
     loadGlobalRanking();
@@ -1874,6 +1901,7 @@ function loadFromCloud() {
       if(!d.stockHistories) d.stockHistories = { 1: [500,500], 2: [500,500], 3: [500,500], 4: [500,500] };
       
       save();
+      markCloudSaveComplete();
       playSuccessSound();
       say("🔄 클라우드에서 저장된 레벨 및 모든 데이터를 성공적으로 불러왔습니다!");
     } else {
@@ -2281,6 +2309,7 @@ function getBaseMult(){
 
 let saveTimeout = null;
 function save(){
+  markCloudSavePending();
   checkAndDiscoverPets();
   checkTitles();
   if (saveTimeout) clearTimeout(saveTimeout);
