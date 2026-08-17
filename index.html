@@ -2160,7 +2160,7 @@ function parseJwt(token) {
   } catch (e) { return null; }
 }
 
-// 명시적으로 전역 함수에 등록하여 'callback' 에러 방지
+// 1. 콜백 함수를 전역에 먼저 정의합니다.
 window.handleCredentialResponse = function(response) {
   const responsePayload = parseJwt(response.credential);
   if (responsePayload) {
@@ -2176,6 +2176,28 @@ window.handleCredentialResponse = function(response) {
     say(`환영합니다, ${currentUser.name} 연구원님!`);
   }
 };
+
+// 2. DOM이 로드된 후에 구글 로그인을 초기화합니다.
+document.addEventListener("DOMContentLoaded", () => {
+  // ... (기존 초기화 코드들)
+
+  try {
+    if (window.google && google.accounts && google.accounts.id) {
+      google.accounts.id.initialize({
+        client_id: "458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com",
+        callback: window.handleCredentialResponse // 명시적으로 window 객체의 함수를 연결
+      });
+      google.accounts.id.renderButton(
+        document.querySelector(".g_id_signin"),
+        { theme: "outline", size: "large", text: "sign_in_with", shape: "rectangular" }
+      );
+    }
+  } catch(e) {
+    console.log("Google Auth Init Warning:", e);
+  }
+  
+  // ... (나머지 DOMContentLoaded 내부 코드들)
+});
 
 function updateUserUI() {
   const userAvatar = document.getElementById("userAvatar");
@@ -3366,7 +3388,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.google && google.accounts && google.accounts.id) {
       google.accounts.id.initialize({
         client_id: "458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com",
-        callback: handleCredentialResponse
+        callback: window.handleCredentialResponse // callback을 명시적으로 연결
       });
       google.accounts.id.renderButton(
         document.querySelector(".g_id_signin"),
@@ -3374,7 +3396,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
   } catch(e) {
-    console.log("Google Auth Init Warning in local mode:", e);
+    console.log("Google Auth Init Warning:", e);
   }
 
   const bgmToggle = document.getElementById("bgmToggleBtn");
