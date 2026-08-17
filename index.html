@@ -558,6 +558,43 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
   .shop-grid, .minigame-grid, .pet-box-grid, .stock-grid{grid-template-columns: 1fr;}
   .coin{width: 120px; height: 120px; font-size: 40px;}
 }
+
+/* P2P 마켓플레이스 리빌드 */
+.p2p-market-shell { display:flex; flex-direction:column; gap:16px; }
+.p2p-market-hero { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:18px; border:1px solid rgba(16,185,129,.32); border-radius:18px; background:linear-gradient(135deg,rgba(16,185,129,.13),rgba(59,130,246,.07)); }
+.p2p-market-hero h3 { margin:0; color:var(--text-main); font-size:16px; }
+.p2p-market-hero p { margin:5px 0 0; color:var(--text-sub); font-size:11px; line-height:1.5; }
+.p2p-connection { display:inline-flex; align-items:center; gap:6px; padding:6px 9px; border-radius:999px; font-size:10px; font-weight:800; white-space:nowrap; background:rgba(148,163,184,.12); color:var(--text-sub); }
+.p2p-connection.online { background:rgba(16,185,129,.16); color:#6ee7b7; }
+.p2p-market-layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(270px,.8fr); gap:16px; align-items:start; }
+.p2p-surface { background:rgba(255,255,255,.018); border:1px solid var(--border-color); border-radius:16px; padding:16px; }
+.p2p-surface-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:13px; }
+.p2p-surface-head h4 { margin:0; color:var(--text-main); font-size:13px; }
+.p2p-filter-group { display:flex; gap:6px; flex-wrap:wrap; }
+.p2p-filter { border:1px solid var(--border-color); border-radius:8px; background:rgba(255,255,255,.03); color:var(--text-sub); padding:5px 8px; cursor:pointer; font-size:10px; font-weight:700; }
+.p2p-filter.active { border-color:var(--accent); color:var(--accent); background:rgba(16,185,129,.12); }
+.p2p-list { max-height:420px; overflow-y:auto; padding-right:4px; display:flex; flex-direction:column; gap:9px; }
+.p2p-listing { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; border:1px solid rgba(148,163,184,.16); border-radius:13px; background:rgba(3,7,18,.35); transition:.2s ease; }
+.p2p-listing:hover { border-color:rgba(16,185,129,.52); transform:translateY(-1px); }
+.p2p-listing-main { min-width:0; display:flex; gap:10px; align-items:center; }
+.p2p-listing-icon { width:36px; height:36px; display:grid; place-items:center; border-radius:11px; background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.22); font-size:19px; flex:0 0 auto; }
+.p2p-listing-title { color:var(--text-main); font-size:12px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.p2p-listing-meta { color:var(--text-sub); font-size:10px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.p2p-listing-side { display:flex; align-items:center; gap:9px; flex:0 0 auto; }
+.p2p-price-label { text-align:right; color:var(--text-sub); font-size:9px; }
+.p2p-price { color:#fbbf24; font-size:12px; font-weight:900; margin-top:2px; }
+.p2p-action { border:0; border-radius:9px; padding:7px 9px; color:#fff; background:linear-gradient(135deg,#10b981,#059669); cursor:pointer; font-size:10px; font-weight:800; }
+.p2p-action.recall { background:#475569; }
+.p2p-empty { padding:28px 10px; text-align:center; color:var(--text-sub); font-size:11px; }
+.p2p-register-grid { display:flex; flex-direction:column; gap:10px; }
+.p2p-register-grid label { color:var(--text-sub); font-size:10px; font-weight:700; }
+.p2p-register-grid .p2p-input { width:100%; }
+.p2p-register-btn { width:100%; margin-top:3px; background:linear-gradient(135deg,#10b981,#047857) !important; }
+.p2p-note { padding:10px; border-radius:10px; background:rgba(59,130,246,.08); border:1px solid rgba(59,130,246,.18); color:#bfdbfe; font-size:10px; line-height:1.5; }
+.p2p-my-list { display:flex; flex-direction:column; gap:8px; max-height:180px; overflow-y:auto; }
+.p2p-my-row { display:flex; justify-content:space-between; gap:8px; padding:9px; border-radius:10px; background:rgba(255,255,255,.025); color:var(--text-sub); font-size:10px; }
+@media (max-width: 900px) { .p2p-market-layout { grid-template-columns:1fr; } .p2p-market-hero { align-items:flex-start; flex-direction:column; } }
+
 </style>
 </head>
 <body>
@@ -921,39 +958,65 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="p2pPanel" class="panel hidden">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="color:var(--accent); margin:0; font-size:15px;">🌐 구글 유저 실시간 P2P 유저거래소</h3>
-        <button class="tool-btn" id="refreshP2PBtn">🔄 매물 새로고침</button>
-      </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">보유한 모든 드론 중 원하는 드론을 정확히 선택하거나 보석(💎)을 최소 1,000원에 등록하고 거래하세요!</p>
-      
-      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; margin-bottom:16px;">
-        <h4 style="color:var(--text-main); margin:0 0 10px; font-size:13px;">📦 새 매물 등록하기</h4>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <select id="p2pItemType" class="p2p-input" style="flex:1; min-width:120px;">
-            <option value="gem">보석 (💎)</option>
-            <option value="drone">보유 드론 (🤖)</option>
-          </select>
-          
-          <div id="p2pGemInputArea" style="flex:1; min-width:100px;">
-            <input type="number" id="p2pGemCount" class="p2p-input" placeholder="보석 수량" value="1" min="1">
+      <div class="p2p-market-shell">
+        <section class="p2p-market-hero">
+          <div>
+            <h3>🌐 퀀텀 유저거래소</h3>
+            <p>보석과 드론을 실시간으로 등록·구매·회수하세요. 매물은 클라우드에 기록되어 새로고침 후에도 유지됩니다.</p>
           </div>
-          
-          <div id="p2pDroneInputArea" class="hidden" style="flex:1; min-width:140px;">
-            <select id="p2pSelectedDroneIndex" class="p2p-input"></select>
+          <div>
+            <div id="p2pConnectionStatus" class="p2p-connection">● 거래소 연결 준비 중</div>
+            <button class="tool-btn" id="refreshP2PBtn" style="margin-top:8px; width:100%;">🔄 거래소 새로고침</button>
           </div>
+        </section>
 
-          <input type="number" id="p2pPrice" class="p2p-input" placeholder="판매 가격 (최소 1,000 에너지)" value="1000" min="1000" style="flex:1.5; min-width:140px;">
-          <button class="btn-game" id="registerP2PBtn" style="flex:1; background:linear-gradient(135deg, #10b981, #059669) !important;">🚀 매물 등록</button>
+        <div class="p2p-market-layout">
+          <section class="p2p-surface">
+            <div class="p2p-surface-head">
+              <h4>📋 실시간 등록 매물</h4>
+              <div class="p2p-filter-group">
+                <button class="p2p-filter active" data-p2p-filter="all">전체</button>
+                <button class="p2p-filter" data-p2p-filter="gem">💎 보석</button>
+                <button class="p2p-filter" data-p2p-filter="drone">🤖 드론</button>
+              </div>
+            </div>
+            <div id="p2pMarketList" class="p2p-list"><div class="p2p-empty">등록 매물을 불러오는 중입니다.</div></div>
+          </section>
+
+          <aside style="display:flex; flex-direction:column; gap:16px;">
+            <section class="p2p-surface">
+              <div class="p2p-surface-head"><h4>📦 새 매물 등록</h4></div>
+              <div class="p2p-register-grid">
+                <label for="p2pItemType">판매 품목</label>
+                <select id="p2pItemType" class="p2p-input">
+                  <option value="gem">💎 보석</option>
+                  <option value="drone">🤖 보유 드론</option>
+                </select>
+                <div id="p2pGemInputArea">
+                  <label for="p2pGemCount">보석 수량</label>
+                  <input type="number" id="p2pGemCount" class="p2p-input" value="1" min="1" inputmode="numeric">
+                </div>
+                <div id="p2pDroneInputArea" class="hidden">
+                  <label for="p2pSelectedDroneIndex">판매할 드론</label>
+                  <select id="p2pSelectedDroneIndex" class="p2p-input"></select>
+                </div>
+                <div>
+                  <label for="p2pPrice">판매 가격</label>
+                  <input type="number" id="p2pPrice" class="p2p-input" value="1000" min="1000" inputmode="numeric">
+                </div>
+                <button class="btn-game p2p-register-btn" id="registerP2PBtn">🚀 클라우드에 매물 등록</button>
+                <div class="p2p-note">매물이 서버 저장에 실패하면 차감한 보석·드론을 자동으로 되돌립니다.</div>
+              </div>
+            </section>
+
+            <section class="p2p-surface">
+              <div class="p2p-surface-head"><h4>🗂 내 등록 매물</h4><span id="p2pMyListingCount" style="font-size:10px; color:var(--accent);">0개</span></div>
+              <div id="p2pMyListings" class="p2p-my-list"><div class="p2p-empty">로그인 후 내 매물을 확인할 수 있습니다.</div></div>
+            </section>
+          </aside>
         </div>
       </div>
-
-      <h4 style="color:var(--text-main); margin:0 0 10px; font-size:13px;">📋 실시간 등록된 유저거래 매물 목록</h4>
-      <div id="p2pMarketList" style="max-height:350px; overflow-y:auto; padding-right:4px;">
-        <p style="text-align:center; color:var(--text-sub); font-size:12px;">등록된 매물을 불러오는 중...</p>
-      </div>
     </div>
-
     <div id="customPanel" class="panel hidden">
       <h3 style="color:var(--text-main); font-size:14px; margin-top:0;">🖼️ 내 사진으로 코어 커스텀</h3>
       <div style="margin-bottom: 14px;">
@@ -1137,6 +1200,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">구글 로그인 후 클라우드 서버에 안전하게 데이터를 동기화하고 언제든 불러오세요!</p>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
         <div style="display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
           <div id="googleSignInButton"></div>
         </div>
@@ -1952,223 +2016,314 @@ function loadGlobalRanking() {
   });
 }
 
-function toggleP2PItemTypeSelector() {
-  const typeEl = document.getElementById("p2pItemType");
-  if(!typeEl) return;
-  const type = typeEl.value;
-  const gemArea = document.getElementById("p2pGemInputArea");
-  const droneArea = document.getElementById("p2pDroneInputArea");
-  if(type === 'gem') {
-    if(gemArea) gemArea.classList.remove("hidden");
-    if(droneArea) droneArea.classList.add("hidden");
-  } else {
-    if(gemArea) gemArea.classList.add("hidden");
-    if(droneArea) droneArea.classList.remove("hidden");
-    updateP2PDroneSelect();
-  }
-}
+const P2P_COLLECTION = 'quantum_p2p_market';
+let p2pMarketUnsubscribe = null;
+let p2pActiveFilter = 'all';
+let p2pLiveListings = [];
 
+function escapeP2PHtml(value) {
+  return String(value ?? '').replace(/[&<>"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[char]));
+}
+function getP2PStatusElement() { return document.getElementById('p2pConnectionStatus'); }
+function setP2PStatus(message, mode = 'idle') {
+  const status = getP2PStatusElement();
+  if (!status) return;
+  status.textContent = `● ${message}`;
+  status.classList.toggle('online', mode === 'online');
+}
+function formatP2PAge(item) {
+  const createdMs = Number(item.createdAtMs || (item.createdAt && item.createdAt.toMillis && item.createdAt.toMillis()) || Date.now());
+  const seconds = Math.max(0, Math.floor((Date.now() - createdMs) / 1000));
+  if (seconds < 60) return '방금 등록';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}분 전`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}시간 전`;
+  return `${Math.floor(seconds / 86400)}일 전`;
+}
+function toggleP2PItemTypeSelector() {
+  const typeEl = document.getElementById('p2pItemType');
+  const gemArea = document.getElementById('p2pGemInputArea');
+  const droneArea = document.getElementById('p2pDroneInputArea');
+  const type = typeEl ? typeEl.value : 'gem';
+  if (gemArea) gemArea.classList.toggle('hidden', type !== 'gem');
+  if (droneArea) droneArea.classList.toggle('hidden', type !== 'drone');
+  if (type === 'drone') updateP2PDroneSelect();
+}
 function updateP2PDroneSelect() {
-  const select = document.getElementById("p2pSelectedDroneIndex");
-  if(!select) return;
-  select.innerHTML = "";
-  if(!d.pets || d.pets.length === 0) {
-    select.innerHTML = `<option value="">보유한 드론 없음</option>`;
+  const select = document.getElementById('p2pSelectedDroneIndex');
+  if (!select) return;
+  select.innerHTML = '';
+  if (!d.pets || d.pets.length === 0) {
+    select.innerHTML = '<option value="">보유한 드론 없음</option>';
     return;
   }
-  d.pets.forEach((petId, idx) => {
+  d.pets.forEach((petId, index) => {
     const pet = PET_DB[petId];
-    if(pet) {
-      const opt = document.createElement("option");
-      opt.value = idx;
-      opt.textContent = `${pet.icon} ${pet.name} (${pet.grade}급) [#${idx+1}]`;
-      select.appendChild(opt);
-    }
+    if (!pet) return;
+    const option = document.createElement('option');
+    option.value = index;
+    option.textContent = `${pet.icon} ${pet.name} (${pet.grade}급) [#${index + 1}]`;
+    select.appendChild(option);
   });
 }
-
-function loadP2PMarket() {
-  const container = document.getElementById("p2pMarketList");
-  if(!container) return;
-  db.collection('quantum_p2p_market').orderBy('createdAt', 'desc').limit(20).get().then(snapshot => {
-    if(snapshot.empty) {
-      container.innerHTML = "<p style='text-align:center; color:var(--text-sub); font-size:12px;'>현재 등록된 유저거래 매물이 없습니다.</p>";
-      return;
-    }
-    let html = "";
-    snapshot.forEach(doc => {
-      const item = doc.data();
-      const isMyItem = currentUser && currentUser.googleId === item.sellerId;
-      let itemDesc = "";
-      if(item.type === 'gem') {
-        itemDesc = `💎 보석 ${item.count}개`;
-      } else {
-        const pet = PET_DB[item.petId];
-        itemDesc = `${pet ? pet.icon + ' ' + pet.name : '알 수 없는 드론'} (${pet ? pet.grade : 'C'}급)`;
-      }
-
-      let fallbackPic = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%237f8c8d'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23ffffff' font-size='10' font-family='sans-serif'%3E?%3C/text%3E%3C/svg%3E";
-
-      html += `
-        <div class="p2p-card">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <img src="${item.sellerPic || fallbackPic}" style="width:26px; height:26px; border-radius:50%; border:1px solid var(--accent);">
-            <div>
-              <b style="color:var(--text-main); font-size:12px;">${item.sellerName}</b>
-              <p style="margin:2px 0 0; font-size:11px; color:var(--accent);">${itemDesc}</p>
-            </div>
-          </div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div style="text-align:right;">
-              <span style="font-size:10px; color:var(--text-sub);">판매 가격</span>
-              <b style="display:block; color:var(--text-main); font-size:12px;">⚡ ${fmt(item.price)}</b>
-            </div>
-            ${isMyItem ? `<button class="btn-game" style="background:#4b5563 !important; font-size:11px; padding:6px 10px;" onclick="cancelP2PItem('${doc.id}')">회수</button>` :
-              `<button class="btn-game" style="font-size:11px; padding:6px 10px;" onclick="buyP2PItem('${doc.id}', '${item.sellerId}', ${item.price}, '${item.type}', ${item.count || 0}, '${item.petId || ''}')">즉시 구매</button>`}
-          </div>
-        </div>
-      `;
-    });
-    container.innerHTML = html;
-  }).catch(err => {
-    container.innerHTML = "<p style='text-align:center; color:#ef4444; font-size:12px;'>유저거래 매물을 불러오지 못했습니다.</p>";
-  });
-}
-
-function registerP2PItem() {
-  if(!currentUser) return say("구글 로그인을 먼저 진행해야 유저거래소를 이용할 수 있습니다.");
-  const typeEl = document.getElementById("p2pItemType");
-  const priceEl = document.getElementById("p2pPrice");
-  if(!typeEl || !priceEl) return;
-
-  const type = typeEl.value;
-  const price = parseInt(priceEl.value) || 0;
-  
-  if(price < 1000) return say("판매 가격은 최소 1,000 에너지 이상이어야 합니다.");
-
-  if(type === 'gem') {
-    const countEl = document.getElementById("p2pGemCount");
-    const count = countEl ? parseInt(countEl.value) || 0 : 0;
-    if(count <= 0) return say("수량을 올바르게 입력해주세요.");
-    if(d.gems < count) return say("보유한 보석(💎)이 부족합니다.");
-
-    d.gems -= count;
-    db.collection('quantum_p2p_market').add({
-      sellerId: currentUser.googleId,
-      sellerName: currentUser.name,
-      sellerPic: currentUser.picture,
-      type: 'gem',
-      count: count,
-      price: price,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-      playSuccessSound();
-      say("💎 보석 매물이 유저거래소에 성공적으로 등록되었습니다!");
-      save();
-      loadP2PMarket();
-    }).catch(err => say("등록 실패: 네트워크 상태를 확인해주세요."));
-  } else {
-    if(!d.pets || d.pets.length === 0) return say("등록할 드론이 없습니다.");
-    const selectEl = document.getElementById("p2pSelectedDroneIndex");
-    if(!selectEl) return;
-    
-    const petIdx = parseInt(selectEl.value);
-    if(isNaN(petIdx) || petIdx < 0 || !d.pets[petIdx]) return say("등록할 드론을 올바르게 선택해주세요.");
-
-    const petId = d.pets[petIdx];
-    const pet = PET_DB[petId];
-
-    if(['S', 'L', 'M', 'T', 'X', 'Z'].includes(pet.grade)) {
-      if(!confirm(`⚠️ 경고: [${pet.grade}등급] ${pet.name}은(는) 초고등급 드론입니다! 정말 유저거래소에 등록하시겠습니까?`)) return;
-    }
-
-    let eqIdx = d.equippedPets.indexOf(petIdx);
-    if(eqIdx !== -1) d.equippedPets.splice(eqIdx, 1);
-    
-    d.pets.splice(petIdx, 1);
-    d.equippedPets = d.equippedPets.map(eIdx => eIdx > petIdx ? eIdx - 1 : eIdx);
-
-    db.collection('quantum_p2p_market').add({
-      sellerId: currentUser.googleId,
-      sellerName: currentUser.name,
-      sellerPic: currentUser.picture,
-      type: 'drone',
-      petId: petId,
-      price: price,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-      playSuccessSound();
-      say(`🤖 [${pet.name}] 드론이 유저거래소에 성공적으로 등록되었습니다!`);
-      save();
-      loadP2PMarket();
-      updateP2PDroneSelect();
-    }).catch(err => say("등록 실패: 네트워크 상태를 확인해주세요."));
+function getP2PItemView(item) {
+  if (item.type === 'gem') {
+    return { icon: '💎', title: `보석 ${fmt(item.count || 0)}개`, subtitle: '보석 거래', typeLabel: 'gem' };
   }
+  const pet = PET_DB[item.petId];
+  return {
+    icon: pet ? pet.icon : '🤖',
+    title: pet ? pet.name : '알 수 없는 드론',
+    subtitle: pet ? `${pet.grade}급 드론` : '드론 거래',
+    typeLabel: 'drone'
+  };
 }
+function renderP2PMarketplace() {
+  const market = document.getElementById('p2pMarketList');
+  const mine = document.getElementById('p2pMyListings');
+  const mineCount = document.getElementById('p2pMyListingCount');
+  if (!market || !mine) return;
 
-function buyP2PItem(docId, sellerId, price, type, count, petId) {
-  if(!currentUser) return say("로그인이 필요합니다.");
-  if(currentUser.googleId === sellerId) return say("본인이 등록한 매물은 구매할 수 없습니다.");
-  if(d.score < price) return say("구매에 필요한 에너지가 부족합니다.");
+  const active = p2pLiveListings.filter(item => !item.status || item.status === 'active');
+  const visible = active.filter(item => p2pActiveFilter === 'all' || item.type === p2pActiveFilter);
+  const own = currentUser ? active.filter(item => item.sellerId === currentUser.googleId) : [];
+  if (mineCount) mineCount.textContent = `${own.length}개`;
 
-  db.collection('quantum_p2p_market').doc(docId).get().then(doc => {
-    if(!doc.exists) return say("이미 거래되었거나 존재하지 않는 매물입니다.");
+  market.innerHTML = visible.length ? visible.map(item => {
+    const view = getP2PItemView(item);
+    const mineItem = currentUser && item.sellerId === currentUser.googleId;
+    return `<article class="p2p-listing">
+      <div class="p2p-listing-main">
+        <div class="p2p-listing-icon">${view.icon}</div>
+        <div style="min-width:0;">
+          <div class="p2p-listing-title">${escapeP2PHtml(view.title)}</div>
+          <div class="p2p-listing-meta">${escapeP2PHtml(item.sellerName || '익명 연구원')} · ${escapeP2PHtml(view.subtitle)} · ${formatP2PAge(item)}</div>
+        </div>
+      </div>
+      <div class="p2p-listing-side">
+        <div class="p2p-price-label">판매 가격<div class="p2p-price">⚡ ${fmt(item.price || 0)}</div></div>
+        ${mineItem
+          ? `<button class="p2p-action recall" data-p2p-action="cancel" data-listing-id="${item.id}">회수</button>`
+          : `<button class="p2p-action" data-p2p-action="buy" data-listing-id="${item.id}">구매</button>`}
+      </div>
+    </article>`;
+  }).join('') : '<div class="p2p-empty">조건에 맞는 등록 매물이 없습니다.</div>';
 
-    d.score -= price;
-    if(type === 'gem') {
-      d.gems += count;
-    } else {
-      if(!d.pets) d.pets = [];
-      d.pets.push(petId);
-      checkAndDiscoverPets();
-    }
-
-    db.collection('quantum_users').doc(sellerId).get().then(sellerDoc => {
-      if(sellerDoc.exists) {
-        let sellerData = sellerDoc.data();
-        let newScore = (sellerData.score || 0) + price;
-        if(sellerData.saveData) {
-          sellerData.saveData.score = (sellerData.saveData.score || 0) + price;
-        }
-        db.collection('quantum_users').doc(sellerId).update({
-          score: newScore,
-          saveData: sellerData.saveData || {}
+  mine.innerHTML = currentUser
+    ? (own.length ? own.map(item => {
+        const view = getP2PItemView(item);
+        return `<div class="p2p-my-row"><span>${view.icon} ${escapeP2PHtml(view.title)}</span><span style="color:#fbbf24; font-weight:800;">⚡ ${fmt(item.price || 0)}</span></div>`;
+      }).join('') : '<div class="p2p-empty">현재 등록한 매물이 없습니다.</div>')
+    : '<div class="p2p-empty">구글 로그인 후 내 매물을 확인할 수 있습니다.</div>';
+}
+function loadP2PMarket() {
+  const market = document.getElementById('p2pMarketList');
+  if (!market) return;
+  if (!firebase.auth || !firebase.auth().currentUser) {
+    setP2PStatus('구글 로그인 후 거래소 연결');
+    market.innerHTML = '<div class="p2p-empty">구글 로그인 후 실시간 거래소 매물을 확인할 수 있습니다.</div>';
+    return;
+  }
+  if (p2pMarketUnsubscribe) {
+    p2pMarketUnsubscribe();
+    p2pMarketUnsubscribe = null;
+  }
+  market.innerHTML = '<div class="p2p-empty">실시간 매물을 연결하는 중입니다.</div>';
+  setP2PStatus('거래소 연결 중');
+  p2pMarketUnsubscribe = db.collection(P2P_COLLECTION)
+    .limit(100)
+    .onSnapshot(snapshot => {
+      p2pLiveListings = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => {
+          const aTime = Number(a.createdAtMs || (a.createdAt && a.createdAt.toMillis && a.createdAt.toMillis()) || 0);
+          const bTime = Number(b.createdAtMs || (b.createdAt && b.createdAt.toMillis && b.createdAt.toMillis()) || 0);
+          return bTime - aTime;
         });
-      }
+      setP2PStatus(`실시간 동기화됨 · ${p2pLiveListings.filter(item => !item.status || item.status === 'active').length}개 매물`, 'online');
+      renderP2PMarketplace();
+    }, error => {
+      console.error('P2P market listener error:', error);
+      p2pLiveListings = [];
+      setP2PStatus('거래소 연결 실패');
+      market.innerHTML = `<div class="p2p-empty" style="color:#fca5a5;">매물을 불러오지 못했습니다. Firebase Authentication과 Firestore 규칙을 확인해주세요.</div>`;
     });
-
-    db.collection('quantum_p2p_market').doc(docId).delete().then(() => {
+}
+function registerP2PItem() {
+  if (!currentUser) return say('구글 로그인을 먼저 진행해야 유저거래소를 이용할 수 있습니다.');
+  const type = document.getElementById('p2pItemType')?.value;
+  const price = Math.floor(Number(document.getElementById('p2pPrice')?.value));
+  if (!type || !Number.isFinite(price) || price < 1000) return say('판매 가격은 최소 1,000 에너지 이상이어야 합니다.');
+  const listingRef = db.collection(P2P_COLLECTION).doc();
+  const base = {
+    sellerId: currentUser.googleId,
+    sellerAuthUid: firebase.auth && firebase.auth().currentUser ? firebase.auth().currentUser.uid : null,
+    sellerName: currentUser.name || '익명 연구원',
+    sellerPic: currentUser.picture || '',
+    price,
+    status: 'active',
+    schemaVersion: 2,
+    createdAtMs: Date.now(),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if (type === 'gem') {
+    const count = Math.floor(Number(document.getElementById('p2pGemCount')?.value));
+    if (!Number.isFinite(count) || count <= 0) return say('보석 수량을 올바르게 입력해주세요.');
+    if ((d.gems || 0) < count) return say('보유한 보석이 부족합니다.');
+    d.gems -= count;
+    save();
+    setP2PStatus('보석 매물 서버에 저장 중');
+    listingRef.set({ ...base, type: 'gem', count }).then(() => {
       playSuccessSound();
-      say("✨ 유저거래소 거래가 성공적으로 완료되었습니다!");
+      say('💎 보석 매물이 클라우드 거래소에 등록되었습니다.');
+    }).catch(error => {
+      console.error('P2P gem listing error:', error);
+      d.gems += count;
       save();
-      loadP2PMarket();
-      updateP2PDroneSelect();
+      setP2PStatus('매물 등록 실패');
+      say('등록에 실패하여 보석을 복구했습니다. Firebase 권한을 확인해주세요.');
     });
+    return;
+  }
+  const petIndex = Number(document.getElementById('p2pSelectedDroneIndex')?.value);
+  if (!Number.isInteger(petIndex) || !d.pets?.[petIndex]) return say('등록할 드론을 선택해주세요.');
+  const petId = d.pets[petIndex];
+  const pet = PET_DB[petId];
+  if (!pet) return say('등록할 드론 정보를 찾지 못했습니다.');
+  if (['S','L','M','T','X','Z'].includes(pet.grade) && !confirm(`⚠️ ${pet.grade}등급 ${pet.name}을 거래소에 등록하시겠습니까?`)) return;
+  const equippedBefore = [...(d.equippedPets || [])];
+  d.pets.splice(petIndex, 1);
+  d.equippedPets = equippedBefore.filter(index => index !== petIndex).map(index => index > petIndex ? index - 1 : index);
+  save();
+  updateP2PDroneSelect();
+  setP2PStatus('드론 매물 서버에 저장 중');
+  listingRef.set({ ...base, type: 'drone', petId, petName: pet.name, petGrade: pet.grade }).then(() => {
+    playSuccessSound();
+    say(`🤖 ${pet.name} 드론이 클라우드 거래소에 등록되었습니다.`);
+  }).catch(error => {
+    console.error('P2P drone listing error:', error);
+    d.pets.splice(petIndex, 0, petId);
+    d.equippedPets = equippedBefore;
+    save();
+    updateP2PDroneSelect();
+    setP2PStatus('매물 등록 실패');
+    say('등록에 실패하여 드론을 복구했습니다. Firebase 권한을 확인해주세요.');
   });
 }
-
-function cancelP2PItem(docId) {
-  db.collection('quantum_p2p_market').doc(docId).get().then(doc => {
-    if(!doc.exists) return say("존재하지 않는 매물입니다.");
-    const data = doc.data();
-    if(data.sellerId !== currentUser.googleId) return say("본인의 매물만 회수할 수 있습니다.");
-
-    if(data.type === 'gem') {
-      d.gems += data.count;
-    } else {
-      if(!d.pets) d.pets = [];
-      d.pets.push(data.petId);
-      checkAndDiscoverPets();
-    }
-
-    db.collection('quantum_p2p_market').doc(docId).delete().then(() => {
-      playSuccessSound();
-      say("매물이 성공적으로 회수되었습니다.");
+function payP2PSeller(sellerId, price) {
+  if (!sellerId || !price) return Promise.resolve();
+  return db.collection('quantum_users').doc(sellerId).set({
+    p2pPendingEarnings: firebase.firestore.FieldValue.increment(price),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+}
+function collectP2PEarnings() {
+  if (!currentUser) return;
+  const userRef = db.collection('quantum_users').doc(currentUser.googleId);
+  userRef.get().then(snapshot => {
+    const pending = Number(snapshot.data()?.p2pPendingEarnings || 0);
+    if (pending <= 0) return;
+    return db.runTransaction(transaction => transaction.get(userRef).then(latest => {
+      const amount = Number(latest.data()?.p2pPendingEarnings || 0);
+      if (amount <= 0) return;
+      transaction.update(userRef, { p2pPendingEarnings: 0 });
+      d.score = (d.score || 0) + amount;
       save();
-      loadP2PMarket();
-      updateP2PDroneSelect();
+      say(`💰 유저거래소 판매 대금 ⚡ ${fmt(amount)}을 받았습니다.`);
+    }));
+  }).catch(error => console.error('P2P earnings collection error:', error));
+}
+function buyP2PItem(listingId) {
+  if (!currentUser) return say('구글 로그인을 먼저 진행해주세요.');
+  const listingRef = db.collection(P2P_COLLECTION).doc(listingId);
+  db.runTransaction(transaction => transaction.get(listingRef).then(snapshot => {
+    if (!snapshot.exists) throw new Error('not-found');
+    const item = snapshot.data();
+    if (item.status && item.status !== 'active') throw new Error('not-active');
+    if (item.sellerId === currentUser.googleId) throw new Error('own-listing');
+    if ((d.score || 0) < Number(item.price || 0)) throw new Error('insufficient-score');
+    transaction.update(listingRef, {
+      status: 'sold',
+      buyerId: currentUser.googleId,
+      buyerName: currentUser.name || '익명 연구원',
+      soldAt: firebase.firestore.FieldValue.serverTimestamp(),
+      soldAtMs: Date.now()
     });
+    return item;
+  })).then(item => {
+    d.score -= Number(item.price || 0);
+    if (item.type === 'gem') d.gems = (d.gems || 0) + Number(item.count || 0);
+    else {
+      if (!d.pets) d.pets = [];
+      d.pets.push(item.petId);
+      checkAndDiscoverPets();
+      updateP2PDroneSelect();
+    }
+    save();
+    return payP2PSeller(item.sellerId, Number(item.price || 0));
+  }).then(() => {
+    playSuccessSound();
+    say('✨ 거래가 완료되었습니다. 판매 대금은 판매자의 거래소 지갑에 적립됩니다.');
+  }).catch(error => {
+    const messages = {
+      'not-found': '이미 삭제된 매물입니다.',
+      'not-active': '이미 판매되었거나 회수된 매물입니다.',
+      'own-listing': '본인이 등록한 매물은 구매할 수 없습니다.',
+      'insufficient-score': '구매에 필요한 에너지가 부족합니다.'
+    };
+    console.error('P2P purchase error:', error);
+    say(messages[error.message] || '구매에 실패했습니다. 거래소 권한과 네트워크를 확인해주세요.');
   });
+}
+function cancelP2PItem(listingId) {
+  if (!currentUser) return say('로그인이 필요합니다.');
+  const listingRef = db.collection(P2P_COLLECTION).doc(listingId);
+  db.runTransaction(transaction => transaction.get(listingRef).then(snapshot => {
+    if (!snapshot.exists) throw new Error('not-found');
+    const item = snapshot.data();
+    if (item.sellerId !== currentUser.googleId) throw new Error('not-owner');
+    if (item.status && item.status !== 'active') throw new Error('not-active');
+    transaction.update(listingRef, { status: 'cancelled', cancelledAt: firebase.firestore.FieldValue.serverTimestamp(), cancelledAtMs: Date.now() });
+    return item;
+  })).then(item => {
+    if (item.type === 'gem') d.gems = (d.gems || 0) + Number(item.count || 0);
+    else {
+      if (!d.pets) d.pets = [];
+      d.pets.push(item.petId);
+      checkAndDiscoverPets();
+      updateP2PDroneSelect();
+    }
+    save();
+    playSuccessSound();
+    say('매물을 회수했고 판매 품목을 돌려드렸습니다.');
+  }).catch(error => {
+    console.error('P2P cancellation error:', error);
+    say(error.message === 'not-owner' ? '본인의 매물만 회수할 수 있습니다.' : '매물 회수에 실패했습니다.');
+  });
+}
+function setP2PFilter(filter) {
+  p2pActiveFilter = filter;
+  document.querySelectorAll('[data-p2p-filter]').forEach(button => button.classList.toggle('active', button.dataset.p2pFilter === filter));
+  renderP2PMarketplace();
+}
+function initP2PMarketplace() {
+  const panel = document.getElementById('p2pPanel');
+  if (!panel) return;
+  if (panel.dataset.p2pReady !== 'true') {
+    panel.dataset.p2pReady = 'true';
+    panel.addEventListener('click', event => {
+    const filterButton = event.target.closest('[data-p2p-filter]');
+    if (filterButton) return setP2PFilter(filterButton.dataset.p2pFilter);
+    const actionButton = event.target.closest('[data-p2p-action]');
+    if (!actionButton) return;
+    const id = actionButton.dataset.listingId;
+      if (actionButton.dataset.p2pAction === 'buy') buyP2PItem(id);
+      if (actionButton.dataset.p2pAction === 'cancel') cancelP2PItem(id);
+    });
+  }
+  toggleP2PItemTypeSelector();
+  updateP2PDroneSelect();
+  loadP2PMarket();
+  collectP2PEarnings();
 }
 
 function parseJwt(token) {
@@ -2182,10 +2337,9 @@ function parseJwt(token) {
   } catch (e) { return null; }
 }
 
-window.handleCredentialResponse = function(response) {
+window.handleCredentialResponse = async function(response) {
   const responsePayload = parseJwt(response.credential);
   if (!responsePayload) return;
-
   currentUser = {
     googleId: responsePayload.sub,
     name: responsePayload.name,
@@ -2194,7 +2348,18 @@ window.handleCredentialResponse = function(response) {
   };
   localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
   updateUserUI();
+  try {
+    if (firebase.auth) {
+      const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
+      await firebase.auth().signInWithCredential(credential);
+    }
+  } catch (error) {
+    console.error('Firebase Authentication sign-in error:', error);
+    say('Google 로그인은 완료되었지만 거래소 인증 연결에 실패했습니다. Firebase Auth 설정을 확인해주세요.');
+  }
   loadFromCloud();
+  if (typeof initP2PMarketplace === 'function') initP2PMarketplace();
+  if (typeof collectP2PEarnings === 'function') collectP2PEarnings();
   say(`환영합니다, ${currentUser.name} 연구원님!`);
 };
 
@@ -3460,7 +3625,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(p2pItemTypeSelect) {
     p2pItemTypeSelect.onchange = toggleP2PItemTypeSelector;
   }
-
+  initP2PMarketplace();
   const exploreMineBtn = document.getElementById("exploreMineBtn");
   const upgradeMineBtn = document.getElementById("upgradeMineBtn");
   if(exploreMineBtn) exploreMineBtn.onclick = exploreMine;
