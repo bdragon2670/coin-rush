@@ -1414,6 +1414,38 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.firestore();
+let firebaseAuthStateUser = null;
+
+function waitForFirebaseUser(timeoutMs = 8000) {
+  const auth = firebase.auth();
+  if (auth.currentUser) return Promise.resolve(auth.currentUser);
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    let timer = null;
+    let unsubscribe = () => {};
+    const finish = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      if (timer) clearTimeout(timer);
+      unsubscribe();
+      callback(value);
+    };
+    unsubscribe = auth.onAuthStateChanged(
+      user => { if (user) finish(resolve, user); },
+      error => finish(reject, error)
+    );
+    timer = setTimeout(() => {
+      finish(reject, new Error('firebase-auth-timeout'));
+    }, timeoutMs);
+  });
+}
+
+firebase.auth().onAuthStateChanged(user => {
+  firebaseAuthStateUser = user || null;
+  if (!user) return;
+  if (typeof initP2PMarketplace === 'function') initP2PMarketplace();
+  if (typeof collectP2PEarnings === 'function') collectP2PEarnings();
+});
 
 const saveKey = "energyRush_PermanentSaveData_v148";
 const cloudSaveStatusKey = `${saveKey}_CloudSaveStatus`;
@@ -1931,8 +1963,7 @@ function claimAllEncyclopediaRewards() {
   save();
 }
 
-function getCloudUserDocRef() {
-  const firebaseUser = firebase.auth && firebase.auth().currentUser;
+function getCloudUserDocRef(firebaseUser = firebase.auth && firebase.auth().currentUser) {
   if (!currentUser || !firebaseUser) return null;
   return db.collection('quantum_users').doc(firebaseUser.uid);
 }
@@ -1948,44 +1979,57 @@ function normalizeCloudSaveData(saveData) {
   if (!d.stockHistories) d.stockHistories = { 1: [500,500], 2: [500,500], 3: [500,500], 4: [500,500] };
 }
 
-function saveToCloud() {
+async function saveToCloud() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해주세요.");
-  const firebaseUser = firebase.auth && firebase.auth().currentUser;
-  const cloudRef = getCloudUserDocRef();
-  if(!firebaseUser || !cloudRef) return say("클라우드 인증을 준비 중입니다. 잠시 후 다시 시도해주세요.");
-  cloudRef.set({
-    googleId: currentUser.googleId,
-    authUid: firebaseUser.uid,
-    name: currentUser.name,
-    picture: currentUser.picture,
-    score: d.score,
-    level: d.level || 1,
-    saveData: d,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true }).then(() => {
+  let firebaseUser;
+  try {
+    firebaseUser = await waitForFirebaseUser();
+  } catch (error) {
+    console.error('Firebase Authentication is not ready:', error);
+    return say("Firebase 인증에 연결하지 못했습니다. Firebase Authentication의 Google 로그인을 사용 설정해주세요.");
+  }
+  const cloudRef = getCloudUserDocRef(firebaseUser);
+  try {
+    await cloudRef.set({
+      googleId: currentUser.googleId,
+      authUid: firebaseUser.uid,
+      name: currentUser.name,
+      picture: currentUser.picture,
+      score: d.score,
+      level: d.level || 1,
+      saveData: d,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
     markCloudSaveComplete();
     playSuccessSound();
     say("☁️ 현재 레벨 및 전체 게임 데이터가 클라우드에 즉시 저장되었습니다!");
     loadGlobalRanking();
-  }).catch(err => {
-    console.error('Cloud save error:', err);
-    if (err && err.code === 'permission-denied') {
+  } catch (error) {
+    console.error('Cloud save error:', error);
+    if (error && error.code === 'permission-denied') {
       say("클라우드 저장 권한이 없습니다. 최신 Firestore 규칙을 게시해주세요.");
     } else {
       say("클라우드 저장에 실패했습니다. 네트워크 상태를 확인해주세요.");
     }
-  });
+  }
 }
 
-function loadFromCloud() {
+async function loadFromCloud() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해주세요.");
-  const cloudRef = getCloudUserDocRef();
-  if(!cloudRef) return say("클라우드 인증을 준비 중입니다. 잠시 후 다시 시도해주세요.");
-  cloudRef.get().then(doc => {
-    if(doc.exists && doc.data().saveData) return doc;
-    // 이전 버전에서 Google ID를 문서 ID로 쓰던 저장 데이터도 한 번 읽어옵니다.
-    return db.collection('quantum_users').doc(currentUser.googleId).get();
-  }).then(doc => {
+  let firebaseUser;
+  try {
+    firebaseUser = await waitForFirebaseUser();
+  } catch (error) {
+    console.error('Firebase Authentication is not ready:', error);
+    return say("Firebase 인증에 연결하지 못했습니다. Firebase Authentication의 Google 로그인을 사용 설정해주세요.");
+  }
+  const cloudRef = getCloudUserDocRef(firebaseUser);
+  try {
+    let doc = await cloudRef.get();
+    if (!doc.exists || !doc.data().saveData) {
+      // 이전 버전에서 Google ID를 문서 ID로 쓰던 저장 데이터도 한 번 읽어옵니다.
+      doc = await db.collection('quantum_users').doc(currentUser.googleId).get();
+    }
     if(doc.exists && doc.data().saveData) {
       normalizeCloudSaveData(doc.data().saveData);
       save();
@@ -1995,10 +2039,10 @@ function loadFromCloud() {
     } else {
       say("서버에 저장된 클라우드 데이터가 없습니다.");
     }
-  }).catch(err => {
-    console.error('Cloud load error:', err);
+  } catch (error) {
+    console.error('Cloud load error:', error);
     say("클라우드 데이터를 불러오지 못했습니다. Firestore 권한을 확인해주세요.");
-  });
+  }
 }
 
 function loadGlobalRanking() {
@@ -2382,7 +2426,7 @@ function parseJwt(token) {
 
 window.handleCredentialResponse = async function(response) {
   const responsePayload = parseJwt(response.credential);
-  if (!responsePayload) return;
+  if (!responsePayload) return say('Google 로그인 정보를 읽지 못했습니다. 다시 로그인해주세요.');
   currentUser = {
     googleId: responsePayload.sub,
     name: responsePayload.name,
@@ -2391,19 +2435,22 @@ window.handleCredentialResponse = async function(response) {
   };
   localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
   updateUserUI();
+
   try {
-    if (firebase.auth) {
-      const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
-      await firebase.auth().signInWithCredential(credential);
-    }
+    const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
+    const authResult = await firebase.auth().signInWithCredential(credential);
+    if (!authResult || !authResult.user) throw new Error('firebase-auth-user-missing');
+    await waitForFirebaseUser();
+
+    if (typeof initP2PMarketplace === 'function') initP2PMarketplace();
+    if (typeof collectP2PEarnings === 'function') collectP2PEarnings();
+    loadFromCloud();
+    say(`환영합니다, ${currentUser.name} 연구원님!`);
   } catch (error) {
     console.error('Firebase Authentication sign-in error:', error);
-    say('Google 로그인은 완료되었지만 거래소 인증 연결에 실패했습니다. Firebase Auth 설정을 확인해주세요.');
+    const code = error && error.code ? ` (${error.code})` : '';
+    say(`Firebase Google 인증에 실패했습니다${code}. Firebase Console에서 Authentication → Sign-in method → Google을 사용 설정해주세요.`);
   }
-  loadFromCloud();
-  if (typeof initP2PMarketplace === 'function') initP2PMarketplace();
-  if (typeof collectP2PEarnings === 'function') collectP2PEarnings();
-  say(`환영합니다, ${currentUser.name} 연구원님!`);
 };
 
 window.googleIdentityInitialized = false;
