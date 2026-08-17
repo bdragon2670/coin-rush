@@ -2020,6 +2020,7 @@ const P2P_COLLECTION = 'quantum_p2p_market';
 let p2pMarketUnsubscribe = null;
 let p2pActiveFilter = 'all';
 let p2pLiveListings = [];
+let p2pClaimInProgress = false;
 
 function escapeP2PHtml(value) {
   return String(value ?? '').replace(/[&<>"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[char]));
@@ -2141,6 +2142,7 @@ function loadP2PMarket() {
         });
       setP2PStatus(`실시간 동기화됨 · ${p2pLiveListings.filter(item => !item.status || item.status === 'active').length}개 매물`, 'online');
       renderP2PMarketplace();
+      collectP2PEarnings();
     }, error => {
       console.error('P2P market listener error:', error);
       p2pLiveListings = [];
@@ -2150,13 +2152,15 @@ function loadP2PMarket() {
 }
 function registerP2PItem() {
   if (!currentUser) return say('구글 로그인을 먼저 진행해야 유저거래소를 이용할 수 있습니다.');
+  const marketAuthUser = firebase.auth && firebase.auth().currentUser;
+  if (!marketAuthUser) return say('거래소 인증을 준비 중입니다. 잠시 후 다시 시도해주세요.');
   const type = document.getElementById('p2pItemType')?.value;
   const price = Math.floor(Number(document.getElementById('p2pPrice')?.value));
   if (!type || !Number.isFinite(price) || price < 1000) return say('판매 가격은 최소 1,000 에너지 이상이어야 합니다.');
   const listingRef = db.collection(P2P_COLLECTION).doc();
   const base = {
     sellerId: currentUser.googleId,
-    sellerAuthUid: firebase.auth && firebase.auth().currentUser ? firebase.auth().currentUser.uid : null,
+    sellerAuthUid: marketAuthUser.uid,
     sellerName: currentUser.name || '익명 연구원',
     sellerPic: currentUser.picture || '',
     price,
@@ -2209,31 +2213,45 @@ function registerP2PItem() {
     say('등록에 실패하여 드론을 복구했습니다. Firebase 권한을 확인해주세요.');
   });
 }
-function payP2PSeller(sellerId, price) {
-  if (!sellerId || !price) return Promise.resolve();
-  return db.collection('quantum_users').doc(sellerId).set({
-    p2pPendingEarnings: firebase.firestore.FieldValue.increment(price),
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
-}
 function collectP2PEarnings() {
-  if (!currentUser) return;
-  const userRef = db.collection('quantum_users').doc(currentUser.googleId);
-  userRef.get().then(snapshot => {
-    const pending = Number(snapshot.data()?.p2pPendingEarnings || 0);
-    if (pending <= 0) return;
-    return db.runTransaction(transaction => transaction.get(userRef).then(latest => {
-      const amount = Number(latest.data()?.p2pPendingEarnings || 0);
-      if (amount <= 0) return;
-      transaction.update(userRef, { p2pPendingEarnings: 0 });
-      d.score = (d.score || 0) + amount;
-      save();
-      say(`💰 유저거래소 판매 대금 ⚡ ${fmt(amount)}을 받았습니다.`);
+  const marketAuthUser = firebase.auth && firebase.auth().currentUser;
+  if (!currentUser || !marketAuthUser || p2pClaimInProgress) return;
+  const soldListings = p2pLiveListings.filter(item =>
+    item.status === 'sold' && item.sellerAuthUid === marketAuthUser.uid
+  );
+  if (!soldListings.length) return;
+
+  p2pClaimInProgress = true;
+  Promise.all(soldListings.map(item => {
+    const listingRef = db.collection(P2P_COLLECTION).doc(item.id);
+    return db.runTransaction(transaction => transaction.get(listingRef).then(snapshot => {
+      if (!snapshot.exists) return 0;
+      const latest = snapshot.data();
+      if (latest.status !== 'sold' || latest.sellerAuthUid !== marketAuthUser.uid) return 0;
+      transaction.update(listingRef, {
+        status: 'claimed',
+        claimedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        claimedAtMs: Date.now()
+      });
+      return Number(latest.price || 0);
     }));
-  }).catch(error => console.error('P2P earnings collection error:', error));
+  })).then(amounts => {
+    const total = amounts.reduce((sum, amount) => sum + amount, 0);
+    if (total <= 0) return;
+    d.score = (d.score || 0) + total;
+    save();
+    playSuccessSound();
+    say(`💰 유저거래소 판매 대금 ⚡ ${fmt(total)}을 받았습니다.`);
+  }).catch(error => {
+    console.error('P2P earnings claim error:', error);
+  }).finally(() => {
+    p2pClaimInProgress = false;
+  });
 }
 function buyP2PItem(listingId) {
   if (!currentUser) return say('구글 로그인을 먼저 진행해주세요.');
+  const marketAuthUser = firebase.auth && firebase.auth().currentUser;
+  if (!marketAuthUser) return say('거래소 인증을 준비 중입니다. 잠시 후 다시 시도해주세요.');
   const listingRef = db.collection(P2P_COLLECTION).doc(listingId);
   db.runTransaction(transaction => transaction.get(listingRef).then(snapshot => {
     if (!snapshot.exists) throw new Error('not-found');
@@ -2245,24 +2263,24 @@ function buyP2PItem(listingId) {
       status: 'sold',
       buyerId: currentUser.googleId,
       buyerName: currentUser.name || '익명 연구원',
+      buyerAuthUid: marketAuthUser.uid,
       soldAt: firebase.firestore.FieldValue.serverTimestamp(),
       soldAtMs: Date.now()
     });
     return item;
   })).then(item => {
     d.score -= Number(item.price || 0);
-    if (item.type === 'gem') d.gems = (d.gems || 0) + Number(item.count || 0);
-    else {
+    if (item.type === 'gem') {
+      d.gems = (d.gems || 0) + Number(item.count || 0);
+    } else {
       if (!d.pets) d.pets = [];
       d.pets.push(item.petId);
       checkAndDiscoverPets();
       updateP2PDroneSelect();
     }
     save();
-    return payP2PSeller(item.sellerId, Number(item.price || 0));
-  }).then(() => {
     playSuccessSound();
-    say('✨ 거래가 완료되었습니다. 판매 대금은 판매자의 거래소 지갑에 적립됩니다.');
+    say('✨ 거래가 완료되었습니다. 판매자는 접속 시 판매 대금을 받습니다.');
   }).catch(error => {
     const messages = {
       'not-found': '이미 삭제된 매물입니다.',
