@@ -1135,20 +1135,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <div class="google-box">
         <h3 style="color:var(--text-main);margin:0 0 8px;font-size:14px;">☁️ 구글 계정 클라우드 데이터 세이브</h3>
         <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">구글 로그인 후 클라우드 서버에 안전하게 데이터를 동기화하고 언제든 불러오세요!</p>
-        
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-        <div id="g_id_onload"
-             data-client_id="458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com"
-             data-callback="handleCredentialResponse"
-             data-auto_prompt="false"
-             data-context="signin"
-             data-ux_mode="popup">
-        </div>
         <div style="display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
-          <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
+          <div id="googleSignInButton"></div>
         </div>
 
         <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
@@ -1702,6 +1692,7 @@ function getRequiredExp(level) {
 }
 
 function addExp(amount) {
+  // 10분 주기 중 처음 2분 동안은 경험치 2배 적용
   const totalCycleSec = 10 * 60;
   const eventDurationSec = 2 * 60;
   const currentSecInCycle = Math.floor(Date.now() / 1000) % totalCycleSec;
@@ -1758,7 +1749,6 @@ function equipTitle(tId) {
   say(`🏅 칭호 [${TITLES_DB[tId].name}] 장착 완료!`);
   save();
 }
-window.equipTitle = equipTitle;
 
 function renderTitles() {
   const container = document.getElementById("titleGridContainer");
@@ -1816,7 +1806,6 @@ function claimEncyclopediaReward(petId) {
     save();
   }
 }
-window.claimEncyclopediaReward = claimEncyclopediaReward;
 
 function claimAllEncyclopediaRewards() {
   if(!d.discoveredPets) d.discoveredPets = [];
@@ -2010,8 +1999,6 @@ function loadP2PMarket() {
     container.innerHTML = "<p style='text-align:center; color:#ef4444; font-size:12px;'>유저거래 매물을 불러오지 못했습니다.</p>";
   });
 }
-window.buyP2PItem = buyP2PItem;
-window.cancelP2PItem = cancelP2PItem;
 
 function registerP2PItem() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해야 유저거래소를 이용할 수 있습니다.");
@@ -2160,50 +2147,48 @@ function parseJwt(token) {
   } catch (e) { return null; }
 }
 
-// 1. 콜백 함수를 전역에 먼저 정의
 window.handleCredentialResponse = function(response) {
   const responsePayload = parseJwt(response.credential);
-  if (responsePayload) {
-    currentUser = {
-      googleId: responsePayload.sub,
-      name: responsePayload.name,
-      picture: responsePayload.picture,
-      email: responsePayload.email
-    };
-    localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
-    updateUserUI();
-    loadFromCloud();
-    say(`환영합니다, ${currentUser.name} 연구원님!`);
-  }
+  if (!responsePayload) return;
+
+  currentUser = {
+    googleId: responsePayload.sub,
+    name: responsePayload.name,
+    picture: responsePayload.picture,
+    email: responsePayload.email
+  };
+  localStorage.setItem("energyRushGoogleUser", JSON.stringify(currentUser));
+  updateUserUI();
+  loadFromCloud();
+  say(`환영합니다, ${currentUser.name} 연구원님!`);
 };
 
-// 2. 구글 라이브러리 로드 후 안전하게 초기화
-function initGoogleAuth() {
-  try {
-    if (window.google && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: "458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com",
-        callback: window.handleCredentialResponse
-      });
-      const signinDiv = document.querySelector(".g_id_signin");
-      if (signinDiv) {
-        google.accounts.id.renderButton(
-          signinDiv,
-          { theme: "outline", size: "large", text: "sign_in_with", shape: "rectangular" }
-        );
-      }
-    }
-  } catch(e) {
-    console.log("Google Auth Init Error:", e);
+window.googleIdentityInitialized = false;
+window.initGoogleIdentity = function() {
+  const buttonContainer = document.getElementById("googleSignInButton");
+  if (
+    window.googleIdentityInitialized ||
+    !buttonContainer ||
+    !window.google?.accounts?.id ||
+    typeof window.handleCredentialResponse !== "function"
+  ) {
+    return;
   }
-}
 
-window.addEventListener("load", () => {
-  setTimeout(initGoogleAuth, 500);
-});
-  
-  // ... (나머지 DOMContentLoaded 내부 코드들)
-});
+  window.google.accounts.id.initialize({
+    client_id: "458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com",
+    callback: window.handleCredentialResponse,
+    auto_select: false
+  });
+  window.googleIdentityInitialized = true;
+  window.google.accounts.id.renderButton(buttonContainer, {
+    theme: "outline",
+    size: "large",
+    text: "sign_in_with",
+    shape: "rectangular",
+    logo_alignment: "left"
+  });
+};
 
 function updateUserUI() {
   const userAvatar = document.getElementById("userAvatar");
@@ -2838,6 +2823,7 @@ function renderEncyclopedia() {
     container.appendChild(card);
   });
 }
+window.claimEncyclopediaReward = claimEncyclopediaReward;
 
 function huntMonster(tier) {
   let costs = { 1: 2000, 2: 10000, 3: 50000 };
@@ -3390,20 +3376,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserUI();
   render();
 
-  try {
-    if (window.google && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: "458198508620-vfgev33kmafqufdgoj8n5bqgfuk1l998.apps.googleusercontent.com",
-        callback: window.handleCredentialResponse // callback을 명시적으로 연결
-      });
-      google.accounts.id.renderButton(
-        document.querySelector(".g_id_signin"),
-        { theme: "outline", size: "large", text: "sign_in_with", shape: "rectangular" }
-      );
-    }
-  } catch(e) {
-    console.log("Google Auth Init Warning:", e);
-  }
 
   const bgmToggle = document.getElementById("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
@@ -3910,4 +3882,23 @@ document.addEventListener("DOMContentLoaded", () => {
       if (bet < 500 || d.score < bet) return say("최소 투자 에너지는 500 이상입니다.");
       d.score -= bet;
       let success = Math.random() < 0.50;
-      if(document.getElementById("저는 언어 모델일 뿐이라 그것을 이해하지 못해서 도와드릴 수가 없습니다.
+      if(document.getElementById("game4Display")) document.getElementById("game4Display").textContent = success ? "⏳ 오라클 예측 성공!" : "⌛ 타임라인 어긋남 (실패)";
+      if (success) { 
+        const reward = Math.floor(bet * 1.8);
+        d.score += reward;
+        d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + reward;
+        addExp(20);
+        playSuccessSound();
+        say(`오라클 예측 성공! (+${fmt(reward)})`);
+      } else {
+        playFailureSound();
+        say("타임라인이 어긋나 에너지를 잃었습니다.");
+      }
+      save();
+    };
+  }
+});
+</script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="window.initGoogleIdentity()"></script>
+</body>
+</html>
