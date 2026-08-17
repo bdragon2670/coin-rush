@@ -1931,10 +1931,31 @@ function claimAllEncyclopediaRewards() {
   save();
 }
 
+function getCloudUserDocRef() {
+  const firebaseUser = firebase.auth && firebase.auth().currentUser;
+  if (!currentUser || !firebaseUser) return null;
+  return db.collection('quantum_users').doc(firebaseUser.uid);
+}
+
+function normalizeCloudSaveData(saveData) {
+  d = saveData;
+  if (!d.equippedPets) d.equippedPets = [];
+  if (!d.discoveredPets) d.discoveredPets = [];
+  if (!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
+  if (!d.unlockedTitles) d.unlockedTitles = ['novice'];
+  if (!d.ownedWeapons) d.ownedWeapons = [0];
+  if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
+  if (!d.stockHistories) d.stockHistories = { 1: [500,500], 2: [500,500], 3: [500,500], 4: [500,500] };
+}
+
 function saveToCloud() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해주세요.");
-  db.collection('quantum_users').doc(currentUser.googleId).set({
+  const firebaseUser = firebase.auth && firebase.auth().currentUser;
+  const cloudRef = getCloudUserDocRef();
+  if(!firebaseUser || !cloudRef) return say("클라우드 인증을 준비 중입니다. 잠시 후 다시 시도해주세요.");
+  cloudRef.set({
     googleId: currentUser.googleId,
+    authUid: firebaseUser.uid,
     name: currentUser.name,
     picture: currentUser.picture,
     score: d.score,
@@ -1947,23 +1968,26 @@ function saveToCloud() {
     say("☁️ 현재 레벨 및 전체 게임 데이터가 클라우드에 즉시 저장되었습니다!");
     loadGlobalRanking();
   }).catch(err => {
-    say("클라우드 저장 실패: 할당량 또는 권한을 확인해주세요.");
+    console.error('Cloud save error:', err);
+    if (err && err.code === 'permission-denied') {
+      say("클라우드 저장 권한이 없습니다. 최신 Firestore 규칙을 게시해주세요.");
+    } else {
+      say("클라우드 저장에 실패했습니다. 네트워크 상태를 확인해주세요.");
+    }
   });
 }
 
 function loadFromCloud() {
   if(!currentUser) return say("구글 로그인을 먼저 진행해주세요.");
-  db.collection('quantum_users').doc(currentUser.googleId).get().then(doc => {
+  const cloudRef = getCloudUserDocRef();
+  if(!cloudRef) return say("클라우드 인증을 준비 중입니다. 잠시 후 다시 시도해주세요.");
+  cloudRef.get().then(doc => {
+    if(doc.exists && doc.data().saveData) return doc;
+    // 이전 버전에서 Google ID를 문서 ID로 쓰던 저장 데이터도 한 번 읽어옵니다.
+    return db.collection('quantum_users').doc(currentUser.googleId).get();
+  }).then(doc => {
     if(doc.exists && doc.data().saveData) {
-      d = doc.data().saveData;
-      if(!d.equippedPets) d.equippedPets = [];
-      if(!d.discoveredPets) d.discoveredPets = [];
-      if(!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
-      if(!d.unlockedTitles) d.unlockedTitles = ['novice'];
-      if(!d.ownedWeapons) d.ownedWeapons = [0];
-      if(!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
-      if(!d.stockHistories) d.stockHistories = { 1: [500,500], 2: [500,500], 3: [500,500], 4: [500,500] };
-      
+      normalizeCloudSaveData(doc.data().saveData);
       save();
       markCloudSaveComplete();
       playSuccessSound();
@@ -1972,7 +1996,8 @@ function loadFromCloud() {
       say("서버에 저장된 클라우드 데이터가 없습니다.");
     }
   }).catch(err => {
-    say("데이터 불러오기 실패");
+    console.error('Cloud load error:', err);
+    say("클라우드 데이터를 불러오지 못했습니다. Firestore 권한을 확인해주세요.");
   });
 }
 
