@@ -681,7 +681,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
-      <div class="stat"><span>5초당 자동채굴</span><b id="cps">0</b></div>
+      <div class="stat"><span>3초당 자동채굴</span><b id="cps">0</b></div>
       <div class="stat"><span>클릭 효율 파워</span><b id="power">1</b></div>
       <div class="stat"><span>보유 보석 💎</span><b id="gemCount">0</b></div>
     </div>
@@ -704,11 +704,12 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <div class="upgrades" id="autoUpgradeCardBox">
         <div class="upgrade-row">
           <div>
-            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0</b> <span id="autoLockTag" style="font-size:10px; color:#f43f5e;">(🔒 Lv.10 달성 시 잠금해제)</span></h3>
-            <small style="color:var(--text-sub);">5초마다 자동 채굴 및 경험치 연동</small>
+            <h3>🤖 자동 채굴 장치 <b id="autoLv" style="color:var(--accent)">Lv.0 / 10</b> <span id="autoLockTag" style="font-size:10px; color:#f43f5e;">(🔒 Lv.10 달성 시 잠금해제)</span></h3>
+            <small id="autoMiningInfo" style="color:var(--text-sub);">3초마다 자동 채굴 · 업그레이드로 채굴량 증가</small>
           </div>
-          <div style="display: flex; align-items: center; gap: 8px;" id="autoControlArea">
+          <div style="display: flex; flex-wrap:wrap; justify-content:flex-end; align-items: center; gap: 8px;" id="autoControlArea">
             <button id="autoToggleBtn" class="toggle-btn off">OFF</button>
+            <button id="autoUpgradeBtn" disabled>업그레이드</button>
             <button id="autoBtn">자동채굴 장치 구매 (1,200)</button>
           </div>
         </div>
@@ -1481,7 +1482,7 @@ let d = JSON.parse(savedRawData || "null") || {
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
   pets: [], equippedPets: [], discoveredPets: [], claimedEncyclopedia: [], 
   attendDays: 0, lastAttendDayStr: "", 
-  autoEnabled: false, autoPurchased: false,
+  autoEnabled: false, autoPurchased: false, autoLevel: 0,
   permPower: 0, permCps: 0, permLuck: 0, permGem: 0, gems: 0,
   coinColor: 'emerald', coinIcon: '⚡', customImg: null, bgImg: null,
   stock1: 0, stock2: 0, stock3: 0, stock4: 0,
@@ -1532,6 +1533,11 @@ if (d.exp === undefined) d.exp = 0;
 if (d.attendDays === undefined) d.attendDays = 0;
 if (!d.lastAttendDayStr) d.lastAttendDayStr = "";
 if (d.cps === undefined) d.cps = 0;
+if (d.autoLevel === undefined || !Number.isFinite(Number(d.autoLevel))) {
+  d.autoLevel = d.autoPurchased ? Math.min(10, Math.max(1, Math.round((d.cps || 10) / 10))) : 0;
+}
+d.autoLevel = Math.min(10, Math.max(0, Math.floor(d.autoLevel)));
+if (d.autoPurchased && d.autoLevel < 1) d.autoLevel = 1;
 
 if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
 if (!d.stockHistories) d.stockHistories = {
@@ -1651,6 +1657,75 @@ const COLOR_GRADIENTS = {
 let msgTimer = null;
 let draggedPetIdx = null;
 let autoclickInterval = null;
+let autoMiningInterval = null;
+let autoMiningPersistTimer = null;
+const AUTO_MINING_INTERVAL_MS = 3000;
+const AUTO_MINING_MAX_LEVEL = 10;
+const AUTO_MINING_BASE_YIELD = 10;
+
+function getAutoMiningBaseYield() {
+  return d.autoPurchased ? AUTO_MINING_BASE_YIELD * Math.max(1, d.autoLevel || 1) : 0;
+}
+
+function getAutoMiningUpgradeCost() {
+  const level = Math.max(1, d.autoLevel || 1);
+  return Math.round(1800 * Math.pow(1.6, level - 1));
+}
+
+function getAutoMiningReward() {
+  if (!d.autoPurchased || !d.autoEnabled) return 0;
+  const petBonus = getPetBonus();
+  const filterBonus = d.filter ? 1.25 : 1.0;
+  const gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
+  const gemRingBonus = d.gemRing ? 1.08 : 1.0;
+  const baseYield = getAutoMiningBaseYield() + (d.permCps || 0);
+  return Math.max(1, Math.floor(baseYield * filterBonus * gemAutoBonus * gemRingBonus * getBaseMult() * petBonus.cpsMult * petBonus.coinMult));
+}
+
+function updateAutoMiningHud() {
+  const scoreEl = document.getElementById("score");
+  const cpsEl = document.getElementById("cps");
+  const autoLvEl = document.getElementById("autoLv");
+  const infoEl = document.getElementById("autoMiningInfo");
+  const enabled = d.autoPurchased && d.autoEnabled;
+  const reward = getAutoMiningReward();
+  if (scoreEl) scoreEl.textContent = fmt(d.score);
+  if (cpsEl) cpsEl.textContent = fmt(reward);
+  if (autoLvEl) autoLvEl.textContent = `Lv.${d.autoLevel || 0} / ${AUTO_MINING_MAX_LEVEL}`;
+  if (infoEl) {
+    infoEl.textContent = d.autoPurchased
+      ? (enabled ? `3초마다 ${fmt(reward)} 에너지 자동 채굴 중` : `3초마다 ${fmt(getAutoMiningBaseYield())} 에너지 · 현재 정지됨`)
+      : "3초마다 자동 채굴 · 업그레이드로 채굴량 증가";
+  }
+}
+
+function scheduleAutoMiningPersist() {
+  markCloudSavePending();
+  if (autoMiningPersistTimer) return;
+  autoMiningPersistTimer = setTimeout(() => {
+    localStorage.setItem(saveKey, JSON.stringify(d));
+    autoMiningPersistTimer = null;
+  }, 1200);
+}
+
+function runAutoMiningTick() {
+  if (!d.autoPurchased || !d.autoEnabled) return;
+  const reward = getAutoMiningReward();
+  if (reward <= 0) return;
+  const previousLevel = d.level || 1;
+  d.score += reward;
+  d.totalEnergyEarned = (d.totalEnergyEarned || 0) + reward;
+  addExp(Math.max(1, Math.floor((d.autoLevel || 1) / 2)));
+  scheduleAutoMiningPersist();
+  updateAutoMiningHud();
+  // 레벨업처럼 화면 구조가 바뀌는 경우에만 전체 렌더링을 수행합니다.
+  if ((d.level || 1) !== previousLevel) render();
+}
+
+function startAutoMiningLoop() {
+  if (autoMiningInterval) clearInterval(autoMiningInterval);
+  autoMiningInterval = setInterval(runAutoMiningTick, AUTO_MINING_INTERVAL_MS);
+}
 
 function showStockAlertToast(msg, isUp = true) {
   playAlertDingSound();
@@ -2742,14 +2817,14 @@ function render(){
  
  let filterBonus = d.filter ? 1.25 : 1.0;
  let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
- let totalCps = (((((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus)) * baseMult * petBonus.cpsMult * petBonus.coinMult * titleBonus.cpsMult;
+ let totalCps = getAutoMiningReward();
 
  if(document.getElementById("score")) document.getElementById("score").textContent=fmt(d.score); 
  if(document.getElementById("power")) document.getElementById("power").textContent=fmt(totalPower);
  if(document.getElementById("cps")) document.getElementById("cps").textContent=fmt(totalCps); 
  if(document.getElementById("gemCount")) document.getElementById("gemCount").textContent=fmt(d.gems);
  if(document.getElementById("powerLv")) document.getElementById("powerLv").textContent="Lv."+d.power; 
- if(document.getElementById("autoLv")) document.getElementById("autoLv").textContent="Lv."+d.cps;
+ if(document.getElementById("autoLv")) document.getElementById("autoLv").textContent=`Lv.${d.autoLevel || 0} / ${AUTO_MINING_MAX_LEVEL}`;
  if(document.getElementById("rp")) document.getElementById("rp").textContent=fmt(d.rp);
  if(document.getElementById("permRpDisplay")) document.getElementById("permRpDisplay").textContent=fmt(d.rp);
 
@@ -2767,20 +2842,36 @@ function render(){
  const autoLockTag = document.getElementById("autoLockTag");
  const autoBtnEl = document.getElementById("autoBtn");
  const autoToggleBtnEl = document.getElementById("autoToggleBtn");
+ const autoUpgradeBtnEl = document.getElementById("autoUpgradeBtn");
+ const autoInfoEl = document.getElementById("autoMiningInfo");
+ const autoLevel = d.autoLevel || 0;
+ const autoBaseYield = getAutoMiningBaseYield();
+ const autoReward = getAutoMiningReward();
  if(currentLevel >= 10) {
    if(autoLockTag) { autoLockTag.textContent = "(Lv.10 달성 완료)"; autoLockTag.style.color = "#10b981"; }
    if(autoBtnEl) {
      if(d.autoPurchased) {
-       autoBtnEl.disabled = true; autoBtnEl.textContent = "보유 완료 (Lv.10)";
+       autoBtnEl.disabled = true; autoBtnEl.textContent = "설치 완료";
      } else {
        autoBtnEl.disabled = false; autoBtnEl.textContent = "자동채굴 장치 구매 (1,200)";
      }
    }
    if(autoToggleBtnEl) autoToggleBtnEl.disabled = !d.autoPurchased;
+   if(autoUpgradeBtnEl) {
+     const maxed = autoLevel >= AUTO_MINING_MAX_LEVEL;
+     autoUpgradeBtnEl.disabled = !d.autoPurchased || maxed;
+     autoUpgradeBtnEl.textContent = maxed ? "최대 Lv.10" : `강화 ${fmt(getAutoMiningUpgradeCost())}`;
+   }
  } else {
    if(autoLockTag) { autoLockTag.textContent = "(🔒 Lv.10 달성 시 잠금해제)"; autoLockTag.style.color = "#f43f5e"; }
    if(autoBtnEl) { autoBtnEl.disabled = true; autoBtnEl.textContent = "🔒 Lv.10 잠금됨"; }
    if(autoToggleBtnEl) autoToggleBtnEl.disabled = true;
+   if(autoUpgradeBtnEl) { autoUpgradeBtnEl.disabled = true; autoUpgradeBtnEl.textContent = "강화 잠김"; }
+ }
+ if(autoInfoEl) {
+   autoInfoEl.textContent = d.autoPurchased
+     ? (d.autoEnabled ? `3초마다 ${fmt(autoReward)} 에너지 자동 채굴 중` : `3초마다 ${fmt(autoBaseYield)} 에너지 · 현재 정지됨`)
+     : "3초마다 자동 채굴 · 업그레이드로 채굴량 증가";
  }
 
  const tabGemShop = document.getElementById("tab_gemShop");
@@ -3667,6 +3758,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserUI();
   render();
   startExpEventCountdown();
+  startAutoMiningLoop();
   const bgmToggle = document.getElementById("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
 
@@ -3957,6 +4049,24 @@ document.addEventListener("DOMContentLoaded", () => {
       if((d.level || 1) < 10) return say("자동 채굴 장치는 10레벨 이상부터 이용 가능합니다!");
       if(!d.autoPurchased) return say("자동 채굴 장치를 먼저 구매해야 합니다!");
       d.autoEnabled = !d.autoEnabled;
+      say(d.autoEnabled ? "🤖 자동 채굴을 시작했습니다. (3초 주기)" : "🤖 자동 채굴을 일시 정지했습니다.");
+      save();
+    };
+  }
+
+  const autoUpgradeBtn = document.getElementById("autoUpgradeBtn");
+  if(autoUpgradeBtn) {
+    autoUpgradeBtn.onclick = () => {
+      if((d.level || 1) < 10) return say("자동 채굴 업그레이드는 레벨 10 이상부터 가능합니다!");
+      if(!d.autoPurchased) return say("자동 채굴 장치를 먼저 구매해야 합니다!");
+      if((d.autoLevel || 0) >= AUTO_MINING_MAX_LEVEL) return say("자동 채굴 장치는 최대 레벨 10입니다!");
+      const cost = getAutoMiningUpgradeCost();
+      if(d.score < cost) return say("업그레이드에 필요한 에너지가 부족합니다!");
+      d.score -= cost;
+      d.autoLevel++;
+      d.cps = getAutoMiningBaseYield();
+      playSuccessSound();
+      say(`🤖 자동 채굴 강화 완료! Lv.${d.autoLevel} · 3초당 기본 ${fmt(d.cps)} 에너지`);
       save();
     };
   }
@@ -3992,10 +4102,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if(d.score >= cost) {
         d.score -= cost;
         d.autoPurchased = true;
-        d.cps = 10;
+        d.autoLevel = 1;
+        d.cps = getAutoMiningBaseYield();
         d.autoEnabled = true;
         addExp(20);
-        say("🤖 자동 채굴 장치 설치 완료!");
+        say("🤖 자동 채굴 장치 설치 완료! 3초마다 채굴을 시작합니다.");
         save();
       } else {
         say("에너지가 부족합니다.");
@@ -4053,6 +4164,7 @@ document.addEventListener("DOMContentLoaded", () => {
       d.score = 0;
       d.power = 1; 
       d.cps = 0; 
+      d.autoLevel = 0;
       d.autoPurchased = false; 
       d.autoEnabled = false;
       d.equippedWeapon = 0;
