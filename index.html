@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.8 (안전 보안 및 클라우드 동기화 버전)</title>
+<title>에너지 러시 - 퀀텀 에디션 v14.7 (클라우드 동기화 및 신규 초기화 버전)</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2310b981%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>⚡</text></svg>">
 
@@ -607,8 +607,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.8</h1>
-    <div class="sub">레벨업 버그 수정 및 강력한 오토클릭(매크로) 방지 시스템 적용 버전</div>
+    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.7</h1>
+    <div class="sub">클라우드 동기화 및 신규 유저 기본 초기화 적용 버전</div>
 
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
@@ -1289,16 +1289,19 @@ function playFailureSound() {
 
 const patchNotes = [
   {
-    version: "v14.8 공식 업데이트 공지 (패치 아카이브)",
-    title: "✨ 레벨업 버그 수정 및 매크로(오토클릭) 방지 강화",
-    desc: "1. **레벨업 판정 버그 완벽 수정**\n" +
-          "   - 경험치 초과 적립 시 정상적으로 다중 레벨업 및 EXP가 올바르게 갱신되도록 수정되었습니다.\n\n" +
-          "2. **매크로/오토클릭 실시간 방지 시스템**\n" +
-          "   - 0.5초 이내의 과도한 비정상 연타가 감지되면 **5초 동안 코어 버튼이 잠기고 경고음이 발생**합니다.\n\n" +
-          "3. **창 이탈 시 클라우드 저장 안내**\n" +
-          "   - 페이지를 닫거나 새로고침할 때 데이터 손실 방지를 위해 구글 클라우드 저장을 유도하는 메시지가 출력됩니다.\n\n" +
-          "4. **자동 채굴 장치 해제 시 즉시 Lv.10 부여**\n" +
-          "   - 자동 채굴 장치 구매(잠금해제) 시 즉시 10레벨로 연동되어 바로 업그레이드가 가능합니다."
+    version: "v14.7 공식 업데이트 공지 (패치 아카이브)",
+    title: "✨ 신규 유저 초기화 및 주식 변동 색상 적용",
+    desc: "1. **신규 유저 기본 초기화**\n" +
+          "   - 처음 접속하는 유저는 모든 스탯, 연구, 레벨(Lv.1) 및 아이템이 기본 초기 상태로 시작합니다.\n\n" +
+          "2. **주식 상승/하락 컬러 실시간 연동**\n" +
+          "   - 주가가 상승할 때는 초록색(#10b981), 하락할 때는 빨간색(#ef4444)으로 시각화됩니다.\n\n" +
+          "3. **콘텐츠별 잠금해제 레벨**\n" +
+          "   - 자동채굴 장치: Lv.10\n" +
+          "   - 프리미엄 보석: Lv.15\n" +
+          "   - 칭호 시스템: Lv.20\n" +
+          "   - 오토클릭 연구소: Lv.25\n" +
+          "   - 에너지 변환 연구소: Lv.30\n" +
+          "   - 주식 거래소: Lv.35"
   }
 ];
 
@@ -1333,9 +1336,10 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-const saveKey = "energyRush_PermanentSaveData_v148";
+const saveKey = "energyRush_PermanentSaveData_v147";
 let savedRawData = localStorage.getItem(saveKey);
 
+// 신규 유저는 모든 스탯과 아이템이 완전히 처음(Lv.1)부터 시작하도록 기본값 설정
 let d = JSON.parse(savedRawData || "null") || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
@@ -1511,12 +1515,6 @@ const COLOR_GRADIENTS = {
 let msgTimer = null;
 let draggedPetIdx = null;
 let autoclickInterval = null;
-
-// 오토클릭(매크로) 탐지 및 5초 잠금 상태 변수
-let lastClickTime = 0;
-let clickBurstCount = 0;
-let isClickLocked = false;
-let clickLockTimer = null;
 
 function showStockAlertToast(msg, isUp = true) {
   playAlertDingSound();
@@ -2531,15 +2529,15 @@ function render(){
 
  const coinBtn = document.getElementById("coin");
  if(coinBtn) {
-   coinBtn.style.filter = isClickLocked ? "grayscale(80%) brightness(0.6)" : "none";
-   coinBtn.style.cursor = isClickLocked ? "not-allowed" : "pointer";
+   coinBtn.style.filter = "none";
+   coinBtn.style.cursor = "pointer";
 
    if(d.customImg) {
      coinBtn.innerHTML = `<img src="${d.customImg}" alt="Custom Core">`;
      coinBtn.style.background = "none";
      coinBtn.style.boxShadow = "0 10px 35px rgba(16, 185, 129, 0.4)";
    } else {
-     coinBtn.textContent = isClickLocked ? "🚫잠김" : (d.coinIcon || '⚡');
+     coinBtn.textContent = d.coinIcon || '⚡';
      coinBtn.style.background = COLOR_GRADIENTS[d.coinColor || 'emerald'];
    }
  }
@@ -3241,36 +3239,6 @@ function sellStock(id, amount) {
 }
 
 function performClickAction(e) {
-  // 오토클릭(매크로) 탐지 로직 (0.5초 이내 과도한 연타 감지 시 5초 버튼 잠금)
-  const now = Date.now();
-  if (isClickLocked) {
-    say("🚫 오토클릭 방지 시스템 작동 중! (잠시 기다려주세요)");
-    return;
-  }
-
-  if (now - lastClickTime < 120) { // 0.12초 미만의 비정상적 고속 연타 감지
-    clickBurstCount++;
-    if (clickBurstCount >= 5) {
-      isClickLocked = true;
-      playFailureSound();
-      showStockAlertToast("⚠️ 비정상적인 매크로 연타 감지! 5초간 클릭이 잠깁니다.", false);
-      say("⚠️ 매크로 방지 5초 버튼 잠금 발동!");
-      
-      if (clickLockTimer) clearTimeout(clickLockTimer);
-      clickLockTimer = setTimeout(() => {
-        isClickLocked = false;
-        clickBurstCount = 0;
-        say("🔓 코어 잠금이 해제되었습니다.");
-        render();
-      }, 5000);
-      render();
-      return;
-    }
-  } else {
-    clickBurstCount = 0;
-  }
-  lastClickTime = now;
-
   const petBonus = getPetBonus();
   const baseMult = getBaseMult();
   const titleBonus = getTitleBonus();
@@ -3331,13 +3299,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserUI();
   render();
 
-  // 새로고침이나 창을 닫을 때 구글 클라우드로 저장 유도 메시지 표시
-  window.addEventListener("beforeunload", (e) => {
-    e.preventDefault();
-    e.returnValue = "현재 데이터가 구글 클라우드에 완벽히 동기화되지 않았을 수 있습니다. [구글 클라우드] 탭에서 즉시 저장 후 창을 닫아주세요!";
-    return e.returnValue;
-  });
-
   try {
     if (window.google && google.accounts && google.accounts.id) {
       google.accounts.id.initialize({
@@ -3376,7 +3337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = new Blob([document.documentElement.outerHTML], { type: "text/html;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "energy_rush_ultimate_v14_8.html";
+      a.download = "energy_rush_ultimate_v14_7.html";
       a.click();
       say("시스템 파일이 다운로드되었습니다!");
     };
@@ -3678,10 +3639,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if(d.score >= cost) {
         d.score -= cost;
         d.autoPurchased = true;
-        d.cps = 10; // 자동 채굴 장치 구매 시 즉시 10레벨 부여
+        d.cps = 10;
         d.autoEnabled = true;
         addExp(20);
-        say("🤖 자동 채굴 장치 설치 완료! (자동 채굴 Lv.10 즉시 적용)");
+        say("🤖 자동 채굴 장치 설치 완료!");
         save();
       } else {
         say("에너지가 부족합니다.");
@@ -3881,4 +3842,45 @@ document.addEventListener("DOMContentLoaded", () => {
       const titleBonus = getTitleBonus();
       let filterBonus = d.filter ? 1.25 : 1.0;
       let gemAutoBonus = d.gemAuto ? 1.12 : 1.0;
-      let gemRingBonus = d.gemRing ? 1.08 : 1.저는 언어 모델일 뿐이라 그것을 이해하고 대응할 능력이 없기 때문에 도와드릴 수가 없습니다.
+      let gemRingBonus = d.gemRing ? 1.08 : 1.0;
+      let gemChronosBonus = d.gemChronos ? 1.15 : 1.0;
+      let curCps = (((d.cps + (d.permCps || 0)) * filterBonus) * gemAutoBonus) * gemRingBonus * gemChronosBonus;
+      let inc = (curCps * baseMult * petBonus.cpsMult * petBonus.coinMult * titleBonus.cpsMult) / 5;
+      d.score = Number(d.score) + Number(inc);
+      d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + Number(inc);
+      if(document.getElementById("score")) document.getElementById("score").textContent = fmt(d.score);
+    }
+  }, 1000);
+
+  setInterval(() => {
+    let stockIds = [1, 2, 3, 4];
+    stockIds.forEach(id => {
+      let currentPrice = d.stockPrices[id] || 500;
+      let changePercent = (Math.random() * 0.16) - 0.078;
+      let newPrice = Math.max(50, Math.round(currentPrice * (1 + changePercent)));
+      d.stockPrices[id] = newPrice;
+
+      if(!d.stockHistories[id]) d.stockHistories[id] = [500, 500];
+      d.stockHistories[id].push(newPrice);
+      if(d.stockHistories[id].length > 15) d.stockHistories[id].shift();
+    });
+
+    let newsList = [
+      { text: "테슬라 에너지(TES) 핵심 부품 공급 안정화 소식에 관련주 강세!", type: "good" },
+      { text: "엠비디아(NVDA) 글로벌 네트워크 일시적 과부하로 소폭 조정을 받는 장세입니다.", type: "bad" },
+      { text: "스페이스코어(SPC) 차세대 양자 코어 상용화 임박 소식에 테크 주식 일제히 급등!", type: "good" },
+      { text: "양자 바이오(QBIO) 지하 광산 안전 점검 강화 뉴스로 투자 심리가 관망세를 보이고 있습니다.", type: "good" },
+      { text: "테슬라 에너지(TES) 바이러스 레이드 소탕 작전 성공 릴레이로 보안 관련 테마 상승세!", type: "good" }
+    ];
+    if(Math.random() < 0.35) {
+      let chosen = newsList[Math.floor(Math.random() * newsList.length)];
+      d.latestNews = chosen.text;
+      d.newsType = chosen.type;
+    }
+
+    updateStockUI();
+  }, 5000);
+});
+</script>
+</body>
+</html>
