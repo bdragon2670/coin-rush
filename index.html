@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에너지 러시 - 퀀텀 에디션 v14.8 (2X 경험치 이벤트 추가)</title>
+<title>에너지 클릭</title>
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2310b981%22/><text y=%22.9em%22 x=%2218%22 font-size=%2255%22 fill=%22%23fff%22>⚡</text></svg>">
 
@@ -676,7 +676,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
     </div>
 
-    <h1>✨ 에너지 러시 : 퀀텀 에디션 v14.8</h1>
+    <h1>✨ 에너지 클릭</h1>
     <div class="sub">10분 주기 2배 EXP 이벤트 시스템 탑재 버전</div>
 
     <div class="stats">
@@ -726,7 +726,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <p style="color:var(--accent); font-size:11px; margin-top:0; margin-bottom:12px;">🛒 테크 상점 전 품목 가격 20% 인하 적용됨!</p>
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 행운 확률 +1.5% · 대성공 시 클릭 보상 ×1.15</p></div>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 행운 확률 +5% · 대성공 시 클릭 보상 ×1.15</p></div>
           <button class="buy" data-item="luck">구매 72,000</button>
         </div>
         <div class="shop-item">
@@ -1174,7 +1174,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       </div>
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">대성공 확률 추가 (+0.5%)</small></div>
+          <div><h3>🍀 영구 행운 증폭 모듈 <b id="permLuckLv" style="color:var(--accent);">+0%</b></h3><small style="color:var(--text-sub);">대성공 확률 추가 (강화당 +5%)</small></div>
           <button id="buyPermLuckBtn"><span id="costPermLuck">1</span> RP</button>
         </div>
       </div>
@@ -1865,9 +1865,9 @@ function updateStockUI() {
   drawStockChart("stockCanvas4", d.stockHistories[4]);
 }
 
-// 10분 주기 2배 EXP 이벤트 시스템 로직
+// 2분 핫타임 후 5분 쿨타임으로 반복되는 2배 EXP 이벤트 시스템 로직
 function checkAndRunExpEvent() {
-  const totalCycleSec = 10 * 60; // 10분 주기
+  const totalCycleSec = 7 * 60; // 2분 핫타임 + 5분 쿨타임
   const eventDurationSec = 2 * 60; // 2분간 지속
   const currentSecInCycle = Math.floor(Date.now() / 1000) % totalCycleSec;
 
@@ -1905,8 +1905,8 @@ function getRequiredExp(level) {
 }
 
 function addExp(amount) {
-  // 10분 주기 중 처음 2분 동안은 경험치 2배 적용
-  const totalCycleSec = 10 * 60;
+  // 7분 주기 중 처음 2분 동안은 경험치 2배 적용
+  const totalCycleSec = 7 * 60; // 2분 핫타임 + 5분 쿨타임
   const eventDurationSec = 2 * 60;
   const currentSecInCycle = Math.floor(Date.now() / 1000) % totalCycleSec;
   const isEventActive = currentSecInCycle < eventDurationSec;
@@ -2602,15 +2602,15 @@ function updateUserUI() {
 }
 
 const DRONE_GRADE_PASSIVES = {
-  C: { clickMult: 0.0008, cpsMult: 0.0006, coinMult: 1.0000, luckProb: 0.0002 },
-  B: { clickMult: 0.0015, cpsMult: 0.0013, coinMult: 1.0000, luckProb: 0.0004 },
-  A: { clickMult: 0.0024, cpsMult: 0.0020, coinMult: 1.0000, luckProb: 0.0007 },
-  S: { clickMult: 0.0040, cpsMult: 0.0035, coinMult: 1.0020, luckProb: 0.0012 },
-  L: { clickMult: 0.0100, cpsMult: 0.0090, coinMult: 1.0100, luckProb: 0.0030 },
-  M: { clickMult: 0.0220, cpsMult: 0.0200, coinMult: 1.0250, luckProb: 0.0060 },
-  T: { clickMult: 0.0600, cpsMult: 0.0550, coinMult: 1.0800, luckProb: 0.0120 },
-  X: { clickMult: 0.1300, cpsMult: 0.1200, coinMult: 1.2200, luckProb: 0.0200 },
-  Z: { clickMult: 0.2800, cpsMult: 0.2500, coinMult: 1.6500, luckProb: 0.0350 }
+  C: { clickMult: 0.0008, cpsMult: 0.0006, coinMult: 1.0000, luckProb: 0.05 },
+  B: { clickMult: 0.0015, cpsMult: 0.0013, coinMult: 1.0000, luckProb: 0.05 },
+  A: { clickMult: 0.0024, cpsMult: 0.0020, coinMult: 1.0000, luckProb: 0.05 },
+  S: { clickMult: 0.0040, cpsMult: 0.0035, coinMult: 1.0020, luckProb: 0.05 },
+  L: { clickMult: 0.0100, cpsMult: 0.0090, coinMult: 1.0100, luckProb: 0.05 },
+  M: { clickMult: 0.0220, cpsMult: 0.0200, coinMult: 1.0250, luckProb: 0.05 },
+  T: { clickMult: 0.0600, cpsMult: 0.0550, coinMult: 1.0800, luckProb: 0.05 },
+  X: { clickMult: 0.1300, cpsMult: 0.1200, coinMult: 1.2200, luckProb: 0.05 },
+  Z: { clickMult: 0.2800, cpsMult: 0.2500, coinMult: 1.6500, luckProb: 0.05 }
 };
 
 function getPetBonus(){
@@ -2629,9 +2629,9 @@ function getPetBonus(){
 }
 
 function getTotalLuckProbability(petBonus = getPetBonus()) {
-  const itemLuckBonus = d.luck ? 0.015 : 0.0;
-  const permanentLuckBonus = ((d.permLuck || 0) * 0.5) / 100;
-  const gemLuckBonus = d.gemLuck ? 0.015 : 0.0;
+  const itemLuckBonus = d.luck ? 0.05 : 0.0;
+  const permanentLuckBonus = ((d.permLuck || 0) * 5) / 100;
+  const gemLuckBonus = d.gemLuck ? 0.05 : 0.0;
   // 확률을 25% 아래로 제한해 과도한 중첩을 방지합니다.
   return Math.min(0.25, itemLuckBonus + permanentLuckBonus + gemLuckBonus + petBonus.luckProb);
 }
@@ -2919,7 +2919,7 @@ function render(){
 
  if(document.getElementById("permPowerLv")) document.getElementById("permPowerLv").textContent = `+${d.permPower || 0}`;
  if(document.getElementById("permCpsLv")) document.getElementById("permCpsLv").textContent = `+${d.permCps || 0}`;
- if(document.getElementById("permLuckLv")) document.getElementById("permLuckLv").textContent = `+${(d.permLuck || 0) * 0.5}%`;
+ if(document.getElementById("permLuckLv")) document.getElementById("permLuckLv").textContent = `+${(d.permLuck || 0) * 5}%`;
  if(document.getElementById("permGemLv")) document.getElementById("permGemLv").textContent = `+${(d.permGem || 0) * 5}%`;
 
  const powerCost = 1 + Math.floor((d.permPower || 0) / 4);
