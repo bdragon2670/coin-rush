@@ -1697,11 +1697,11 @@ let manualLastClickAt = 0;
 let manualClickBlockedUntil = 0;
 let manualClickCooldownTimer = null;
 const MANUAL_CLICK_WINDOW_MS = 1000;
-const MANUAL_CLICK_MAX_PER_SECOND = 10;
+const MANUAL_CLICK_MAX_PER_SECOND = 15;
 const MANUAL_CLICK_BURST_WINDOW_MS = 250;
-const MANUAL_CLICK_MAX_BURST = 5;
-const MANUAL_CLICK_PATTERN_SAMPLES = 8;
-const MANUAL_CLICK_PATTERN_TOLERANCE_MS = 4;
+const MANUAL_CLICK_MAX_BURST = 9;
+const MANUAL_CLICK_PATTERN_SAMPLES = 12;
+const MANUAL_CLICK_PATTERN_TOLERANCE_MS = 1.5;
 const MANUAL_CLICK_COOLDOWN_MS = 8000;
 const AUTOCLICK_MAX_CPS = 15;
 let autoMiningInterval = null;
@@ -2623,7 +2623,7 @@ window.initGoogleIdentity = function() {
   }
 
   window.google.accounts.id.initialize({
-    client_id: "531183128462-5r9j1hke0uarp42v4m3mddev3dja332l.apps.googleusercontent.com",
+    client_id: "531183128462-5r9j1hke0uarp42v4m3mddev3dja332l.apps.googleusercontent.comm",
     callback: window.handleCredentialResponse,
     auto_select: false
   });
@@ -3956,7 +3956,7 @@ function canAcceptManualClick() {
     const recentIntervals = manualClickIntervalHistory.slice(-MANUAL_CLICK_PATTERN_SAMPLES).map(entry => entry.interval);
     const shortest = Math.min(...recentIntervals);
     const longest = Math.max(...recentIntervals);
-    const mechanicalRhythm = shortest >= 25 && longest <= 250 && (longest - shortest) <= MANUAL_CLICK_PATTERN_TOLERANCE_MS;
+    const mechanicalRhythm = shortest >= 35 && longest <= 200 && (longest - shortest) <= MANUAL_CLICK_PATTERN_TOLERANCE_MS;
     if (mechanicalRhythm) {
       applyManualClickCooldown("기계적으로 일정한 클릭 패턴이 감지되었습니다.");
       return false;
