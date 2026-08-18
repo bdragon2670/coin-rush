@@ -1692,9 +1692,17 @@ let draggedPetIdx = null;
 let autoclickInterval = null;
 let autoclickPersistTimer = null;
 let manualClickTimes = [];
+let manualClickIntervalHistory = [];
+let manualLastClickAt = 0;
 let manualClickBlockedUntil = 0;
+let manualClickCooldownTimer = null;
 const MANUAL_CLICK_WINDOW_MS = 1000;
-const MANUAL_CLICK_MAX_PER_SECOND = 15;
+const MANUAL_CLICK_MAX_PER_SECOND = 10;
+const MANUAL_CLICK_BURST_WINDOW_MS = 250;
+const MANUAL_CLICK_MAX_BURST = 5;
+const MANUAL_CLICK_PATTERN_SAMPLES = 8;
+const MANUAL_CLICK_PATTERN_TOLERANCE_MS = 4;
+const MANUAL_CLICK_COOLDOWN_MS = 8000;
 const AUTOCLICK_MAX_CPS = 15;
 let autoMiningInterval = null;
 let autoMiningPersistTimer = null;
@@ -3008,7 +3016,7 @@ function render(){
  }
  if(autoclickSpeedDisplay) autoclickSpeedDisplay.textContent = autoclickActive && autoclickPurchased ? `${autoclickSpeed}회 / 초` : "0회 / 초 (정지)";
  const autoclickGuardDisplay = document.getElementById("autoclickGuardDisplay");
- if(autoclickGuardDisplay) autoclickGuardDisplay.textContent = `🛡️ 보호: 최대 ${AUTOCLICK_MAX_CPS}회/초 · 비정상 입력 자동 제한`;
+ if(autoclickGuardDisplay) autoclickGuardDisplay.textContent = `🛡️ 보호: 수동 최대 ${MANUAL_CLICK_MAX_PER_SECOND}회/초 · 적발 시 8초 차단`;
  if(buyAutoclickModuleBtn) {
    buyAutoclickModuleBtn.textContent = autoclickPurchased ? "모듈 보유 완료" : "🤖 오토클릭 모듈 구매 (50,000 에너지)";
    buyAutoclickModuleBtn.disabled = autoclickPurchased;
@@ -3889,16 +3897,74 @@ function sellStock(id, amount) {
   save();
 }
 
+function updateManualClickCooldownUI() {
+  const coinBtn = document.getElementById("coin");
+  if (!coinBtn) return;
+  const remainingMs = Math.max(0, manualClickBlockedUntil - performance.now());
+  const remainingSeconds = Math.ceil(remainingMs / 1000);
+  coinBtn.disabled = remainingMs > 0;
+  coinBtn.title = remainingMs > 0
+    ? `비정상 입력 감지: ${remainingSeconds}초 후 클릭 가능`
+    : "에너지를 클릭해 채굴하세요";
+  coinBtn.style.opacity = remainingMs > 0 ? "0.52" : "";
+  coinBtn.style.cursor = remainingMs > 0 ? "not-allowed" : "";
+}
+
+function applyManualClickCooldown(reason) {
+  const now = performance.now();
+  manualClickBlockedUntil = now + MANUAL_CLICK_COOLDOWN_MS;
+  manualClickTimes = [];
+  manualClickIntervalHistory = [];
+  manualLastClickAt = 0;
+  if (manualClickCooldownTimer) clearTimeout(manualClickCooldownTimer);
+  updateManualClickCooldownUI();
+  say(`🛡️ ${reason} 8초간 수동 클릭이 차단됩니다.`);
+  manualClickCooldownTimer = setTimeout(() => {
+    if (performance.now() >= manualClickBlockedUntil) {
+      updateManualClickCooldownUI();
+      say("🛡️ 클릭 보호 쿨타임이 종료되었습니다.");
+    }
+  }, MANUAL_CLICK_COOLDOWN_MS + 30);
+}
+
 function canAcceptManualClick() {
   const now = performance.now();
-  if (now < manualClickBlockedUntil) return false;
-  manualClickTimes = manualClickTimes.filter(time => now - time < MANUAL_CLICK_WINDOW_MS);
-  if (manualClickTimes.length >= MANUAL_CLICK_MAX_PER_SECOND) {
-    manualClickBlockedUntil = now + 1000;
-    say("🛡️ 비정상적으로 빠른 클릭이 감지되어 1초간 입력을 제한합니다.");
+  if (now < manualClickBlockedUntil) {
+    updateManualClickCooldownUI();
     return false;
   }
+
+  manualClickTimes = manualClickTimes.filter(time => now - time < MANUAL_CLICK_WINDOW_MS);
+  const recentBurstCount = manualClickTimes.filter(time => now - time < MANUAL_CLICK_BURST_WINDOW_MS).length;
+  if (manualClickTimes.length >= MANUAL_CLICK_MAX_PER_SECOND) {
+    applyManualClickCooldown("초당 클릭 한도를 초과했습니다.");
+    return false;
+  }
+  if (recentBurstCount >= MANUAL_CLICK_MAX_BURST) {
+    applyManualClickCooldown("초단위 연속 클릭이 감지되었습니다.");
+    return false;
+  }
+
+  if (manualLastClickAt > 0) {
+    const interval = now - manualLastClickAt;
+    manualClickIntervalHistory.push({ time: now, interval });
+  }
+  manualLastClickAt = now;
+  manualClickIntervalHistory = manualClickIntervalHistory.filter(entry => now - entry.time < 2500);
+
+  if (manualClickIntervalHistory.length >= MANUAL_CLICK_PATTERN_SAMPLES) {
+    const recentIntervals = manualClickIntervalHistory.slice(-MANUAL_CLICK_PATTERN_SAMPLES).map(entry => entry.interval);
+    const shortest = Math.min(...recentIntervals);
+    const longest = Math.max(...recentIntervals);
+    const mechanicalRhythm = shortest >= 25 && longest <= 250 && (longest - shortest) <= MANUAL_CLICK_PATTERN_TOLERANCE_MS;
+    if (mechanicalRhythm) {
+      applyManualClickCooldown("기계적으로 일정한 클릭 패턴이 감지되었습니다.");
+      return false;
+    }
+  }
+
   manualClickTimes.push(now);
+  updateManualClickCooldownUI();
   return true;
 }
 
@@ -3928,8 +3994,8 @@ function updateClickHud(petBonus = getPetBonus()) {
 
 function performClickAction(e, source = 'manual') {
   const isAutoclick = source === 'autoclick';
-  if (!isAutoclick && e && e.isTrusted === false) {
-    say("🛡️ 외부 스크립트 입력은 허용되지 않습니다.");
+  if (!isAutoclick && (!e || e.isTrusted !== true)) {
+    applyManualClickCooldown("외부 스크립트 입력이 감지되었습니다.");
     return;
   }
   if (!isAutoclick && !canAcceptManualClick()) return;
@@ -4307,6 +4373,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const coinBtnMain = document.getElementById("coin");
   if(coinBtnMain) {
+    updateManualClickCooldownUI();
     coinBtnMain.onclick = (e) => {
       performClickAction(e);
     };
