@@ -682,13 +682,13 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div class="stats">
       <div class="stat"><span>에너지 잔고</span><b id="score">0</b></div>
       <div class="stat"><span>3초당 자동채굴</span><b id="cps">0</b></div>
-      <div class="stat"><span>클릭 효율 파워</span><b id="power">1</b></div>
+      <div class="stat"><span>클릭 효율 파워</span><b id="power">1</b><small id="powerLuckInfo" style="display:block; margin-top:3px; color:var(--accent); font-size:9px;">🍀 행운 적용: 0.00%</small></div>
       <div class="stat"><span>보유 보석 💎</span><b id="gemCount">0</b></div>
     </div>
 
     <div class="main" id="mainArea">
       <div class="coin-container">
-        <div class="click-gain-badge" id="clickGainBadge">클릭 보상: 1개 연동</div>
+        <div class="click-gain-badge" id="clickGainBadge">클릭 보상: 1개 · 🍀 행운 0.00%</div>
         <button class="coin" id="coin">⚡</button>
       </div>
       <div id="message"></div>
@@ -697,7 +697,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     <div id="upgrade" class="panel">
       <div class="upgrades">
         <div class="upgrade-row">
-          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);">클릭당 에너지 생산량 증가 및 경험치 획득</small></div>
+          <div><h3>⚡ 채굴 효율 업그레이드 <b id="powerLv" style="color:var(--accent)">Lv.1</b></h3><small style="color:var(--text-sub);">클릭당 에너지 생산량 증가 · 아래 행운 확률이 함께 적용됩니다</small></div>
           <button id="powerBtn">100 에너지</button>
         </div>
       </div>
@@ -726,7 +726,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <p style="color:var(--accent); font-size:11px; margin-top:0; margin-bottom:12px;">🛒 테크 상점 전 품목 가격 20% 인하 적용됨!</p>
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 시 1% 확률로 에너지 보너스 ×1.05</p></div>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 행운 확률 +1.5% · 대성공 시 클릭 보상 ×1.15</p></div>
           <button class="buy" data-item="luck">구매 72,000</button>
         </div>
         <div class="shop-item">
@@ -797,7 +797,8 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:14px; padding:16px; text-align:center; margin-bottom:14px;">
         <h4 style="color:var(--accent); margin:0 0 4px; font-size:14px;">오토클릭 상태: <b id="autoclickStatusDisplay" style="color:#10b981;">활성 (ON)</b></h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0 0 10px;">현재 구동 속도: <b id="autoclickSpeedDisplay">3회 / 초</b></p>
+        <p style="font-size:11px; color:var(--text-sub); margin:0 0 4px;">현재 구동 속도: <b id="autoclickSpeedDisplay">3회 / 초</b></p>
+        <p id="autoclickGuardDisplay" style="font-size:10px; color:#60a5fa; margin:0 0 10px;">🛡️ 보호: 자동 클릭은 초당 최대 15회로 제한됩니다.</p>
         <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
           <button class="btn-game" id="autoclickOnOffBtn" style="background:linear-gradient(135deg, #10b981, #059669) !important;">🔄 오토클릭 ON/OFF 전환</button>
           <button class="btn-game" id="buyAutoclickModuleBtn" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8) !important;">🤖 오토클릭 모듈 구매 (50,000 에너지)</button>
@@ -1657,6 +1658,12 @@ const COLOR_GRADIENTS = {
 let msgTimer = null;
 let draggedPetIdx = null;
 let autoclickInterval = null;
+let autoclickPersistTimer = null;
+let manualClickTimes = [];
+let manualClickBlockedUntil = 0;
+const MANUAL_CLICK_WINDOW_MS = 1000;
+const MANUAL_CLICK_MAX_PER_SECOND = 15;
+const AUTOCLICK_MAX_CPS = 15;
 let autoMiningInterval = null;
 let autoMiningPersistTimer = null;
 const AUTO_MINING_INTERVAL_MS = 3000;
@@ -1664,12 +1671,14 @@ const AUTO_MINING_MAX_LEVEL = 10;
 const AUTO_MINING_BASE_YIELD = 10;
 
 function getAutoMiningBaseYield() {
-  return d.autoPurchased ? AUTO_MINING_BASE_YIELD * Math.max(1, d.autoLevel || 1) : 0;
+  const level = Math.max(1, Math.min(AUTO_MINING_MAX_LEVEL, d.autoLevel || 1));
+  // Lv.1은 10, Lv.10은 145 기본 에너지로 단계별 체감이 명확하도록 조정합니다.
+  return d.autoPurchased ? AUTO_MINING_BASE_YIELD + ((level - 1) * 15) : 0;
 }
 
 function getAutoMiningUpgradeCost() {
   const level = Math.max(1, d.autoLevel || 1);
-  return Math.round(1800 * Math.pow(1.6, level - 1));
+  return Math.round(1800 * Math.pow(1.45, level - 1));
 }
 
 function getAutoMiningReward() {
@@ -2592,63 +2601,39 @@ function updateUserUI() {
   }
 }
 
+const DRONE_GRADE_PASSIVES = {
+  C: { clickMult: 0.0008, cpsMult: 0.0006, coinMult: 1.0000, luckProb: 0.0002 },
+  B: { clickMult: 0.0015, cpsMult: 0.0013, coinMult: 1.0000, luckProb: 0.0004 },
+  A: { clickMult: 0.0024, cpsMult: 0.0020, coinMult: 1.0000, luckProb: 0.0007 },
+  S: { clickMult: 0.0040, cpsMult: 0.0035, coinMult: 1.0020, luckProb: 0.0012 },
+  L: { clickMult: 0.0100, cpsMult: 0.0090, coinMult: 1.0100, luckProb: 0.0030 },
+  M: { clickMult: 0.0220, cpsMult: 0.0200, coinMult: 1.0250, luckProb: 0.0060 },
+  T: { clickMult: 0.0600, cpsMult: 0.0550, coinMult: 1.0800, luckProb: 0.0120 },
+  X: { clickMult: 0.1300, cpsMult: 0.1200, coinMult: 1.2200, luckProb: 0.0200 },
+  Z: { clickMult: 0.2800, cpsMult: 0.2500, coinMult: 1.6500, luckProb: 0.0350 }
+};
+
 function getPetBonus(){
   let clickMult = 1.0, cpsMult = 1.0, coinMult = 1.0, luckProb = 0.01;
   if (!d.equippedPets) d.equippedPets = [];
   d.equippedPets.forEach(index => {
-    const petId = d.pets[index];
-    if(!petId) return;
-    if(petId === 'cat' || petId === 'c9') clickMult += 0.0005;
-    if(petId === 'chick' || petId === 'c10') clickMult += 0.0008;
-    if(petId === 'sparrow') clickMult += 0.0006;
-    if(petId === 'beetle') clickMult += 0.0007;
-    if(petId === 'ant') clickMult += 0.0009;
-    if(petId === 'bee') clickMult += 0.0010;
-    if(petId === 'bug1') clickMult += 0.0006;
-    if(petId === 'bug2') clickMult += 0.0007;
-
-    if(petId === 'dog' || petId === 'b9') cpsMult += 0.0010;
-    if(petId === 'rabbit' || petId === 'b10') cpsMult += 0.0012;
-    if(petId === 'hamster') cpsMult += 0.0011;
-    if(petId === 'frog') cpsMult += 0.0013;
-    if(petId === 'turtle') cpsMult += 0.0014;
-    if(petId === 'mouse') cpsMult += 0.0015;
-    if(petId === 'beast1') cpsMult += 0.0012;
-    if(petId === 'beast2') cpsMult += 0.0013;
-
-    if(petId === 'fox' || petId === 'a9') luckProb += 0.001;
-    if(petId === 'panda' || petId === 'a10') { clickMult += 0.0015; cpsMult += 0.0015; }
-    if(petId === 'wolf') luckProb += 0.0012;
-    if(petId === 'owl') clickMult += 0.0018;
-    if(petId === 'tiger') clickMult += 0.0020;
-    if(petId === 'bear') cpsMult += 0.0020;
-    if(petId === 'mecha1') clickMult += 0.0017;
-    if(petId === 'mecha2') luckProb += 0.0020;
-
-    if(petId === 'dragon' || petId === 's7') coinMult *= 1.004;
-    if(petId === 'unicorn' || petId === 's8') coinMult *= 1.005;
-    if(petId === 'phoenix') { clickMult += 0.0025; cpsMult += 0.0015; }
-    if(petId === 'titan') coinMult *= 1.006;
-    if(petId === 'hydra') coinMult *= 1.007;
-    if(petId === 'griffin') clickMult += 0.0030;
-
-    if(petId === 'legend' || petId === 'l4') { coinMult *= 1.015; luckProb += 0.002; }
-    if(petId === 'leviathan' || petId === 'l5') coinMult *= 1.018;
-    if(petId === 'wraith') coinMult *= 1.020;
-
-    if(petId === 'mythic' || petId === 'm3') { coinMult *= 1.045; luckProb += 0.005; }
-    if(petId === 'chronos') coinMult *= 1.035;
-
-    if(petId === 'trans') { coinMult *= 1.10; luckProb += 0.01; }
-    if(petId === 'infinity') coinMult *= 1.12;
-
-    if(petId === 'chaos') { coinMult *= 1.35; luckProb += 0.015; }
-    if(petId === 'voidmaster') coinMult *= 1.45;
-
-    if(petId === 'omniz') { coinMult *= 2.00; luckProb += 0.03; }
-    if(petId === 'eternity') { coinMult *= 2.30; luckProb += 0.04; }
+    const pet = PET_DB[d.pets[index]];
+    if (!pet) return;
+    const passive = DRONE_GRADE_PASSIVES[pet.grade] || DRONE_GRADE_PASSIVES.C;
+    clickMult += passive.clickMult;
+    cpsMult += passive.cpsMult;
+    coinMult *= passive.coinMult;
+    luckProb += passive.luckProb;
   });
   return { clickMult, cpsMult, coinMult, luckProb };
+}
+
+function getTotalLuckProbability(petBonus = getPetBonus()) {
+  const itemLuckBonus = d.luck ? 0.015 : 0.0;
+  const permanentLuckBonus = ((d.permLuck || 0) * 0.5) / 100;
+  const gemLuckBonus = d.gemLuck ? 0.015 : 0.0;
+  // 확률을 25% 아래로 제한해 과도한 중첩을 방지합니다.
+  return Math.min(0.25, itemLuckBonus + permanentLuckBonus + gemLuckBonus + petBonus.luckProb);
 }
 
 function getBaseMult(){
@@ -2845,8 +2830,11 @@ function render(){
  let totalCps = getAutoMiningReward();
 
  if(document.getElementById("score")) document.getElementById("score").textContent=fmt(d.score); 
- if(document.getElementById("power")) document.getElementById("power").textContent=fmt(totalPower);
+ const displayedLuckProb = getTotalLuckProbability(petBonus);
+ if(document.getElementById("power")) document.getElementById("power").textContent=fmt(totalPower); 
  if(document.getElementById("cps")) document.getElementById("cps").textContent=fmt(totalCps); 
+ if(document.getElementById("powerLuckInfo")) document.getElementById("powerLuckInfo").textContent = `🍀 행운 적용: ${(displayedLuckProb * 100).toFixed(2)}% · 대성공 ×1.15`;
+ if(document.getElementById("clickGainBadge")) document.getElementById("clickGainBadge").textContent = `클릭 보상: ${fmt(totalPower)} · 🍀 행운 ${(displayedLuckProb * 100).toFixed(2)}%`;
  if(document.getElementById("gemCount")) document.getElementById("gemCount").textContent=fmt(d.gems);
  if(document.getElementById("powerLv")) document.getElementById("powerLv").textContent="Lv."+d.power; 
  if(document.getElementById("autoLv")) document.getElementById("autoLv").textContent=`Lv.${d.autoLevel || 0} / ${AUTO_MINING_MAX_LEVEL}`;
@@ -2956,7 +2944,7 @@ function render(){
  const autoclickPurchased = d.autoclickPurchased === true;
  const autoclickLevel = d.autoclickLevel || 1;
  const autoclickActive = d.autoclickActive === true;
- const autoclickSpeed = autoclickLevel * 3; 
+ const autoclickSpeed = Math.min(AUTOCLICK_MAX_CPS, autoclickLevel * 3); 
  const autoclickUpgradeCost = Math.round(10000 * Math.pow(1.5, autoclickLevel));
 
  const autoclickStatusDisplay = document.getElementById("autoclickStatusDisplay");
@@ -2978,6 +2966,8 @@ function render(){
    }
  }
  if(autoclickSpeedDisplay) autoclickSpeedDisplay.textContent = autoclickActive && autoclickPurchased ? `${autoclickSpeed}회 / 초` : "0회 / 초 (정지)";
+ const autoclickGuardDisplay = document.getElementById("autoclickGuardDisplay");
+ if(autoclickGuardDisplay) autoclickGuardDisplay.textContent = `🛡️ 보호: 최대 ${AUTOCLICK_MAX_CPS}회/초 · 비정상 입력 자동 제한`;
  if(buyAutoclickModuleBtn) {
    buyAutoclickModuleBtn.textContent = autoclickPurchased ? "모듈 보유 완료" : "🤖 오토클릭 모듈 구매 (50,000 에너지)";
    buyAutoclickModuleBtn.disabled = autoclickPurchased;
@@ -3722,54 +3712,96 @@ function sellStock(id, amount) {
   save();
 }
 
-function performClickAction(e) {
-  const petBonus = getPetBonus();
-  const baseMult = getBaseMult();
-  const titleBonus = getTitleBonus();
-  let coolerBonus = d.cooler ? 1.2 : 1.0;
-  let gemClickBonus = d.gemClick ? 1.10 : 1.0;
-  let gemRingBonus = d.gemRing ? 1.08 : 1.0;
-  let currentPower = (((d.power + (d.permPower || 0)) * coolerBonus) * gemClickBonus) * gemRingBonus;
-  
-  let randomGainCount = 1;
-  const clickGainBadge = document.getElementById("clickGainBadge");
-  if(clickGainBadge) clickGainBadge.textContent = `클릭 보상: ${randomGainCount}개 연동`;
+function canAcceptManualClick() {
+  const now = performance.now();
+  if (now < manualClickBlockedUntil) return false;
+  manualClickTimes = manualClickTimes.filter(time => now - time < MANUAL_CLICK_WINDOW_MS);
+  if (manualClickTimes.length >= MANUAL_CLICK_MAX_PER_SECOND) {
+    manualClickBlockedUntil = now + 1000;
+    say("🛡️ 비정상적으로 빠른 클릭이 감지되어 1초간 입력을 제한합니다.");
+    return false;
+  }
+  manualClickTimes.push(now);
+  return true;
+}
 
-  let gain = currentPower * baseMult * petBonus.clickMult * petBonus.coinMult * titleBonus.clickMult * randomGainCount;
-  
-  let gemLuckBonus = d.gemLuck ? 0.015 : 0.0;
-  const totalLuckProb = (d.luck ? 0.01 : 0.0) + (((d.permLuck || 0) * 0.5) / 100) + gemLuckBonus + petBonus.luckProb;
-  if(Math.random() < totalLuckProb){ gain *= 1.15; triggerLuckEffect(gain); }
-  
+function scheduleAutoclickPersist() {
+  markCloudSavePending();
+  if (autoclickPersistTimer) return;
+  autoclickPersistTimer = setTimeout(() => {
+    localStorage.setItem(saveKey, JSON.stringify(d));
+    autoclickPersistTimer = null;
+  }, 1000);
+}
+
+function updateClickHud(petBonus = getPetBonus()) {
+  const titleBonus = getTitleBonus();
+  const currentPower = (((d.power + (d.permPower || 0)) * (d.cooler ? 1.2 : 1.0)) * (d.gemClick ? 1.10 : 1.0)) * (d.gemRing ? 1.08 : 1.0);
+  const displayedPower = currentPower * getBaseMult() * petBonus.clickMult * petBonus.coinMult * titleBonus.clickMult;
+  const luckProb = getTotalLuckProbability(petBonus);
+  const scoreEl = document.getElementById("score");
+  const powerEl = document.getElementById("power");
+  const powerLuckInfo = document.getElementById("powerLuckInfo");
+  const clickGainBadge = document.getElementById("clickGainBadge");
+  if (scoreEl) scoreEl.textContent = fmt(d.score);
+  if (powerEl) powerEl.textContent = fmt(displayedPower);
+  if (powerLuckInfo) powerLuckInfo.textContent = `🍀 행운 적용: ${(luckProb * 100).toFixed(2)}% · 대성공 ×1.15`;
+  if (clickGainBadge) clickGainBadge.textContent = `클릭 보상: ${fmt(displayedPower)} · 🍀 행운 ${(luckProb * 100).toFixed(2)}%`;
+}
+
+function performClickAction(e, source = 'manual') {
+  const isAutoclick = source === 'autoclick';
+  if (!isAutoclick && e && e.isTrusted === false) {
+    say("🛡️ 외부 스크립트 입력은 허용되지 않습니다.");
+    return;
+  }
+  if (!isAutoclick && !canAcceptManualClick()) return;
+
+  const previousLevel = d.level || 1;
+  const petBonus = getPetBonus();
+  const titleBonus = getTitleBonus();
+  const currentPower = (((d.power + (d.permPower || 0)) * (d.cooler ? 1.2 : 1.0)) * (d.gemClick ? 1.10 : 1.0)) * (d.gemRing ? 1.08 : 1.0);
+  const luckProb = getTotalLuckProbability(petBonus);
+  let gain = currentPower * getBaseMult() * petBonus.clickMult * petBonus.coinMult * titleBonus.clickMult;
+  const isLucky = Math.random() < luckProb;
+  if (isLucky) gain *= 1.15;
+
   d.score = Number(d.score) + Number(gain);
-  d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + Number(gain);
+  d.totalEnergyEarned = (d.totalEnergyEarned || 0) + Number(gain);
   addExp(1);
 
-  const coinBtnMain = document.getElementById("coin");
-  if(coinBtnMain) {
-    const coinContainer = coinBtnMain.parentElement;
-    if(coinContainer) {
+  if (!isAutoclick) {
+    if (isLucky) triggerLuckEffect(gain);
+    const coinBtnMain = document.getElementById("coin");
+    const coinContainer = coinBtnMain && coinBtnMain.parentElement;
+    if (coinContainer) {
       const floatText = document.createElement("div");
       floatText.className = "click-float-left";
       floatText.textContent = `+${fmt(gain)}`;
       coinContainer.appendChild(floatText);
       setTimeout(() => floatText.remove(), 800);
     }
+    save();
+    return;
   }
 
-  save();
+  // 오토클릭은 전체 화면을 매회 렌더링하지 않아 렉을 방지합니다.
+  scheduleAutoclickPersist();
+  updateClickHud(petBonus);
+  if ((d.level || 1) !== previousLevel) render();
 }
 
 function setupAutoclickLoop() {
   if(autoclickInterval) clearInterval(autoclickInterval);
   if(!d.autoclickPurchased || !d.autoclickActive) return;
 
-  let speedPerSec = (d.autoclickLevel || 1) * 3; 
-  let intervalMs = Math.max(100, Math.floor(1000 / speedPerSec));
+  const requestedCps = (d.autoclickLevel || 1) * 3;
+  const speedPerSec = Math.min(AUTOCLICK_MAX_CPS, Math.max(1, requestedCps));
+  const intervalMs = Math.ceil(1000 / speedPerSec);
 
   autoclickInterval = setInterval(() => {
     if(d.autoclickPurchased && d.autoclickActive) {
-      performClickAction(null);
+      performClickAction(null, 'autoclick');
     }
   }, intervalMs);
 }
