@@ -1512,7 +1512,7 @@ let d = JSON.parse(savedRawData || "null") || {
   coinColor: 'emerald', coinIcon: '⚡', customImg: null, bgImg: null,
   stock1: 0, stock2: 0, stock3: 0, stock4: 0,
   box1Count: 0,
-  miscBoxCount: 0, miscItems: { exp2: 0, luck2: 0, money: [] }, expCouponUntil: 0, luckCouponUntil: 0,
+  miscBoxCount: 0, miscItems: { exp2: 0, luck2: 0, money: [] }, miscItemCooldowns: { exp2: 0, luck2: 0, money: 0 }, expCouponUntil: 0, luckCouponUntil: 0, expRequirementVersion: 2,
   equippedWeapon: 0, ownedWeapons: [0],
   mineDepth: 1,
   stockSellCooldowns: {},
@@ -1551,6 +1551,10 @@ if (!Number.isFinite(d.miscItems.luck2)) d.miscItems.luck2 = 0;
 if (!Array.isArray(d.miscItems.money)) d.miscItems.money = [];
 if (!Number.isFinite(d.expCouponUntil)) d.expCouponUntil = 0;
 if (!Number.isFinite(d.luckCouponUntil)) d.luckCouponUntil = 0;
+if (!d.miscItemCooldowns || typeof d.miscItemCooldowns !== 'object') d.miscItemCooldowns = { exp2: 0, luck2: 0, money: 0 };
+['exp2', 'luck2', 'money'].forEach(type => {
+  if (!Number.isFinite(d.miscItemCooldowns[type])) d.miscItemCooldowns[type] = 0;
+});
 if (d.autoPurchased === undefined) d.autoPurchased = false;
 if (d.equippedWeapon === undefined) d.equippedWeapon = 0;
 if (d.ownedWeapons === undefined) d.ownedWeapons = [0];
@@ -1563,6 +1567,7 @@ if (d.autoclickLevel === undefined) d.autoclickLevel = 1;
 if (d.autoclickActive === undefined) d.autoclickActive = false;
 if (d.level === undefined) d.level = 1;
 if (d.exp === undefined) d.exp = 0;
+if (d.expRequirementVersion === undefined) d.expRequirementVersion = 1;
 if (d.attendDays === undefined) d.attendDays = 0;
 if (!d.lastAttendDayStr) d.lastAttendDayStr = "";
 if (d.cps === undefined) d.cps = 0;
@@ -1940,10 +1945,45 @@ function startExpEventCountdown() {
   expEventTimer = setInterval(checkAndRunExpEvent, 1000);
 }
 
-function getRequiredExp(level) {
+const EXP_REQUIREMENT_VERSION = 2;
+const EXP_REQUIREMENT_REDUCTION = 0.95;
+
+function getLegacyRequiredExp(level) {
   return Math.round(100 * Math.pow(1.35, level - 1));
 }
-
+function getRequiredExp(level) {
+  return Math.max(1, Math.round(getLegacyRequiredExp(level) * EXP_REQUIREMENT_REDUCTION));
+}
+function getTotalExpFromProgress(level, exp, requirementFn) {
+  let total = Math.max(0, Number(exp) || 0);
+  const safeLevel = Math.max(1, Math.floor(Number(level) || 1));
+  for (let currentLevel = 1; currentLevel < safeLevel; currentLevel++) total += requirementFn(currentLevel);
+  return total;
+}
+function setProgressFromTotalExp(totalExp) {
+  let remaining = Math.max(0, Number(totalExp) || 0);
+  let level = 1;
+  let required = getRequiredExp(level);
+  while (remaining >= required) {
+    remaining -= required;
+    level++;
+    required = getRequiredExp(level);
+  }
+  d.level = level;
+  d.exp = remaining;
+}
+function migrateExpRequirementIfNeeded() {
+  if (d.expRequirementVersion === EXP_REQUIREMENT_VERSION) return false;
+  const legacyTotalExp = getTotalExpFromProgress(d.level, d.exp, getLegacyRequiredExp);
+  setProgressFromTotalExp(legacyTotalExp);
+  d.expRequirementVersion = EXP_REQUIREMENT_VERSION;
+  return true;
+}
+// 기존 저장 진행도는 기존 누적 EXP를 유지한 채 새 필요 EXP 기준으로 한 번만 재계산합니다.
+if (migrateExpRequirementIfNeeded()) {
+  markCloudSavePending();
+  localStorage.setItem(saveKey, JSON.stringify(d));
+}
 function addExp(amount) {
   // 7분 주기 중 처음 2분 동안은 경험치 2배 적용
   const totalCycleSec = 7 * 60; // 2분 핫타임 + 5분 쿨타임
@@ -2137,6 +2177,12 @@ function normalizeCloudSaveData(saveData) {
   if (!Array.isArray(d.miscItems.money)) d.miscItems.money = [];
   if (!Number.isFinite(d.expCouponUntil)) d.expCouponUntil = 0;
   if (!Number.isFinite(d.luckCouponUntil)) d.luckCouponUntil = 0;
+  if (!d.miscItemCooldowns || typeof d.miscItemCooldowns !== 'object') d.miscItemCooldowns = { exp2: 0, luck2: 0, money: 0 };
+  ['exp2', 'luck2', 'money'].forEach(type => {
+    if (!Number.isFinite(d.miscItemCooldowns[type])) d.miscItemCooldowns[type] = 0;
+  });
+  if (d.expRequirementVersion === undefined) d.expRequirementVersion = 1;
+  migrateExpRequirementIfNeeded();
   if (!d.unlockedTitles) d.unlockedTitles = ['novice'];
   if (!d.ownedWeapons) d.ownedWeapons = [0];
   if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
@@ -3708,8 +3754,11 @@ function startMultiBoxOpeningInteraction(count){
 }
 
 
-const MISC_DRAW_BASE_COST = 3500;
+const MISC_DRAW_BASE_COST = 3000;
+const MISC_DRAW_STEP_COST = 300;
 const COUPON_DURATION_MS = 5 * 60 * 1000;
+const MISC_ITEM_USE_COOLDOWN_MS = 5 * 60 * 1000;
+let miscInventoryTimer = null;
 
 function ensureMiscInventory() {
   if (!d.miscItems || typeof d.miscItems !== 'object') d.miscItems = { exp2: 0, luck2: 0, money: [] };
@@ -3717,13 +3766,34 @@ function ensureMiscInventory() {
   if (!Number.isFinite(d.miscItems.luck2)) d.miscItems.luck2 = 0;
   if (!Array.isArray(d.miscItems.money)) d.miscItems.money = [];
   if (!Number.isFinite(d.miscBoxCount)) d.miscBoxCount = 0;
+  if (!d.miscItemCooldowns || typeof d.miscItemCooldowns !== 'object') d.miscItemCooldowns = { exp2: 0, luck2: 0, money: 0 };
+  ['exp2', 'luck2', 'money'].forEach(type => {
+    if (!Number.isFinite(d.miscItemCooldowns[type])) d.miscItemCooldowns[type] = 0;
+  });
 }
-
 function getMiscDrawCost() {
   ensureMiscInventory();
-  return MISC_DRAW_BASE_COST + ((d.miscBoxCount || 0) * 350);
+  return MISC_DRAW_BASE_COST + ((d.miscBoxCount || 0) * MISC_DRAW_STEP_COST);
 }
-
+function getMiscItemCooldownRemaining(type) {
+  ensureMiscInventory();
+  return Math.max(0, (d.miscItemCooldowns[type] || 0) - Date.now());
+}
+function getMiscItemUseButtonLabel(type, count = 1) {
+  const remaining = getMiscItemCooldownRemaining(type);
+  return remaining > 0 ? `쿨타임 ${getCouponRemainingLabel(Date.now() + remaining)}` : `사용 (${count})`;
+}
+function startMiscInventoryTimer() {
+  if (miscInventoryTimer) clearInterval(miscInventoryTimer);
+  miscInventoryTimer = setInterval(() => {
+    const container = document.getElementById('miscInventory');
+    const status = document.getElementById('couponStatus');
+    if (!container && !status) return;
+    const hasCooldown = ['exp2', 'luck2', 'money'].some(type => getMiscItemCooldownRemaining(type) > 0);
+    const hasActiveCoupon = Date.now() < (d.expCouponUntil || 0) || Date.now() < (d.luckCouponUntil || 0);
+    if (hasCooldown || hasActiveCoupon) renderMiscInventory();
+  }, 1000);
+}
 function getCouponRemainingLabel(until) {
   const remain = Math.max(0, until - Date.now());
   const min = Math.floor(remain / 60000);
@@ -3756,17 +3826,17 @@ function renderMiscInventory() {
   let html = `
     <div class="game-card" style="padding:10px;">
       <b style="font-size:12px; color:var(--text-main);">⚡ EXP 2배 쿠폰</b>
-      <p style="font-size:10px; color:var(--text-sub); margin:5px 0;">5분 동안 EXP 획득량 2배</p>
-      <button class="btn-game" data-bag-item="exp2" ${d.miscItems.exp2 > 0 ? '' : 'disabled'}>사용 (${d.miscItems.exp2})</button>
+      <p style="font-size:10px; color:var(--text-sub); margin:5px 0;">5분 동안 EXP 획득량 2배 · 사용 후 5분 쿨타임</p>
+      <button class="btn-game" data-bag-item="exp2" ${d.miscItems.exp2 > 0 && getMiscItemCooldownRemaining('exp2') <= 0 ? '' : 'disabled'}>${getMiscItemUseButtonLabel('exp2', d.miscItems.exp2)}</button>
     </div>
     <div class="game-card" style="padding:10px;">
       <b style="font-size:12px; color:var(--text-main);">🍀 행운 2배 쿠폰</b>
-      <p style="font-size:10px; color:var(--text-sub); margin:5px 0;">5분 동안 전체 행운 확률 2배</p>
-      <button class="btn-game" data-bag-item="luck2" ${d.miscItems.luck2 > 0 ? '' : 'disabled'}>사용 (${d.miscItems.luck2})</button>
+      <p style="font-size:10px; color:var(--text-sub); margin:5px 0;">5분 동안 전체 행운 확률 2배 · 사용 후 5분 쿨타임</p>
+      <button class="btn-game" data-bag-item="luck2" ${d.miscItems.luck2 > 0 && getMiscItemCooldownRemaining('luck2') <= 0 ? '' : 'disabled'}>${getMiscItemUseButtonLabel('luck2', d.miscItems.luck2)}</button>
     </div>`;
   if (moneyPreview.length) {
     moneyPreview.forEach((amount, index) => {
-      html += `<div class="game-card" style="padding:10px;"><b style="font-size:12px; color:var(--text-main);">💰 머니 쿠폰</b><p style="font-size:10px; color:var(--accent); margin:5px 0;">에너지 +${fmt(amount)}</p><button class="btn-game" data-bag-item="money" data-money-index="${index}">사용</button></div>`;
+      html += `<div class="game-card" style="padding:10px;"><b style="font-size:12px; color:var(--text-main);">💰 머니 쿠폰</b><p style="font-size:10px; color:var(--accent); margin:5px 0;">에너지 +${fmt(amount)} · 사용 후 5분 쿨타임</p><button class="btn-game" data-bag-item="money" data-money-index="${index}" ${getMiscItemCooldownRemaining('money') <= 0 ? '' : 'disabled'}>${getMiscItemUseButtonLabel('money', d.miscItems.money.length)}</button></div>`;
     });
     if (d.miscItems.money.length > moneyPreview.length) html += `<div class="game-card" style="padding:10px; font-size:11px; color:var(--text-sub); display:flex; align-items:center; justify-content:center;">머니 쿠폰 ${d.miscItems.money.length - moneyPreview.length}장 더 보유</div>`;
   } else {
@@ -3781,6 +3851,8 @@ function renderMiscInventory() {
 function useMiscItem(type, moneyIndex = NaN) {
   ensureMiscInventory();
   const now = Date.now();
+  const cooldownRemaining = getMiscItemCooldownRemaining(type);
+  if (cooldownRemaining > 0) return say(`⏳ ${getCouponRemainingLabel(now + cooldownRemaining)} 후 다시 사용할 수 있습니다.`);
   if (type === 'exp2') {
     if (d.miscItems.exp2 < 1) return say('EXP 2배 쿠폰이 없습니다.');
     d.miscItems.exp2--;
@@ -3800,10 +3872,10 @@ function useMiscItem(type, moneyIndex = NaN) {
   } else {
     return;
   }
+  d.miscItemCooldowns[type] = now + MISC_ITEM_USE_COOLDOWN_MS;
   playSuccessSound();
   save();
 }
-
 function rollMiscItem() {
   const roll = Math.random() * 100;
   if (roll < 30) return { type: 'exp2', icon: '⚡', name: 'EXP 2배 쿠폰', desc: '5분 동안 EXP 2배' };
@@ -4073,6 +4145,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserUI();
   render();
   startExpEventCountdown();
+  startMiscInventoryTimer();
   startAutoMiningLoop();
   const bgmToggle = document.getElementById("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
