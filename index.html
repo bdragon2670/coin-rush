@@ -604,6 +604,11 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .dungeon-combatant{min-width:0;display:flex;flex-direction:column;gap:7px;padding:11px;border-radius:15px;background:rgba(3,12,22,.58);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(3px);transition:transform .16s ease,filter .16s ease;}
 .dungeon-combatant.enemy{text-align:right;border-color:rgba(217,70,239,.45);background:rgba(27,6,38,.56);}.dungeon-entity{font-size:38px;line-height:1;filter:drop-shadow(0 3px 9px rgba(0,0,0,.8));}.dungeon-entity.enemy-icon{color:#f0abfc;}.dungeon-name{font-size:13px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.dungeon-meta{font-size:10px;color:#b6c5d3;}.dungeon-hp-track{height:9px;border-radius:20px;background:rgba(0,0,0,.55);overflow:hidden;border:1px solid rgba(255,255,255,.14);}.dungeon-hp-fill{height:100%;width:100%;border-radius:inherit;transition:width .22s ease;background:linear-gradient(90deg,#34d399,#2dd4bf);}.enemy .dungeon-hp-fill{background:linear-gradient(90deg,#ef4444,#d946ef);}.dungeon-hit{animation:dungeonHit .34s ease both;}.dungeon-strike{animation:dungeonStrike .34s ease both;}.dungeon-boss-glow{animation:dungeonBossGlow 1.4s ease-in-out infinite;}.dungeon-log{margin:0 14px 12px;padding:10px 12px;min-height:36px;border-radius:10px;background:rgba(0,6,14,.72);border:1px solid rgba(94,234,212,.24);color:#d9faff;font-size:11px;display:flex;align-items:center;justify-content:center;text-align:center;}.dungeon-action-row{display:flex;gap:8px;padding:0 14px 14px;}.dungeon-attack-btn{flex:1;font-size:14px!important;padding:12px!important;background:linear-gradient(135deg,#0891b2,#0f766e)!important;}.dungeon-help{margin:10px 2px 0;font-size:11px;color:var(--text-sub);line-height:1.5;}.dungeon-reward-note{font-size:10px;color:#fde68a;text-align:center;margin-top:3px;}@keyframes dungeonHit{0%,100%{transform:translateX(0);filter:brightness(1)}35%{transform:translateX(12px);filter:brightness(2.1) saturate(1.7)}}@keyframes dungeonStrike{0%,100%{transform:translateX(0) scale(1)}45%{transform:translateX(28px) scale(1.08)}}@keyframes dungeonBossGlow{0%,100%{box-shadow:0 0 0 rgba(217,70,239,0)}50%{box-shadow:0 0 24px rgba(217,70,239,.72)}}@media(max-width:620px){.dungeon-arena{min-height:390px}.dungeon-battlefield{min-height:220px;padding:18px 12px 8px;gap:7px}.dungeon-combatant{padding:8px}.dungeon-entity{font-size:30px}.dungeon-hud{font-size:10px}.dungeon-name{font-size:11px;}.dungeon-help{font-size:10px;}}
 
+
+/* 2D 자동 전투 던전 카드 UI */
+.dungeon-auto-arena{position:relative;overflow:hidden;border:1px solid rgba(48,180,205,.34);border-radius:16px;padding:12px;background:linear-gradient(180deg,rgba(3,12,24,.76),rgba(5,8,20,.88)),url('dungeon_auto_battle_bg.jpg') center/cover no-repeat;box-shadow:inset 0 0 42px rgba(0,0,0,.42),0 8px 28px rgba(14,116,144,.12)}
+.dungeon-auto-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px 10px;color:#dceff7;font-size:12px;font-weight:800}.dungeon-auto-top b{color:#5eead4}.dungeon-auto-live{padding:4px 8px;border:1px solid rgba(45,212,191,.32);border-radius:99px;background:rgba(13,148,136,.13);font-size:10px;color:#99f6e4;white-space:nowrap}.dungeon-auto-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.dungeon-unit-card{min-width:0;min-height:135px;padding:10px;border:1px solid rgba(110,231,255,.27);border-radius:12px;background:rgba(3,11,23,.82);box-shadow:0 7px 18px rgba(0,0,0,.24);display:flex;flex-direction:column;justify-content:space-between;transition:transform .18s ease,filter .18s ease}.dungeon-unit-card.enemy{border-color:rgba(217,70,239,.52);background:rgba(19,8,35,.86);text-align:right}.dungeon-unit-head{display:flex;align-items:center;gap:8px;min-width:0}.enemy .dungeon-unit-head{justify-content:flex-end;flex-direction:row-reverse}.dungeon-sprite-frame{width:52px;height:52px;flex:0 0 52px;border-radius:11px;background:radial-gradient(circle at 35% 30%,rgba(45,212,191,.22),rgba(5,15,28,.1));border:1px solid rgba(94,234,212,.24);overflow:hidden;display:grid;place-items:center}.enemy .dungeon-sprite-frame{background:radial-gradient(circle at 65% 30%,rgba(217,70,239,.25),rgba(27,7,41,.12));border-color:rgba(232,121,249,.34)}.dungeon-sprite{width:100%;height:100%;object-fit:contain;object-position:center bottom;transform:scale(1.18);filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}.dungeon-unit-info{min-width:0}.dungeon-unit-name{font-size:12px;font-weight:900;color:#f8fafc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dungeon-unit-sub{margin-top:3px;font-size:10px;color:#9fb5c6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dungeon-auto-hp-label{margin:8px 0 5px;font-size:10px;color:#cbd5e1}.enemy .dungeon-auto-hp-label{text-align:right}.dungeon-auto-hp-track{height:9px;border:1px solid rgba(255,255,255,.13);border-radius:10px;overflow:hidden;background:rgba(0,0,0,.45)}.dungeon-auto-hp-fill{width:100%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#14b8a6,#2dd4bf);transition:width .26s ease}.enemy .dungeon-auto-hp-fill{background:linear-gradient(90deg,#fb4b54,#d946ef)}.dungeon-auto-log{margin-top:10px;padding:9px 10px;border:1px solid rgba(148,163,184,.2);border-radius:9px;background:rgba(1,7,18,.73);color:#d8edf3;font-size:10px;line-height:1.45;text-align:center;min-height:34px;display:flex;align-items:center;justify-content:center}.dungeon-auto-reward{padding-top:8px;text-align:center;font-size:10px;color:#f8d58a}.dungeon-auto-help{margin:9px 2px 0;color:var(--text-sub);font-size:10px;line-height:1.5}.dungeon-auto-boss{animation:dungeonBossPulse 1.25s ease-in-out infinite}@keyframes dungeonAutoStrike{0%,100%{transform:translateX(0) scale(1)}48%{transform:translateX(7px) scale(1.025)}}@keyframes dungeonAutoHit{0%,100%{filter:brightness(1);transform:translateX(0)}48%{filter:brightness(1.8);transform:translateX(-6px)}}@keyframes dungeonBossPulse{0%,100%{box-shadow:0 7px 18px rgba(0,0,0,.24)}50%{box-shadow:0 0 18px rgba(217,70,239,.47)}}.dungeon-unit-card.dungeon-strike{animation:dungeonAutoStrike .34s ease both}.dungeon-unit-card.dungeon-hit{animation:dungeonAutoHit .34s ease both}@media(max-width:560px){.dungeon-auto-arena{padding:10px}.dungeon-auto-grid{gap:7px}.dungeon-unit-card{min-height:125px;padding:8px}.dungeon-sprite-frame{width:45px;height:45px;flex-basis:45px}.dungeon-unit-head{gap:6px}.dungeon-unit-name{font-size:10px}.dungeon-unit-sub,.dungeon-auto-hp-label{font-size:9px}.dungeon-auto-top{font-size:10px}.dungeon-auto-live{font-size:9px;padding:3px 6px}}
+
 </style>
 </head>
 <body>
@@ -855,25 +860,24 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
     </div>
 
     <div id="huntingPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">⚔️ 양자 균열 던전</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">확률이 아닌 <b style="color:var(--accent);">직접 전투</b>로 몬스터를 처치하세요. 일반 몬스터 10마리를 쓰러뜨리면 강력한 보스가 출현합니다.</p>
-      <div class="dungeon-arena">
-        <div class="dungeon-hud"><span>🏰 <b id="dungeonFloor">1</b>층 균열</span><span id="dungeonProgress">일반 몬스터 0 / 10</span></div>
-        <div class="dungeon-battlefield">
-          <div class="dungeon-combatant" id="dungeonHeroCard">
-            <div class="dungeon-entity">🧑‍🚀⚔️</div><div class="dungeon-name">양자 연구원</div>
-            <div class="dungeon-meta" id="dungeonHeroHpText">HP 100 / 100</div><div class="dungeon-hp-track"><div class="dungeon-hp-fill" id="dungeonHeroHpFill"></div></div>
-          </div>
-          <div class="dungeon-combatant enemy" id="dungeonMonsterCard">
-            <div class="dungeon-entity enemy-icon" id="dungeonMonsterIcon">👾</div><div class="dungeon-name" id="dungeonMonsterName">균열 생명체</div>
-            <div class="dungeon-meta" id="dungeonMonsterHpText">HP 0 / 0</div><div class="dungeon-hp-track"><div class="dungeon-hp-fill" id="dungeonMonsterHpFill"></div></div>
-          </div>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">⚔️ 양자 균열 자동 던전</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:10px;">2D 연구원과 몬스터가 자동으로 전투합니다. 일반 몬스터 10마리 처치 후 보스가 출현합니다.</p>
+      <div class="dungeon-auto-arena">
+        <div class="dungeon-auto-top"><span>🏰 <b id="dungeonFloor">1</b>층 균열 · <span id="dungeonProgress">일반 몬스터 0 / 10</span></span><span class="dungeon-auto-live">● 자동 전투 중</span></div>
+        <div class="dungeon-auto-grid">
+          <article class="dungeon-unit-card" id="dungeonHeroCard">
+            <div class="dungeon-unit-head"><div class="dungeon-sprite-frame"><img class="dungeon-sprite" id="dungeonHeroSprite" src="dungeon_player_2d_clean.png" alt="양자 연구원"></div><div class="dungeon-unit-info"><div class="dungeon-unit-name">양자 연구원</div><div class="dungeon-unit-sub" id="dungeonHeroWeapon">🪵⚔️ 나무검</div></div></div>
+            <div><div class="dungeon-auto-hp-label" id="dungeonHeroHpText">HP 100 / 100</div><div class="dungeon-auto-hp-track"><div class="dungeon-auto-hp-fill" id="dungeonHeroHpFill"></div></div></div>
+          </article>
+          <article class="dungeon-unit-card enemy" id="dungeonMonsterCard">
+            <div class="dungeon-unit-head"><div class="dungeon-sprite-frame"><img class="dungeon-sprite" id="dungeonMonsterSprite" src="dungeon_monster_2d_clean.png" alt="던전 몬스터"></div><div class="dungeon-unit-info"><div class="dungeon-unit-name" id="dungeonMonsterName">균열 생명체</div><div class="dungeon-unit-sub" id="dungeonMonsterRank">일반 몬스터</div></div></div>
+            <div><div class="dungeon-auto-hp-label" id="dungeonMonsterHpText">HP 0 / 0</div><div class="dungeon-auto-hp-track"><div class="dungeon-auto-hp-fill" id="dungeonMonsterHpFill"></div></div></div>
+          </article>
         </div>
-        <div class="dungeon-reward-note" id="dungeonRewardInfo">처치 보상 준비 중</div>
-        <div class="dungeon-log" id="dungeonCombatLog">던전 신호를 분석하고 있습니다...</div>
-        <div class="dungeon-action-row"><button class="btn-game dungeon-attack-btn" id="dungeonAttackBtn">⚔️ 공격하기</button></div>
+        <div class="dungeon-auto-log" id="dungeonCombatLog">자동 전투 시스템을 준비하고 있습니다...</div>
+        <div class="dungeon-auto-reward" id="dungeonRewardInfo">처치 보상 준비 중</div>
       </div>
-      <p class="dungeon-help">장착한 무기는 공격력과 전리품 보상에 반영됩니다. 전투불능이 되어도 입장권·에너지를 잃지 않으며, 몬스터 체력만 일부 회복됩니다.</p>
+      <p class="dungeon-auto-help">버튼을 누를 필요 없이 사냥터를 열어 둔 동안 자동으로 전투가 진행됩니다. 전투불능이어도 에너지·입장권을 잃지 않습니다.</p>
     </div>
     <!-- 주식 거래소 -->
     <div id="stockPanel" class="panel hidden">
@@ -3335,16 +3339,17 @@ window.claimEncyclopediaReward = claimEncyclopediaReward;
 
 const DUNGEON_NORMALS_PER_BOSS = 10;
 let dungeonPersistTimer = null;
+let dungeonAutoBattleTimer = null;
 const DUNGEON_NORMAL_MONSTERS = [
-  { name: '글리치 스커미셔', icon: '👾', hp: 92, attack: 5, reward: 1200, exp: 46 },
-  { name: '오염된 서보 드론', icon: '🤖', hp: 108, attack: 6, reward: 1450, exp: 52 },
-  { name: '공허 크롤러', icon: '🦠', hp: 126, attack: 7, reward: 1700, exp: 60 },
-  { name: '프랙탈 헌터', icon: '🦂', hp: 142, attack: 8, reward: 2050, exp: 68 }
+  { name: '글리치 스커미셔', icon: '👾', hp: 92, attack: 5, reward: 600, exp: 23 },
+  { name: '오염된 서보 드론', icon: '🤖', hp: 108, attack: 6, reward: 725, exp: 26 },
+  { name: '공허 크롤러', icon: '🦠', hp: 126, attack: 7, reward: 850, exp: 30 },
+  { name: '프랙탈 헌터', icon: '🦂', hp: 142, attack: 8, reward: 1025, exp: 34 }
 ];
 const DUNGEON_BOSSES = [
-  { name: '균열 감시자 오메가', icon: '👹', hp: 480, attack: 13, reward: 13500, exp: 420 },
-  { name: '네뷸라 바이러스 군주', icon: '🐉', hp: 550, attack: 15, reward: 16000, exp: 470 },
-  { name: '공허 코어 타이탄', icon: '🧿', hp: 630, attack: 17, reward: 19000, exp: 530 }
+  { name: '균열 감시자 오메가', icon: '👹', hp: 480, attack: 13, reward: 6750, exp: 210 },
+  { name: '네뷸라 바이러스 군주', icon: '🐉', hp: 550, attack: 15, reward: 8000, exp: 235 },
+  { name: '공허 코어 타이탄', icon: '🧿', hp: 630, attack: 17, reward: 9500, exp: 265 }
 ];
 function getDungeonHeroMaxHp() {
   return Math.max(110, Math.round(100 + (d.level || 1) * 10 + (d.permPower || 0) * 4));
@@ -3364,6 +3369,14 @@ function scheduleDungeonPersist() {
     localStorage.setItem(saveKey, JSON.stringify(d));
     dungeonPersistTimer = null;
   }, 350);
+}
+function startDungeonAutoBattle() {
+  if (dungeonAutoBattleTimer) clearInterval(dungeonAutoBattleTimer);
+  dungeonAutoBattleTimer = setInterval(() => {
+    const panel = document.getElementById('huntingPanel');
+    if (!panel || panel.classList.contains('hidden')) return;
+    attackDungeonMonster();
+  }, 1100);
 }
 function createDungeonEncounter() {
   const state = d.dungeon;
@@ -3418,19 +3431,25 @@ function renderDungeon() {
   setText('dungeonFloor', state.floor);
   setText('dungeonProgress', monster.isBoss ? '⚠️ 보스 전투' : `일반 몬스터 ${state.normalKills} / ${DUNGEON_NORMALS_PER_BOSS}`);
   setText('dungeonHeroHpText', `HP ${fmt(state.heroHp)} / ${fmt(state.heroMaxHp)}`);
-  setText('dungeonMonsterIcon', monster.icon);
+  setText('dungeonHeroWeapon', `${weapon.icon} ${weapon.name} · 피해 ${fmt(getDungeonAttackPower())}`);
   setText('dungeonMonsterName', monster.isBoss ? `👑 ${monster.name}` : monster.name);
+  setText('dungeonMonsterRank', monster.isBoss ? '보스 몬스터' : '일반 몬스터');
   setText('dungeonMonsterHpText', `HP ${fmt(monster.hp)} / ${fmt(monster.maxHp)}`);
-  setText('dungeonCombatLog', state.lastLog || '몬스터의 움직임을 감지했습니다.');
-  setText('dungeonRewardInfo', `장착 무기: ${weapon.icon} ${weapon.name} · 처치 시 ${fmt(Math.round(monster.reward * (weapon.bonusReward || 1)))} 에너지 · EXP ${fmt(monster.exp)}`);
+  setText('dungeonCombatLog', state.lastLog || '자동 전투가 곧 시작됩니다.');
+  setText('dungeonRewardInfo', `처치 보상: ${fmt(Math.round(monster.reward * (weapon.bonusReward || 1)))} 에너지 · EXP ${fmt(monster.exp)}`);
   const heroFill = document.getElementById('dungeonHeroHpFill');
   const monsterFill = document.getElementById('dungeonMonsterHpFill');
   const monsterCard = document.getElementById('dungeonMonsterCard');
-  const attackBtn = document.getElementById('dungeonAttackBtn');
+  const monsterSprite = document.getElementById('dungeonMonsterSprite');
+  const heroSprite = document.getElementById('dungeonHeroSprite');
   if (heroFill) heroFill.style.width = `${heroHpPct}%`;
   if (monsterFill) monsterFill.style.width = `${monsterHpPct}%`;
-  if (monsterCard) monsterCard.classList.toggle('dungeon-boss-glow', monster.isBoss);
-  if (attackBtn) attackBtn.textContent = `⚔️ 공격하기 · 피해 ${fmt(getDungeonAttackPower())}`;
+  if (heroSprite) heroSprite.src = 'dungeon_player_2d_clean.png';
+  if (monsterSprite) {
+    monsterSprite.src = 'dungeon_monster_2d_clean.png';
+    monsterSprite.style.filter = monster.isBoss ? 'hue-rotate(32deg) saturate(1.35) drop-shadow(0 3px 5px rgba(0,0,0,.45))' : '';
+  }
+  if (monsterCard) monsterCard.classList.toggle('dungeon-auto-boss', monster.isBoss);
 }
 function attackDungeonMonster() {
   ensureDungeonState();
@@ -4401,8 +4420,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const claimAllEncyclopediaBtn = document.getElementById("claimAllEncyclopediaBtn");
   if(claimAllEncyclopediaBtn) claimAllEncyclopediaBtn.onclick = claimAllEncyclopediaRewards;
 
-  const dungeonAttackBtn = document.getElementById("dungeonAttackBtn");
-  if(dungeonAttackBtn) dungeonAttackBtn.onclick = attackDungeonMonster;
+  startDungeonAutoBattle();
 
   for(let i = 1; i <= 4; i++) {
     const bCustom = document.getElementById(`buyStock${i}_custom`);
