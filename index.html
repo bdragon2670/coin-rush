@@ -595,6 +595,15 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 .p2p-my-row { display:flex; justify-content:space-between; gap:8px; padding:9px; border-radius:10px; background:rgba(255,255,255,.025); color:var(--text-sub); font-size:10px; }
 @media (max-width: 900px) { .p2p-market-layout { grid-template-columns:1fr; } .p2p-market-hero { align-items:flex-start; flex-direction:column; } }
 
+
+/* 던전형 사냥터 전투 UI */
+.dungeon-arena{position:relative;overflow:hidden;min-height:420px;border:1px solid rgba(34,211,238,.38);border-radius:18px;background:#06111b url('quantum_dungeon_battle.jpg') center/cover no-repeat;box-shadow:inset 0 0 80px rgba(0,0,0,.55),0 10px 35px rgba(34,211,238,.11);isolation:isolate;}
+.dungeon-arena::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,9,16,.76),rgba(5,10,21,.25) 46%,rgba(15,3,28,.60)),linear-gradient(0deg,rgba(0,0,0,.58),transparent 46%);z-index:-1;}
+.dungeon-hud{display:flex;justify-content:space-between;gap:8px;padding:12px 14px;color:#e6fbff;font-size:12px;font-weight:800;background:linear-gradient(90deg,rgba(3,18,30,.86),rgba(17,8,35,.70));border-bottom:1px solid rgba(255,255,255,.1);}
+.dungeon-hud b{color:#5eead4;}.dungeon-battlefield{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:12px;min-height:235px;padding:24px 24px 10px;}
+.dungeon-combatant{min-width:0;display:flex;flex-direction:column;gap:7px;padding:11px;border-radius:15px;background:rgba(3,12,22,.58);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(3px);transition:transform .16s ease,filter .16s ease;}
+.dungeon-combatant.enemy{text-align:right;border-color:rgba(217,70,239,.45);background:rgba(27,6,38,.56);}.dungeon-entity{font-size:38px;line-height:1;filter:drop-shadow(0 3px 9px rgba(0,0,0,.8));}.dungeon-entity.enemy-icon{color:#f0abfc;}.dungeon-name{font-size:13px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.dungeon-meta{font-size:10px;color:#b6c5d3;}.dungeon-hp-track{height:9px;border-radius:20px;background:rgba(0,0,0,.55);overflow:hidden;border:1px solid rgba(255,255,255,.14);}.dungeon-hp-fill{height:100%;width:100%;border-radius:inherit;transition:width .22s ease;background:linear-gradient(90deg,#34d399,#2dd4bf);}.enemy .dungeon-hp-fill{background:linear-gradient(90deg,#ef4444,#d946ef);}.dungeon-hit{animation:dungeonHit .34s ease both;}.dungeon-strike{animation:dungeonStrike .34s ease both;}.dungeon-boss-glow{animation:dungeonBossGlow 1.4s ease-in-out infinite;}.dungeon-log{margin:0 14px 12px;padding:10px 12px;min-height:36px;border-radius:10px;background:rgba(0,6,14,.72);border:1px solid rgba(94,234,212,.24);color:#d9faff;font-size:11px;display:flex;align-items:center;justify-content:center;text-align:center;}.dungeon-action-row{display:flex;gap:8px;padding:0 14px 14px;}.dungeon-attack-btn{flex:1;font-size:14px!important;padding:12px!important;background:linear-gradient(135deg,#0891b2,#0f766e)!important;}.dungeon-help{margin:10px 2px 0;font-size:11px;color:var(--text-sub);line-height:1.5;}.dungeon-reward-note{font-size:10px;color:#fde68a;text-align:center;margin-top:3px;}@keyframes dungeonHit{0%,100%{transform:translateX(0);filter:brightness(1)}35%{transform:translateX(12px);filter:brightness(2.1) saturate(1.7)}}@keyframes dungeonStrike{0%,100%{transform:translateX(0) scale(1)}45%{transform:translateX(28px) scale(1.08)}}@keyframes dungeonBossGlow{0%,100%{box-shadow:0 0 0 rgba(217,70,239,0)}50%{box-shadow:0 0 24px rgba(217,70,239,.72)}}@media(max-width:620px){.dungeon-arena{min-height:390px}.dungeon-battlefield{min-height:220px;padding:18px 12px 8px;gap:7px}.dungeon-combatant{padding:8px}.dungeon-entity{font-size:30px}.dungeon-hud{font-size:10px}.dungeon-name{font-size:11px;}.dungeon-help{font-size:10px;}}
+
 </style>
 </head>
 <body>
@@ -841,32 +850,31 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 
     <div id="armoryPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">⚔️ 퀀텀 무기 상점 (검 장착 및 구매)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">다양한 검을 구매하고 장착하여 사냥터 성공 확률과 보상을 극대화하세요!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">다양한 검을 구매하고 장착하여 던전 공격력과 처치 보상을 강화하세요!</p>
       <div class="shop-grid" id="weaponShopGrid"></div>
     </div>
 
     <div id="huntingPanel" class="panel hidden">
-      <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">🎯 퀀텀 바이러스 사냥터 (에너지 레이드)</h3>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">장착한 무기로 사냥터에 도전하세요!</p>
-      <div class="shop-grid">
-        <div class="game-card">
-          <h3>🦠 로그 바이러스 <span style="font-size:10px; color:#10b981;" id="huntProb1">(기본 30%)</span></h3>
-          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward1" style="color:var(--accent);">4,500</b> 에너지</p>
-          <button class="btn-game" id="huntBtn1">소탕 작전 (비용 2,000)</button>
+      <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">⚔️ 양자 균열 던전</h3>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:12px;">확률이 아닌 <b style="color:var(--accent);">직접 전투</b>로 몬스터를 처치하세요. 일반 몬스터 10마리를 쓰러뜨리면 강력한 보스가 출현합니다.</p>
+      <div class="dungeon-arena">
+        <div class="dungeon-hud"><span>🏰 <b id="dungeonFloor">1</b>층 균열</span><span id="dungeonProgress">일반 몬스터 0 / 10</span></div>
+        <div class="dungeon-battlefield">
+          <div class="dungeon-combatant" id="dungeonHeroCard">
+            <div class="dungeon-entity">🧑‍🚀⚔️</div><div class="dungeon-name">양자 연구원</div>
+            <div class="dungeon-meta" id="dungeonHeroHpText">HP 100 / 100</div><div class="dungeon-hp-track"><div class="dungeon-hp-fill" id="dungeonHeroHpFill"></div></div>
+          </div>
+          <div class="dungeon-combatant enemy" id="dungeonMonsterCard">
+            <div class="dungeon-entity enemy-icon" id="dungeonMonsterIcon">👾</div><div class="dungeon-name" id="dungeonMonsterName">균열 생명체</div>
+            <div class="dungeon-meta" id="dungeonMonsterHpText">HP 0 / 0</div><div class="dungeon-hp-track"><div class="dungeon-hp-fill" id="dungeonMonsterHpFill"></div></div>
+          </div>
         </div>
-        <div class="game-card">
-          <h3>👾 글리치 워머 <span style="font-size:10px; color:#10b981;" id="huntProb2">(기본 15%)</span></h3>
-          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward2" style="color:var(--accent);">25,000</b> 에너지</p>
-          <button class="btn-game" id="huntBtn2">소탕 작전 (비용 10,000)</button>
-        </div>
-        <div class="game-card">
-          <h3>🐉 타이탄 랜섬웨어 <span style="font-size:10px; color:#10b981;" id="huntProb3">(기본 5%)</span></h3>
-          <p style="font-size:11px; color:var(--text-sub); margin:4px 0;">보상: <b id="huntReward3" style="color:var(--accent);">150,000</b> 에너지</p>
-          <button class="btn-game" id="huntBtn3">소탕 작전 (비용 50,000)</button>
-        </div>
+        <div class="dungeon-reward-note" id="dungeonRewardInfo">처치 보상 준비 중</div>
+        <div class="dungeon-log" id="dungeonCombatLog">던전 신호를 분석하고 있습니다...</div>
+        <div class="dungeon-action-row"><button class="btn-game dungeon-attack-btn" id="dungeonAttackBtn">⚔️ 공격하기</button></div>
       </div>
+      <p class="dungeon-help">장착한 무기는 공격력과 전리품 보상에 반영됩니다. 전투불능이 되어도 입장권·에너지를 잃지 않으며, 몬스터 체력만 일부 회복됩니다.</p>
     </div>
-
     <!-- 주식 거래소 -->
     <div id="stockPanel" class="panel hidden">
       <h3 style="color:var(--text-main); margin-top:0; font-size:14px;">📈 퀀텀 에너지 주식 거래소 & 뉴스 채널 (Lv.35 해제)</h3>
@@ -1512,7 +1520,7 @@ let d = JSON.parse(savedRawData || "null") || {
   coinColor: 'emerald', coinIcon: '⚡', customImg: null, bgImg: null,
   stock1: 0, stock2: 0, stock3: 0, stock4: 0,
   box1Count: 0,
-  miscBoxCount: 0, miscItems: { exp2: 0, luck2: 0, money: [] }, miscItemCooldowns: { exp2: 0, luck2: 0, money: 0 }, expCouponUntil: 0, luckCouponUntil: 0, expRequirementVersion: 2,
+  miscBoxCount: 0, miscItems: { exp2: 0, luck2: 0, money: [] }, miscItemCooldowns: { exp2: 0, luck2: 0, money: 0 }, expCouponUntil: 0, luckCouponUntil: 0, expRequirementVersion: 3,
   equippedWeapon: 0, ownedWeapons: [0],
   mineDepth: 1,
   stockSellCooldowns: {},
@@ -1525,7 +1533,8 @@ let d = JSON.parse(savedRawData || "null") || {
   equippedTitle: 'novice',
   totalEnergyEarned: 0,
   level: 1,
-  exp: 0
+  exp: 0,
+  dungeon: null
 };
 
 if (!d.equippedPets) d.equippedPets = [];
@@ -1567,6 +1576,7 @@ if (d.autoclickLevel === undefined) d.autoclickLevel = 1;
 if (d.autoclickActive === undefined) d.autoclickActive = false;
 if (d.level === undefined) d.level = 1;
 if (d.exp === undefined) d.exp = 0;
+if (!d.dungeon || typeof d.dungeon !== 'object') d.dungeon = null;
 if (d.expRequirementVersion === undefined) d.expRequirementVersion = 1;
 if (d.attendDays === undefined) d.attendDays = 0;
 if (!d.lastAttendDayStr) d.lastAttendDayStr = "";
@@ -1945,7 +1955,7 @@ function startExpEventCountdown() {
   expEventTimer = setInterval(checkAndRunExpEvent, 1000);
 }
 
-const EXP_REQUIREMENT_VERSION = 2;
+const EXP_REQUIREMENT_VERSION = 3;
 const EXP_REQUIREMENT_REDUCTION = 0.95;
 
 function getLegacyRequiredExp(level) {
@@ -1974,8 +1984,11 @@ function setProgressFromTotalExp(totalExp) {
 }
 function migrateExpRequirementIfNeeded() {
   if (d.expRequirementVersion === EXP_REQUIREMENT_VERSION) return false;
-  const legacyTotalExp = getTotalExpFromProgress(d.level, d.exp, getLegacyRequiredExp);
-  setProgressFromTotalExp(legacyTotalExp);
+  const previousVersion = Number(d.expRequirementVersion) || 1;
+  const previousRequirementFn = previousVersion >= 2 ? getRequiredExp : getLegacyRequiredExp;
+  // 저장된 레벨·현재 EXP를 이전 기준의 누적 EXP로 환산한 뒤, 5% 낮아진 요구량에 맞춰 레벨과 잔여 EXP를 다시 계산합니다.
+  const totalEarnedExp = getTotalExpFromProgress(d.level, d.exp, previousRequirementFn);
+  setProgressFromTotalExp(totalEarnedExp);
   d.expRequirementVersion = EXP_REQUIREMENT_VERSION;
   return true;
 }
@@ -2182,6 +2195,7 @@ function normalizeCloudSaveData(saveData) {
     if (!Number.isFinite(d.miscItemCooldowns[type])) d.miscItemCooldowns[type] = 0;
   });
   if (d.expRequirementVersion === undefined) d.expRequirementVersion = 1;
+  if (!d.dungeon || typeof d.dungeon !== 'object') d.dungeon = null;
   migrateExpRequirementIfNeeded();
   if (!d.unlockedTitles) d.unlockedTitles = ['novice'];
   if (!d.ownedWeapons) d.ownedWeapons = [0];
@@ -3093,18 +3107,7 @@ function render(){
    }
  }
 
- const weapon = WEAPONS_DB[d.equippedWeapon || 0];
- const extraProb = (weapon ? weapon.bonusProb : 0);
- const extraRew = (weapon ? weapon.bonusReward : 1.0);
-
- if(document.getElementById("huntProb1")) document.getElementById("huntProb1").textContent = `(적용 확률: ${Math.min(90, Math.round((0.30 + extraProb)*100))}%)`;
- if(document.getElementById("huntProb2")) document.getElementById("huntProb2").textContent = `(적용 확률: ${Math.min(85, Math.round((0.15 + extraProb)*100))}%)`;
- if(document.getElementById("huntProb3")) document.getElementById("huntProb3").textContent = `(적용 확률: ${Math.min(80, Math.round((0.05 + extraProb)*100))}%)`;
-
- if(document.getElementById("huntReward1")) document.getElementById("huntReward1").textContent = fmt(Math.round(4500 * extraRew));
- if(document.getElementById("huntReward2")) document.getElementById("huntReward2").textContent = fmt(Math.round(25000 * extraRew));
- if(document.getElementById("huntReward3")) document.getElementById("huntReward3").textContent = fmt(Math.round(150000 * extraRew));
-
+ renderDungeon();
  renderWeaponShop();
  renderTitles();
 
@@ -3330,35 +3333,148 @@ function renderEncyclopedia() {
 }
 window.claimEncyclopediaReward = claimEncyclopediaReward;
 
-function huntMonster(tier) {
-  let costs = { 1: 2000, 2: 10000, 3: 50000 };
-  let baseRewards = { 1: 4500, 2: 25000, 3: 150000 };
-  let baseProbs = { 1: 0.30, 2: 0.15, 3: 0.05 };
-  
-  let cost = costs[tier];
-  let weapon = WEAPONS_DB[d.equippedWeapon || 0];
-
-  let extraProb = (weapon ? weapon.bonusProb : 0);
-  let extraRew = (weapon ? weapon.bonusReward : 1.0);
-
-  let prob = Math.min(0.90, baseProbs[tier] + extraProb);
-  let reward = Math.round(baseRewards[tier] * extraRew);
-
-  if(d.score < cost) return say("출동 비용 에너지가 부족합니다.");
-  d.score -= cost;
-
-  let success = Math.random() < prob;
-  if(success) {
-    d.score += reward;
-    d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + reward;
-    addExp(tier * 250);
-    playSuccessSound();
-    say(`🎯 사냥 소탕 성공! (+${fmt(reward)} 에너지, EXP 획득)`);
-  } else {
-    playFailureSound();
-    say(`💥 사냥 실패... 바이러스 반격으로 에너지를 잃었습니다.`);
+const DUNGEON_NORMALS_PER_BOSS = 10;
+let dungeonPersistTimer = null;
+const DUNGEON_NORMAL_MONSTERS = [
+  { name: '글리치 스커미셔', icon: '👾', hp: 92, attack: 5, reward: 1200, exp: 46 },
+  { name: '오염된 서보 드론', icon: '🤖', hp: 108, attack: 6, reward: 1450, exp: 52 },
+  { name: '공허 크롤러', icon: '🦠', hp: 126, attack: 7, reward: 1700, exp: 60 },
+  { name: '프랙탈 헌터', icon: '🦂', hp: 142, attack: 8, reward: 2050, exp: 68 }
+];
+const DUNGEON_BOSSES = [
+  { name: '균열 감시자 오메가', icon: '👹', hp: 480, attack: 13, reward: 13500, exp: 420 },
+  { name: '네뷸라 바이러스 군주', icon: '🐉', hp: 550, attack: 15, reward: 16000, exp: 470 },
+  { name: '공허 코어 타이탄', icon: '🧿', hp: 630, attack: 17, reward: 19000, exp: 530 }
+];
+function getDungeonHeroMaxHp() {
+  return Math.max(110, Math.round(100 + (d.level || 1) * 10 + (d.permPower || 0) * 4));
+}
+function getDungeonWeapon() {
+  return WEAPONS_DB[d.equippedWeapon || 0] || WEAPONS_DB[0];
+}
+function getDungeonAttackPower() {
+  const weapon = getDungeonWeapon();
+  const rawPower = (d.power || 1) + (d.permPower || 0);
+  return Math.max(16, Math.round((14 + rawPower * 3 + (d.level || 1) * 1.5) * (weapon.bonusReward || 1)));
+}
+function scheduleDungeonPersist() {
+  markCloudSavePending();
+  if (dungeonPersistTimer) return;
+  dungeonPersistTimer = setTimeout(() => {
+    localStorage.setItem(saveKey, JSON.stringify(d));
+    dungeonPersistTimer = null;
+  }, 350);
+}
+function createDungeonEncounter() {
+  const state = d.dungeon;
+  const isBoss = state.normalKills >= DUNGEON_NORMALS_PER_BOSS;
+  const roster = isBoss ? DUNGEON_BOSSES : DUNGEON_NORMAL_MONSTERS;
+  const seed = (state.floor + state.normalKills) % roster.length;
+  const template = roster[seed];
+  const scaling = 1 + Math.max(0, state.floor - 1) * (isBoss ? 0.20 : 0.15);
+  state.current = {
+    isBoss,
+    name: template.name,
+    icon: template.icon,
+    maxHp: Math.round(template.hp * scaling),
+    hp: Math.round(template.hp * scaling),
+    attack: Math.max(3, Math.round(template.attack * (1 + Math.max(0, state.floor - 1) * 0.08))),
+    reward: Math.round(template.reward * scaling),
+    exp: Math.round(template.exp * scaling)
+  };
+  state.lastLog = isBoss ? `⚠️ 보스 ${template.name}가 균열에서 모습을 드러냈습니다!` : `${template.name}가 길을 막아섰습니다. 공격을 시작하세요!`;
+}
+function ensureDungeonState() {
+  if (!d.dungeon || typeof d.dungeon !== 'object') {
+    d.dungeon = { floor: 1, normalKills: 0, heroHp: 0, heroMaxHp: 0, current: null, lastLog: '' };
   }
-  save();
+  const state = d.dungeon;
+  state.floor = Math.max(1, Math.floor(Number(state.floor) || 1));
+  state.normalKills = Math.min(DUNGEON_NORMALS_PER_BOSS, Math.max(0, Math.floor(Number(state.normalKills) || 0)));
+  const nextMaxHp = getDungeonHeroMaxHp();
+  if (!Number.isFinite(state.heroHp) || state.heroHp <= 0) state.heroHp = nextMaxHp;
+  if (!Number.isFinite(state.heroMaxHp) || state.heroMaxHp <= 0) state.heroMaxHp = nextMaxHp;
+  if (state.heroMaxHp !== nextMaxHp) {
+    state.heroHp = Math.max(1, Math.round((state.heroHp / state.heroMaxHp) * nextMaxHp));
+    state.heroMaxHp = nextMaxHp;
+  }
+  state.heroHp = Math.min(state.heroMaxHp, state.heroHp);
+  if (!state.current || !Number.isFinite(state.current.hp) || !Number.isFinite(state.current.maxHp) || state.current.hp <= 0) createDungeonEncounter();
+}
+function animateDungeonStrike() {
+  const hero = document.getElementById('dungeonHeroCard');
+  const monster = document.getElementById('dungeonMonsterCard');
+  if (hero) { hero.classList.remove('dungeon-strike'); void hero.offsetWidth; hero.classList.add('dungeon-strike'); }
+  if (monster) { monster.classList.remove('dungeon-hit'); void monster.offsetWidth; monster.classList.add('dungeon-hit'); }
+}
+function renderDungeon() {
+  ensureDungeonState();
+  const state = d.dungeon;
+  const monster = state.current;
+  const weapon = getDungeonWeapon();
+  const heroHpPct = Math.max(0, Math.min(100, (state.heroHp / state.heroMaxHp) * 100));
+  const monsterHpPct = Math.max(0, Math.min(100, (monster.hp / monster.maxHp) * 100));
+  const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  setText('dungeonFloor', state.floor);
+  setText('dungeonProgress', monster.isBoss ? '⚠️ 보스 전투' : `일반 몬스터 ${state.normalKills} / ${DUNGEON_NORMALS_PER_BOSS}`);
+  setText('dungeonHeroHpText', `HP ${fmt(state.heroHp)} / ${fmt(state.heroMaxHp)}`);
+  setText('dungeonMonsterIcon', monster.icon);
+  setText('dungeonMonsterName', monster.isBoss ? `👑 ${monster.name}` : monster.name);
+  setText('dungeonMonsterHpText', `HP ${fmt(monster.hp)} / ${fmt(monster.maxHp)}`);
+  setText('dungeonCombatLog', state.lastLog || '몬스터의 움직임을 감지했습니다.');
+  setText('dungeonRewardInfo', `장착 무기: ${weapon.icon} ${weapon.name} · 처치 시 ${fmt(Math.round(monster.reward * (weapon.bonusReward || 1)))} 에너지 · EXP ${fmt(monster.exp)}`);
+  const heroFill = document.getElementById('dungeonHeroHpFill');
+  const monsterFill = document.getElementById('dungeonMonsterHpFill');
+  const monsterCard = document.getElementById('dungeonMonsterCard');
+  const attackBtn = document.getElementById('dungeonAttackBtn');
+  if (heroFill) heroFill.style.width = `${heroHpPct}%`;
+  if (monsterFill) monsterFill.style.width = `${monsterHpPct}%`;
+  if (monsterCard) monsterCard.classList.toggle('dungeon-boss-glow', monster.isBoss);
+  if (attackBtn) attackBtn.textContent = `⚔️ 공격하기 · 피해 ${fmt(getDungeonAttackPower())}`;
+}
+function attackDungeonMonster() {
+  ensureDungeonState();
+  const state = d.dungeon;
+  const monster = state.current;
+  const damage = getDungeonAttackPower();
+  animateDungeonStrike();
+  monster.hp = Math.max(0, monster.hp - damage);
+  state.lastLog = `⚔️ ${monster.name}에게 ${fmt(damage)} 피해를 주었습니다.`;
+  if (monster.hp <= 0) {
+    const weapon = getDungeonWeapon();
+    const reward = Math.round(monster.reward * (weapon.bonusReward || 1));
+    d.score += reward;
+    d.totalEnergyEarned = (d.totalEnergyEarned || 0) + reward;
+    addExp(monster.exp);
+    if (monster.isBoss) {
+      state.floor++;
+      state.normalKills = 0;
+      state.heroHp = state.heroMaxHp;
+      state.lastLog = `🏆 보스를 처치했습니다! ${fmt(reward)} 에너지와 EXP를 획득하고 ${state.floor}층으로 진입합니다.`;
+    } else {
+      state.normalKills++;
+      state.heroHp = Math.min(state.heroMaxHp, state.heroHp + Math.round(state.heroMaxHp * 0.10));
+      state.lastLog = state.normalKills >= DUNGEON_NORMALS_PER_BOSS
+        ? `💥 일반 몬스터 10마리 처치 완료! 다음 전투에서 보스가 출현합니다.`
+        : `✅ ${monster.name} 처치! ${fmt(reward)} 에너지와 EXP를 획득했습니다.`;
+    }
+    playSuccessSound();
+    createDungeonEncounter();
+  } else {
+    const counterDamage = monster.attack;
+    state.heroHp = Math.max(0, state.heroHp - counterDamage);
+    state.lastLog += ` ${monster.name}의 반격! 연구원 HP -${fmt(counterDamage)}.`;
+    if (state.heroHp <= 0) {
+      state.heroHp = state.heroMaxHp;
+      monster.hp = Math.max(1, Math.round(monster.hp * 0.78));
+      state.lastLog = `🛡️ 연구원이 보호막으로 복귀했습니다. 입장 비용은 없으며, ${monster.name}의 HP가 22% 감소했습니다.`;
+      playFailureSound();
+    }
+  }
+  updateClickHud();
+  updateExpProgressUI();
+  renderDungeon();
+  scheduleDungeonPersist();
 }
 
 function performMergeAll() {
@@ -4285,12 +4401,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const claimAllEncyclopediaBtn = document.getElementById("claimAllEncyclopediaBtn");
   if(claimAllEncyclopediaBtn) claimAllEncyclopediaBtn.onclick = claimAllEncyclopediaRewards;
 
-  const huntBtn1 = document.getElementById("huntBtn1");
-  const huntBtn2 = document.getElementById("huntBtn2");
-  const huntBtn3 = document.getElementById("huntBtn3");
-  if(huntBtn1) huntBtn1.onclick = () => huntMonster(1);
-  if(huntBtn2) huntBtn2.onclick = () => huntMonster(2);
-  if(huntBtn3) huntBtn3.onclick = () => huntMonster(3);
+  const dungeonAttackBtn = document.getElementById("dungeonAttackBtn");
+  if(dungeonAttackBtn) dungeonAttackBtn.onclick = attackDungeonMonster;
 
   for(let i = 1; i <= 4; i++) {
     const bCustom = document.getElementById(`buyStock${i}_custom`);
