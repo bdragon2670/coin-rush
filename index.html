@@ -517,6 +517,10 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
 }
 .news-bad { color: #fca5a5 !important; }
 .news-good { color: #38bdf8 !important; }
+.news-ticker-box.news-good-box{background:rgba(59,130,246,.11);border-color:rgba(59,130,246,.52);box-shadow:0 4px 18px rgba(59,130,246,.22)}
+.news-ticker-box.news-bad-box{background:rgba(239,68,68,.11);border-color:rgba(239,68,68,.52);box-shadow:0 4px 18px rgba(239,68,68,.22)}
+.stock-card.stock-news-up{border-color:rgba(59,130,246,.85)!important;box-shadow:0 0 18px rgba(59,130,246,.22)}
+.stock-card.stock-news-down{border-color:rgba(239,68,68,.85)!important;box-shadow:0 0 18px rgba(239,68,68,.22)}
 
 .ranking-card, .p2p-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 
@@ -869,7 +873,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <h3 style="color:var(--text-main); margin-top:0; font-size:15px;">⚔️ 양자 균열 자동 던전</h3>
       <p style="color:var(--text-sub); font-size:11px; margin-bottom:10px;">2D 연구원과 몬스터가 전투합니다. 일반 몬스터 10마리 처치 후 보스가 출현하며, 처치 시 전리품을 얻을 수 있습니다.</p>
       <div class="dungeon-auto-arena">
-        <div class="dungeon-auto-top"><span>🏰 <b id="dungeonFloor">1</b>층 균열 · <span id="dungeonProgress">일반 몬스터 0 / 10</span></span><span style="display:flex;gap:6px;align-items:center;"><button class="dungeon-manual-attack" id="dungeonManualAttackBtn">⚔️ 공격</button><button class="dungeon-auto-toggle" id="dungeonAutoHuntBtn">🤖 자동사냥: ON</button></span></div>
+        <div class="dungeon-auto-top"><span>🏰 <b id="dungeonFloor">1</b>층 균열 · <span id="dungeonProgress">일반 몬스터 0 / 10</span></span><span style="display:flex;gap:6px;align-items:center;"><span id="dungeonDefeatStatus" style="display:none;color:#fecaca;font-size:10px;font-weight:900;white-space:nowrap;"></span><button class="dungeon-manual-attack" id="dungeonManualAttackBtn">⚔️ 공격</button><button class="dungeon-auto-toggle" id="dungeonAutoHuntBtn">🤖 자동사냥: ON</button></span></div>
         <div class="dungeon-auto-grid">
           <article class="dungeon-unit-card" id="dungeonHeroCard">
             <div class="dungeon-unit-head"><div class="dungeon-sprite-frame"><img class="dungeon-sprite" id="dungeonHeroSprite" src="" alt="양자 연구원"></div><div class="dungeon-unit-info"><div class="dungeon-unit-name">양자 연구원</div><div class="dungeon-unit-sub" id="dungeonHeroWeapon">🪵⚔️ 나무검</div></div></div>
@@ -887,7 +891,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <div class="dungeon-loot-head"><span>🎒 사냥 전리품 가방 <span class="dungeon-loot-count" id="dungeonLootCount">0개</span></span><button class="dungeon-loot-sellall" id="sellAllDungeonLootBtn">전부 판매</button></div>
         <div class="dungeon-loot-list" id="dungeonLootList"><div class="dungeon-loot-empty">아직 획득한 전리품이 없습니다.</div></div>
       </section>
-      <p class="dungeon-auto-help">자동사냥을 OFF하면 수동 공격 버튼으로 직접 전투할 수 있습니다. 전리품은 가방에서 개별 또는 전체 판매할 수 있고, 전투불능이어도 에너지·입장권을 잃지 않습니다.</p>
+      <p class="dungeon-auto-help">자동사냥을 OFF하면 수동 공격 버튼으로 직접 전투할 수 있습니다. 전리품은 가방에서 개별 또는 전체 판매할 수 있습니다. 연구원 HP가 0이 되면 보유 에너지의 10%를 잃고 1분간 전투불능 상태가 됩니다.</p>
     </div>
     <!-- 주식 거래소 -->
     <div id="stockPanel" class="panel hidden">
@@ -895,14 +899,14 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       
       <div id="stockChannelStatusBox" style="background:rgba(16, 185, 129, 0.08); border:1px solid rgba(16, 185, 129, 0.3); border-radius:12px; padding:12px; margin-bottom:14px; text-align:center;">
         <h4 style="margin:0 0 4px; color:var(--accent); font-size:13px;" id="channelStateTitle">🟢 주식 거래소 개장 중</h4>
-        <p style="font-size:11px; color:var(--text-sub); margin:0;" id="channelStateDesc">남은 개장 시간: 5분 00초 (이후 10분간 휴장)</p>
+        <p style="font-size:11px; color:var(--text-sub); margin:0;" id="channelStateDesc">실시간 시세 운영 중 · 5초마다 갱신</p>
       </div>
 
       <div class="news-ticker-box" id="newsTickerBox">
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
         <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세를 유지하고 있습니다.</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">주식을 매도하면 **3분(180초) 동안 해당 주식의 재매수가 엄격히 제한**됩니다. 거래소는 5분 개장, 10분 휴장 주기로 운영됩니다!</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">시세는 <b style="color:#38bdf8;">5초마다</b> 400~600 에너지 범위로 변동합니다. 4개 회사의 호재·악재 뉴스가 발생하면 2초간 급등 또는 하락 후 평균 시세로 복귀합니다.</p>
       
       <div id="stockTradingContainer">
         <div class="stock-grid">
@@ -1097,11 +1101,11 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         </div>
         <div class="game-card">
           <h3>🎒 기타 아이템 뽑기</h3>
-          <p style="color:var(--text-sub); font-size:11px;">EXP 2배 쿠폰, 행운 2배 쿠폰, 1만~50만 머니 쿠폰 또는 꽝을 획득합니다.</p>
+          <p style="color:var(--text-sub); font-size:11px;">EXP 2배 쿠폰 30%(5분), 5천~10만 머니 쿠폰 20%, 꽝 50%입니다. 쿠폰 사용 후 5분 쿨타임이 적용됩니다.</p>
           <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
-            <button class="btn-game" style="flex:1; background:linear-gradient(135deg, #f59e0b, #d97706) !important;" id="buyMiscBox1">1회 (<span id="costMiscBox1">3,500</span>)</button>
-            <button class="btn-game" style="flex:1; background:linear-gradient(135deg, #ec4899, #be185d) !important;" id="buyMiscBox5">5회 (<span id="costMiscBox5">17,500</span>)</button>
-            <button class="btn-game" style="flex:1; background:linear-gradient(135deg, #8b5cf6, #5b21b6) !important;" id="buyMiscBox10">10회 (<span id="costMiscBox10">35,000</span>)</button>
+            <button class="btn-game" style="flex:1; background:linear-gradient(135deg, #f59e0b, #d97706) !important;" id="buyMiscBox1">1회 (<span id="costMiscBox1">50</span>)</button>
+            <button class="btn-game" style="flex:1; background:linear-gradient(135deg, #ec4899, #be185d) !important;" id="buyMiscBox5">5회 (<span id="costMiscBox5">250</span>)</button>
+            <button class="btn-game" style="flex:1; background:linear-gradient(135deg, #8b5cf6, #5b21b6) !important;" id="buyMiscBox10">10회 (<span id="costMiscBox10">500</span>)</button>
           </div>
         </div>
       </div>
@@ -1859,14 +1863,87 @@ function drawStockChart(canvasId, historyData) {
   ctx.stroke();
 }
 
+const STOCK_TICK_INTERVAL_MS = 5000;
+const STOCK_NEWS_EFFECT_MS = 2000;
+const STOCK_NORMAL_STEP_MIN = 400;
+const STOCK_NORMAL_STEP_MAX = 600;
+const STOCK_COMPANIES = {
+  1: { name: '테슬라 에너지', code: 'TES', good: '차세대 에너지 셀 양산 성공', bad: '핵심 발전 설비 점검 장기화' },
+  2: { name: '엠비디아', code: 'NVDA', good: '양자 AI 칩 공급 계약 체결', bad: '주력 AI 칩 공급 차질 발생' },
+  3: { name: '스페이스코어', code: 'SPC', good: '심우주 광물 탐사선 귀환 성공', bad: '궤도 물류선 발사 일정 연기' },
+  4: { name: '양자 바이오', code: 'QBIO', good: '신형 재생 캡슐 임상 결과 호조', bad: '연구 샘플 오염으로 실험 중단' }
+};
+let quantumStockMarketTimer = null;
+let stockNewsReturnTimers = {};
 function getStockMarketStatus() {
-  const totalCycleSec = 15 * 60; // 15분
-  const openSec = 5 * 60; // 5분
-  const currentSecInCycle = Math.floor(Date.now() / 1000) % totalCycleSec;
-  
-  const isOpen = currentSecInCycle < openSec;
-  let remainingSec = isOpen ? (openSec - currentSecInCycle) : (totalCycleSec - currentSecInCycle);
-  return { isOpen, remainingSec };
+  return { isOpen: true, remainingSec: 0 };
+}
+function ensureQuantumStockMarketData() {
+  if (!d.stockPrices || typeof d.stockPrices !== 'object') d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
+  if (!d.stockHistories || typeof d.stockHistories !== 'object') d.stockHistories = { 1: [500,500], 2: [500,500], 3: [500,500], 4: [500,500] };
+  if (!d.stockBaselines || typeof d.stockBaselines !== 'object') d.stockBaselines = {};
+  if (!d.stockNewsEffects || typeof d.stockNewsEffects !== 'object') d.stockNewsEffects = {};
+  for (let id = 1; id <= 4; id++) {
+    const price = Math.max(100, Math.floor(Number(d.stockPrices[id]) || 500));
+    d.stockPrices[id] = price;
+    if (!Number.isFinite(d.stockBaselines[id])) d.stockBaselines[id] = price;
+    if (!Array.isArray(d.stockHistories[id]) || d.stockHistories[id].length < 2) d.stockHistories[id] = [price, price];
+    d.stockHistories[id] = d.stockHistories[id].map(value => Math.max(100, Math.floor(Number(value) || price))).slice(-30);
+    if (!d.stockSellCooldowns || typeof d.stockSellCooldowns !== 'object') d.stockSellCooldowns = {};
+    d.stockSellCooldowns[id] = 0;
+  }
+  if (!d.latestNews) d.latestNews = '📈 4개 회사의 실시간 시세를 분석하고 있습니다.';
+  if (!['good', 'bad', 'neutral'].includes(d.newsType)) d.newsType = 'neutral';
+}
+function appendQuantumStockHistory(id, price) {
+  const history = d.stockHistories[id] || (d.stockHistories[id] = []);
+  history.push(Math.max(100, Math.floor(price)));
+  if (history.length > 30) history.splice(0, history.length - 30);
+}
+function applyQuantumStockNews(id, direction) {
+  const company = STOCK_COMPANIES[id];
+  const isGood = direction === 'good';
+  const spike = isGood ? 2400 : -2400;
+  const displayPrice = Math.max(100, d.stockBaselines[id] + spike);
+  d.stockPrices[id] = displayPrice;
+  appendQuantumStockHistory(id, displayPrice);
+  d.stockNewsEffects[id] = { until: Date.now() + STOCK_NEWS_EFFECT_MS, direction };
+  d.latestNews = `${isGood ? '🔵 호재' : '🔴 악재'} | ${company.name}(${company.code}) ${isGood ? company.good : company.bad}`;
+  d.newsType = direction;
+  showStockAlertToast(`${company.name} ${isGood ? '호재 발생! 2초간 급등' : '악재 발생! 2초간 하락장'}`, isGood);
+  if (stockNewsReturnTimers[id]) clearTimeout(stockNewsReturnTimers[id]);
+  stockNewsReturnTimers[id] = setTimeout(() => {
+    if (!d.stockNewsEffects[id] || d.stockNewsEffects[id].direction !== direction) return;
+    d.stockPrices[id] = d.stockBaselines[id];
+    appendQuantumStockHistory(id, d.stockPrices[id]);
+    delete d.stockNewsEffects[id];
+    d.latestNews = `📊 ${company.name}(${company.code}) 시세가 평균 변동 구간으로 복귀했습니다.`;
+    d.newsType = 'neutral';
+    updateStockUI();
+    save();
+  }, STOCK_NEWS_EFFECT_MS);
+}
+function runQuantumStockTick() {
+  ensureQuantumStockMarketData();
+  for (let id = 1; id <= 4; id++) {
+    if (d.stockNewsEffects[id] && d.stockNewsEffects[id].until > Date.now()) continue;
+    const step = (Math.floor(Math.random() * 3) + 4) * 100;
+    const direction = Math.random() < 0.5 ? -1 : 1;
+    d.stockBaselines[id] = Math.max(100, d.stockBaselines[id] + (step * direction));
+    d.stockPrices[id] = d.stockBaselines[id];
+    appendQuantumStockHistory(id, d.stockPrices[id]);
+  }
+  const targetId = Math.floor(Math.random() * 4) + 1;
+  applyQuantumStockNews(targetId, Math.random() < 0.5 ? 'good' : 'bad');
+  updateStockUI();
+  save();
+}
+function startQuantumStockMarket() {
+  ensureQuantumStockMarketData();
+  if (quantumStockMarketTimer) clearInterval(quantumStockMarketTimer);
+  updateStockUI();
+  quantumStockMarketTimer = setInterval(runQuantumStockTick, STOCK_TICK_INTERVAL_MS);
+  setTimeout(runQuantumStockTick, 700);
 }
 
 function updateStockUI() {
@@ -1897,37 +1974,31 @@ function updateStockUI() {
     newsEl.textContent = d.latestNews;
     newsEl.className = "news-ticker-content " + (d.newsType === 'bad' ? 'news-bad' : 'news-good');
   }
-
-  const market = getStockMarketStatus();
-  const channelTitle = document.getElementById("channelStateTitle");
-  const channelDesc = document.getElementById("channelStateDesc");
-  if(channelTitle && channelDesc) {
-    let minRem = Math.floor(market.remainingSec / 60);
-    let secRem = market.remainingSec % 60;
-    let timeStr = `${minRem}분 ${secRem < 10 ? '0' : ''}${secRem}초`;
-    if(market.isOpen) {
-      channelTitle.textContent = "🟢 주식 거래소 개장 중";
-      channelTitle.style.color = "#10b981";
-      channelDesc.textContent = `남은 개장 시간: ${timeStr} (이후 10분간 휴장)`;
-    } else {
-      channelTitle.textContent = "🔴 주식 거래소 휴장 (닫힘)";
-      channelTitle.style.color = "#ef4444";
-      channelDesc.textContent = `남은 휴장 시간: ${timeStr} (이후 5분간 개장)`;
+  const newsBox = document.getElementById('newsTickerBox');
+  if (newsBox) {
+    newsBox.classList.toggle('news-good-box', d.newsType === 'good');
+    newsBox.classList.toggle('news-bad-box', d.newsType === 'bad');
+  }
+  for (let id = 1; id <= 4; id++) {
+    const card = document.getElementById(`stockPrice${id}`)?.closest('.stock-card');
+    const effect = d.stockNewsEffects && d.stockNewsEffects[id];
+    if (card) {
+      card.classList.toggle('stock-news-up', !!effect && effect.direction === 'good');
+      card.classList.toggle('stock-news-down', !!effect && effect.direction === 'bad');
     }
   }
 
-  const now = Date.now();
+  const channelTitle = document.getElementById("channelStateTitle");
+  const channelDesc = document.getElementById("channelStateDesc");
+  if(channelTitle && channelDesc) {
+    channelTitle.textContent = "🔵 실시간 양자 주식 장세";
+    channelTitle.style.color = "#38bdf8";
+    channelDesc.textContent = "4개 회사 시세가 5초마다 400~600 에너지 범위로 변동합니다.";
+  }
+
   for(let i = 1; i <= 4; i++) {
     const timerEl = document.getElementById(`stockTimer${i}`);
-    const sellTime = d.stockSellCooldowns[i] || 0;
-    const diff = sellTime - now;
-    if(diff > 0) {
-      let minRem = Math.floor(diff / 60000);
-      let secRem = Math.floor((diff % 60000) / 1000);
-      if(timerEl) timerEl.textContent = `⏳ 재매수 제한 남은 시간: ${minRem}분 ${secRem}초`;
-    } else {
-      if(timerEl) timerEl.textContent = "";
-    }
+    if(timerEl) timerEl.textContent = "";
   }
 
   drawStockChart("stockCanvas1", d.stockHistories[1]);
@@ -3385,7 +3456,34 @@ function scheduleDungeonPersist() {
     dungeonPersistTimer = null;
   }, 350);
 }
+const DUNGEON_DEFEAT_DURATION_MS = 60 * 1000;
+let dungeonDefeatTimer = null;
+function getDungeonDefeatRemaining() {
+  ensureDungeonState();
+  return Math.max(0, (d.dungeon.defeatUntil || 0) - Date.now());
+}
+function getDungeonDefeatLabel() {
+  const remaining = Math.ceil(getDungeonDefeatRemaining() / 1000);
+  return remaining > 0 ? `🚫 전투불능 ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}` : '';
+}
+function startDungeonDefeatCountdown() {
+  if (dungeonDefeatTimer) clearInterval(dungeonDefeatTimer);
+  dungeonDefeatTimer = setInterval(() => {
+    if (getDungeonDefeatRemaining() <= 0) {
+      clearInterval(dungeonDefeatTimer);
+      dungeonDefeatTimer = null;
+      if (d.dungeon && d.dungeon.defeatUntil) {
+        d.dungeon.defeatUntil = 0;
+        d.dungeon.lastLog = '✅ 전투불능 상태가 해제되었습니다. 다시 사냥할 수 있습니다.';
+        save();
+      }
+    }
+    const panel = document.getElementById('huntingPanel');
+    if (panel && !panel.classList.contains('hidden')) renderDungeon();
+  }, 1000);
+}
 function startDungeonAutoBattle() {
+  startDungeonDefeatCountdown();
   if (dungeonAutoBattleTimer) clearInterval(dungeonAutoBattleTimer);
   dungeonAutoBattleTimer = setInterval(() => {
     const panel = document.getElementById('huntingPanel');
@@ -3501,6 +3599,7 @@ function ensureDungeonState() {
     d.dungeon = { floor: 1, normalKills: 0, heroHp: 0, heroMaxHp: 0, current: null, lastLog: '' };
   }
   const state = d.dungeon;
+  if (!Number.isFinite(state.defeatUntil)) state.defeatUntil = 0;
   state.floor = Math.max(1, Math.floor(Number(state.floor) || 1));
   state.normalKills = Math.min(DUNGEON_NORMALS_PER_BOSS, Math.max(0, Math.floor(Number(state.normalKills) || 0)));
   const nextMaxHp = getDungeonHeroMaxHp();
@@ -3554,7 +3653,14 @@ function renderDungeon() {
   if (monsterCard) monsterCard.classList.toggle('dungeon-auto-boss', monster.isBoss);
   const autoBtn = document.getElementById('dungeonAutoHuntBtn');
   const manualBtn = document.getElementById('dungeonManualAttackBtn');
+  const defeatStatus = document.getElementById('dungeonDefeatStatus');
+  const defeatRemaining = getDungeonDefeatRemaining();
+  const isDefeated = defeatRemaining > 0;
   const enabled = d.dungeonAutoHunt !== false;
+  if (defeatStatus) {
+    defeatStatus.textContent = getDungeonDefeatLabel();
+    defeatStatus.style.display = isDefeated ? 'inline' : 'none';
+  }
   if (autoBtn) {
     autoBtn.textContent = enabled ? '🤖 자동사냥: ON' : '⏸️ 자동사냥: OFF';
     autoBtn.classList.toggle('off', !enabled);
@@ -3562,13 +3668,17 @@ function renderDungeon() {
   }
   if (manualBtn) {
     manualBtn.classList.toggle('show', !enabled);
-    manualBtn.disabled = enabled;
+    manualBtn.disabled = enabled || isDefeated;
     manualBtn.onclick = () => attackDungeonMonster('manual');
   }
   renderDungeonLootInventory();
 }
 function attackDungeonMonster(source = 'auto') {
   ensureDungeonState();
+  if (getDungeonDefeatRemaining() > 0) {
+    if (source === 'manual') say(`${getDungeonDefeatLabel()} 상태입니다. 회복 후 다시 공격하세요.`);
+    return;
+  }
   const state = d.dungeon;
   const monster = state.current;
   const damage = getDungeonAttackPower();
@@ -3603,9 +3713,12 @@ function attackDungeonMonster(source = 'auto') {
     state.heroHp = Math.max(0, state.heroHp - counterDamage);
     state.lastLog += ` ${monster.name}의 반격! 연구원 HP -${fmt(counterDamage)}.`;
     if (state.heroHp <= 0) {
+      const loss = Math.min(Math.max(0, d.score || 0), Math.max(50, Math.floor((d.score || 0) * 0.10)));
+      d.score = Math.max(0, (d.score || 0) - loss);
       state.heroHp = state.heroMaxHp;
-      monster.hp = Math.max(1, Math.round(monster.hp * 0.78));
-      state.lastLog = `🛡️ 연구원이 보호막으로 복귀했습니다. 입장 비용은 없으며, ${monster.name}의 HP가 22% 감소했습니다.`;
+      state.defeatUntil = Date.now() + DUNGEON_DEFEAT_DURATION_MS;
+      state.lastLog = `💀 연구원이 쓰러졌습니다. 에너지 ${fmt(loss)}를 잃고 1분간 전투불능 상태가 됩니다.`;
+      startDungeonDefeatCountdown();
       playFailureSound();
     }
   }
@@ -4132,11 +4245,10 @@ function useMiscItem(type, moneyIndex = NaN) {
 }
 function rollMiscItem() {
   const roll = Math.random() * 100;
-  if (roll < 30) return { type: 'exp2', icon: '⚡', name: 'EXP 2배 쿠폰', desc: '5분 동안 EXP 2배' };
-  if (roll < 55) return { type: 'luck2', icon: '🍀', name: '행운 2배 쿠폰', desc: '5분 동안 행운 확률 2배' };
-  if (roll < 90) {
-    const amount = (Math.floor(Math.random() * 50) + 1) * 10000;
-    return { type: 'money', amount, icon: '💰', name: '머니 쿠폰', desc: `에너지 +${fmt(amount)}` };
+  if (roll < 30) return { type: 'exp2', icon: '⚡', name: 'EXP 2배 쿠폰', desc: '5분 동안 EXP 2배 · 사용 후 5분 쿨타임' };
+  if (roll < 50) {
+    const amount = (Math.floor(Math.random() * 20) + 1) * 5000;
+    return { type: 'money', amount, icon: '💰', name: '머니 쿠폰', desc: `에너지 +${fmt(amount)} · 사용 후 5분 쿨타임` };
   }
   return { type: 'blank', icon: '💨', name: '꽝', desc: '아무것도 얻지 못했습니다.' };
 }
@@ -4169,20 +4281,7 @@ function startMiscDraw(count = 1) {
 }
 
 function buyStock(id, amount) {
-  const market = getStockMarketStatus();
-  if(!market.isOpen) {
-    return say("🔴 현재 주식 거래소가 휴장 중입니다! (5분 열림 / 10분 닫힘 주기)");
-  }
-
-  const now = Date.now();
-  const sellTime = d.stockSellCooldowns[id] || 0;
-  if(now < sellTime) {
-    let diff = sellTime - now;
-    let minRem = Math.floor(diff / 60000);
-    let secRem = Math.floor((diff % 60000) / 1000);
-    return say(`⏳ 매도 후 3분 쿨타임 적용 중! (${minRem}분 ${secRem}초 후 재매수 가능)`);
-  }
-
+  ensureQuantumStockMarketData();
   const price = d.stockPrices[id];
   let qty = 0;
   if(amount === 'max') {
@@ -4205,11 +4304,7 @@ function buyStock(id, amount) {
 }
 
 function sellStock(id, amount) {
-  const market = getStockMarketStatus();
-  if(!market.isOpen) {
-    return say("🔴 현재 주식 거래소가 휴장 중이므로 매도할 수 없습니다!");
-  }
-
+  ensureQuantumStockMarketData();
   const price = d.stockPrices[id];
   let owned = id === 1 ? (d.stock1 || 0) : id === 2 ? (d.stock2 || 0) : id === 3 ? (d.stock3 || 0) : (d.stock4 || 0);
   let qty = 0;
@@ -4229,9 +4324,9 @@ function sellStock(id, amount) {
   d.score += price * qty;
   d.totalEnergyEarned = (d.totalEnergyEarned || d.score) + (price * qty);
 
-  d.stockSellCooldowns[id] = Date.now() + (3 * 60 * 1000);
+  d.stockSellCooldowns[id] = 0;
 
-  say(`주식 ${qty}주 매도 완료! (3분간 재매수 쿨타임 적용)`);
+  say(`주식 ${qty}주 매도 완료!`);
   save();
 }
 
@@ -4401,6 +4496,7 @@ document.addEventListener("DOMContentLoaded", () => {
   startExpEventCountdown();
   startMiscInventoryTimer();
   startAutoMiningLoop();
+  startQuantumStockMarket();
   const bgmToggle = document.getElementById("bgmToggleBtn");
   if(bgmToggle) bgmToggle.onclick = toggleBGM;
 
