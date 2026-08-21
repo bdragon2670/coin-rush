@@ -750,7 +750,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
       <p style="color:var(--accent); font-size:11px; margin-top:0; margin-bottom:12px;">🛒 테크 상점 전 품목 가격 20% 인하 적용됨!</p>
       <div class="shop-grid">
         <div class="shop-item">
-          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 행운 확률 +5% · 대성공 시 클릭 보상 ×1.15</p></div>
+          <div><h3>🍀 행운 증폭 모듈</h3><p>클릭 행운 확률 +10% · 대성공 시 클릭 보상 ×1.15</p></div>
           <button class="buy" data-item="luck">구매 72,000</button>
         </div>
         <div class="shop-item">
@@ -906,7 +906,7 @@ button:disabled{opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,
         <span class="news-ticker-title">📢 BREAKING NEWS</span>
         <span class="news-ticker-content" id="newsTickerText">현재 평온한 장세를 유지하고 있습니다.</span>
       </div>
-      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">시세는 <b style="color:#38bdf8;">5초마다</b> 400~600 에너지 범위로 변동합니다. 호재·악재 뉴스의 팝업 알림은 내가 보유한 회사에만 표시됩니다.</p>
+      <p style="color:var(--text-sub); font-size:11px; margin-bottom:14px;">시세는 <b style="color:#38bdf8;">5초마다</b> 400~600 에너지 범위로 변동합니다. 보유 종목은 그래프 차이가 100 이상일 때만 알림이 오며, 뉴스 급등락 지속 시간은 매번 무작위입니다.</p>
       
       <div id="stockTradingContainer">
         <div class="stock-grid">
@@ -1502,6 +1502,16 @@ firebase.auth().onAuthStateChanged(user => {
 const saveKey = "energyRush_PermanentSaveData_v148";
 const cloudSaveStatusKey = `${saveKey}_CloudSaveStatus`;
 const cloudExitWarningMessage = "구글 클라우드에 저장되지 않은 진행 데이터가 있습니다. 지금 종료하면 다른 기기에서 해당 데이터가 사라질 수 있습니다.";
+function parseStoredGameObject(raw, storageKey) {
+  if (!raw || typeof raw !== 'string' || raw.length > 5000000) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : null;
+  } catch (error) {
+    console.warn(`Invalid local storage payload ignored: ${storageKey}`);
+    return null;
+  }
+}
 let savedRawData = localStorage.getItem(saveKey);
 let hasUnsavedCloudChanges = localStorage.getItem(cloudSaveStatusKey) === "pending";
 
@@ -1528,7 +1538,7 @@ window.addEventListener("beforeunload", (event) => {
   return cloudExitWarningMessage;
 });
 
-let d = JSON.parse(savedRawData || "null") || {
+let d = parseStoredGameObject(savedRawData, saveKey) || {
   score: 0, best: 0, power: 1, cps: 0, rebirth: 0, rp: 0, luck: false, core: false, double: false, cooler: false, filter: false, quantum: false,
   gemClick: false, gemAuto: false, gemLuck: false, gemHyper: false, gemRing: false, gemDivine: false, gemChronos: false, gemProtector: false,
   pets: [], equippedPets: [], discoveredPets: [], claimedEncyclopedia: [], 
@@ -1615,7 +1625,38 @@ if (!d.stockHistories) d.stockHistories = {
   4: [500, 500]
 };
 
-let currentUser = JSON.parse(localStorage.getItem("energyRushGoogleUser") || "null");
+const CLIENT_STATE_LIMITS = {
+  score: 1000000000000000, gems: 1000000000, power: 1000000000, cps: 1000000000,
+  rebirth: 1000000, rp: 1000000000, exp: 1000000000000, level: 1000000,
+  inventoryCount: 5000, stockCount: 1000000000
+};
+function clampClientNumber(value, min, max, fallback = 0) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return fallback;
+  return Math.max(min, Math.min(max, number));
+}
+function sanitizeClientGameData() {
+  if (!d || typeof d !== 'object' || Array.isArray(d)) d = {};
+  d.score = clampClientNumber(d.score, 0, CLIENT_STATE_LIMITS.score);
+  d.best = clampClientNumber(d.best, 0, CLIENT_STATE_LIMITS.score);
+  d.power = clampClientNumber(d.power, 1, CLIENT_STATE_LIMITS.power, 1);
+  d.cps = clampClientNumber(d.cps, 0, CLIENT_STATE_LIMITS.cps);
+  d.rebirth = Math.floor(clampClientNumber(d.rebirth, 0, CLIENT_STATE_LIMITS.rebirth));
+  d.rp = Math.floor(clampClientNumber(d.rp, 0, CLIENT_STATE_LIMITS.rp));
+  d.level = Math.floor(clampClientNumber(d.level, 1, CLIENT_STATE_LIMITS.level, 1));
+  d.exp = Math.floor(clampClientNumber(d.exp, 0, CLIENT_STATE_LIMITS.exp));
+  d.gems = Math.floor(clampClientNumber(d.gems, 0, CLIENT_STATE_LIMITS.gems));
+  d.totalEnergyEarned = clampClientNumber(d.totalEnergyEarned, 0, CLIENT_STATE_LIMITS.score);
+  for (let id = 1; id <= 4; id++) d[`stock${id}`] = Math.floor(clampClientNumber(d[`stock${id}`], 0, CLIENT_STATE_LIMITS.stockCount));
+  if (!Array.isArray(d.pets)) d.pets = [];
+  d.pets = d.pets.filter(petId => typeof petId === 'string' && !!PET_DB[petId]).slice(0, CLIENT_STATE_LIMITS.inventoryCount);
+  if (!Array.isArray(d.equippedPets)) d.equippedPets = [];
+  d.equippedPets = d.equippedPets.filter(index => Number.isInteger(index) && index >= 0 && index < d.pets.length).slice(0, 2);
+  if (!Array.isArray(d.dungeonLoot)) d.dungeonLoot = [];
+  d.dungeonLoot = d.dungeonLoot.filter(item => item && typeof item === 'object' && typeof item.id === 'string').slice(0, CLIENT_STATE_LIMITS.inventoryCount);
+  return d;
+}
+let currentUser = parseStoredGameObject(localStorage.getItem("energyRushGoogleUser"), "energyRushGoogleUser");
 
 const TITLES_DB = {
   novice: { id: 'novice', name: '초보 연구원', desc: '기본 지급 칭호', effectDesc: '효과 없음', check: () => true },
@@ -1713,6 +1754,7 @@ const PETS_BY_GRADE = {
   'Z': ['omniz', 'eternity']
 };
 
+sanitizeClientGameData();
 const COLOR_GRADIENTS = {
   emerald: 'linear-gradient(135deg, #10b981, #047857)',
   ruby: 'linear-gradient(135deg, #f43f5e, #be123c)',
@@ -1864,7 +1906,9 @@ function drawStockChart(canvasId, historyData) {
 }
 
 const STOCK_TICK_INTERVAL_MS = 5000;
-const STOCK_NEWS_EFFECT_MS = 2000;
+const STOCK_NEWS_EFFECT_MIN_MS = 1000;
+const STOCK_NEWS_EFFECT_MAX_MS = 9000;
+const STOCK_ALERT_CHANGE_THRESHOLD = 100;
 const STOCK_NORMAL_STEP_MIN = 400;
 const STOCK_NORMAL_STEP_MAX = 600;
 const STOCK_PRICE_MIN = -100;
@@ -1911,43 +1955,62 @@ function getOwnedStockQuantity(id) {
 function hasOwnedStockForAlert(id) {
   return getOwnedStockQuantity(id) > 0;
 }
+function getRandomStockNewsDurationMs() {
+  const seconds = Math.floor(Math.random() * ((STOCK_NEWS_EFFECT_MAX_MS - STOCK_NEWS_EFFECT_MIN_MS) / 1000 + 1)) + (STOCK_NEWS_EFFECT_MIN_MS / 1000);
+  return seconds * 1000;
+}
+function notifyHeldStockMovement(id, change, messagePrefix = '') {
+  if (!hasOwnedStockForAlert(id) || Math.abs(change) < STOCK_ALERT_CHANGE_THRESHOLD) return;
+  const company = STOCK_COMPANIES[id];
+  const isUp = change >= 0;
+  const sign = isUp ? '+' : '';
+  showStockAlertToast(`${messagePrefix}${company.name} ${sign}${fmt(change)} 에너지 변동`, isUp);
+}
 function applyQuantumStockNews(id, direction) {
   const company = STOCK_COMPANIES[id];
   const isGood = direction === 'good';
+  const previousPrice = d.stockPrices[id];
   const spike = isGood ? 2400 : -2400;
   const displayPrice = clampQuantumStockPrice(d.stockBaselines[id] + spike);
+  const change = displayPrice - previousPrice;
+  const durationMs = getRandomStockNewsDurationMs();
   d.stockPrices[id] = displayPrice;
   appendQuantumStockHistory(id, displayPrice);
-  d.stockNewsEffects[id] = { until: Date.now() + STOCK_NEWS_EFFECT_MS, direction };
+  d.stockNewsEffects[id] = { until: Date.now() + durationMs, direction, durationMs };
   d.latestNews = `${isGood ? '🔵 호재' : '🔴 악재'} | ${company.name}(${company.code}) ${isGood ? company.good : company.bad}`;
   d.newsType = direction;
-  if (hasOwnedStockForAlert(id)) {
-    showStockAlertToast(`보유 중인 ${company.name} ${isGood ? '호재 발생! 2초간 급등' : '악재 발생! 2초간 하락장'}`, isGood);
-  }
+  notifyHeldStockMovement(id, change, `보유 중인 ${isGood ? '호재! ' : '악재! '}`);
   if (stockNewsReturnTimers[id]) clearTimeout(stockNewsReturnTimers[id]);
   stockNewsReturnTimers[id] = setTimeout(() => {
-    if (!d.stockNewsEffects[id] || d.stockNewsEffects[id].direction !== direction) return;
+    const effect = d.stockNewsEffects[id];
+    if (!effect || effect.direction !== direction || effect.durationMs !== durationMs) return;
+    const beforeReturn = d.stockPrices[id];
     d.stockPrices[id] = d.stockBaselines[id];
+    const returnChange = d.stockPrices[id] - beforeReturn;
     appendQuantumStockHistory(id, d.stockPrices[id]);
     delete d.stockNewsEffects[id];
     d.latestNews = `📊 ${company.name}(${company.code}) 시세가 평균 변동 구간으로 복귀했습니다.`;
     d.newsType = 'neutral';
+    notifyHeldStockMovement(id, returnChange, '보유 중인 시세 복귀! ');
     updateStockUI();
     save();
-  }, STOCK_NEWS_EFFECT_MS);
+  }, durationMs);
 }
 function runQuantumStockTick() {
   ensureQuantumStockMarketData();
+  const targetId = Math.floor(Math.random() * 4) + 1;
+  const newsDirection = Math.random() < 0.5 ? 'good' : 'bad';
   for (let id = 1; id <= 4; id++) {
     if (d.stockNewsEffects[id] && d.stockNewsEffects[id].until > Date.now()) continue;
+    const previousPrice = d.stockPrices[id];
     const step = (Math.floor(Math.random() * 3) + 4) * 100;
     const direction = Math.random() < 0.5 ? -1 : 1;
     d.stockBaselines[id] = clampQuantumStockPrice(d.stockBaselines[id] + (step * direction));
     d.stockPrices[id] = d.stockBaselines[id];
     appendQuantumStockHistory(id, d.stockPrices[id]);
+    if (id !== targetId) notifyHeldStockMovement(id, d.stockPrices[id] - previousPrice, '보유 중인 시세 변동: ');
   }
-  const targetId = Math.floor(Math.random() * 4) + 1;
-  applyQuantumStockNews(targetId, Math.random() < 0.5 ? 'good' : 'bad');
+  applyQuantumStockNews(targetId, newsDirection);
   updateStockUI();
   save();
 }
@@ -2279,7 +2342,9 @@ function buildRankingData(firebaseUser) {
 }
 
 function normalizeCloudSaveData(saveData) {
+  if (!saveData || typeof saveData !== 'object' || Array.isArray(saveData)) return false;
   d = saveData;
+  sanitizeClientGameData();
   if (!d.equippedPets) d.equippedPets = [];
   if (!d.discoveredPets) d.discoveredPets = [];
   if (!d.claimedEncyclopedia) d.claimedEncyclopedia = [];
@@ -2303,6 +2368,8 @@ function normalizeCloudSaveData(saveData) {
   if (!d.ownedWeapons) d.ownedWeapons = [0];
   if (!d.stockPrices) d.stockPrices = { 1: 500, 2: 500, 3: 500, 4: 500 };
   if (!d.stockHistories) d.stockHistories = { 1: [500,500], 2: [500,500], 3: [500,500], 4: [500,500] };
+  sanitizeClientGameData();
+  return true;
 }
 
 async function saveToCloud() {
@@ -2362,7 +2429,9 @@ async function loadFromCloud() {
       doc = await db.collection('quantum_users').doc(currentUser.googleId).get();
     }
     if(doc.exists && doc.data().saveData) {
-      normalizeCloudSaveData(doc.data().saveData);
+      if (!normalizeCloudSaveData(doc.data().saveData)) {
+        return say("클라우드 저장 데이터 형식이 올바르지 않아 불러오기를 중단했습니다.");
+      }
       save();
       markCloudSaveComplete();
       playSuccessSound();
@@ -2417,6 +2486,8 @@ function loadGlobalRanking() {
 }
 
 const P2P_COLLECTION = 'quantum_p2p_market';
+const P2P_MAX_PRICE = 1000000000000;
+const P2P_MAX_GEM_COUNT = 100000000;
 let p2pMarketUnsubscribe = null;
 let p2pActiveFilter = 'all';
 let p2pLiveListings = [];
@@ -2556,7 +2627,7 @@ function registerP2PItem() {
   if (!marketAuthUser) return say('거래소 인증을 준비 중입니다. 잠시 후 다시 시도해주세요.');
   const type = document.getElementById('p2pItemType')?.value;
   const price = Math.floor(Number(document.getElementById('p2pPrice')?.value));
-  if (!type || !Number.isFinite(price) || price < 1000) return say('판매 가격은 최소 1,000 에너지 이상이어야 합니다.');
+  if (!['gem', 'drone'].includes(type) || !Number.isFinite(price) || price < 1000 || price > P2P_MAX_PRICE) return say(`판매 가격은 1,000~${fmt(P2P_MAX_PRICE)} 에너지 범위여야 합니다.`);
   const listingRef = db.collection(P2P_COLLECTION).doc();
   const base = {
     sellerId: currentUser.googleId,
@@ -2571,7 +2642,7 @@ function registerP2PItem() {
   };
   if (type === 'gem') {
     const count = Math.floor(Number(document.getElementById('p2pGemCount')?.value));
-    if (!Number.isFinite(count) || count <= 0) return say('보석 수량을 올바르게 입력해주세요.');
+    if (!Number.isFinite(count) || count <= 0 || count > P2P_MAX_GEM_COUNT) return say(`보석 수량은 1~${fmt(P2P_MAX_GEM_COUNT)} 범위여야 합니다.`);
     if ((d.gems || 0) < count) return say('보유한 보석이 부족합니다.');
     d.gems -= count;
     save();
@@ -2824,15 +2895,15 @@ function updateUserUI() {
 }
 
 const DRONE_GRADE_PASSIVES = {
-  C: { clickMult: 0.0008, cpsMult: 0.0006, coinMult: 1.0000, luckProb: 0.05 },
-  B: { clickMult: 0.0015, cpsMult: 0.0013, coinMult: 1.0000, luckProb: 0.05 },
-  A: { clickMult: 0.0024, cpsMult: 0.0020, coinMult: 1.0000, luckProb: 0.05 },
-  S: { clickMult: 0.0040, cpsMult: 0.0035, coinMult: 1.0020, luckProb: 0.05 },
-  L: { clickMult: 0.0100, cpsMult: 0.0090, coinMult: 1.0100, luckProb: 0.05 },
-  M: { clickMult: 0.0220, cpsMult: 0.0200, coinMult: 1.0250, luckProb: 0.05 },
-  T: { clickMult: 0.0600, cpsMult: 0.0550, coinMult: 1.0800, luckProb: 0.05 },
-  X: { clickMult: 0.1300, cpsMult: 0.1200, coinMult: 1.2200, luckProb: 0.05 },
-  Z: { clickMult: 0.2800, cpsMult: 0.2500, coinMult: 1.6500, luckProb: 0.05 }
+  C: { clickMult: 0.0008, cpsMult: 0.0006, coinMult: 1.0000, luckProb: 0.10 },
+  B: { clickMult: 0.0015, cpsMult: 0.0013, coinMult: 1.0000, luckProb: 0.10 },
+  A: { clickMult: 0.0024, cpsMult: 0.0020, coinMult: 1.0000, luckProb: 0.10 },
+  S: { clickMult: 0.0040, cpsMult: 0.0035, coinMult: 1.0020, luckProb: 0.10 },
+  L: { clickMult: 0.0100, cpsMult: 0.0090, coinMult: 1.0100, luckProb: 0.10 },
+  M: { clickMult: 0.0220, cpsMult: 0.0200, coinMult: 1.0250, luckProb: 0.10 },
+  T: { clickMult: 0.0600, cpsMult: 0.0550, coinMult: 1.0800, luckProb: 0.10 },
+  X: { clickMult: 0.1300, cpsMult: 0.1200, coinMult: 1.2200, luckProb: 0.10 },
+  Z: { clickMult: 0.2800, cpsMult: 0.2500, coinMult: 1.6500, luckProb: 0.10 }
 };
 
 function getPetBonus(){
@@ -2851,9 +2922,9 @@ function getPetBonus(){
 }
 
 function getTotalLuckProbability(petBonus = getPetBonus()) {
-  const itemLuckBonus = d.luck ? 0.05 : 0.0;
+  const itemLuckBonus = d.luck ? 0.10 : 0.0;
   const permanentLuckBonus = ((d.permLuck || 0) * 5) / 100;
-  const gemLuckBonus = d.gemLuck ? 0.05 : 0.0;
+  const gemLuckBonus = d.gemLuck ? 0.10 : 0.0;
   // 확률을 25% 아래로 제한해 과도한 중첩을 방지합니다.
   const luckCouponMultiplier = Date.now() < (d.luckCouponUntil || 0) ? 2 : 1;
   return Math.min(0.75, (itemLuckBonus + permanentLuckBonus + gemLuckBonus + petBonus.luckProb) * luckCouponMultiplier);
@@ -2872,6 +2943,7 @@ function getBaseMult(){
 
 let saveTimeout = null;
 function save(){
+  sanitizeClientGameData();
   markCloudSavePending();
   checkAndDiscoverPets();
   checkTitles();
